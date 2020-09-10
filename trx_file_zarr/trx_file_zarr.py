@@ -39,23 +39,27 @@ def compute_lengths(offsets, nb_points):
     return lengths.astype(np.uint32)
 
 
-def load(input_path, directory_func=zarr.DirectoryStore):
-    if os.path.isdir(input_path):
-        store = directory_func(input_path)
-    elif os.path.isfile(input_path) and \
-            os.path.splitext(input_path)[1] in ['.zip', '.trx']:
-        store = zarr.ZipStore(input_path)
-    else:
-        raise ValueError('Invalid input path/filename.')
-
+def load(input_obj):
+    """ """
     trx = TrxFile()
+    if isinstance(input_obj, str):
+        if os.path.isdir(input_obj):
+            store = zarr.storage.DirectoryStore(input_obj)
+        elif os.path.isfile(input_obj) and \
+                os.path.splitext(input_obj)[1] in ['.zip', '.trx']:
+            store = zarr.ZipStore(input_obj)
+        else:
+            raise ValueError('Invalid input path/filename.')
+    else:
+        store = input_obj
+
     trx._zcontainer = zarr.group(store=store, overwrite=False)
     trx.storage = store
 
     return trx
 
 
-def save(trx, output_path, directory_func=zarr.DirectoryStore):
+def save(trx, output_path):
     if os.path.splitext(output_path)[1] in ['.zip', '.trx']:
         if os.path.isfile(output_path):
             os.remove(output_path)
@@ -63,12 +67,12 @@ def save(trx, output_path, directory_func=zarr.DirectoryStore):
     elif os.path.splitext(output_path)[1] == '':
         if os.path.isdir(output_path):
             shutil.rmtree(output_path)
-        store = directory_func(output_path)
+        store = zarr.storage.DirectoryStore(output_path)
     else:
         raise ValueError('Invalid output path/filename.')
 
     out_zcontainer = zarr.group(store=store, overwrite=False)
-    zarr.copy(trx._zcontainer, out_zcontainer, name='')
+    zarr.convenience.copy_store(trx._zcontainer, out_zcontainer)
     store.close()
 
 
@@ -83,7 +87,8 @@ def _check_same_keys(key_1, key_2):
 class TrxFile():
     """ Core class of the TrxFile """
 
-    def __init__(self, init_as=None, reference=None):
+    def __init__(self, init_as=None, reference=None,
+                 store=None):
         """ Initialize an empty TrxFile, support preallocation """
         if init_as is not None:
             affine = init_as._zcontainer.attrs['VOXEL_TO_RASMM']
@@ -96,24 +101,25 @@ class TrxFile():
             affine = np.eye(4).astype(np.float32)
             dimensions = [1, 1, 1]
 
-        store = zarr.storage.TempStore()
+        if store is None:
+            store = zarr.storage.TempStore()
         self._zcontainer = zarr.group(store=store, overwrite=True)
         self.voxel_to_rasmm = affine
         self.dimensions = dimensions
         self.nb_points = 0
         self.nb_streamlines = 0
-        self.storage = store
+        self._zstore = store
 
         if init_as:
             positions_dtype = init_as._zpos.dtype
         else:
             positions_dtype = np.float16
         self._zcontainer.create_dataset('positions', shape=(0, 3),
-                                        chunks=(100000, None),
+                                        chunks=(1000000, None),
                                         dtype=positions_dtype)
 
         self._zcontainer.create_dataset('offsets', shape=(0,),
-                                        chunks=(10000,), dtype=np.uint64)
+                                        chunks=(100000,), dtype=np.uint64)
 
         self._zcontainer.create_group('data_per_point')
         self._zcontainer.create_group('data_per_streamline')
@@ -127,7 +133,7 @@ class TrxFile():
             empty_shape = list(init_as._zdpp[dpp_key].shape)
             empty_shape[0] = 0
             dtype = init_as._zdpp[dpp_key].dtype
-            chunks = [100000]
+            chunks = [1000000]
             for _ in range(len(empty_shape)-1):
                 chunks.append(None)
 
@@ -138,7 +144,7 @@ class TrxFile():
             empty_shape = list(init_as._zdps[dps_key].shape)
             empty_shape[0] = 0
             dtype = init_as._zdps[dps_key].dtype
-            chunks = [10000]
+            chunks = [100000]
             for _ in range(len(empty_shape)-1):
                 chunks.append(None)
 
@@ -150,7 +156,7 @@ class TrxFile():
             empty_shape[0] = 0
             dtype = init_as._zgrp[grp_key].dtype
             self._zgrp.create_dataset(grp_key, shape=empty_shape,
-                                      chunks=(1000,), dtype=dtype)
+                                      chunks=(10000,), dtype=dtype)
 
         for grp_key in init_as._zdpg.group_keys():
             if len(init_as._zdpg[grp_key]):
@@ -259,17 +265,31 @@ class TrxFile():
 
         return sft
 
+    def __deepcopy__(self):
+        return self.deepcopy()
+
+    def deepcopy(self, store=None):
+        if store is None:
+            store = zarr.storage.TempStore()
+
+        zarr.convenience.copy_store(self.storage, store)
+        new_trx = load(store)
+
+        return new_trx
+
     def __getitem__(self, key):
         """ Slice all data in a consistent way """
         indices = np.arange(self.nb_streamlines)[key]
         return self.select(indices)
 
+    def get_group(self, key):
+        return self.select(self._zgrp[key])
 
     def select(self, indices, keep_group=True):
         """ Get a subset of items, always points to the same memmaps """
         indices = np.array(indices, np.uint32)
-        if len(indices) and (np.max(indices) > self.nb_streamlines - 1 or \
-                np.min(indices) < 0):
+        if len(indices) and (np.max(indices) > self.nb_streamlines - 1 or
+                             np.min(indices) < 0):
             raise ValueError('Invalid indices.')
 
         new_trx = TrxFile(init_as=self)
@@ -278,46 +298,17 @@ class TrxFile():
             return new_trx
 
         tmp_streamlines = self.streamlines
-        arr_seq = ArraySequence()
-        arr_seq._data = np.array(tmp_streamlines._data)
-        arr_seq._offsets = np.array(tmp_streamlines._offsets)
-        arr_seq._lengths = np.array(tmp_streamlines._lengths)
-
-        c_size = 1000000000
-        c_offsets = list(range(0, len(arr_seq._offsets)+c_size, c_size))
-        for i in range(len(c_offsets)-1):
-            chunk_arr_seq = arr_seq[c_offsets[i]:c_offsets[i+1]]
-
-            tmp_indices = indices[indices >= c_offsets[i]]
-            tmp_indices = tmp_indices[tmp_indices < c_offsets[i+1]]
-            tmp_indices -= c_offsets[i]
-            if len(tmp_indices) == 0:
-                continue
-
-            new_trx._zoff.append([len(new_trx._zpos)])
-            new_trx._zpos.append(chunk_arr_seq[tmp_indices].get_data())
-            new_offsets = np.cumsum(chunk_arr_seq[tmp_indices]._lengths[:-1])
-            new_trx._zoff.append(new_offsets + new_trx._zoff[-1])
+        new_trx._zpos.append(tmp_streamlines[indices].get_data())
+        new_offsets = np.cumsum(tmp_streamlines[indices]._lengths[:-1])
+        new_trx._zoff.append(np.concatenate(([0], new_offsets)))
 
         for dpp_key in self._zdpp.array_keys():
-            tmp_dpp = self._zdpp[dpp_key]
-            arr_seq = ArraySequence()
-            arr_seq._data = np.array(tmp_dpp)
-            arr_seq._offsets = np.array(tmp_streamlines._offsets)
-            arr_seq._lengths = np.array(tmp_streamlines._lengths)
+            tmp_dpp = ArraySequence()
+            tmp_dpp._data = np.array(self._zdpp[dpp_key])
+            tmp_dpp._offsets = tmp_streamlines._offsets
+            tmp_dpp._lengths = tmp_streamlines._lengths
 
-            c_offsets = list(range(0, len(arr_seq._offsets)+c_size, c_size))
-            for i in range(len(c_offsets)-1):
-                chunk_arr_seq = arr_seq[c_offsets[i]:c_offsets[i+1]]
-
-                tmp_indices = indices[indices >= c_offsets[i]]
-                tmp_indices = tmp_indices[tmp_indices < c_offsets[i+1]]
-                tmp_indices -= c_offsets[i]
-                if len(tmp_indices) == 0:
-                    continue
-
-                new_trx._zdpp[dpp_key].append(
-                    chunk_arr_seq[tmp_indices].get_data())
+            new_trx._zdpp[dpp_key].append(tmp_dpp[indices].get_data())
 
         for dps_key in self._zdps.array_keys():
             new_trx._zdps[dps_key].append(
@@ -344,17 +335,17 @@ class TrxFile():
 
         return new_trx
 
-    def prune_metadata(self):
+    def prune_metadata(self, force=False):
         for dpp_key in self._zdpp.array_keys():
-            if self._zdpp[dpp_key].shape[0] == 0:
+            if self._zdpp[dpp_key].shape[0] == 0 or force:
                 del self._zcontainer['data_per_point'][dpp_key]
 
         for dps_key in self._zdps.array_keys():
-            if self._zdps[dps_key].shape[0] == 0:
+            if self._zdps[dps_key].shape[0] == 0 or force:
                 del self._zcontainer['data_per_streamline'][dps_key]
 
         for grp_key in self._zgrp.array_keys():
-            if self._zgrp[grp_key].shape[0] == 0:
+            if self._zgrp[grp_key].shape[0] == 0 or force:
                 del self._zcontainer['groups'][grp_key]
 
         for grp_key in self._zdpg.group_keys():
@@ -362,7 +353,7 @@ class TrxFile():
                 del self._zcontainer['data_per_group'][grp_key]
                 continue
             for dpg_key in self._zdpg[grp_key].array_keys():
-                if self._zdpg[grp_key][dpg_key].shape[0] == 0:
+                if self._zdpg[grp_key][dpg_key].shape[0] == 0 or force:
                     del self._zcontainer['data_per_group'][grp_key][dpg_key]
 
     def consolidate_data_per_streamline(self):
@@ -397,8 +388,8 @@ class TrxFile():
     def streamlines(self):
         """ """
         streamlines = ArraySequence()
-        streamlines._data = self._zpos
-        streamlines._offsets = self._zoff
+        streamlines._data = np.array(self._zpos)
+        streamlines._offsets = np.array(self._zoff)
         streamlines._lengths = compute_lengths(streamlines._offsets,
                                                self.nb_points)
         return streamlines
@@ -498,11 +489,25 @@ class TrxFile():
 
         return text
 
+    @ property
+    def storage(self):
+        return self._zstore
+
+    @ storage.setter
+    def storage(self, val):
+        if self._zstore is not None:
+            self.close()
+        self._zstore = val
+
     def close(self):
         self.__del__()
 
     def __del__(self):
-        if isinstance(self.storage, zarr.storage.DirectoryStore):
-            self.storage.rmdir()
+        if isinstance(self._zstore, zarr.storage.TempStore):
+            self._zstore.rmdir()
+        elif isinstance(self._zstore, zarr.storage.ZipStore):
+            self._zstore.close()
+        elif isinstance(self._zstore, zarr.storage.MemoryStore):
+            self._zstore.clear()
         else:
-            self.storage.close()
+            logging.debug('Cannot close an user created directory.')
