@@ -14,6 +14,19 @@ import zarr
 from zarr.util import TreeViewer
 
 
+def intersect_groups(group, indices):
+    if np.issubdtype(type(indices), np.integer):
+        indices = np.array([indices])
+
+    index = np.argsort(indices)
+    sorted_x = indices[index]
+    sorted_index = np.searchsorted(sorted_x, group)
+    yindex = np.take(index, sorted_index, mode="clip")
+    mask = indices[yindex] != group
+
+    return yindex[~mask]
+
+
 def compute_lengths(offsets, nb_points):
     """ Compute lengths from offsets and header information """
     if len(offsets) > 1:
@@ -92,7 +105,7 @@ class TrxFile():
         self.storage = store
 
         if init_as:
-            positions_dtype = init_as._zcontainer['positions'].dtype
+            positions_dtype = init_as._zpos.dtype
         else:
             positions_dtype = np.float16
         self._zcontainer.create_dataset('positions', shape=(0, 3),
@@ -110,8 +123,6 @@ class TrxFile():
         if init_as is None:
             return
 
-        # if len(init_as._zdpp):
-        # self._zcontainer.create_group('data_per_point')
         for dpp_key in init_as._zdpp.array_keys():
             empty_shape = list(init_as._zdpp[dpp_key].shape)
             empty_shape[0] = 0
@@ -123,8 +134,6 @@ class TrxFile():
             self._zdpp.create_dataset(dpp_key, shape=empty_shape,
                                       chunks=chunks, dtype=dtype)
 
-        # if len(init_as._zdps):
-        # self._zcontainer.create_group('data_per_streamline')
         for dps_key in init_as._zdps.array_keys():
             empty_shape = list(init_as._zdps[dps_key].shape)
             empty_shape[0] = 0
@@ -136,8 +145,6 @@ class TrxFile():
             self._zdps.create_dataset(dps_key, shape=empty_shape,
                                       chunks=chunks, dtype=dtype)
 
-        # if len(init_as._zgrp):
-        # self._zcontainer.create_group('groups')
         for grp_key in init_as._zgrp.array_keys():
             empty_shape = list(init_as._zgrp[grp_key].shape)
             empty_shape[0] = 0
@@ -145,8 +152,6 @@ class TrxFile():
             self._zgrp.create_dataset(grp_key, shape=empty_shape,
                                       chunks=(1000,), dtype=dtype)
 
-        # if len(init_as._zdpg):
-        # self._zcontainer.create_group('data_per_group')
         for grp_key in init_as._zdpg.group_keys():
             if len(init_as._zdpg[grp_key]):
                 self._zdpg.create_group(grp_key)
@@ -177,8 +182,8 @@ class TrxFile():
                 (len(self._zdpg) or len(self._zdpg)):
             print('C')
 
-        self._zcontainer['positions'].append(app_trx._zcontainer['positions'])
-        self._zcontainer['offsets'].append(app_trx._zcontainer['offsets'])
+        self._zpos.append(app_trx._zpos)
+        self._zoff.append(app_trx._zoff)
 
         for dpp_key in self._zdpp.array_keys():
             self._zdpp[dpp_key].append(app_trx._zdpp[dpp_key])
@@ -198,7 +203,7 @@ class TrxFile():
         self.nb_streamlines += app_trx.nb_streamlines
 
     def tree(self):
-        print(self._zcontainer.tree())
+        self._zcontainer.tree()
 
     @staticmethod
     def from_sft(sft, cast_position=np.float16):
@@ -218,7 +223,7 @@ class TrxFile():
         sft.to_rasmm()
         sft.to_center()
 
-        del trx._zcontainer['positions'], trx._zcontainer['offsets']
+        del trx._zpos, trx._zoff
         trx._zcontainer.create_dataset('positions',
                                        data=sft.streamlines._data,
                                        chunks=(100000, None), dtype=np.float16)
@@ -256,21 +261,20 @@ class TrxFile():
 
     def __getitem__(self, key):
         """ Slice all data in a consistent way """
-        # TODO
-        return
+        indices = np.arange(self.nb_streamlines)[key]
+        return self.select(indices)
 
-    def _select(self, indices, keep_group=True, keep_dpg=False):
+
+    def select(self, indices, keep_group=True):
         """ Get a subset of items, always points to the same memmaps """
         indices = np.array(indices, np.uint32)
-        if len(indices) and np.max(indices) > self.nb_streamlines - 1 or \
-                np.min(indices) < 0:
+        if len(indices) and (np.max(indices) > self.nb_streamlines - 1 or \
+                np.min(indices) < 0):
             raise ValueError('Invalid indices.')
-
-        if keep_dpg and not keep_group:
-            raise ValueError('Cannot keep dpg if not keeping groups.')
 
         new_trx = TrxFile(init_as=self)
         if len(indices) == 0:
+            new_trx.prune_metadata()
             return new_trx
 
         tmp_streamlines = self.streamlines
@@ -279,23 +283,21 @@ class TrxFile():
         arr_seq._offsets = np.array(tmp_streamlines._offsets)
         arr_seq._lengths = np.array(tmp_streamlines._lengths)
 
-        chunk_offsets = list(range(0, len(arr_seq._offsets)+100000, 100000))
-        for i in range(len(chunk_offsets)-1):
-            chunk_arr_seq = arr_seq[chunk_offsets[i]:chunk_offsets[i+1]]
+        c_size = 1000000000
+        c_offsets = list(range(0, len(arr_seq._offsets)+c_size, c_size))
+        for i in range(len(c_offsets)-1):
+            chunk_arr_seq = arr_seq[c_offsets[i]:c_offsets[i+1]]
 
-            tmp_indices = indices[indices >= chunk_offsets[i]]
-            tmp_indices = tmp_indices[tmp_indices < chunk_offsets[i+1]]
-            tmp_indices -= chunk_offsets[i]
+            tmp_indices = indices[indices >= c_offsets[i]]
+            tmp_indices = tmp_indices[tmp_indices < c_offsets[i+1]]
+            tmp_indices -= c_offsets[i]
             if len(tmp_indices) == 0:
                 continue
 
-            new_trx._zcontainer['offsets'].append(
-                [len(new_trx._zcontainer['positions'])])
-            new_trx._zcontainer['positions'].append(
-                chunk_arr_seq[tmp_indices].get_data())
-            new_trx._zcontainer['offsets'].append(
-                np.cumsum(chunk_arr_seq[tmp_indices]._lengths[:-1]) +
-                new_trx._zcontainer['offsets'][-1])
+            new_trx._zoff.append([len(new_trx._zpos)])
+            new_trx._zpos.append(chunk_arr_seq[tmp_indices].get_data())
+            new_offsets = np.cumsum(chunk_arr_seq[tmp_indices]._lengths[:-1])
+            new_trx._zoff.append(new_offsets + new_trx._zoff[-1])
 
         for dpp_key in self._zdpp.array_keys():
             tmp_dpp = self._zdpp[dpp_key]
@@ -304,14 +306,13 @@ class TrxFile():
             arr_seq._offsets = np.array(tmp_streamlines._offsets)
             arr_seq._lengths = np.array(tmp_streamlines._lengths)
 
-            chunk_offsets = list(
-                range(0, len(arr_seq._offsets)+100000, 100000))
-            for i in range(len(chunk_offsets)-1):
-                chunk_arr_seq = arr_seq[chunk_offsets[i]:chunk_offsets[i+1]]
+            c_offsets = list(range(0, len(arr_seq._offsets)+c_size, c_size))
+            for i in range(len(c_offsets)-1):
+                chunk_arr_seq = arr_seq[c_offsets[i]:c_offsets[i+1]]
 
-                tmp_indices = indices[indices >= chunk_offsets[i]]
-                tmp_indices = tmp_indices[tmp_indices < chunk_offsets[i+1]]
-                tmp_indices -= chunk_offsets[i]
+                tmp_indices = indices[indices >= c_offsets[i]]
+                tmp_indices = tmp_indices[tmp_indices < c_offsets[i+1]]
+                tmp_indices -= c_offsets[i]
                 if len(tmp_indices) == 0:
                     continue
 
@@ -324,39 +325,37 @@ class TrxFile():
 
         if keep_group:
             for grp_key in self._zgrp.array_keys():
-                index = np.argsort(indices)
-                sorted_x = indices[index]
-                sorted_index = np.searchsorted(
-                    sorted_x, self._zgrp[grp_key])
-                yindex = np.take(index, sorted_index, mode="clip")
-                mask = indices[yindex] != self._zgrp[grp_key]
-                new_group = yindex[~mask]
+                new_group = intersect_groups(self._zgrp[grp_key], indices)
 
                 if len(new_group):
                     new_trx._zgrp[grp_key].append(new_group)
                 else:
-                    del new_trx._zgrp[grp_key]
+                    del new_trx._zcontainer['groups'][grp_key]
 
-        if keep_dpg:
-            for grp_key in self._zdpg.group_keys():
-                if grp_key in new_trx._zgrp:
-                    for dpg_key in self._zdpg[grp_key].array_keys():
-                        new_trx._zdpg[grp_key][dpg_key].append(
-                            self._zdpg[grp_key][dpg_key])
-        else:
-            del new_trx._zcontainer['data_per_group']
-            new_trx._zcontainer.create_group('data_per_group')
+        for grp_key in self._zdpg.group_keys():
+            if grp_key in new_trx._zgrp:
+                for dpg_key in self._zdpg[grp_key].array_keys():
+                    new_trx._zdpg[grp_key][dpg_key].append(
+                        self._zdpg[grp_key][dpg_key])
 
-        new_trx.nb_streamlines = len(new_trx._zcontainer['offsets'])
-        new_trx.nb_points = len(new_trx._zcontainer['positions'])
-        new_trx.prune_grp_and_dpg()
+        new_trx.nb_streamlines = len(new_trx._zoff)
+        new_trx.nb_points = len(new_trx._zpos)
+        new_trx.prune_metadata()
 
         return new_trx
 
-    def prune_grp_and_dpg(self):
+    def prune_metadata(self):
+        for dpp_key in self._zdpp.array_keys():
+            if self._zdpp[dpp_key].shape[0] == 0:
+                del self._zcontainer['data_per_point'][dpp_key]
+
+        for dps_key in self._zdps.array_keys():
+            if self._zdps[dps_key].shape[0] == 0:
+                del self._zcontainer['data_per_streamline'][dps_key]
+
         for grp_key in self._zgrp.array_keys():
-            if self._zcontainer['groups'][grp_key].shape[0] == 0:
-                del self._zgrp[grp_key]
+            if self._zgrp[grp_key].shape[0] == 0:
+                del self._zcontainer['groups'][grp_key]
 
         for grp_key in self._zdpg.group_keys():
             if grp_key not in self._zgrp:
@@ -378,7 +377,7 @@ class TrxFile():
         for dpp_key in self._zdpp.array_keys():
             arr_seq = ArraySequence()
             arr_seq._data = self._zdpp[dpp_key]
-            arr_seq._offsets = self._zcontainer['offsets']
+            arr_seq._offsets = self._zoff
             arr_seq._lengths = compute_lengths(arr_seq._offsets,
                                                self.nb_points)
             if arr_seq._data.ndim == 1:
@@ -398,8 +397,8 @@ class TrxFile():
     def streamlines(self):
         """ """
         streamlines = ArraySequence()
-        streamlines._data = self._zcontainer['positions']
-        streamlines._offsets = self._zcontainer['offsets']
+        streamlines._data = self._zpos
+        streamlines._offsets = self._zoff
         streamlines._lengths = compute_lengths(streamlines._offsets,
                                                self.nb_points)
         return streamlines
@@ -444,6 +443,16 @@ class TrxFile():
     @ nb_points.setter
     def nb_points(self, val):
         self._zcontainer.attrs['NB_POINTS'] = int(val)
+
+    @ property
+    def _zpos(self):
+        """ """
+        return self._zcontainer['positions']
+
+    @ property
+    def _zoff(self):
+        """ """
+        return self._zcontainer['offsets']
 
     @ property
     def _zdpp(self):
