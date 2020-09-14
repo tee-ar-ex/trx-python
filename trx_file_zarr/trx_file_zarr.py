@@ -71,9 +71,13 @@ def save(trx, output_path):
     else:
         raise ValueError('Invalid output path/filename.')
 
-    out_zcontainer = zarr.group(store=store, overwrite=False)
-    zarr.convenience.copy_store(trx._zcontainer, out_zcontainer)
-    store.close()
+    zarr.convenience.copy_store(trx.storage, store)
+    if isinstance(store, zarr.storage.TempStore):
+        store.rmdir()
+    elif isinstance(store, zarr.storage.ZipStore):
+        store.close()
+    elif isinstance(store, zarr.storage.MemoryStore):
+        store.clear()
 
 
 def _check_same_keys(key_1, key_2):
@@ -169,44 +173,59 @@ class TrxFile():
                                                    chunks=None, dtype=dtype)
 
     def append(self, app_trx, delete_dpg=False, keep_first_dpg=True):
-        """ """
+        """ Append TrxFile with strict metadata check """
         if not np.allclose(self.voxel_to_rasmm,
                            app_trx.voxel_to_rasmm) \
                 or not np.array_equal(self.dimensions,
                                       app_trx.dimensions):
-            raise ValueError('Wrong space attributes.')
+            raise ValueError('Mismatched space attributes between TrxFile.')
+
+        if isinstance(self.storage, zarr.storage.ZipStore):
+            raise ValueError('Cannot append to a Zip. Either unzip first, \n'
+                             ' save to directory or init a new TrxFile (with '
+                             'init_as) to append.')
 
         if delete_dpg and keep_first_dpg:
-            print('1')
-        if not _check_same_keys(self._zdpp.array_keys(),
-                                app_trx._zdpp.array_keys()):
-            print('A')
-        if not _check_same_keys(self._zdps.array_keys(),
-                                app_trx._zdps.array_keys()):
-            print('B')
+            raise ValueError('Cannot delete and keep data_per_group at the '
+                             'same time.')
+
+        if not self.is_empty() and not app_trx.is_empty() and \
+            not _check_same_keys(self._zdpp.array_keys(),
+                                 app_trx._zdpp.array_keys()):
+            raise ValueError('data_per_point keys must fit to append.')
+        if not self.is_empty() and not app_trx.is_empty() and \
+            not _check_same_keys(self._zdps.array_keys(),
+                                 app_trx._zdps.array_keys()):
+            raise ValueError('data_per_streamline keys must fit to append.')
         if not (delete_dpg or keep_first_dpg) and \
                 (len(self._zdpg) or len(self._zdpg)):
-            print('C')
+            raise ValueError('Choose a strategy for data_per_group: '
+                             'delete_dpg or keep_first_dpg.')
 
         self._zpos.append(app_trx._zpos)
-        self._zoff.append(app_trx._zoff)
+        self._zoff.append(np.array(app_trx._zoff) + self.nb_points)
 
+        self.nb_points += app_trx.nb_points
+        self.nb_streamlines += app_trx.nb_streamlines
+
+        if app_trx.is_empty():
+            return
         for dpp_key in self._zdpp.array_keys():
             self._zdpp[dpp_key].append(app_trx._zdpp[dpp_key])
         for dps_key in self._zdps.array_keys():
             self._zdps[dps_key].append(app_trx._zdps[dps_key])
         for grp_key in self._zgrp.array_keys():
-            self._zgrp[grp_key].append(app_trx._zgrp[grp_key] +
-                                       self.nb_streamlines)
+            if grp_key in app_trx._zgrp:
+                self._zgrp[grp_key].append(np.array(app_trx._zgrp[grp_key]) +
+                                           self.nb_streamlines)
 
         if keep_first_dpg:
             for grp_key in self._zdpg.group_keys():
                 for dpg_key in self._zdpg[grp_key].array_keys():
-                    self._zdpg[grp_key][dpg_key].append(
-                        app_trx._zdpg[grp_key][dpg_key])
-
-        self.nb_points += app_trx.nb_points
-        self.nb_streamlines += app_trx.nb_streamlines
+                    if grp_key in app_trx._zdpg and \
+                            dpg_key in app_trx._zdpg[grp_key]:
+                        self._zdpg[grp_key][dpg_key].append(
+                            app_trx._zdpg[grp_key][dpg_key])
 
     def tree(self):
         self._zcontainer.tree()
@@ -277,12 +296,26 @@ class TrxFile():
 
         return new_trx
 
+    def is_empty(self):
+        self.prune_metadata()
+
+        is_empty = True
+        if len(list(self._zdpp.array_keys())) or \
+                len(list(self._zdps.array_keys())) or \
+                len(list(self._zgrp.array_keys())) or \
+                len(list(self._zdpg.group_keys())) or \
+                len(list(self._zcontainer['positions'])) or \
+                len(list(self._zcontainer['offsets'])):
+            is_empty = False
+        return is_empty
+
     def __getitem__(self, key):
         """ Slice all data in a consistent way """
         indices = np.arange(self.nb_streamlines)[key]
         return self.select(indices)
 
     def get_group(self, key):
+        """ Select the items of a specific groups from the TrxFile """
         return self.select(self._zgrp[key])
 
     def select(self, indices, keep_group=True):
@@ -336,6 +369,7 @@ class TrxFile():
         return new_trx
 
     def prune_metadata(self, force=False):
+        """ Prune empty arrays of the metadata """
         for dpp_key in self._zdpp.array_keys():
             if self._zdpp[dpp_key].shape[0] == 0 or force:
                 del self._zcontainer['data_per_point'][dpp_key]
@@ -357,6 +391,8 @@ class TrxFile():
                     del self._zcontainer['data_per_group'][grp_key][dpg_key]
 
     def consolidate_data_per_streamline(self):
+        """ Convert the zarr representation of data_per_streamline to
+        memory PerArrayDict (nibabel)"""
         dps_arr_dict = PerArrayDict()
         for dps_key in self._zdps.array_keys():
             dps_arr_dict[dps_key] = self._zdps[dps_key]
@@ -364,6 +400,8 @@ class TrxFile():
         return dps_arr_dict
 
     def consolidate_data_per_point(self):
+        """ Convert the zarr representation of data_per_point to
+        memory PerArraySequenceDict (nibabel)"""
         dpp_arr_seq_dict = PerArraySequenceDict()
         for dpp_key in self._zdpp.array_keys():
             arr_seq = ArraySequence()
@@ -379,6 +417,8 @@ class TrxFile():
 
     @ property
     def consolidate_groups(self):
+        """ Convert the zarr representation of groups to memory dict of
+        np.ndarray """
         group_dict = {}
         for grp_key in self._zcontainer['groups'].array_keys():
             group_dict[grp_key] = np.array(self._zcontainer['groups'][grp_key])
@@ -510,4 +550,4 @@ class TrxFile():
         elif isinstance(self._zstore, zarr.storage.MemoryStore):
             self._zstore.clear()
         else:
-            logging.debug('Cannot close an user created directory.')
+            logging.debug('Cannot close an user defined directory.')
