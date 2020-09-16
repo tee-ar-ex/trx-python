@@ -39,6 +39,14 @@ def compute_lengths(offsets, nb_points):
     return lengths.astype(np.uint32)
 
 
+def concatenate(trx_list):
+    new_trx = TrxFile(init_as=trx_list[0])
+    for trx in trx_list:
+        new_trx.append(trx)
+
+    return new_trx
+
+
 def load(input_obj):
     """ """
     trx = TrxFile()
