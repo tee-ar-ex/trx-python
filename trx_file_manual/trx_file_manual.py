@@ -275,22 +275,6 @@ def concatenate(trx_list, delete_dpp=False, delete_dps=False, delete_groups=Fals
                     all_groups_len[group_key] += len(trx_1.groups[group_key])
                 else:
                     all_groups_len[group_key] = len(trx_1.groups[group_key])
-                    all_groups_dtype[group_key] = trx_1.groups[group_key].dtype
-
-                if len(trx_1.data_per_group.keys()) > 0:
-                    logging.warning('TrxFile contains data_per_group, this '
-                                    'information cannot be easily '
-                                    'concatenated, it will be deleted.')
-
-                # data_per_group cannot be easily 'fused', so they are discarded
-                for trx_2 in trx_list:
-                    if trx_1.groups[group_key].dtype \
-                            != trx_2.groups[group_key].dtype:
-                        logging.debug('{} group key is not declared with '
-                                      'the same dtype in all TrxFile.'.format(
-                                          key))
-                        raise ValueError('Shared group key, has different '
-                                         'dtype.')
 
     # Once the checks are done, actually concatenate
     to_concat_list = trx_list[1:] if preallocation else trx_list
@@ -317,7 +301,7 @@ def concatenate(trx_list, delete_dpp=False, delete_dps=False, delete_groups=Fals
                                                          dtype.name))
             group_len = all_groups_len[group_key]
             new_trx.groups[group_key] = _create_memmap(group_filename, mode='w+',
-                                                       shape=(group_len,),
+                                                       shape=(1, group_len),
                                                        dtype=dtype)
             if delete_groups:
                 continue
@@ -346,7 +330,7 @@ def concatenate(trx_list, delete_dpp=False, delete_dps=False, delete_groups=Fals
 def save(trx, filename, compression_standard=zipfile.ZIP_STORED):
     """ Save a TrxFile (compressed or not) """
     copy_trx = trx.deepcopy()
-    copy_trx.resize()
+    trx.resize()
 
     tmp_dir_name = copy_trx._uncompressed_folder_handle.name
     if os.path.splitext(filename)[1]:
@@ -473,7 +457,7 @@ class TrxFile():
         if isinstance(key, int):
             key = [key]
 
-        return self.get(key, keep_group=False)
+        return self.select(key, keep_group=False)
 
     def __deepcopy__(self):
         return self.deepcopy()
@@ -759,7 +743,7 @@ class TrxFile():
                 if int(size) != dim:
                     raise ValueError('Wrong dpg size/dimensionality.')
                 else:
-                    shape = (int(size),)
+                    shape = (1, int(size))
 
                 # Handle the two-layers architecture
                 data_name = os.path.basename(base)
@@ -881,10 +865,11 @@ class TrxFile():
                     self.data_per_group[group_key][dpg_key],
                     os.path.join(tmp_dir, 'dpg/', group_key, dpg_key))
 
+                shape = self.data_per_group[group_key][dpg_key].shape
                 if dpg_key not in trx.data_per_group[group_key]:
                     trx.data_per_group[group_key][dpg_key] = {}
                 trx.data_per_group[group_key][dpg_key] = _create_memmap(
-                    dpg_filename, mode='w+', shape=(1,), dtype=dpg_dtype)
+                    dpg_filename, mode='w+', shape=shape, dtype=dpg_dtype)
 
                 trx.data_per_group[group_key][dpg_key][:] = \
                     self.data_per_group[group_key][dpg_key]
@@ -906,13 +891,15 @@ class TrxFile():
         _ = concatenate([self, trx], preallocation=True,
                         delete_groups=True)
 
-    def get(self, indices, keep_group=True, keep_dpg=False, copy_safe=False):
+    def get_group(self, key, keep_group=True, copy_safe=False):
+        return self.select(self.groups[key],
+                           keep_group=keep_group,
+                           copy_safe=copy_safe)
+
+    def select(self, indices, keep_group=True, copy_safe=False):
         """ Get a subset of items, always points to the same memmaps """
         if keep_group:
             indices = np.array(indices, dtype=np.uint32)
-
-        if keep_dpg and not keep_group:
-            raise ValueError('Cannot keep dpg if not keeping groups.')
 
         new_trx = TrxFile()
         new_trx.header = deepcopy(self.header)
@@ -946,6 +933,8 @@ class TrxFile():
 
         # Not keeping group is equivalent to the [] operator
         if keep_group:
+            logging.warning('Keeping dpg despite affecting the group '
+                            'items.')
             for group_key in self.groups.keys():
                 # Keep the group indices even when fancy slicing
                 index = np.argsort(indices)
@@ -960,9 +949,7 @@ class TrxFile():
                     continue
 
                 new_trx.groups[group_key] = intersect
-                if keep_dpg:
-                    logging.warning('Keeping dpg despite affecting the group '
-                                    'items.')
+                if group_key in self.data_per_group:
                     for dpg_key in self.data_per_group[group_key].keys():
                         if group_key not in new_trx.data_per_group:
                             new_trx.data_per_group[group_key] = {}
