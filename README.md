@@ -1,12 +1,14 @@
 # tractography_file_format
+import numpy as np
+from trx_file_memmap import load, save, TrxFile
 Official repository to present specifications, showcase examples, discuss issues and keep track of everything.
-Currently host only two file format propositions, the TRX file format (as memmap vs zarr). Anyone is free to contribute.
+Currently host only two file format propositions, the TRX file format(as memmap vs zarr). Anyone is free to contribute.
 
 This README only focus on the _memmap_ implementation.
 
 Try it out with:
 ```bash
-pip install -e .
+pip install - e .
 ```
 
 # Generals
@@ -15,7 +17,7 @@ pip install -e .
     - Each file basename is the metadata’s name
     - Each file extension is the metadata’s dtype
     - Each file dimension is in the value between basename and metdata,  1-dimension array do not have to follow this convention for readability
-- All arrays have a C-style memory layout (row-major)
+- All arrays have a C-style memory layout(row-major)
     -  Simplest representation, pure binary
 - Compression is optional
     - use ZIP_STORE, if compression is desired use ZIP_DEFLATE
@@ -25,47 +27,47 @@ pip install -e .
 Only (or mostly) for use-readability, read-time checks and broader compatibility.
 
 - Dictionary in YAML
-    - VOXEL_TO_RASMM (list of 16 float, unravel C-style of 4x4 matrix)
-    - DIMENSIONS (list of 3 int)
-    - NB_STREAMLINES (uint32)
-    - NB_POINTS (uint64)
+    - VOXEL_TO_RASMM(list of 16 float, unravel C-style of 4x4 matrix)
+    - DIMENSIONS(list of 3 int)
+    - NB_STREAMLINES(uint32)
+    - NB_POINTS(uint64)
 
 # Arrays
-##### positions.float16
-- Written in world space (RASMM)
-    - Like TCK file 
+# positions.float16
+- Written in world space(RASMM)
+    - Like TCK file
 - Should always be a float16/32/64
     - Default could be float16
-- As contiguous 3D array (NB_POINTS, 3)
+- As contiguous 3D array(NB_POINTS, 3)
 
-##### offsets.uint64 
+# offsets.uint64
 - Always uint64
 - Where is the first point of each streamline, start at 0
 - Two ways of knowing how many points there are:
     - Check the header
     - Positions array size / dtypes / 3
 
-- To get streamlines lengths: append the total number of points to the end of offsets and to the differences between consecutive elements of the array (ediff1d in numpy). 
+- To get streamlines lengths: append the total number of points to the end of offsets and to the differences between consecutive elements of the array(ediff1d in numpy).
 
-##### dpp (data_per_point)
-- Always of size (NB_POINTS, 1) or (NB_POINTS, N)
+# dpp (data_per_point)
+- Always of size(NB_POINTS, 1) or (NB_POINTS, N)
 
-##### dps (data_per_streamline)
-- Always of size (NB_STREAMLINES, 1) or (NB_STREAMLINES, N)
+# dps (data_per_streamline)
+- Always of size(NB_STREAMLINES, 1) or (NB_STREAMLINES, N)
 
-##### Groups
-Groups are tables of indices that allow sparse & overlapping representation (clusters, connectomics, bundles).
+# Groups
+Groups are tables of indices that allow sparse & overlapping representation(clusters, connectomics, bundles).
 - All indices must be 0 < id < NB_STREAMLINES
 - Datatype should be uint32
 - Allow to get a predefined streamlines subset from the memmaps efficiently
 - Variables in sizes
 
-##### dpg (data_per_group)
+# dpg (data_per_group)
 - Each folder is the name of a group
 - Not all metadata have to be present in all groups
-- Always of size (1,) or (N,)
+- Always of size(1,) or (N,)
 
-### Example structure
+# Example structure
 ```bash
 complete_big_v4.trx
 ├── dpg
@@ -116,10 +118,8 @@ complete_big_v4.trx
 └── positions.3.float16
 ```
 
-### Example code
+# Example code
 ```python
-import numpy as np  
-from trx_file_memmap import load, save, TrxFile
 
 trx = load('complete_big_v4.trx')
 
@@ -129,7 +129,7 @@ trx.streamlines
 
 # Access the dpp (dict) / dps (dict)
 trx.data_per_point
-trx.data_per_streamlines
+trx.data_per_streamline
 
 # Access the groups (dict) / dpg (dict)
 trx.groups
@@ -143,7 +143,7 @@ save(sub_trx, 'random_1000.trx')
 
 # Get sub-groups only, from the random subset
 for key in sub_trx.groups.keys():
-	group_trx = sub_trx.get_group(key) 
+    group_trx = sub_trx.get_group(key)
     save(group_trx, '{}.trx'.format(key)) 
 
 # Pre-allocate memmaps and append 100x the random subset
