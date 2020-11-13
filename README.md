@@ -60,53 +60,55 @@ Only (or mostly) for use-readability, read-time checks and broader compatibility
 - Variables in sizes
 
 ### Example structure
+```bash
 complete_big_v4.trx
-         ├── dpg
-         │         ├── AF_L
-         │         │         ├── mean_fa.float16
-         │         │         ├── shuffle_colors.3.uint8
-         │         │         └── volume.uint32
-         │         ├── AF_R
-         │         │         ├── mean_fa.float16
-         │         │         ├── shuffle_colors.3.uint8
-         │         │         └── volume.uint32
-         │         ├── CC
-         │         │         ├── mean_fa.float16
-         │         │         ├── shuffle_colors.3.uint8
-         │         │         └── volume.uint32
-         │         ├── CST_L
-         │         │         └── shuffle_colors.3.uint8
-         │         ├── CST_R
-         │         │         └── shuffle_colors.3.uint8
-         │         ├── SLF_L
-         │         │         ├── mean_fa.float16
-         │         │         ├── shuffle_colors.3.uint8
-         │         │         └── volume.uint32
-         │         └── SLF_R
-         │             ├── mean_fa.float16
-         │             ├── shuffle_colors.3.uint8
-         │             └── volume.uint32
-         ├── dpp
-         │         ├── color_x.uint8
-         │         ├── color_y.uint8
-         │         ├── color_z.uint8
-         │         └── fa.float16
-         ├── dps
-         │         ├── algo.uint8
-         │         ├── clusters_QB.uint16
-         │         ├── commit_colors.3.uint8
-         │         └── commit_weights.float32
-         ├── groups
-         │         ├── AF_L.uint32
-         │         ├── AF_R.uint32
-         │         ├── CC.uint32
-         │         ├── CST_L.uint32
-         │         ├── CST_R.uint32
-         │         ├── SLF_L.uint32
-         │         └── SLF_R.uint32
-         ├── header.yaml
-         ├── offsets.uint64
-         └── positions.3.float16
+├── dpg
+│   ├── AF_L
+│   │   ├── mean_fa.float16
+│   │   ├── shuffle_colors.3.uint8
+│   │   └── volume.uint32
+│   ├── AF_R
+│   │   ├── mean_fa.float16
+│   │   ├── shuffle_colors.3.uint8
+│   │   └── volume.uint32
+│   ├── CC
+│   │   ├── mean_fa.float16
+│   │   ├── shuffle_colors.3.uint8
+│   │   └── volume.uint32
+│   ├── CST_L
+│   │   └── shuffle_colors.3.uint8
+│   ├── CST_R
+│   │   └── shuffle_colors.3.uint8
+│   ├── SLF_L
+│   │   ├── mean_fa.float16
+│   │   ├── shuffle_colors.3.uint8
+│   │   └── volume.uint32
+│   └── SLF_R
+│       ├── mean_fa.float16
+│       ├── shuffle_colors.3.uint8
+│       └── volume.uint32
+├── dpp
+│   ├── color_x.uint8
+│   ├── color_y.uint8
+│   ├── color_z.uint8
+│   └── fa.float16
+├── dps
+│   ├── algo.uint8
+│   ├── clusters_QB.uint16
+│   ├── commit_colors.3.uint8
+│   └── commit_weights.float32
+├── groups
+│   ├── AF_L.uint32
+│   ├── AF_R.uint32
+│   ├── CC.uint32
+│   ├── CST_L.uint32
+│   ├── CST_R.uint32
+│   ├── SLF_L.uint32
+│   └── SLF_R.uint32
+├── header.yaml
+├── offsets.uint64
+└── positions.3.float16
+```
 
 ```python
 import numpy as np  
