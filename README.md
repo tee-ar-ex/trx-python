@@ -40,6 +40,7 @@ Only (or mostly) for use-readability, read-time checks and broader compatibility
 
 ##### offsets.uint64 
 - Always uint64
+- Where is the first point of each streamline, start at 0
 - Two ways of knowing how many points there are:
     - Check the header
     - Positions array size / dtypes / 3
