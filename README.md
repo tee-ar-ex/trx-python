@@ -25,10 +25,10 @@ pip install -e .
 Only (or mostly) for use-readability, read-time checks and broader compatibility.
 
 - Dictionary in YAML
-    - VOXEL_TO_RASMM
-    - DIMENSIONS
-    - NB_STREAMLINES
-    - NB_POINTS
+    - VOXEL_TO_RASMM (list of 16 float, unravel C-style of 4x4 matrix)
+    - DIMENSIONS (list of 3 int)
+    - NB_STREAMLINES (uint32)
+    - NB_POINTS (uint64)
 
 # Arrays
 ##### positions.float16
@@ -55,7 +55,7 @@ Only (or mostly) for use-readability, read-time checks and broader compatibility
 ##### Groups
 Groups are tables of indices that allow sparse & overlapping representation (clusters, connectomics, bundles).
 - All indices must be 0 < id < NB_STREAMLINES
-- Recommended uint32 (as long as streamlines count is below 4 294 967 295)
+- Datatype should be uint32
 - Allow to get a predefined streamlines subset from the memmaps efficiently
 - Variables in sizes
 
