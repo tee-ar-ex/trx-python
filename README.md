@@ -2,11 +2,12 @@
 Official repository to present specifications, showcase examples, discuss issues and keep track of everything.
 Currently host only two file format propositions, the TRX file format (as memmap vs zarr). Anyone is free to contribute.
 
+This README only focus on the _memmap_ implementation.
+
 Try it out with:
 ```bash
 pip install -e .
 ```
-
 
 # Generals
 - (Un)-Compressed Zip File or simple folder architecture
@@ -16,6 +17,9 @@ pip install -e .
     - Each file dimension is in the value between basename and metdata,  1-dimension array do not have to follow this convention for readability
 - All arrays have a C-style memory layout (row-major)
     -  Simplest representation, pure binary
+- Compression is optional
+    - use ZIP_STORE, if compression is desired use ZIP_DEFLATE
+    - Compressed TRX files will have to be decompressed before being loaded
 
 # Header
 Only (or mostly) for use-readability, read-time checks and broader compatibility.
@@ -32,7 +36,7 @@ Only (or mostly) for use-readability, read-time checks and broader compatibility
     - Like TCK file 
 - Should always be a float16/32/64
     - Default could be float16
-- As contiguous 3D array (NBR_POINTS, 3)
+- As contiguous 3D array (NB_POINTS, 3)
 
 ##### offsets.uint64 
 - Always uint64
@@ -42,22 +46,23 @@ Only (or mostly) for use-readability, read-time checks and broader compatibility
 
 - To get streamlines lengths: append the total number of points to the end of offsets and to the differences between consecutive elements of the array (ediff1d in numpy). 
 
+##### dpp (data_per_point)
+- Always of size (NB_POINTS, 1) or (NB_POINTS, N)
+
+##### dps (data_per_streamline)
+- Always of size (NB_STREAMLINES, 1) or (NB_STREAMLINES, N)
+
+##### Groups
+Groups are tables of indices that allow sparse & overlapping representation (clusters, connectomics, bundles).
+- All indices must be 0 < id < NB_STREAMLINES
+- Recommended uint32 (as long as streamlines count is below 4 294 967 295)
+- Allow to get a predefined streamlines subset from the memmaps efficiently
+- Variables in sizes
+
 ##### dpg (data_per_group)
 - Each folder is the name of a group
 - Not all metadata have to be present in all groups
 - Always of size (1,) or (N,)
-
-##### dpp (data_per_point)
-- Always of size (NBR_POINTS, 1) or (NBR_POINTS, N)
-
-##### dps (data_per_streamline)
-- Always of size (NBR_STREAMLINES, 1) or (NBR_STREAMLINES, N)
-
-##### Groups
-- Groups are tables of indices that allow sparse & overlapping representation (clusters, connectomics, bundles)
-- Recommended uint32 (as long as streamlines count is below 4 294 967 295)
-- Allow to get a predefined streamlines subset from the memmaps efficiently
-- Variables in sizes
 
 ### Example structure
 ```bash
@@ -110,6 +115,7 @@ complete_big_v4.trx
 └── positions.3.float16
 ```
 
+### Example code
 ```python
 import numpy as np  
 from trx_file_memmap import load, save, TrxFile
