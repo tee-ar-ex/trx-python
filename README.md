@@ -10,35 +10,35 @@ pip install -e .
 
 # Generals
 - (Un)-Compressed Zip File or simple folder architecture
--- File architecture describe the data
--- Each file basename is the metadata’s name
--- Each file extension is the metadata’s dtype
--- Each file dimension is in the value between basename and metdata,  1-dimension array do not have to follow this convention for readability
+    - File architecture describe the data
+    - Each file basename is the metadata’s name
+    - Each file extension is the metadata’s dtype
+    - Each file dimension is in the value between basename and metdata,  1-dimension array do not have to follow this convention for readability
 - All arrays have a C-style memory layout (row-major)
---  Simplest representation, pure binary
+    -  Simplest representation, pure binary
 
 # Header
 Only (or mostly) for use-readability, read-time checks and broader compatibility.
 
 - Dictionary in YAML
--- VOXEL_TO_RASMM
--- DIMENSIONS
--- NB_STREAMLINES
--- NB_POINTS
+    - VOXEL_TO_RASMM
+    - DIMENSIONS
+    - NB_STREAMLINES
+    - NB_POINTS
 
 # Arrays
 ##### positions.float16
 - Written in world space (RASMM)
--- Like TCK file 
+    - Like TCK file 
 - Should always be a float16/32/64
--- Default could be float16
+    - Default could be float16
 - As contiguous 3D array (NBR_POINTS, 3)
 
 ##### offsets.uint64 
 - Always uint64
 - Two ways of knowing how many points there are:
--- Check the header
--- Positions array size / dtypes / 3
+    - Check the header
+    - Positions array size / dtypes / 3
 
 - To get streamlines lengths: append the total number of points to the end of offsets and to the differences between consecutive elements of the array (ediff1d in numpy). 
 
