@@ -8,5 +8,5 @@ pip install -e .
 ```
 
 ```python
-from trx_file import load, save, TrxFile
+from trx_file_manual import load, save, TrxFile
 ```
