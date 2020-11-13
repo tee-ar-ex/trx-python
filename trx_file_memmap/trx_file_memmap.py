@@ -275,6 +275,11 @@ def concatenate(trx_list, delete_dpp=False, delete_dps=False, delete_groups=Fals
                     all_groups_len[group_key] += len(trx_1.groups[group_key])
                 else:
                     all_groups_len[group_key] = len(trx_1.groups[group_key])
+                if group_key in all_groups_dtype and \
+                        trx_1.groups[group_key].dtype != all_groups_dtype[group_key]:
+                    raise ValueError('Shared group key, has different dtype.')
+                else:
+                    all_groups_dtype[group_key] = trx_1.groups[group_key].dtype
 
     # Once the checks are done, actually concatenate
     to_concat_list = trx_list[1:] if preallocation else trx_list
@@ -309,7 +314,7 @@ def concatenate(trx_list, delete_dpp=False, delete_dps=False, delete_groups=Fals
             count = 0
             for curr_trx in trx_list:
                 curr_len = len(curr_trx.groups[group_key])
-                new_trx.groups[group_key][pos:pos+curr_len] = \
+                new_trx.groups[group_key][0, pos:pos+curr_len] = \
                     curr_trx.groups[group_key] + count
                 pos += curr_len
                 count += curr_trx.header['NB_STREAMLINES']
