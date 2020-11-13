@@ -120,6 +120,8 @@ complete_big_v4.trx
 
 # Example code
 ```python
+from trx_file_memmap import TrxFile, load, save
+import numpy as np
 
 trx = load('complete_big_v4.trx')
 
