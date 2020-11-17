@@ -18,7 +18,7 @@ pip install - e .
     - Each file extension is the metadata’s dtype
     - Each file dimension is in the value between basename and metdata,  1-dimension array do not have to follow this convention for readability
 - All arrays have a C-style memory layout(row-major)
-    -  Simplest representation, pure binary
+- All arrays have a little-endian byte order
 - Compression is optional
     - use ZIP_STORE, if compression is desired use ZIP_DEFLATE
     - Compressed TRX files will have to be decompressed before being loaded
@@ -27,10 +27,10 @@ pip install - e .
 Only (or mostly) for use-readability, read-time checks and broader compatibility.
 
 - Dictionary in YAML
-    - VOXEL_TO_RASMM(list of 16 float, unravel C-style of 4x4 matrix)
-    - DIMENSIONS(list of 3 int)
-    - NB_STREAMLINES(uint32)
-    - NB_POINTS(uint64)
+    - VOXEL_TO_RASMM (list of 16 float, unravel C-style of 4x4 matrix)
+    - DIMENSIONS (list of 3 int)
+    - NB_STREAMLINES (uint32)
+    - NB_POINTS (uint64)
 
 # Arrays
 # positions.float16
@@ -66,6 +66,12 @@ Groups are tables of indices that allow sparse & overlapping representation(clus
 - Each folder is the name of a group
 - Not all metadata have to be present in all groups
 - Always of size(1,) or (N,)
+
+# Accepted extensions (datatype)
+- int8/16/32/64
+- uint8/16/32/64
+- float16/32/64
+- bit (for binary/boolean array)
 
 # Example structure
 ```bash
