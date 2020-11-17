@@ -19,7 +19,8 @@ def _generate_filename_from_data(arr, filename):
     if ext:
         logging.warning('Will overwrite provided extension if needed.')
 
-    dtype = arr.dtype.name
+    dtype = arr.dtype
+    dtype = 'bit' if dtype == np.bool else dtype.name
 
     if arr.ndim == 1:
         new_filename = '{}.{}'.format(base, dtype)
@@ -70,6 +71,8 @@ def _compute_lengths(offsets, nb_points):
 
 
 def _is_dtype_valid(ext):
+    if ext.replace('.', '') == 'bit':
+        return True
     try:
         isinstance(np.dtype(ext.replace('.', '')), np.dtype)
         return True
@@ -97,6 +100,9 @@ def _dichotomic_search(x, l_bound=None, r_bound=None):
 def _create_memmap(filename, mode='r', shape=(1,), dtype=np.float32, offset=0,
                    order='C'):
     """ Wrapper to support empty array as memmaps """
+    if np.dtype(dtype) == np.bool:
+        filename = filename.replace('.bool', '.bit')
+
     if shape[0]:
         return np.memmap(filename, mode=mode, offset=offset,
                          shape=shape,  dtype=dtype, order=order)
@@ -165,6 +171,9 @@ def load_from_zip(filename):
                 raise ValueError('The dtype {} is not supported'.format(
                     elem_filename))
 
+            if ext == '.bit':
+                ext = '.bool'
+
             mem_adress = zip_info.header_offset + len(zip_info.FileHeader())
             dtype_size = np.dtype(ext[1:]).itemsize
             size = zip_info.file_size / dtype_size
@@ -194,9 +203,13 @@ def load_from_directory(directory):
             if name == 'header.yaml':
                 continue
             _, ext = os.path.splitext(elem_filename)
+
             if not _is_dtype_valid(ext):
-                raise ValueError('The dtype if {} is not supported'.format(
+                raise ValueError('The dtype is {} is not supported'.format(
                     elem_filename))
+
+            if ext == '.bit':
+                ext = '.bool'
 
             dtype_size = np.dtype(ext[1:]).itemsize
             size = os.path.getsize(elem_filename) / dtype_size
@@ -703,6 +716,8 @@ class TrxFile():
 
             folder = os.path.dirname(elem_filename)
             base, dim, ext = _split_ext_with_dimensionality(elem_filename)
+            if ext == '.bit':
+                ext = '.bool'
             mem_adress, size = dict_pointer_size[elem_filename]
 
             if root is not None and folder.startswith(root.rstrip('/')):
