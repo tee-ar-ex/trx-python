@@ -25,7 +25,7 @@ Only (or mostly) for use-readability, read-time checks and broader compatibility
     - VOXEL_TO_RASMM (list of 16 float, unravel C-style of 4x4 matrix)
     - DIMENSIONS (list of 3 int)
     - NB_STREAMLINES (uint32)
-    - NB_POINTS (uint64)
+    - NB_VERTICES (uint64)
 
 # Arrays
 # positions.float16
@@ -33,22 +33,22 @@ Only (or mostly) for use-readability, read-time checks and broader compatibility
     - Like TCK file
 - Should always be a float16/32/64
     - Default could be float16
-- As contiguous 3D array(NB_POINTS, 3)
+- As contiguous 3D array(NB_VERTICES, 3)
 
 # offsets.uint64
 - Always uint64
-- Where is the first point of each streamline, start at 0
-- Two ways of knowing how many points there are:
+- Where is the first vertex of each streamline, start at 0
+- Two ways of knowing how many vertices there are:
     - Check the header
     - Positions array size / dtypes / 3
 
-- To get streamlines lengths: append the total number of points to the end of offsets and to the differences between consecutive elements of the array(ediff1d in numpy).
+- To get streamlines lengths: append the total number of vertices to the end of offsets and to the differences between consecutive elements of the array(ediff1d in numpy).
 
-# dpp (data_per_point)
-- Always of size(NB_POINTS, 1) or (NB_POINTS, N)
+# dpv (data_per_vertex)
+- Always of size (NB_VERTICES, 1) or (NB_VERTICES, N)
 
 # dps (data_per_streamline)
-- Always of size(NB_STREAMLINES, 1) or (NB_STREAMLINES, N)
+- Always of size (NB_STREAMLINES, 1) or (NB_STREAMLINES, N)
 
 # Groups
 Groups are tables of indices that allow sparse & overlapping representation(clusters, connectomics, bundles).
@@ -60,7 +60,7 @@ Groups are tables of indices that allow sparse & overlapping representation(clus
 # dpg (data_per_group)
 - Each folder is the name of a group
 - Not all metadata have to be present in all groups
-- Always of size(1,) or (N,)
+- Always of size (1,) or (N,)
 
 # Accepted extensions (datatype)
 - int8/16/32/64
@@ -96,7 +96,7 @@ complete_big_v4.trx
 │       ├── mean_fa.float16
 │       ├── shuffle_colors.3.uint8
 │       └── volume.uint32
-├── dpp
+├── dpv
 │   ├── color_x.uint8
 │   ├── color_y.uint8
 │   ├── color_z.uint8
@@ -124,14 +124,14 @@ complete_big_v4.trx
 from trx_file_memmap import TrxFile, load, save
 import numpy as np
 
-trx = load('complete_big_v4.trx')
+trx = load('complete_big_v5.trx')
 
 # Access the header (dict) / streamlines (ArraySequences)
 trx.header
 trx.streamlines
 
-# Access the dpp (dict) / dps (dict)
-trx.data_per_point
+# Access the dpv (dict) / dps (dict)
+trx.data_per_vertex
 trx.data_per_streamline
 
 # Access the groups (dict) / dpg (dict)
@@ -150,7 +150,7 @@ for key in sub_trx.groups.keys():
     save(group_trx, '{}.trx'.format(key)) 
 
 # Pre-allocate memmaps and append 100x the random subset
-alloc_trx = TrxFile(nb_streamlines=1500000, nb_points=500000000, init_as=trx)
+alloc_trx = TrxFile(nb_streamlines=1500000, nb_vertices=500000000, init_as=trx)
 for i in range(100):
     alloc_trx.append(sub_trx)
 
