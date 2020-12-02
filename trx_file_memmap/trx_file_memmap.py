@@ -944,14 +944,17 @@ class TrxFile():
 
             return new_trx.deepcopy() if copy_safe else new_trx
 
-        new_trx.streamlines = self.streamlines[indices].copy()
+        new_trx.streamlines = self.streamlines[indices].copy() if copy_safe \
+            else self.streamlines[indices]
         for dpv_key in self.data_per_vertex.keys():
             new_trx.data_per_vertex[dpv_key] = \
-                self.data_per_vertex[dpv_key][indices].copy()
+                self.data_per_vertex[dpv_key][indices].copy() if copy_safe \
+                else self.data_per_vertex[dpv_key][indices]
 
         for dps_key in self.data_per_streamline.keys():
             new_trx.data_per_streamline[dps_key] = \
-                self.data_per_streamline[dps_key][indices]
+                self.data_per_streamline[dps_key][indices].copy() if \
+                copy_safe else self.data_per_streamline[dps_key][indices]
 
         # Not keeping group is equivalent to the [] operator
         if keep_group:
@@ -1068,15 +1071,12 @@ class TrxFile():
         """ Convert a TrxFile to a nibabel Tractogram (in RAM) """
         if resize:
             self.resize()
-        arr_seq = ArraySequence()
-        arr_seq._data = deepcopy(self.streamlines._data)
-        arr_seq._lengths = deepcopy(self.streamlines._lengths)
-        arr_seq._offsets = deepcopy(self.streamlines._offsets)
 
-        tractogram = nib.streamlines.Tractogram(
-            arr_seq, affine_to_rasmm=np.eye(4),
-            data_per_point=deepcopy(self.data_per_vertex),
-            data_per_streamline=deepcopy(self.data_per_streamline))
+        trx_obj = self.to_memory()
+        tractogram = nib.streamlines.Tractogram([], affine_to_rasmm=np.eye(4))
+        tractogram._set_streamlines(trx_obj.streamlines)
+        tractogram._data_per_point = trx_obj.data_per_vertex
+        tractogram._data_per_streamline = trx_obj.data_per_streamline
 
         return tractogram
 
@@ -1086,14 +1086,15 @@ class TrxFile():
             self.resize()
 
         trx_obj = TrxFile()
-        trx_obj.header = self.header
+        trx_obj.header = deepcopy(self.header)
         trx_obj.streamlines = deepcopy(self.streamlines)
 
         for key in self.data_per_vertex:
-            trx_obj.data_per_vertex[key] = deepcopy(self.data_per_vertex)
+            trx_obj.data_per_vertex[key] = deepcopy(self.data_per_vertex[key])
 
         for key in self.data_per_streamline:
-            trx_obj.data_per_streamline[key] = deepcopy(self.data_per_streamline[key])
+            trx_obj.data_per_streamline[key] = deepcopy(
+                self.data_per_streamline[key])
 
         for key in self.groups:
             trx_obj.groups[key] = deepcopy(self.groups[key])
@@ -1101,7 +1102,7 @@ class TrxFile():
         for key in self.data_per_group:
             trx_obj.data_per_group[key] = deepcopy(self.data_per_group[key])
 
-        return self.streamlines
+        return trx_obj
 
     def to_sft(self, resize=False):
         """ Convert a TrxFile to a valid StatefulTractogram (in RAM) """
