@@ -164,10 +164,12 @@ def load_from_zip(filename):
         files_pointer_size = {}
         for zip_info in zf.filelist:
             elem_filename = zip_info.filename
-            if elem_filename == 'header.json':
-                continue
             _, ext = os.path.splitext(elem_filename)
+            if ext == '.json' or zip_info.is_dir():
+                continue
+            
             if not _is_dtype_valid(ext):
+                continue
                 raise ValueError('The dtype {} is not supported'.format(
                     elem_filename))
 
@@ -177,6 +179,9 @@ def load_from_zip(filename):
             mem_adress = zip_info.header_offset + len(zip_info.FileHeader())
             dtype_size = np.dtype(ext[1:]).itemsize
             size = zip_info.file_size / dtype_size
+
+            if len(zip_info.extra):
+                mem_adress += 4
 
             if size.is_integer():
                 files_pointer_size[elem_filename] = mem_adress, int(size)
@@ -200,12 +205,12 @@ def load_from_directory(directory):
     for root, dirs, files in os.walk(directory):
         for name in files:
             elem_filename = os.path.join(root, name)
-            if name == 'header.json':
-                continue
             _, ext = os.path.splitext(elem_filename)
-
+            if ext == '.json':
+                continue
+            
             if not _is_dtype_valid(ext):
-                raise ValueError('The dtype is {} is not supported'.format(
+                raise ValueError('The dtype of {} is not supported'.format(
                     elem_filename))
 
             if ext == '.bit':
@@ -347,15 +352,17 @@ def concatenate(trx_list, delete_dpv=False, delete_dps=False, delete_groups=Fals
 
 def save(trx, filename, compression_standard=zipfile.ZIP_STORED):
     """ Save a TrxFile (compressed or not) """
+    if os.path.splitext(filename)[1] and not \
+            os.path.splitext(filename)[1] in ['.zip', '.trx']:
+        raise ValueError('Unsupported extension.')
+
     copy_trx = trx.deepcopy()
     copy_trx.resize()
 
     tmp_dir_name = copy_trx._uncompressed_folder_handle.name
-    if os.path.splitext(filename)[1]:
-        if os.path.splitext(filename)[1] in ['.zip', '.trx']:
-            zip_from_folder(tmp_dir_name, filename, compression_standard)
-        else:
-            raise ValueError('Unsupported extension.')
+    if os.path.splitext(filename)[1] and \
+            os.path.splitext(filename)[1] in ['.zip', '.trx']:
+        zip_from_folder(tmp_dir_name, filename, compression_standard)
     else:
         if os.path.isdir(filename):
             shutil.rmtree(filename)
@@ -493,8 +500,7 @@ class TrxFile():
         out_json = open(os.path.join(tmp_dir.name, 'header.json'), 'w')
         tmp_header = deepcopy(self.header)
 
-        tmp_header['VOXEL_TO_RASMM'] = \
-            tmp_header['VOXEL_TO_RASMM'].tolist()
+        tmp_header['VOXEL_TO_RASMM'] = tmp_header['VOXEL_TO_RASMM'].tolist()
         tmp_header['DIMENSIONS'] = tmp_header['DIMENSIONS'].tolist()
 
         # tofile() alway write in C-order
@@ -597,23 +603,21 @@ class TrxFile():
             return strs_start, pts_start
 
         # Mandatory arrays
-        self.streamlines._data[pts_start:pts_end] = \
-            trx.streamlines._data[0:curr_pts_len]
-        self.streamlines._offsets[strs_start:strs_end] = \
-            trx.streamlines._offsets[0:curr_strs_len] + pts_start
-        self.streamlines._lengths[strs_start:strs_end] = \
-            trx.streamlines._lengths[0:curr_strs_len]
+        self.streamlines._data[pts_start:pts_end] = trx.streamlines._data[0:curr_pts_len]
+        self.streamlines._offsets[strs_start:strs_end] = trx.streamlines._offsets[0:curr_strs_len] + pts_start
+        self.streamlines._lengths[strs_start:
+                                  strs_end] = trx.streamlines._lengths[0:curr_strs_len]
 
         # Optional fixed-sized arrays
         for dpv_key in self.data_per_vertex.keys():
-            self.data_per_vertex[dpv_key]._data[pts_start:pts_end] = \
-                trx.data_per_vertex[dpv_key]._data[0:curr_pts_len]
+            self.data_per_vertex[dpv_key]._data[pts_start:
+                                                pts_end] = trx.data_per_vertex[dpv_key]._data[0:curr_pts_len]
             self.data_per_vertex[dpv_key]._offsets = self.streamlines._offsets
             self.data_per_vertex[dpv_key]._lengths = self.streamlines._lengths
 
         for dps_key in self.data_per_streamline.keys():
-            self.data_per_streamline[dps_key][strs_start:strs_end] = \
-                trx.data_per_streamline[dps_key][0:curr_strs_len]
+            self.data_per_streamline[dps_key][strs_start:
+                                              strs_end] = trx.data_per_streamline[dps_key][0:curr_strs_len]
 
         return strs_end, pts_end
 
@@ -918,8 +922,8 @@ class TrxFile():
                 trx.data_per_group[group_key][dpg_key] = _create_memmap(
                     dpg_filename, mode='w+', shape=shape, dtype=dpg_dtype)
 
-                trx.data_per_group[group_key][dpg_key][:] = \
-                    self.data_per_group[group_key][dpg_key]
+                trx.data_per_group[group_key][dpg_key][:
+                                                       ] = self.data_per_group[group_key][dpg_key]
 
         self.close()
         self.__dict__ = trx.__dict__
@@ -956,15 +960,14 @@ class TrxFile():
             positions_dtype = self.streamlines._data.dtype
             offsets_dtype = self.streamlines._offsets.dtype
             lengths_dtype = self.streamlines._lengths.dtype
-            new_trx.streamlines._data = \
-                new_trx.streamlines._data.reshape(
-                    (0, 3)).astype(positions_dtype)
-            new_trx.streamlines._offsets = \
-                new_trx.streamlines._offsets.astype(offsets_dtype)
-            new_trx.streamlines._lengths = \
-                new_trx.streamlines._lengths.astype(lengths_dtype)
+            new_trx.streamlines._data = new_trx.streamlines._data.reshape(
+                (0, 3)).astype(positions_dtype)
+            new_trx.streamlines._offsets = new_trx.streamlines._offsets.astype(
+                offsets_dtype)
+            new_trx.streamlines._lengths = new_trx.streamlines._lengths.astype(
+                lengths_dtype)
             new_trx.header['NB_VERTICES'] = len(new_trx.streamlines._data)
-            new_trx.header['NB_STREAMLINES'] \
+            new_trx.header['NB_STREAMLINES']\
                 = len(new_trx.streamlines._lengths)
 
             return new_trx.deepcopy() if copy_safe else new_trx
@@ -972,13 +975,11 @@ class TrxFile():
         new_trx.streamlines = self.streamlines[indices].copy() if copy_safe \
             else self.streamlines[indices]
         for dpv_key in self.data_per_vertex.keys():
-            new_trx.data_per_vertex[dpv_key] = \
-                self.data_per_vertex[dpv_key][indices].copy() if copy_safe \
+            new_trx.data_per_vertex[dpv_key] = self.data_per_vertex[dpv_key][indices].copy() if copy_safe \
                 else self.data_per_vertex[dpv_key][indices]
 
         for dps_key in self.data_per_streamline.keys():
-            new_trx.data_per_streamline[dps_key] = \
-                self.data_per_streamline[dps_key][indices].copy() if \
+            new_trx.data_per_streamline[dps_key] = self.data_per_streamline[dps_key][indices].copy() if \
                 copy_safe else self.data_per_streamline[dps_key][indices]
 
         # Not keeping group is equivalent to the [] operator
@@ -1003,8 +1004,7 @@ class TrxFile():
                     for dpg_key in self.data_per_group[group_key].keys():
                         if group_key not in new_trx.data_per_group:
                             new_trx.data_per_group[group_key] = {}
-                        new_trx.data_per_group[group_key][dpg_key] = \
-                            self.data_per_group[group_key][dpg_key]
+                        new_trx.data_per_group[group_key][dpg_key] = self.data_per_group[group_key][dpg_key]
 
         new_trx.header['NB_VERTICES'] = len(new_trx.streamlines._data)
         new_trx.header['NB_STREAMLINES'] = len(new_trx.streamlines._lengths)
