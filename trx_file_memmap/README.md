@@ -21,9 +21,9 @@ pip install - e .
 # Header
 Only (or mostly) for use-readability, read-time checks and broader compatibility.
 
-- Dictionary in YAML
-    - VOXEL_TO_RASMM (list of 16 float, unravel C-style of 4x4 matrix)
-    - DIMENSIONS (list of 3 int)
+- Dictionary in JSON
+    - VOXEL_TO_RASMM (4 lists of 4 float, 4x4 transformation matrix)
+    - DIMENSIONS (list of 3 uint16)
     - NB_STREAMLINES (uint32)
     - NB_VERTICES (uint64)
 
@@ -114,7 +114,7 @@ complete_big_v4.trx
 │   ├── CST_R.uint32
 │   ├── SLF_L.uint32
 │   └── SLF_R.uint32
-├── header.yaml
+├── header.json
 ├── offsets.uint64
 └── positions.3.float16
 ```

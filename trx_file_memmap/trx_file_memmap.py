@@ -1,5 +1,5 @@
 from copy import deepcopy
-import yaml
+import json
 import logging
 import os
 import shutil
@@ -154,9 +154,8 @@ def load(input_obj, check_dpg=True):
 def load_from_zip(filename):
     """ Load a TrxFile from a single zipfile """
     with zipfile.ZipFile(filename, mode='r') as zf:
-        with zf.open('header.yaml') as zf_header:
-            data = zf_header.read()
-            header = yaml.load(data, Loader=yaml.FullLoader)
+        with zf.open('header.json') as zf_header:
+            header = json.load(zf_header)
             header['VOXEL_TO_RASMM'] = np.reshape(header['VOXEL_TO_RASMM'],
                                                   (4, 4)).astype(np.float32)
             header['DIMENSIONS'] = np.array(header['DIMENSIONS'],
@@ -165,7 +164,7 @@ def load_from_zip(filename):
         files_pointer_size = {}
         for zip_info in zf.filelist:
             elem_filename = zip_info.filename
-            if elem_filename == 'header.yaml':
+            if elem_filename == 'header.json':
                 continue
             _, ext = os.path.splitext(elem_filename)
             if not _is_dtype_valid(ext):
@@ -191,8 +190,8 @@ def load_from_zip(filename):
 def load_from_directory(directory):
     """ Load a TrxFile from a folder containing memmaps """
     directory = os.path.abspath(directory)
-    with open(os.path.join(directory, 'header.yaml')) as header:
-        header = yaml.load(header, Loader=yaml.FullLoader)
+    with open(os.path.join(directory, 'header.json')) as header:
+        header = json.load(header)
         header['VOXEL_TO_RASMM'] = np.reshape(header['VOXEL_TO_RASMM'],
                                               (4, 4)).astype(np.float32)
         header['DIMENSIONS'] = np.array(header['DIMENSIONS'],
@@ -201,7 +200,7 @@ def load_from_directory(directory):
     for root, dirs, files in os.walk(directory):
         for name in files:
             elem_filename = os.path.join(root, name)
-            if name == 'header.yaml':
+            if name == 'header.json':
                 continue
             _, ext = os.path.splitext(elem_filename)
 
@@ -349,7 +348,7 @@ def concatenate(trx_list, delete_dpv=False, delete_dps=False, delete_groups=Fals
 def save(trx, filename, compression_standard=zipfile.ZIP_STORED):
     """ Save a TrxFile (compressed or not) """
     copy_trx = trx.deepcopy()
-    trx.resize()
+    copy_trx.resize()
 
     tmp_dir_name = copy_trx._uncompressed_folder_handle.name
     if os.path.splitext(filename)[1]:
@@ -427,6 +426,7 @@ class TrxFile():
         self.header['DIMENSIONS'] = dimensions
         self.header['NB_VERTICES'] = nb_vertices
         self.header['NB_STREAMLINES'] = nb_streamlines
+        self._copy_safe = True
 
     def __str__(self):
         """ Generate the string for printing """
@@ -465,6 +465,9 @@ class TrxFile():
             if group_key in self.data_per_group:
                 text += '\ndata_per_groups ({}) keys: {}'.format(
                     group_key, list(self.data_per_group[group_key].keys()))
+
+        text += '\ncopy_safe: {}'.format(self._copy_safe)
+
         return text
 
     def __len__(self):
@@ -474,7 +477,11 @@ class TrxFile():
     def __getitem__(self, key):
         """ Slice all data in a consistent way """
         if isinstance(key, int):
+            if key < 0:
+                key += len(self)
             key = [key]
+        elif isinstance(key, slice):
+            key = [ii for ii in range(*key.indices(len(self)))]
 
         return self.select(key, keep_group=False)
 
@@ -483,20 +490,31 @@ class TrxFile():
 
     def deepcopy(self):
         tmp_dir = tempfile.TemporaryDirectory()
-        with open(os.path.join(tmp_dir.name, 'header.yaml'), 'w') as out_yaml:
-            tmp_header = deepcopy(self.header)
-            tmp_header['VOXEL_TO_RASMM'] = \
-                tmp_header['VOXEL_TO_RASMM'].ravel().tolist()
-            tmp_header['DIMENSIONS'] = tmp_header['DIMENSIONS'].tolist()
-            yaml.dump(tmp_header, out_yaml)
+        out_json = open(os.path.join(tmp_dir.name, 'header.json'), 'w')
+        tmp_header = deepcopy(self.header)
+
+        tmp_header['VOXEL_TO_RASMM'] = \
+            tmp_header['VOXEL_TO_RASMM'].tolist()
+        tmp_header['DIMENSIONS'] = tmp_header['DIMENSIONS'].tolist()
 
         # tofile() alway write in C-order
-        to_dump = self.streamlines._data
+        if not self._copy_safe:
+            to_dump = self.streamlines.copy()._data
+            tmp_header['NB_STREAMLINES'] = len(self.streamlines)
+            tmp_header['NB_VERTICES'] = len(to_dump)
+        else:
+            to_dump = self.streamlines._data
+        json.dump(tmp_header, out_json)
+        out_json.close()
+
         positions_filename = _generate_filename_from_data(
             to_dump, os.path.join(tmp_dir.name, 'positions'))
         to_dump.tofile(positions_filename)
 
-        to_dump = self.streamlines._offsets
+        if not self._copy_safe:
+            to_dump = self.streamlines.copy()._offsets
+        else:
+            to_dump = self.streamlines._offsets
         offsets_filename = _generate_filename_from_data(
             self.streamlines._offsets, os.path.join(tmp_dir.name, 'offsets'))
         to_dump.tofile(offsets_filename)
@@ -504,7 +522,11 @@ class TrxFile():
         if len(self.data_per_vertex.keys()) > 0:
             os.mkdir(os.path.join(tmp_dir.name, 'dpv/'))
         for dpv_key in self.data_per_vertex.keys():
-            to_dump = self.data_per_vertex[dpv_key]._data
+            if not self._copy_safe:
+                to_dump = self.data_per_vertex[dpv_key].copy()._data
+            else:
+                to_dump = self.data_per_vertex[dpv_key]._data
+
             dpv_filename = _generate_filename_from_data(
                 to_dump, os.path.join(tmp_dir.name, 'dpv/', dpv_key))
             to_dump.tofile(dpv_filename)
@@ -808,6 +830,9 @@ class TrxFile():
 
     def resize(self, nb_streamlines=None, nb_vertices=None, delete_dpg=False):
         """ Remove the ununsed portion of preallocated memmaps """
+        if not self._copy_safe:
+            raise ValueError('Cannot resize a sliced datasets.')
+
         strs_end, pts_end = self._get_real_len()
 
         if nb_streamlines is not None and nb_streamlines < strs_end:
@@ -920,10 +945,10 @@ class TrxFile():
 
     def select(self, indices, keep_group=True, copy_safe=False):
         """ Get a subset of items, always vertices to the same memmaps """
-        if keep_group:
-            indices = np.array(indices, dtype=np.uint32)
+        indices = np.array(indices, dtype=np.uint32)
 
         new_trx = TrxFile()
+        new_trx._copy_safe = copy_safe
         new_trx.header = deepcopy(self.header)
 
         if isinstance(indices, np.ndarray) and len(indices) == 0:
