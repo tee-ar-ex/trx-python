@@ -57,7 +57,7 @@ def _compute_lengths(offsets, nb_vertices):
     if len(offsets) > 1:
         last_elem_pos = _dichotomic_search(offsets)
         if last_elem_pos == len(offsets)-1:
-            lengths = np.ediff1d(offsets, to_end=nb_vertices-offsets[-1])
+            lengths = np.ediff1d(offsets, to_end=int(nb_vertices-offsets[-1]))
         else:
             tmp = offsets
             tmp[last_elem_pos+1] = nb_vertices
