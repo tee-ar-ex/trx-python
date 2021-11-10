@@ -545,10 +545,10 @@ class TrxFile:
         init_as: Optional[Type["TrxFile"]] = None,
         reference: Union[
             str,
+            dict,
             Type[Nifti1Image],
             Type[TrkFile],
             Type[Nifti1Header],
-            Type[TrkFile.header],
             None,
         ] = None,
     ) -> None:
