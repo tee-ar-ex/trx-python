@@ -354,6 +354,12 @@ def concatenate(
         return TrxFile()
 
     ref_trx = trx_list[0]
+    all_dps = []
+    all_dpv = []
+    for curr_trx in trx_list:
+        all_dps.extend(list(curr_trx.data_per_streamline.keys()))
+        all_dpv.extend(list(curr_trx.data_per_vertex.keys()))
+    all_dps, all_dpv = set(all_dps), set(all_dpv)
 
     if check_space_attributes:
         for curr_trx in trx_list[1:]:
@@ -370,9 +376,9 @@ def concatenate(
         )
 
     # Verifying the validity of fixed-size arrays, coherence between inputs
-    for curr_trx in trx_list[1:]:
-        for key in curr_trx.data_per_vertex.keys():
-            if key not in ref_trx.data_per_vertex.keys():
+    for curr_trx in trx_list:
+        for key in all_dpv:
+            if key not in ref_trx.data_per_vertex.keys() or key not in curr_trx.data_per_vertex.keys():
                 if not delete_dpv:
                     logging.debug(
                         "{} dpv key does not exist in all TrxFile.".format(key)
@@ -388,9 +394,9 @@ def concatenate(
                 )
                 raise ValueError("Shared dpv key, has different dtype.")
 
-    for curr_trx in trx_list[1:]:
-        for key in curr_trx.data_per_streamline.keys():
-            if key not in ref_trx.data_per_streamline.keys():
+    for curr_trx in trx_list:
+        for key in all_dps:
+            if key not in ref_trx.data_per_streamline.keys() or key not in curr_trx.data_per_streamline.keys():
                 if not delete_dps:
                     logging.debug(
                         "{} dps key does not exist in all " "TrxFile.".format(key)
@@ -438,6 +444,13 @@ def concatenate(
         new_trx = TrxFile(
             nb_vertices=nb_vertices, nb_streamlines=nb_streamlines, init_as=ref_trx
         )
+        if delete_dps:
+            new_trx.data_per_streamline = {}
+        if delete_dpv:
+            new_trx.data_per_vertex = {}
+        if delete_groups:
+            new_trx.groups = {}
+
         tmp_dir = new_trx._uncompressed_folder_handle.name
 
         # When memory is allocated on the spot, groups and data_per_group can
@@ -451,7 +464,7 @@ def concatenate(
             )
             group_len = all_groups_len[group_key]
             new_trx.groups[group_key] = _create_memmap(
-                group_filename, mode="w+", shape=(1, group_len), dtype=dtype
+                group_filename, mode="w+", shape=(group_len,), dtype=dtype
             )
             if delete_groups:
                 continue
@@ -459,9 +472,7 @@ def concatenate(
             count = 0
             for curr_trx in trx_list:
                 curr_len = len(curr_trx.groups[group_key])
-                new_trx.groups[group_key][0, pos : pos + curr_len] = (
-                    curr_trx.groups[group_key] + count
-                )
+                new_trx.groups[group_key][pos : pos + curr_len] = curr_trx.groups[group_key] + count
                 pos += curr_len
                 count += curr_trx.header["NB_STREAMLINES"]
 
@@ -684,8 +695,10 @@ class TrxFile:
         out_json = open(os.path.join(tmp_dir.name, "header.json"), "w")
         tmp_header = deepcopy(self.header)
 
-        tmp_header["VOXEL_TO_RASMM"] = tmp_header["VOXEL_TO_RASMM"].tolist()
-        tmp_header["DIMENSIONS"] = tmp_header["DIMENSIONS"].tolist()
+        if not isinstance(tmp_header["VOXEL_TO_RASMM"], list):
+            tmp_header["VOXEL_TO_RASMM"] = tmp_header["VOXEL_TO_RASMM"].tolist()
+        if not isinstance(tmp_header["DIMENSIONS"], list):
+            tmp_header["DIMENSIONS"] = tmp_header["DIMENSIONS"].tolist()
 
         # tofile() alway write in C-order
         if not self._copy_safe:
