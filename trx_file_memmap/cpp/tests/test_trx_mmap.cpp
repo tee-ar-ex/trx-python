@@ -55,7 +55,6 @@ TEST(TrxFileMemmap, __split_ext_with_dimensionality)
 		}
 		catch (const std::invalid_argument &e)
 		{
-			std::cout << "hello" << std::endl;
 			EXPECT_STREQ("Invalid filename", e.what());
 			throw;
 		}
@@ -63,29 +62,29 @@ TEST(TrxFileMemmap, __split_ext_with_dimensionality)
 		     std::invalid_argument);
 }
 
-TEST(TrxFileMemmap, __compute_lengths)
-{
-}
+// TEST(TrxFileMemmap, __compute_lengths)
+// {
+// }
 
-TEST(TrxFileMemmap, __is_dtype_valid)
-{
-}
+// TEST(TrxFileMemmap, __is_dtype_valid)
+// {
+// }
 
-TEST(TrxFileMemmap, __dichotomic_search)
-{
-}
+// TEST(TrxFileMemmap, __dichotomic_search)
+// {
+// }
 
-TEST(TrxFileMemmap, __create_memmap)
-{
-}
+// TEST(TrxFileMemmap, __create_memmap)
+// {
+// }
 
-TEST(TrxFileMemmap, _load)
-{
-}
+// TEST(TrxFileMemmap, _load)
+// {
+// }
 
-TEST(TrxFileMemmap, _load_zip)
-{
-}
+// TEST(TrxFileMemmap, _load_zip)
+// {
+// }
 
 int main(int argc, char **argv)
 {

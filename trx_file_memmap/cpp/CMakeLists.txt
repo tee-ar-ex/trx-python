@@ -14,31 +14,18 @@ find_package(libzip CONFIG REQUIRED)
 find_package (Eigen3 3.3 REQUIRED NO_MODULE)
 
 find_package(jsoncpp CONFIG REQUIRED)
-find_package(GTest CONFIG REQUIRED)
 
-# pkg_check_modules(JSONCPP jsoncpp)
-# link_libraries(${JSONCPP_LIBRARIES})
-
-# include_directories(${JSON_INC_PATH})
-# include_directories(${JSONCPP_INCLUDE_DIRS})
-
-include(CTest)
-enable_testing()
-
-include_directories(tests)
-link_directories(tests)
-add_subdirectory(tests)
-add_executable(trx src/trx.cpp src/trx.h)
+# include_directories(tests)
+# link_directories(tests)
+# add_subdirectory(tests)
+add_library(trx src/trx.cpp src/trx.tpp src/trx.h)
 
 TARGET_LINK_LIBRARIES(trx
 	PRIVATE
-	jsoncpp_object
-	jsoncpp_static
+	jsoncpp
 	ZLIB::ZLIB
 	libzip::zip
 	Eigen3::Eigen
-	GTest::gtest
-	GTest::gtest_main
 )
 
 
