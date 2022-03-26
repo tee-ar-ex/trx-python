@@ -168,9 +168,38 @@ TEST(TrxFileMemmap, __dichotomic_search)
 	EXPECT_EQ(result6, -1);
 }
 
-// TEST(TrxFileMemmap, __create_memmap)
-// {
-// }
+TEST(TrxFileMemmap, __create_memmap)
+{
+
+	char *dirname;
+	char t[] = "/tmp/trx_XXXXXX";
+	dirname = mkdtemp(t);
+
+	std::string path(dirname);
+	path += "/offsets.int16";
+
+	std::tuple<int, int> shape = std::make_tuple(3, 4);
+
+	// Test 1: create file and allocate space assert that correct data is filled
+	mio::shared_mmap_sink empty_mmap = trxmmap::_create_memmap(path, shape);
+	Map<Matrix<half, 3, 4>> expected_m(reinterpret_cast<half *>(empty_mmap.data()));
+	Matrix<half, 3, 4> zero_filled{{half(0), half(0), half(0), half(0)},
+				       {half(0), half(0), half(0), half(0)},
+				       {half(0), half(0), half(0), half(0)}};
+
+	EXPECT_EQ(expected_m, zero_filled);
+
+	// Test 2: edit data and compare mapped values with new mmap
+	for (int i = 0; i < expected_m.size(); i++)
+	{
+		expected_m(i) = half(i);
+	}
+
+	mio::shared_mmap_sink filled_mmap = trxmmap::_create_memmap(path, shape);
+	Map<Matrix<half, 3, 4>> real_m(reinterpret_cast<half *>(filled_mmap.data()), std::get<0>(shape), std::get<1>(shape));
+
+	EXPECT_EQ(expected_m, real_m);
+}
 
 // TEST(TrxFileMemmap, _load)
 // {

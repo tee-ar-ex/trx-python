@@ -135,7 +135,23 @@ namespace trxmmap
 	// private:
 	// template <typename DT>
 	// std::string _generate_filename_from_data(const ArrayBase<DT> &arr, std::string &filename);
-	mio::shared_mmap_sink _create_memmap(std::filesystem::path &filename, const MatrixXi &shape, std::string mode = "r", std::string dtype = "float32", int offset = 0);
+
+	void allocate_file(const std::string &path, const int size);
+
+	/**
+	 * @brief Wrapper to support empty array as memmaps
+	 *
+	 * @param filename filename of the file where the empty memmap should be created
+	 * @param shape shape of memmapped NDArray
+	 * @param mode file open mode
+	 * @param dtype datatype of memmapped NDArray
+	 * @param offset offset of the data within the file
+	 * @return mio::shared_mmap_sink
+	 */
+	// TODO: ADD order??
+	// TODO: change tuple to vector to support ND arrays?
+	mio::shared_mmap_sink _create_memmap(std::string &filename, std::tuple<int, int> &shape, std::string mode = "r", std::string dtype = "float32", int offset = 0);
+
 	template <typename DT>
 	std::string _generate_filename_from_data(const ArrayBase<DT> &arr, const std::string filename);
 	std::tuple<std::string, int, std::string> _split_ext_with_dimensionality(const std::string filename);
