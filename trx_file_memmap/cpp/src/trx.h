@@ -19,7 +19,7 @@ using namespace Eigen;
 namespace trxmmap
 {
 
-	const std::vector<std::string> dtypes({"int8", "int16", "int32", "int64", "uint8", "uint16", "uint32", "uint64", "float16", "float32", "float64"});
+	const std::vector<std::string> dtypes({"bit", "ushort", "int8", "int16", "int32", "int64", "uint8", "uint16", "uint32", "uint64", "float16", "float32", "float64"});
 
 	typedef std::map<std::string, std::variant<int, MatrixXf, RowVectorXi, std::string, double>> Dict;
 

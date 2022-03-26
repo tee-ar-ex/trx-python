@@ -88,7 +88,7 @@ namespace trxmmap
 	{
 		if (ext.compare("bit") == 0)
 			return true;
-		else if (std::find(trxmmap::dtypes.begin(), trxmmap::dtypes.end(), ext.substr(1)) != trxmmap::dtypes.end())
+		if (std::find(trxmmap::dtypes.begin(), trxmmap::dtypes.end(), ext.substr(1)) != trxmmap::dtypes.end())
 			return true;
 		return false;
 	}

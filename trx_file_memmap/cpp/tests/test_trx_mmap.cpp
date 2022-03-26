@@ -123,9 +123,23 @@ TEST(TrxFileMemmap, __compute_lengths)
 	EXPECT_EQ(lengths5, result5);
 }
 
-// TEST(TrxFileMemmap, __is_dtype_valid)
-// {
-// }
+TEST(TrxFileMemmap, __is_dtype_valid)
+{
+	std::string ext = ".bit";
+	EXPECT_TRUE(_is_dtype_valid(ext));
+
+	std::string ext2 = ".int16";
+	EXPECT_TRUE(_is_dtype_valid(ext2));
+
+	std::string ext3 = ".float32";
+	EXPECT_TRUE(_is_dtype_valid(ext3));
+
+	std::string ext4 = ".ushort";
+	EXPECT_TRUE(_is_dtype_valid(ext4));
+
+	std::string ext5 = ".txt";
+	EXPECT_FALSE(_is_dtype_valid(ext5));
+}
 
 // TEST(TrxFileMemmap, __dichotomic_search)
 // {
