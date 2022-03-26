@@ -141,9 +141,32 @@ TEST(TrxFileMemmap, __is_dtype_valid)
 	EXPECT_FALSE(_is_dtype_valid(ext5));
 }
 
-// TEST(TrxFileMemmap, __dichotomic_search)
-// {
-// }
+TEST(TrxFileMemmap, __dichotomic_search)
+{
+	Matrix<int, 1, 5> m{0, 1, 2, 3, 4};
+	int result = trxmmap::_dichotomic_search(m);
+	EXPECT_EQ(result, 4);
+
+	Matrix<int, 1, 5> m2{0, 1, 0, 3, 4};
+	int result2 = trxmmap::_dichotomic_search(m2);
+	EXPECT_EQ(result2, 1);
+
+	Matrix<int, 1, 5> m3{0, 1, 2, 0, 4};
+	int result3 = trxmmap::_dichotomic_search(m3);
+	EXPECT_EQ(result3, 2);
+
+	Matrix<int, 1, 5> m4{0, 1, 2, 3, 4};
+	int result4 = trxmmap::_dichotomic_search(m4, 1, 2);
+	EXPECT_EQ(result4, 2);
+
+	Matrix<int, 1, 5> m5{0, 1, 2, 3, 4};
+	int result5 = trxmmap::_dichotomic_search(m5, 3, 3);
+	EXPECT_EQ(result5, 3);
+
+	Matrix<int, 1, 5> m6{0, 0, 0, 0, 0};
+	int result6 = trxmmap::_dichotomic_search(m6, 3, 3);
+	EXPECT_EQ(result6, -1);
+}
 
 // TEST(TrxFileMemmap, __create_memmap)
 // {
