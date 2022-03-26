@@ -71,7 +71,13 @@ namespace trxmmap
 			base = base.substr(0, pos);
 		}
 
-		_is_dtype_valid(ext);
+		bool is_valid = _is_dtype_valid(ext);
+
+		if (is_valid == false)
+		{
+			// TODO: make formatted string and include provided extension name
+			throw std::invalid_argument("Unsupported file extension");
+		}
 
 		std::tuple<std::string, int, std::string> output{base, dim, ext};
 
@@ -82,7 +88,7 @@ namespace trxmmap
 	{
 		if (ext.compare("bit") == 0)
 			return true;
-		else if (std::find(trxmmap::dtypes.begin(), trxmmap::dtypes.end(), ext) != trxmmap::dtypes.end())
+		else if (std::find(trxmmap::dtypes.begin(), trxmmap::dtypes.end(), ext.substr(1)) != trxmmap::dtypes.end())
 			return true;
 		return false;
 	}

@@ -19,7 +19,7 @@ using namespace Eigen;
 namespace trxmmap
 {
 
-	const std::vector<std::string> dtypes({"int8", "int16", "int64", "uint8", "uint16", "uint32", "uint64", "float16", "float32", "float64"});
+	const std::vector<std::string> dtypes({"int8", "int16", "int32", "int64", "uint8", "uint16", "uint32", "uint64", "float16", "float32", "float64"});
 
 	typedef std::map<std::string, std::variant<int, MatrixXf, RowVectorXi, std::string, double>> Dict;
 
@@ -139,6 +139,29 @@ namespace trxmmap
 	template <typename DT>
 	std::string _generate_filename_from_data(const ArrayBase<DT> &arr, const std::string filename);
 	std::tuple<std::string, int, std::string> _split_ext_with_dimensionality(const std::string filename);
+
+	/**
+	 * @brief Compute the lengths from offsets and header information
+	 *
+	 * @tparam DT The datatype (used for the input matrix)
+	 * @param[in] offsets An array of offsets
+	 * @param[in] nb_vertices the number of vertices
+	 * @return Matrix<uint32_t, Dynamic, Dynamic> of lengths
+	 */
+	template <typename DT>
+	Matrix<uint32_t, Dynamic, Dynamic, RowMajor> _compute_lengths(const MatrixBase<DT> &offsets, int nb_vertices);
+
+	/**
+	 * @brief Find where data of a contiguous array is actually ending
+	 *
+	 * @tparam DT (the datatype)
+	 * @param x Matrix of values
+	 * @param l_bound lower bound index for search
+	 * @param r_bound upper bound index for search
+	 * @return int index at which array value is 0 (if possible), otherwise returns -1
+	 */
+	template <typename DT>
+	int _dichotomic_search(const MatrixBase<DT> &x, int l_bound = -1, int r_bound = -1);
 #include "trx.tpp"
 
 }

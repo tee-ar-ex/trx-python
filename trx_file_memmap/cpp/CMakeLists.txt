@@ -11,7 +11,7 @@ set(CMAKE_BUILD_TYPE Debug)
 find_package(PkgConfig REQUIRED)
 find_package(ZLIB REQUIRED)
 find_package(libzip CONFIG REQUIRED)
-find_package (Eigen3 3.3 REQUIRED NO_MODULE)
+find_package (Eigen3 CONFIG REQUIRED)
 
 find_package(jsoncpp CONFIG REQUIRED)
 
