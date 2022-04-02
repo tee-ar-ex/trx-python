@@ -140,6 +140,9 @@ namespace trxmmap
 			}
 		}
 
+		free(zh);
+		free(buffer);
+
 		// convert jstream data into Json.
 		auto root = json::parse(jstream);
 		return root;
