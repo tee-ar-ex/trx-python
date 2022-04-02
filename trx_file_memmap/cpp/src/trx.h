@@ -4,7 +4,7 @@
 #include <iostream>
 #include <zip.h>
 #include <string.h>
-#include <json/json.h>
+#include <nlohmann/json.hpp>
 #include <algorithm>
 #include <variant>
 #include <math.h>
@@ -15,18 +15,17 @@
 #include <mio/shared_mmap.hpp>
 
 using namespace Eigen;
+using json = nlohmann::json;
 
 namespace trxmmap
 {
 
 	const std::vector<std::string> dtypes({"bit", "ushort", "int8", "int16", "int32", "int64", "uint8", "uint16", "uint32", "uint64", "float16", "float32", "float64"});
 
-	typedef std::map<std::string, std::variant<int, MatrixXf, RowVectorXi, std::string, double>> Dict;
-
+	template <typename DT>
 	struct ArraySequence
 	{
-		// TODO: half precision for now. maybe fix or ask later.
-		Map<Matrix<half, Dynamic, Dynamic>> _data;
+		Map<Matrix<DT, Dynamic, Dynamic>> _data;
 		Map<Matrix<uint16_t, Dynamic, 1>> _offset;
 		std::vector<uint32_t> _lengths;
 		mio::shared_mmap_sink mmap_pos;
@@ -37,49 +36,50 @@ namespace trxmmap
 		// Matrix<uint32_t, Dynamic, Dynamic> _lenghts;
 	};
 
+	template <typename DT>
 	struct MMappedMatrix
 	{
-		Map<Matrix<half, Dynamic, Dynamic>> _matrix;
+		Map<Matrix<DT, Dynamic, Dynamic>> _matrix;
 		mio::shared_mmap_sink mmap;
 
 		MMappedMatrix() : _matrix(NULL, 1, 1){};
 	};
 
+	template <typename DT>
 	class TrxFile
 	{
 		// Access specifier
 	public:
 		// Data Members
-		Dict header;
-		ArraySequence streamlines;
+		json header;
+		ArraySequence<DT> streamlines;
 
-		Dict groups; // vector of strings as values
+		std::map<std::string, std::vector<std::string>> groups; // vector of strings as values
 
-		// int or float --check python float precision (singletons)
-		std::map<std::string, MMappedMatrix> data_per_streamline;
-		std::map<std::string, ArraySequence> data_per_vertex;
-		Dict data_per_group;
+		// int or float --check python floa<t precision (singletons)
+		std::map<std::string, MMappedMatrix<DT>> data_per_streamline;
+		std::map<std::string, ArraySequence<DT>> data_per_vertex;
+		std::map<std::string, Matrix<DT, Dynamic, Dynamic>> data_per_group;
 		std::string _uncompressed_folder_handle;
 
 		// Member Functions()
 		// TrxFile(int nb_vertices = 0, int nb_streamlines = 0);
-		TrxFile(int nb_vertices = 0, int nb_streamlines = 0, Json::Value init_as = 0, std::string reference = "");
+		TrxFile(int nb_vertices = 0, int nb_streamlines = 0, json init_as = 0, std::string reference = "");
 
 		void _initialize_empty_trx(int nb_streamlines, int nb_vertices, TrxFile *init_as = NULL);
-		static TrxFile *_create_trx_from_pointer(Json::Value header, std::map<std::string, std::tuple<int, int>> dict_pointer_size, std::string root_zip = "", std::string root = "");
+		static TrxFile *_create_trx_from_pointer(json header, std::map<std::string, std::tuple<int, int>> dict_pointer_size, std::string root_zip = "", std::string root = "");
 
 	private:
 		int len();
 	};
 
 	/**
-	 * Converts Json header data to a Dict structure
-	 * TODO: need to improve. Perhaps can just keep it in JSON format...
+	 * TODO: This function might be completely unecessary
 	 *
 	 * @param[in] root a Json::Value root obtained from reading a header file with JsonCPP
-	 * @param[out] header a Dict header containing the same elements as the original root
+	 * @param[out] header a header containing the same elements as the original root
 	 * */
-	Dict assignHeader(Json::Value root);
+	json assignHeader(json root);
 
 	/**
 	 * Returns the properly formatted datatype name
@@ -108,7 +108,7 @@ namespace trxmmap
 	 * @param[out] header the JSONCpp root of the header. NULL on error.
 	 *
 	 * */
-	Json::Value load_header(zip_t *zfolder);
+	json load_header(zip_t *zfolder);
 
 	/**
 	 * Load the TRX file stored within a Zip archive.
@@ -131,7 +131,8 @@ namespace trxmmap
 
 	// template <typename Derived>
 	// void _create_memmap(std::filesystem::path &filename, std::string mode = "r", std::string dtype = "float32", int offset = 0);
-	std::ostream &operator<<(std::ostream &out, const TrxFile &TrxFile);
+	template <typename DT>
+	std::ostream &operator<<(std::ostream &out, const TrxFile<DT> &TrxFile);
 	// private:
 	// template <typename DT>
 	// std::string _generate_filename_from_data(const ArrayBase<DT> &arr, std::string &filename);

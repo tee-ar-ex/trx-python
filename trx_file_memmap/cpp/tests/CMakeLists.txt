@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0.0)
 project(trx)
 cmake_policy(SET CMP0074 NEW)
 cmake_policy(SET CMP0079 NEW)
-set (CMAKE_CXX_STANDARD 17)
+set (CMAKE_CXX_STANDARD 11)
 
 set(PROJECT_BINARY_DIR ../../builds)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build/tests)
@@ -15,7 +15,7 @@ set(CMAKE_BUILD_TYPE Debug)
 # find_package(PkgConfig REQUIRED)
 find_package(libzip CONFIG REQUIRED)
 find_package (Eigen3 CONFIG REQUIRED)
-find_package(jsoncpp CONFIG REQUIRED)
+find_package(nlohmann_json CONFIG REQUIRED)
 find_package(GTest CONFIG REQUIRED)
 
 enable_testing()
@@ -25,7 +25,7 @@ add_executable(test_mmap test_trx_mmap.cpp ../src/trx.h ../src/trx.tpp ../src/tr
 
 
 TARGET_LINK_LIBRARIES(test_mmap
-	jsoncpp
+	nlohmann_json::nlohmann_json
 	Eigen3::Eigen
 	libzip::zip
 	GTest::gtest

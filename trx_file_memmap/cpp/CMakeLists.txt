@@ -2,18 +2,17 @@ cmake_minimum_required(VERSION 3.0.0)
 cmake_policy(SET CMP0074 NEW)
 cmake_policy(SET CMP0079 NEW)
 project(trx VERSION 0.1.0)
-set (CMAKE_CXX_STANDARD 17)
+set (CMAKE_CXX_STANDARD 11)
 #set(CMAKE_CXX_FLAGS "-D_GLIBCXX_USE_CXX11_ABI=0 -std=c++17")
 
 #set(CMAKE_BUILD_TYPE RelWithDebInfo)
 set(CMAKE_BUILD_TYPE Debug)
 
-find_package(PkgConfig REQUIRED)
+#find_package(PkgConfig REQUIRED)
 find_package(ZLIB REQUIRED)
 find_package(libzip CONFIG REQUIRED)
 find_package (Eigen3 CONFIG REQUIRED)
-
-find_package(jsoncpp CONFIG REQUIRED)
+find_package(nlohmann_json CONFIG REQUIRED)
 
 # include_directories(tests)
 # link_directories(tests)
@@ -22,7 +21,7 @@ add_library(trx src/trx.cpp src/trx.tpp src/trx.h)
 
 TARGET_LINK_LIBRARIES(trx
 	PRIVATE
-	jsoncpp
+	nlohmann_json::nlohmann_json
 	ZLIB::ZLIB
 	libzip::zip
 	Eigen3::Eigen

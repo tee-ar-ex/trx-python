@@ -2,7 +2,6 @@
 #include <fstream>
 #include <typeinfo>
 #include <errno.h>
-#include <filesystem>
 #include <algorithm>
 #define SYSERROR() errno
 
@@ -11,7 +10,32 @@
 using namespace Eigen;
 using namespace std;
 
-namespace fs = std::filesystem;
+std::string get_base(const std::string &delimeter, const std::string &str)
+{
+	std::string token;
+
+	if (str.rfind(delimeter) + 1 < str.length())
+	{
+		token = str.substr(str.rfind(delimeter) + 1);
+	}
+	else
+	{
+		token = str;
+	}
+	return token;
+}
+
+std::string get_ext(const std::string &str)
+{
+	std::string ext = "";
+	std::string delimeter = ".";
+
+	if (str.rfind(delimeter) + 1 < str.length())
+	{
+		ext = str.substr(str.rfind(delimeter));
+	}
+	return ext;
+}
 
 namespace trxmmap
 {
@@ -48,7 +72,10 @@ namespace trxmmap
 	}
 	std::tuple<std::string, int, std::string> _split_ext_with_dimensionality(const std::string filename)
 	{
-		std::string base = fs::path(filename).filename();
+
+		// TODO: won't work on windows and not validating OS type
+		std::string base = get_base("/", filename);
+
 		size_t num_splits = std::count(base.begin(), base.end(), '.');
 		int dim;
 
@@ -57,8 +84,9 @@ namespace trxmmap
 			throw std::invalid_argument("Invalid filename");
 		}
 
-		std::string ext = fs::path(base).extension();
-		base = fs::path(base).replace_extension("");
+		std::string ext = get_ext(filename);
+
+		base = base.substr(0, base.length() - ext.length());
 
 		if (num_splits == 1)
 		{
@@ -93,7 +121,7 @@ namespace trxmmap
 		return false;
 	}
 
-	Json::Value load_header(zip_t *zfolder)
+	json load_header(zip_t *zfolder)
 	{
 		// load file
 		zip_file_t *zh = zip_fopen(zfolder, "header.json", ZIP_FL_UNCHANGED);
@@ -101,8 +129,7 @@ namespace trxmmap
 		// read data from file in chunks of 255 characters until data is fully loaded
 		int buff_len = 255 * sizeof(char);
 		char *buffer = (char *)malloc(buff_len);
-		// char *jstream, *tmpstream;
-		// jstream = NULL;
+
 		std::string jstream = "";
 		zip_int64_t nbytes;
 		while ((nbytes = zip_fread(zh, buffer, buff_len - 1)) > 0)
@@ -113,19 +140,8 @@ namespace trxmmap
 			}
 		}
 
-		// convert jstream data into Json map.
-		Json::Value root;
-		JSONCPP_STRING err;
-		Json::CharReaderBuilder builder;
-
-		const std::unique_ptr<Json::CharReader> reader(builder.newCharReader());
-		if (!reader->parse(jstream.c_str(), jstream.c_str() + jstream.size(), &root,
-				   &err))
-		{
-			std::cout << "error" << std::endl;
-			return 0;
-		}
-
+		// convert jstream data into Json.
+		auto root = json::parse(jstream);
 		return root;
 	}
 
@@ -133,7 +149,7 @@ namespace trxmmap
 	{
 		int *errorp;
 		zip_t *zf = zip_open(path, 0, errorp);
-		Json::Value header = load_header(zf);
+		json header = load_header(zf);
 
 		std::map<std::string, std::tuple<int, int>> file_pointer_size;
 		int global_pos = 0;
@@ -421,28 +437,28 @@ namespace trxmmap
 	// 	this->header["NB_STREAMLINES"] = nb_streamlines;
 	// }
 
-	trxmmap::Dict assignHeader(Json::Value root)
+	json assignHeader(json root)
 	{
-		trxmmap::Dict header;
-		MatrixXf affine(4, 4);
-		RowVectorXi dimensions(3);
+		json header = root;
+		// MatrixXf affine(4, 4);
+		// RowVectorXi dimensions(3);
 
-		for (int i = 0; i < 4; i++)
-		{
-			for (int j = 0; j < 4; j++)
-			{
-				affine << root["VOXEL_TO_RASMM"][i][j].asFloat();
-			}
-		}
+		// for (int i = 0; i < 4; i++)
+		// {
+		// 	for (int j = 0; j < 4; j++)
+		// 	{
+		// 		affine << root["VOXEL_TO_RASMM"][i][j].asFloat();
+		// 	}
+		// }
 
-		for (int i = 0; i < 3; i++)
-		{
-			dimensions[i] << root["DIMENSIONS"][i].asUInt();
-		}
-		header["VOXEL_TO_RASMM"] = affine;
-		header["DIMENSIONS"] = dimensions;
-		header["NB_VERTICES"] = (int)root["NB_VERTICES"].asUInt();
-		header["NB_STREAMLINES"] = (int)root["NB_STREAMLINES"].asUInt();
+		// for (int i = 0; i < 3; i++)
+		// {
+		// 	dimensions[i] << root["DIMENSIONS"][i].asUInt();
+		// }
+		// header["VOXEL_TO_RASMM"] = affine;
+		// header["DIMENSIONS"] = dimensions;
+		// header["NB_VERTICES"] = (int)root["NB_VERTICES"].asUInt();
+		// header["NB_STREAMLINES"] = (int)root["NB_STREAMLINES"].asUInt();
 
 		return header;
 	}

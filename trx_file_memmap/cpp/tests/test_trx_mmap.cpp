@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include "../src/trx.h"
+#include <typeinfo>
 
 using namespace Eigen;
 using namespace trxmmap;
@@ -199,6 +200,31 @@ TEST(TrxFileMemmap, __create_memmap)
 	Map<Matrix<half, 3, 4>> real_m(reinterpret_cast<half *>(filled_mmap.data()), std::get<0>(shape), std::get<1>(shape));
 
 	EXPECT_EQ(expected_m, real_m);
+}
+
+TEST(TrxFileMemmap, load_header)
+{
+	std::string path = "../../tests/data/small.trx";
+	int *errorp;
+	zip_t *zf = zip_open(path.c_str(), 0, errorp);
+	json root = trxmmap::load_header(zf);
+
+	// expected output
+	json expected;
+
+	expected["DIMENSIONS"] = {117, 151, 115};
+	expected["NB_STREAMLINES"] = 1000;
+	expected["NB_VERTICES"] = 33886;
+	expected["VOXEL_TO_RASMM"] = {{-1.25, 0.0, 0.0, 72.5},
+				      {0.0, 1.25, 0.0, -109.75},
+				      {0.0, 0.0, 1.25, -64.5},
+				      {0.0, 0.0, 0.0, 1.0}};
+
+	EXPECT_EQ(root, expected);
+
+	std::string expected_str = "{\"DIMENSIONS\":[117,151,115],\"NB_STREAMLINES\":1000,\"NB_VERTICES\":33886,\"VOXEL_TO_RASMM\":[[-1.25,0.0,0.0,72.5],[0.0,1.25,0.0,-109.75],[0.0,0.0,1.25,-64.5],[0.0,0.0,0.0,1.0]]}";
+
+	EXPECT_EQ(root.dump(), expected_str);
 }
 
 // TEST(TrxFileMemmap, _load)
