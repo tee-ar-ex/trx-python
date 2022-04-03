@@ -3,7 +3,6 @@ cmake_policy(SET CMP0074 NEW)
 cmake_policy(SET CMP0079 NEW)
 project(trx VERSION 0.1.0)
 set (CMAKE_CXX_STANDARD 11)
-#set(CMAKE_CXX_FLAGS "-D_GLIBCXX_USE_CXX11_ABI=0 -std=c++17")
 
 #set(CMAKE_BUILD_TYPE RelWithDebInfo)
 set(CMAKE_BUILD_TYPE Debug)

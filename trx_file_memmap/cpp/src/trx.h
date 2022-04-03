@@ -20,20 +20,18 @@ using json = nlohmann::json;
 namespace trxmmap
 {
 
-	const std::vector<std::string> dtypes({"bit", "ushort", "int8", "int16", "int32", "int64", "uint8", "uint16", "uint32", "uint64", "float16", "float32", "float64"});
+	const std::vector<std::string> dtypes({"float16", "bit", "uint8", "uint16", "uint32", "uint64", "int8", "int16", "int32", "int64", "float32", "float64"});
 
 	template <typename DT>
 	struct ArraySequence
 	{
 		Map<Matrix<DT, Dynamic, Dynamic>> _data;
-		Map<Matrix<uint16_t, Dynamic, 1>> _offset;
+		Map<Matrix<uint64_t, Dynamic, 1>> _offsets;
 		std::vector<uint32_t> _lengths;
 		mio::shared_mmap_sink mmap_pos;
 		mio::shared_mmap_sink mmap_off;
 
-		ArraySequence() : _data(NULL, 1, 1), _offset(NULL, 1, 1){};
-		// Matrix<uint64_t, Dynamic, Dynamic> _offsets;
-		// Matrix<uint32_t, Dynamic, Dynamic> _lenghts;
+		ArraySequence() : _data(NULL, 1, 1), _offsets(NULL, 1, 1){};
 	};
 
 	template <typename DT>
@@ -52,21 +50,21 @@ namespace trxmmap
 	public:
 		// Data Members
 		json header;
-		ArraySequence<DT> streamlines;
+		ArraySequence<DT> *streamlines;
 
 		std::map<std::string, std::vector<std::string>> groups; // vector of strings as values
 
 		// int or float --check python floa<t precision (singletons)
-		std::map<std::string, MMappedMatrix<DT>> data_per_streamline;
-		std::map<std::string, ArraySequence<DT>> data_per_vertex;
+		std::map<std::string, MMappedMatrix<DT> *> data_per_streamline;
+		std::map<std::string, ArraySequence<DT> *> data_per_vertex;
 		std::map<std::string, Matrix<DT, Dynamic, Dynamic>> data_per_group;
 		std::string _uncompressed_folder_handle;
+		bool _copy_safe;
 
 		// Member Functions()
 		// TrxFile(int nb_vertices = 0, int nb_streamlines = 0);
-		TrxFile(int nb_vertices = 0, int nb_streamlines = 0, json init_as = 0, std::string reference = "");
+		TrxFile(int nb_vertices = 0, int nb_streamlines = 0, const TrxFile<DT> *init_as = NULL, std::string reference = "");
 
-		void _initialize_empty_trx(int nb_streamlines, int nb_vertices, TrxFile *init_as = NULL);
 		static TrxFile *_create_trx_from_pointer(json header, std::map<std::string, std::tuple<int, int>> dict_pointer_size, std::string root_zip = "", std::string root = "");
 
 	private:
@@ -129,13 +127,9 @@ namespace trxmmap
 	 * */
 	void get_reference_info(std::string reference, const MatrixXf &affine, const RowVectorXf &dimensions);
 
-	// template <typename Derived>
-	// void _create_memmap(std::filesystem::path &filename, std::string mode = "r", std::string dtype = "float32", int offset = 0);
 	template <typename DT>
 	std::ostream &operator<<(std::ostream &out, const TrxFile<DT> &TrxFile);
 	// private:
-	// template <typename DT>
-	// std::string _generate_filename_from_data(const ArrayBase<DT> &arr, std::string &filename);
 
 	void allocate_file(const std::string &path, const int size);
 
@@ -151,6 +145,7 @@ namespace trxmmap
 	 */
 	// TODO: ADD order??
 	// TODO: change tuple to vector to support ND arrays?
+	// TODO: remove data type as that's done outside of this function
 	mio::shared_mmap_sink _create_memmap(std::string &filename, std::tuple<int, int> &shape, std::string mode = "r", std::string dtype = "float32", int offset = 0);
 
 	template <typename DT>
@@ -179,6 +174,17 @@ namespace trxmmap
 	 */
 	template <typename DT>
 	int _dichotomic_search(const MatrixBase<DT> &x, int l_bound = -1, int r_bound = -1);
+
+	/**
+	 * @brief Create on-disk memmaps of a certain size (preallocation)
+	 *
+	 * @param nb_streamlines The number of streamlines that the empty TrxFile will be initialized with
+	 * @param nb_vertices The number of vertices that the empty TrxFile will be initialized with
+	 * @param init_as A TrxFile to initialize the empty TrxFile with
+	 * @return TrxFile<DT> An empty TrxFile preallocated with a certain size
+	 */
+	template <typename DT>
+	TrxFile<DT> *_initialize_empty_trx(int nb_streamlines, int nb_vertices, const TrxFile<DT> *init_as = NULL);
 #include "trx.tpp"
 
 }

@@ -39,6 +39,46 @@ std::string get_ext(const std::string &str)
 
 namespace trxmmap
 {
+	// TODO: check if there's a better way
+	int _sizeof_dtype(std::string dtype)
+	{
+		// TODO: make dtypes enum??
+		auto it = std::find(dtypes.begin(), dtypes.end(), dtype);
+		int index = 0;
+		if (it != dtypes.end())
+		{
+			index = std::distance(dtypes.begin(), it);
+		}
+
+		switch (index)
+		{
+		case 1:
+			return 1;
+		case 2:
+			return sizeof(uint8_t);
+		case 3:
+			return sizeof(uint16_t);
+		case 4:
+			return sizeof(uint32_t);
+		case 5:
+			return sizeof(uint64_t);
+		case 6:
+			return sizeof(int8_t);
+		case 7:
+			return sizeof(int16_t);
+		case 8:
+			return sizeof(int32_t);
+		case 9:
+			return sizeof(int64_t);
+		case 10:
+			return sizeof(float);
+		case 11:
+			return sizeof(double);
+		default:
+			return sizeof(half); // setting this as default for now but a better solution is needed
+		}
+	}
+
 	std::string _get_dtype(std::string dtype)
 	{
 		char dt = dtype.back();
@@ -236,7 +276,7 @@ namespace trxmmap
 		struct stat buffer;
 		if (stat(filename.c_str(), &buffer) != 0)
 		{
-			allocate_file(filename, std::get<0>(shape) * std::get<1>(shape));
+			allocate_file(filename, std::get<0>(shape) * std::get<1>(shape) * _sizeof_dtype(dtype));
 		}
 
 		// std::error_code error;
@@ -247,198 +287,6 @@ namespace trxmmap
 
 	// TODO: support FORTRAN ORDERING
 	// template <typename Derived>
-
-	// void trxmmap::TrxFile::_initialize_empty_trx(int nb_streamlines, int nb_vertices, trxmmap::TrxFile *init_as)
-	// {
-
-	// 	// TODO: fix as tmpnam has issues with concurrency.
-	// 	std::filesystem::path tmp_dir{std::filesystem::temp_directory_path() /= std::tmpnam(nullptr)};
-	// 	std::filesystem::create_directory(tmp_dir);
-	// 	std::cout << "Temporary folder for memmaps: " << tmp_dir << std::endl;
-
-	// 	this->header["NB_VERTICES"] = nb_vertices;
-	// 	this->header["NB_STREAMLINES"] = nb_streamlines;
-
-	// 	if (init_as != NULL)
-	// 	{
-	// 		this->header["VOXEL_TO_RASMM"] = init_as->header["VOXEL_TO_RASMM"];
-	// 		this->header["DIMENSIONS"] = init_as->header["DIMENSIONS"];
-	// 	}
-
-	// 	cout << "Initializing positions with dtype: "
-	// 	     << "float16" << endl;
-	// 	cout << "Initializing offsets with dtype: "
-	// 	     << "uint16" << endl;
-	// 	cout << "Initializing lengths with dtype: "
-	// 	     << "uint32" << endl;
-
-	// 	std::filesystem::path positions_filename;
-	// 	positions_filename /= tmp_dir;
-	// 	positions_filename /= "positions.3.float16";
-	// 	Eigen::MatrixXi m(2, 1);
-	// 	m << nb_vertices, 3;
-	// 	// new (&trx.streamlines._data)
-	// 	this->streamlines.mmap_pos = trxmmap::_create_memmap(positions_filename, m, std::string("w+"), std::string("float16"), 0);
-	// 	new (&(this->streamlines._data)) Map<Matrix<half, Dynamic, Dynamic>>(reinterpret_cast<half *>(this->streamlines.mmap_pos.data()), m(0), m(1));
-
-	// 	std::filesystem::path offsets_filename;
-	// 	offsets_filename /= tmp_dir;
-	// 	offsets_filename /= "offsets.uint16";
-	// 	cout << "filesystem path " << offsets_filename << endl;
-	// 	m << nb_streamlines, 1;
-	// 	this->streamlines.mmap_off = trxmmap::_create_memmap(offsets_filename, m, std::string("w+"), std::string("uint16_t"), 0);
-	// 	new (&(this->streamlines._offset)) Map<Matrix<uint16_t, Dynamic, 1>>(reinterpret_cast<uint16_t *>(this->streamlines.mmap_off.data()), m(0), m(1));
-
-	// 	this->streamlines._lengths.resize(nb_streamlines, 0);
-
-	// 	if (init_as != NULL)
-	// 	{
-	// 		if (init_as->data_per_vertex.size() > 0)
-	// 		{
-	// 			std::filesystem::path dpv_dirname;
-	// 			dpv_dirname /= tmp_dir;
-	// 			dpv_dirname /= "dpv";
-	// 			std::filesystem::create_directory(dpv_dirname);
-	// 		}
-	// 		if (init_as->data_per_streamline.size() > 0)
-	// 		{
-	// 			std::filesystem::path dps_dirname;
-	// 			dps_dirname /= tmp_dir;
-	// 			dps_dirname /= "dps";
-	// 			std::filesystem::create_directory(dps_dirname);
-	// 		}
-
-	// 		for (auto const &x : init_as->data_per_vertex)
-	// 		{
-	// 			int rows, cols;
-	// 			Map<Matrix<half, Dynamic, Dynamic>> tmp_as = init_as->data_per_vertex[x.first]._data;
-	// 			std::filesystem::path dpv_filename;
-	// 			if (tmp_as.cols() == 1 || tmp_as.rows() == 1)
-	// 			{
-	// 				dpv_filename /= tmp_dir;
-	// 				dpv_filename /= "dpv";
-	// 				dpv_filename /= x.first + "." + "float16";
-	// 				rows = nb_vertices;
-	// 				cols = 1;
-	// 			}
-	// 			else
-	// 			{
-	// 				rows = nb_vertices;
-	// 				cols = tmp_as.cols();
-
-	// 				dpv_filename /= tmp_dir;
-	// 				dpv_filename /= "dpv";
-	// 				dpv_filename /= x.first + "." + std::to_string(cols) + "." + "float16";
-	// 			}
-
-	// 			cout << "Initializing " << x.first << " (dpv) with dtype: "
-	// 			     << "float16" << endl;
-
-	// 			Eigen::MatrixXi m(2, 1);
-	// 			m << rows, cols;
-	// 			this->data_per_vertex[x.first] = trxmmap::ArraySequence();
-	// 			this->data_per_vertex[x.first].mmap_pos = trxmmap::_create_memmap(dpv_filename, m, std::string("w+"), std::string("float16"), 0);
-	// 			new (&(this->data_per_vertex[x.first]._data)) Map<Matrix<uint16_t, Dynamic, Dynamic>>(reinterpret_cast<uint16_t *>(this->data_per_vertex[x.first].mmap_pos.data()), m(0), m(1));
-
-	// 			this->data_per_vertex[x.first]._offset = this->streamlines._offset;
-	// 			this->data_per_vertex[x.first]._lengths = this->streamlines._lengths;
-	// 		}
-
-	// 		for (auto const &x : init_as->data_per_streamline)
-	// 		{
-	// 			string dtype = "float16";
-	// 			int rows, cols;
-	// 			Map<Matrix<half, Dynamic, Dynamic>> tmp_as = init_as->data_per_streamline[x.first]._matrix;
-	// 			std::filesystem::path dps_filename;
-
-	// 			if (tmp_as.rows() == 1 || tmp_as.cols() == 1)
-	// 			{
-	// 				dps_filename /= tmp_dir;
-	// 				dps_filename /= "dps";
-	// 				dps_filename /= x.first + "." + dtype;
-	// 				rows = nb_streamlines;
-	// 			}
-	// 			else
-	// 			{
-	// 				cols = tmp_as.cols();
-	// 				rows = nb_streamlines;
-
-	// 				dps_filename /= tmp_dir;
-	// 				dps_filename /= "dps";
-	// 				dps_filename /= x.first + "." + std::to_string(cols) + "." + dtype;
-	// 			}
-
-	// 			cout << "Initializing " << x.first << " (dps) with and dtype: " << dtype << endl;
-
-	// 			Eigen::MatrixXi m(2, 1);
-	// 			m << rows, cols;
-	// 			this->data_per_streamline[x.first] = trxmmap::MMappedMatrix();
-	// 			this->data_per_streamline[x.first].mmap = trxmmap::_create_memmap(dps_filename, m, std::string("w+"), dtype, 0);
-	// 			new (&(this->data_per_streamline[x.first]._matrix)) Map<Matrix<half, Dynamic, Dynamic>>(reinterpret_cast<half *>(this->data_per_streamline[x.first].mmap.data()), m(0), m(1));
-	// 		}
-	// 	}
-
-	// 	this->_uncompressed_folder_handle = tmp_dir;
-	// }
-
-	// trxmmap::TrxFile::TrxFile(int nb_vertices, int nb_streamlines, Json::Value init_as, std::string reference)
-	// {
-	// 	MatrixXf affine(4, 4);
-	// 	RowVectorXi dimensions(3);
-
-	// 	if (init_as != 0)
-	// 	{
-	// 		for (int i = 0; i < 4; i++)
-	// 		{
-	// 			for (int j = 0; j < 4; j++)
-	// 			{
-	// 				affine << init_as["VOXEL_TO_RASMM"][i][j].asFloat();
-	// 			}
-	// 		}
-
-	// 		for (int i = 0; i < 3; i++)
-	// 		{
-	// 			dimensions[i] << init_as["DIMENSIONS"][i].asUInt();
-	// 		}
-	// 	}
-	// 	else
-	// 	{
-	// 		// add logger here
-	// 		// eye matrixt
-	// 		affine << MatrixXf::Identity(4, 4);
-	// 		dimensions << 1, 1, 1;
-	// 	}
-
-	// 	if (nb_vertices == 0 && nb_streamlines == 0)
-	// 	{
-	// 		if (init_as != 0)
-	// 		{
-	// 			// raise error here
-	// 			exit(1);
-	// 		}
-
-	// 		// will remove as completely unecessary. using as placeholders
-	// 		this->header = {};
-	// 		// this->streamlines = ArraySequence();
-	// 		this->_uncompressed_folder_handle = "";
-
-	// 		nb_vertices = 0;
-	// 		nb_streamlines = 0;
-	// 	}
-	// 	else if (nb_vertices > 0 && nb_streamlines > 0)
-	// 	{
-	// 		std::cout << "Preallocating TrxFile with size " << nb_streamlines << " streamlines and " << nb_vertices << " vertices." << std::endl;
-	// 		_initialize_empty_trx(nb_streamlines, nb_vertices);
-
-	// 		// this->streamlines._data << half(1);
-	// 		this->streamlines._offset << uint16_t(1);
-	// 	}
-
-	// 	this->header["VOXEL_TO_RASMM"] = affine;
-	// 	this->header["DIMENSIONS"] = dimensions;
-	// 	this->header["NB_VERTICES"] = nb_vertices;
-	// 	this->header["NB_STREAMLINES"] = nb_streamlines;
-	// }
 
 	json assignHeader(json root)
 	{
@@ -545,10 +393,11 @@ namespace trxmmap
 
 	void get_reference_info(std::string reference, const MatrixXf &affine, const RowVectorXi &dimensions)
 	{
-		if (reference.find(".nii") != std::string::npos)
-		{
-		}
-		else if (reference.find(".trk") != std::string::npos)
+		// TODO: find a library to use for nifti and trk (MRtrix??)
+		//  if (reference.find(".nii") != std::string::npos)
+		//  {
+		//  }
+		if (reference.find(".trk") != std::string::npos)
 		{
 			// TODO: Create exception class
 			std::cout << "Trk reference not implemented" << std::endl;

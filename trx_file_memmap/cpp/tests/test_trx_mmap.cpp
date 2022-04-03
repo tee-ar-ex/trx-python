@@ -135,7 +135,7 @@ TEST(TrxFileMemmap, __is_dtype_valid)
 	std::string ext3 = ".float32";
 	EXPECT_TRUE(_is_dtype_valid(ext3));
 
-	std::string ext4 = ".ushort";
+	std::string ext4 = ".uint8";
 	EXPECT_TRUE(_is_dtype_valid(ext4));
 
 	std::string ext5 = ".txt";
@@ -225,6 +225,8 @@ TEST(TrxFileMemmap, load_header)
 	std::string expected_str = "{\"DIMENSIONS\":[117,151,115],\"NB_STREAMLINES\":1000,\"NB_VERTICES\":33886,\"VOXEL_TO_RASMM\":[[-1.25,0.0,0.0,72.5],[0.0,1.25,0.0,-109.75],[0.0,0.0,1.25,-64.5],[0.0,0.0,0.0,1.0]]}";
 
 	EXPECT_EQ(root.dump(), expected_str);
+
+	free(zf);
 }
 
 // TEST(TrxFileMemmap, _load)
@@ -234,6 +236,49 @@ TEST(TrxFileMemmap, load_header)
 // TEST(TrxFileMemmap, _load_zip)
 // {
 // }
+
+TEST(TrxFileMemmap, TrxFile)
+{
+	trxmmap::TrxFile<half> *trx = new TrxFile<half>();
+
+	// expected header
+	json expected;
+
+	expected["DIMENSIONS"] = {1, 1, 1};
+	expected["NB_STREAMLINES"] = 0;
+	expected["NB_VERTICES"] = 0;
+	expected["VOXEL_TO_RASMM"] = {{1.0, 0.0, 0.0, 0.0},
+				      {0.0, 1.0, 0.0, 0.0},
+				      {0.0, 0.0, 1.0, 0.0},
+				      {0.0, 0.0, 0.0, 1.0}};
+
+	EXPECT_EQ(trx->header, expected);
+
+	std::string path = "../../tests/data/small.trx";
+	int *errorp;
+	zip_t *zf = zip_open(path.c_str(), 0, errorp);
+	json root = trxmmap::load_header(zf);
+	TrxFile<half> *root_init = new TrxFile<half>();
+	root_init->header = root;
+
+	// TODO: test for now..
+
+	trxmmap::TrxFile<half> *trx_init = new TrxFile<half>(33886, 1000, root_init);
+	json init_as;
+
+	init_as["DIMENSIONS"] = {117, 151, 115};
+	init_as["NB_STREAMLINES"] = 1000;
+	init_as["NB_VERTICES"] = 33886;
+	init_as["VOXEL_TO_RASMM"] = {{-1.25, 0.0, 0.0, 72.5},
+				     {0.0, 1.25, 0.0, -109.75},
+				     {0.0, 0.0, 1.25, -64.5},
+				     {0.0, 0.0, 0.0, 1.0}};
+
+	EXPECT_EQ(root_init->header, init_as);
+	EXPECT_EQ(trx_init->streamlines->_data.size(), 33886 * 3);
+	EXPECT_EQ(trx_init->streamlines->_offsets.size(), 1000);
+	EXPECT_EQ(trx_init->streamlines->_lengths.size(), 1000);
+}
 
 int main(int argc, char **argv)
 {
