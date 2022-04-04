@@ -377,3 +377,228 @@ TrxFile<DT> *_initialize_empty_trx(int nb_streamlines, int nb_vertices, const Tr
 
 	return trx;
 }
+
+template <typename DT>
+TrxFile<DT> *TrxFile<DT>::_create_trx_from_pointer(json header, std::map<std::string, std::tuple<int, int>> dict_pointer_size, std::string root_zip, std::string root)
+{
+	trxmmap::TrxFile<DT> *trx = new trxmmap::TrxFile<DT>();
+	trx->header = header;
+	trx->streamlines = new ArraySequence<DT>();
+
+	std::string filename;
+
+	for (auto const &x : dict_pointer_size)
+	{
+		std::string elem_filename = x.first;
+		if (root_zip.size() > 0)
+		{
+			filename = root_zip;
+		}
+		else
+		{
+			filename = elem_filename;
+		}
+
+		std::string folder = std::string(dirname(elem_filename.c_str()));
+
+		// _split_ext_with_dimensionality
+		std::tuple<std::string, int, std::string> base_tuple = _split_ext_with_dimensionality(elem_filename);
+		std::string base(std::get<0>(base_tuple));
+		int dim = std::get<1>(base_tuple);
+		std::string ext(std::get<2>(base_tuple));
+
+		if (ext.compare(".bit") == 0)
+		{
+			ext = ".bool";
+		}
+
+		int mem_adress = std::get<0>(x.second);
+		int size = std::get<1>(x.second);
+
+		std::string stripped = root;
+
+		// TODO : will not work on windows
+		if (stripped.rfind("/") == stripped.size() - 1)
+		{
+			stripped = stripped.substr(0, stripped.size() - 1);
+		}
+
+		if (root.compare("") != 0 && folder.rfind(stripped, stripped.size()) == 0)
+		{
+			// 1 for the first forward slash
+			folder = folder.substr(1 + root.size(), folder.size() - (1 + root.size()));
+		}
+
+		std::cout << "Test " << folder << " root " << root << std::endl;
+
+		if (base.compare("positions") == 0 && folder.compare("") == 0)
+		{
+			if (size != int(trx->header["NB_VERTICES"]) * 3 || dim != 3)
+			{
+
+				throw std::invalid_argument("Wrong data size/dimensionality");
+			}
+
+			std::tuple<int, int> shape = std::make_tuple(trx->header["NB_VERTICES"], 3);
+			trx->streamlines->mmap_pos = trxmmap::_create_memmap(filename, shape, "r+", ext.substr(1, ext.size() - 1), mem_adress);
+
+			// TODO: find a better way to get the dtype than using all these switch cases. Also refactor into function
+			// as per specifications, positions can only be floats
+			if (ext.compare(".float16") == 0)
+			{
+				new (&(trx->streamlines->_data)) Map<Matrix<half, Dynamic, Dynamic>>(reinterpret_cast<half *>(trx->streamlines->mmap_pos.data()), std::get<0>(shape), std::get<1>(shape));
+			}
+			else if (ext.compare(".float32") == 0)
+			{
+				new (&(trx->streamlines->_data)) Map<Matrix<float, Dynamic, Dynamic>>(reinterpret_cast<float *>(trx->streamlines->mmap_pos.data()), std::get<0>(shape), std::get<1>(shape));
+			}
+			else
+			{
+				new (&(trx->streamlines->_data)) Map<Matrix<double, Dynamic, Dynamic>>(reinterpret_cast<double *>(trx->streamlines->mmap_pos.data()), std::get<0>(shape), std::get<1>(shape));
+			}
+		}
+
+		else if (base.compare("offsets") == 0 && folder.compare("") == 0)
+		{
+			if (size != int(trx->header["NB_STREAMLINES"]) || dim != 1)
+			{
+
+				throw std::invalid_argument("Wrong offsets size/dimensionality");
+			}
+
+			std::tuple<int, int> shape = std::make_tuple(trx->header["NB_STREAMLINES"], 1);
+			trx->streamlines->mmap_off = trxmmap::_create_memmap(filename, shape, "r+", ext.substr(1, ext.size() - 1), mem_adress);
+
+			new (&(trx->streamlines->_offsets)) Map<Matrix<uint64_t, Dynamic, Dynamic>>(reinterpret_cast<uint64_t *>(trx->streamlines->mmap_off.data()), std::get<0>(shape), std::get<1>(shape));
+			trx->streamlines->_lengths = _compute_lengths(trx->streamlines->_offsets, trx->header["NB_VERTICES"]);
+		}
+
+		else if (folder.compare("dps"))
+		{
+			std::tuple<int, int> shape;
+			trx->data_per_streamline[base] = new MMappedMatrix<DT>();
+			int nb_scalar = size / int(trx->header["NB_STREAMLINES"]);
+
+			if (size % int(trx->header["NB_STREAMLINES"]) != 0 || nb_scalar != dim)
+			{
+
+				throw std::invalid_argument("Wrong dps size/dimensionality");
+			}
+			else
+			{
+				shape = std::make_tuple(trx->header["NB_STREAMLINES"], nb_scalar);
+			}
+			trx->data_per_streamline[base]->mmap = trxmmap::_create_memmap(filename, shape, "r+", ext.substr(1, ext.size() - 1), mem_adress);
+
+			if (ext.compare(".float16") == 0)
+			{
+				new (&(trx->data_per_streamline[base]->_matrix)) Map<Matrix<half, Dynamic, Dynamic>>(reinterpret_cast<half *>(trx->data_per_streamline[base]->mmap.data()), std::get<0>(shape), std::get<1>(shape));
+			}
+			else if (ext.compare(".float32") == 0)
+			{
+				new (&(trx->data_per_streamline[base]->_matrix)) Map<Matrix<float, Dynamic, Dynamic>>(reinterpret_cast<float *>(trx->data_per_streamline[base]->mmap.data()), std::get<0>(shape), std::get<1>(shape));
+			}
+			else
+			{
+				new (&(trx->data_per_streamline[base]->_matrix)) Map<Matrix<double, Dynamic, Dynamic>>(reinterpret_cast<double *>(trx->data_per_streamline[base]->mmap.data()), std::get<0>(shape), std::get<1>(shape));
+			}
+		}
+
+		else if (folder.compare("dpv"))
+		{
+			std::tuple<int, int> shape;
+			trx->data_per_vertex[base] = new ArraySequence<DT>();
+			int nb_scalar = size / int(trx->header["NB_VERTICES"]);
+
+			if (size % int(trx->header["NB_VERTICES"]) != 0 || nb_scalar != dim)
+			{
+
+				throw std::invalid_argument("Wrong dpv size/dimensionality");
+			}
+			else
+			{
+				shape = std::make_tuple(trx->header["NB_VERTICES"], nb_scalar);
+			}
+			trx->data_per_vertex[base]->mmap_pos = trxmmap::_create_memmap(filename, shape, "r+", ext.substr(1, ext.size() - 1), mem_adress);
+
+			if (ext.compare(".float16") == 0)
+			{
+				new (&(trx->data_per_vertex[base]->_data)) Map<Matrix<half, Dynamic, Dynamic>>(reinterpret_cast<half *>(trx->data_per_vertex[base]->mmap_pos.data()), std::get<0>(shape), std::get<1>(shape));
+			}
+			else if (ext.compare(".float32") == 0)
+			{
+				new (&(trx->data_per_vertex[base]->_data)) Map<Matrix<float, Dynamic, Dynamic>>(reinterpret_cast<float *>(trx->data_per_vertex[base]->mmap_pos.data()), std::get<0>(shape), std::get<1>(shape));
+			}
+			else
+			{
+				new (&(trx->data_per_vertex[base]->_data)) Map<Matrix<double, Dynamic, Dynamic>>(reinterpret_cast<double *>(trx->data_per_vertex[base]->mmap_pos.data()), std::get<0>(shape), std::get<1>(shape));
+			}
+
+			trx->data_per_vertex[base]->_offsets = trx->streamlines->_offsets;
+			trx->data_per_vertex[base]->_lengths = trx->streamlines->_lengths;
+		}
+
+		else if (folder.compare("dpg"))
+		{
+			std::tuple<int, int> shape;
+			trx->data_per_streamline[base] = new MMappedMatrix<DT>();
+
+			if (size != dim)
+			{
+
+				throw std::invalid_argument("Wrong dpg size/dimensionality");
+			}
+			else
+			{
+				shape = std::make_tuple(1, size);
+			}
+
+			std::string data_name = std::string(basename(base.c_str()));
+			std::string sub_folder = std::string(basename(folder.c_str()));
+
+			trx->data_per_group[sub_folder][data_name] = new MMappedMatrix<DT>();
+			trx->data_per_group[sub_folder][data_name]->mmap = trxmmap::_create_memmap(filename, shape, "r+", ext.substr(1, ext.size() - 1), mem_adress);
+
+			if (ext.compare(".float16") == 0)
+			{
+				new (&(trx->data_per_group[sub_folder][data_name]->_matrix)) Map<Matrix<half, Dynamic, Dynamic>>(reinterpret_cast<half *>(trx->data_per_group[sub_folder][data_name]->mmap.data()), std::get<0>(shape), std::get<1>(shape));
+			}
+			else if (ext.compare(".float32") == 0)
+			{
+				new (&(trx->data_per_group[sub_folder][data_name]->_matrix)) Map<Matrix<float, Dynamic, Dynamic>>(reinterpret_cast<float *>(trx->data_per_group[sub_folder][data_name]->mmap.data()), std::get<0>(shape), std::get<1>(shape));
+			}
+			else
+			{
+				new (&(trx->data_per_group[sub_folder][data_name]->_matrix)) Map<Matrix<double, Dynamic, Dynamic>>(reinterpret_cast<double *>(trx->data_per_group[sub_folder][data_name]->mmap.data()), std::get<0>(shape), std::get<1>(shape));
+			}
+		}
+
+		else if (folder.compare("groups") == 0)
+		{
+			std::tuple<int, int> shape;
+			if (dim != 1)
+			{
+				throw std::invalid_argument("Wrong group dimensionality");
+			}
+			else
+			{
+				shape = std::make_tuple(size, 1);
+			}
+			trx->groups[base] = new MMappedMatrix<DT>();
+			trx->groups[base]->mmap = trxmmap::_create_memmap(filename, shape, "r+", ext.substr(1, ext.size() - 1), mem_adress);
+			new (&(trx->groups[base]->_matrix)) Map<Matrix<uint32_t, Dynamic, Dynamic>>(reinterpret_cast<uint32_t *>(trx->groups[base]->mmap.data()), std::get<0>(shape), std::get<1>(shape));
+		}
+		else
+		{
+			// TODO: logger
+			std::cout << elem_filename << " is not part of a valid structure." << std::endl;
+		}
+	}
+	if (trx->streamlines->_data == NULL || trx->streamlines->_offsets == NULL)
+	{
+
+		throw std::invalid_argument("Missing essential data.");
+	}
+
+	return trx;
+}

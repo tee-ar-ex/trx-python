@@ -237,6 +237,14 @@ TEST(TrxFileMemmap, load_header)
 // {
 // }
 
+// TEST(TrxFileMemmap, initialize_empty_trx)
+// {
+// }
+
+// TEST(TrxFileMemmap, _create_trx_from_pointer)
+// {
+// }
+
 TEST(TrxFileMemmap, TrxFile)
 {
 	trxmmap::TrxFile<half> *trx = new TrxFile<half>();

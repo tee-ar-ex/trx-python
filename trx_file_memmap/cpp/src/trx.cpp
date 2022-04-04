@@ -280,7 +280,7 @@ namespace trxmmap
 		}
 
 		// std::error_code error;
-		mio::shared_mmap_sink rw_mmap(filename, 0, mio::map_entire_file);
+		mio::shared_mmap_sink rw_mmap(filename, offset, mio::map_entire_file);
 
 		return rw_mmap;
 	}
@@ -313,83 +313,6 @@ namespace trxmmap
 
 		return header;
 	}
-
-	// trxmmap::TrxFile *trxmmap::TrxFile::_create_trx_from_pointer(Json::Value header, std::map<std::string, std::tuple<int, int>> dict_pointer_size, std::string root_zip, std::string root)
-	// {
-	// 	trxmmap::TrxFile *trx = new trxmmap::TrxFile();
-	// 	trx->header = trxmmap::assignHeader(header);
-
-	// 	// positions, offsets = None, None
-	// 	Map<Matrix<half, Dynamic, Dynamic>> positions(NULL, 1, 1);
-	// 	Map<Matrix<uint16_t, Dynamic, 1>> offsets(NULL, 1, 1);
-	// 	std::filesystem::path filename;
-
-	// 	for (auto const &x : dict_pointer_size)
-	// 	{
-	// 		std::filesystem::path elem_filename = x.first;
-	// 		if (root_zip.size() == 0)
-	// 		{
-	// 			filename = root_zip;
-	// 		}
-	// 		else
-	// 		{
-	// 			filename = elem_filename;
-	// 		}
-
-	// 		std::filesystem::path folder = elem_filename.parent_path();
-
-	// 		// _split_ext_with_dimensionality
-	// 		std::string basename = elem_filename.filename().string();
-
-	// 		std::string tokens[4];
-	// 		int idx, prev_pos, curr_pos;
-	// 		prev_pos = 0;
-	// 		idx = 0;
-
-	// 		while ((curr_pos = basename.find(".")) != std::string::npos)
-	// 		{
-	// 			tokens[idx] = basename.substr(prev_pos, curr_pos);
-	// 			prev_pos = curr_pos + 1;
-	// 			idx++;
-	// 		}
-
-	// 		if (idx < 2 || idx > 3)
-	// 		{
-	// 			throw("Invalid filename.");
-	// 		}
-
-	// 		basename = tokens[0];
-	// 		std::string ext = "." + tokens[idx - 1];
-	// 		int dim;
-
-	// 		if (idx == 2)
-	// 		{
-	// 			dim = 1;
-	// 		}
-	// 		else
-	// 		{
-	// 			dim = std::stoi(tokens[1]);
-	// 		}
-	// 		_is_dtype_valid(ext);
-	// 		// function completed
-
-	// 		if (ext.compare(".bit") == 0)
-	// 		{
-	// 			ext = ".bool";
-	// 		}
-	// 		int mem_adress = get<0>(dict_pointer_size[elem_filename]);
-	// 		int size = get<1>(dict_pointer_size[elem_filename]);
-
-	// 		// skipped the stripping of right /..not sure when it's necessary
-	// 		// Also not sure how lstripping will work on windows
-	// 		if (root.compare("") == 0 && folder.string().find(root) == 0)
-	// 		{
-	// 			string updated_fldr = folder.string();
-	// 		}
-	// 	}
-
-	// 	return trx;
-	// }
 
 	void get_reference_info(std::string reference, const MatrixXf &affine, const RowVectorXi &dimensions)
 	{

@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <variant>
 #include <math.h>
+#include <libgen.h>
 #include <Eigen/Core>
 #include <filesystem>
 
@@ -52,12 +53,12 @@ namespace trxmmap
 		json header;
 		ArraySequence<DT> *streamlines;
 
-		std::map<std::string, std::vector<std::string>> groups; // vector of strings as values
+		std::map<std::string, MMappedMatrix<uint> *> groups; // vector of strings as values
 
 		// int or float --check python floa<t precision (singletons)
 		std::map<std::string, MMappedMatrix<DT> *> data_per_streamline;
 		std::map<std::string, ArraySequence<DT> *> data_per_vertex;
-		std::map<std::string, Matrix<DT, Dynamic, Dynamic>> data_per_group;
+		std::map<std::string, std::map<std::string, MMappedMatrix<DT> *>> data_per_group;
 		std::string _uncompressed_folder_handle;
 		bool _copy_safe;
 
@@ -65,7 +66,16 @@ namespace trxmmap
 		// TrxFile(int nb_vertices = 0, int nb_streamlines = 0);
 		TrxFile(int nb_vertices = 0, int nb_streamlines = 0, const TrxFile<DT> *init_as = NULL, std::string reference = "");
 
-		static TrxFile *_create_trx_from_pointer(json header, std::map<std::string, std::tuple<int, int>> dict_pointer_size, std::string root_zip = "", std::string root = "");
+		/**
+		 * @brief After reading the structure of a zip/folder, create a TrxFile
+		 *
+		 * @param header A TrxFile header dictionary which will be used for the new TrxFile
+		 * @param dict_pointer_size A dictionary containing the filenames of all the files within the TrxFile disk file/folder
+		 * @param root_zip The path of the ZipFile pointer
+		 * @param root The dirname of the ZipFile pointer
+		 * @return TrxFile*
+		 */
+		static TrxFile<DT> *_create_trx_from_pointer(json header, std::map<std::string, std::tuple<int, int>> dict_pointer_size, std::string root_zip = "", std::string root = "");
 
 	private:
 		int len();
