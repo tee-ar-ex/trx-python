@@ -1,11 +1,11 @@
-#!/usr/bin/env python
-
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+
 """
-Conversion of '.tck', '.trk', '.fib', '.vtk' and 'dpy' files using updated file
-format standard. TRK file always needs a reference file, a NIFTI, for
-conversion. The FIB file format is in fact a VTK, MITK Diffusion supports it.
+Conversion of '.tck', '.trk', '.fib', '.vtk', '.trx' and 'dpy' files using
+updated file format standard. TCK file always needs a reference file, a NIFTI,
+for conversion. The FIB file format is in fact a VTK, MITK Diffusion supports
+it.
 """
 
 import argparse
@@ -17,24 +17,23 @@ from trx_file_memmap import TrxFile
 from trx_file_memmap import load, save
 from tractography_file_format.utils import load_tractogram_with_reference
 
+
 def _build_arg_parser():
     p = argparse.ArgumentParser(description=__doc__,
                                 formatter_class=argparse.RawTextHelpFormatter)
 
     p.add_argument('in_tractogram', metavar='IN_TRACTOGRAM',
                    help='Tractogram filename. Format must be one of \n'
-                        'trk, tck, vtk, fib, dpy')
-
+                        'trk, tck, vtk, fib, dpy, trx')
     p.add_argument('out_name', metavar='OUTPUT_NAME',
                    help='Output filename. Format must be one of \n'
-                        'trk, tck, vtk, fib, dpy')
+                        'trk, tck, vtk, fib, dpy, trx')
 
     p.add_argument('--reference',
-                        help='Reference anatomy for tck/vtk/fib/dpy file\n'
-                             'support (.nii or .nii.gz).')
-    p.add_argument(
-        '-f', dest='overwrite', action='store_true',
-        help='Force overwriting of the output files.')
+                   help='Reference anatomy for tck/vtk/fib/dpy file\n'
+                   'support (.nii or .nii.gz).')
+    p.add_argument('-f', dest='overwrite', action='store_true',
+                   help='Force overwriting of the output files.')
 
     return p
 
@@ -44,7 +43,8 @@ def main():
     args = parser.parse_args()
 
     if os.path.isfile(args.out_name) and not args.overwrite:
-        raise IOError('{} already exists, use -f to overwrite.'.format(args.out_name))
+        raise IOError(
+            '{} already exists, use -f to overwrite.'.format(args.out_name))
 
     in_ext = os.path.splitext(args.in_tractogram)[1]
     out_ext = os.path.splitext(args.out_name)[1]
@@ -54,7 +54,7 @@ def main():
 
     if in_ext != '.trx':
         sft = load_tractogram_with_reference(parser, args, args.in_tractogram,
-                                         bbox_check=False)
+                                             bbox_check=False)
     else:
         trx = load(args.in_tractogram)
         sft = trx.to_sft()
@@ -64,7 +64,6 @@ def main():
     else:
         trx = TrxFile.from_sft(sft)
         save(trx, args.out_name)
-
 
 
 if __name__ == "__main__":

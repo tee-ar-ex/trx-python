@@ -1,15 +1,15 @@
 #!/usr/bin/env python
 
 import os
+import logging
 
 import dipy
-from dipy.io.streamline import save_tractogram, load_tractogram
+from dipy.io.streamline import load_tractogram
 from dipy.io.utils import is_reference_info_valid
 import nibabel as nib
 import numpy as np
 
 import trx_file_memmap
-from trx_file_memmap import load
 
 
 def split_name_with_nii(filename):
@@ -45,7 +45,7 @@ def get_reference_info_wrapper(reference):
     Parameters
     ----------
     reference : Nifti or Trk filename, Nifti1Image or TrkFile, Nifti1Header or
-        trk.header (dict)
+        trk.header (dict), TrxFile or trx.header (dict)
         Reference that provides the spatial attribute.
     Returns
     -------
@@ -68,7 +68,7 @@ def get_reference_info_wrapper(reference):
             header = nib.streamlines.load(reference, lazy_load=True).header
             is_trk = True
         elif ext == '.trx':
-            header = load(reference).header
+            header = trx_file_memmap.load(reference).header
             is_trx = True
     elif isinstance(reference, trx_file_memmap.trx_file_memmap.TrxFile):
         header = reference.header
@@ -108,7 +108,7 @@ def get_reference_info_wrapper(reference):
         voxel_order = header['voxel_order']
     elif is_sft:
         affine, dimensions, voxel_sizes, voxel_order =\
-             reference.space_attributes
+            reference.space_attributes
     elif is_trx:
         affine = header['VOXEL_TO_RASMM']
         dimensions = header['DIMENSIONS']
@@ -141,11 +141,11 @@ def is_header_compatible(reference_1, reference_2):
     output : bool
         Does all the spatial attribute match
     """
-    
-    affine_1, dimensions_1, voxel_sizes_1, voxel_order_1 = get_reference_info_wrapper(
-        reference_1)
-    affine_2, dimensions_2, voxel_sizes_2, voxel_order_2 = get_reference_info_wrapper(
-        reference_2)
+
+    affine_1, dimensions_1, voxel_sizes_1, voxel_order_1 = \
+        get_reference_info_wrapper(reference_1)
+    affine_2, dimensions_2, voxel_sizes_2, voxel_order_2 = \
+        get_reference_info_wrapper(reference_2)
 
     identical_header = True
     if not np.allclose(affine_1, affine_2, rtol=1e-03, atol=1e-03):
@@ -169,12 +169,12 @@ def is_header_compatible(reference_1, reference_2):
 
 def is_argument_set(args, arg_name):
     # Check that attribute is not None
-    return not getattr(args, 'reference', None) is None
+    return not getattr(args, arg_name, None) is None
 
 
 def load_tractogram_with_reference(parser, args, filepath,
-                                   bbox_check=True, arg_name=None):
-
+                                   bbox_check=True):
+    # Force the usage of --reference for all file formats without an header
     _, ext = os.path.splitext(filepath)
     if ext == '.trk':
         if is_argument_set(args, 'reference'):
@@ -183,8 +183,8 @@ def load_tractogram_with_reference(parser, args, filepath,
         sft = load_tractogram(filepath, 'same',
                               bbox_valid_check=bbox_check)
     elif ext in ['.tck', '.fib', '.vtk', '.dpy']:
-        if (not is_argument_set(args, 'reference')) or (args.reference is None) or \
-            (args.reference == 'same'):
+        if (not is_argument_set(args, 'reference')) \
+                or (args.reference is None) or (args.reference == 'same'):
             parser.error('--reference is required for this file format '
                          '{}.'.format(filepath))
         else:

@@ -11,7 +11,8 @@ Spatial attributes are: affine, dimensions, voxel sizes and voxel order.
 import argparse
 import os
 
-from tractography_file_format.utils import is_header_compatible, split_name_with_nii
+from tractography_file_format.utils import (is_header_compatible,
+                                            split_name_with_nii)
 
 
 def _build_arg_parser():
@@ -19,7 +20,7 @@ def _build_arg_parser():
                                 formatter_class=argparse.RawTextHelpFormatter)
 
     p.add_argument('in_files', nargs='+',
-                   help='List of file to compare (trk and nii).')
+                   help='List of file to compare (trk, trx and nii).')
 
     return p
 
