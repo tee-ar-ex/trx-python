@@ -23,9 +23,11 @@ from tractography_file_format.utils import load_tractogram_with_reference
 
 def display(volume, volume_affine=None, streamlines=None, title='FURY',
             display_bounds=True):
+
     volume = volume.astype(float)
     scene = window.Scene()
     scene.background((1., 0.5, 0.))
+
     # Show the X/Y/Z plane intersecting, mid-slices
     slicer_actor_1 = actor.slicer(volume, affine=volume_affine,
                                   value_range=(volume.min(), volume.max()),
@@ -36,15 +38,13 @@ def display(volume, volume_affine=None, streamlines=None, title='FURY',
     slicer_actor_3 = actor.slicer(volume, affine=volume_affine,
                                   value_range=(volume.min(), volume.max()),
                                   interpolation='nearest', opacity=0.8)
-    slicer_actor_1.display_extent(0, volume.shape[0],
-                                  volume.shape[1] // 2, volume.shape[1] // 2,
-                                  0, volume.shape[2])
-    slicer_actor_2.display_extent(volume.shape[0] // 2, volume.shape[0] // 2,
-                                  0, volume.shape[1],
-                                  0, volume.shape[2])
-    slicer_actor_3.display_extent(0, volume.shape[0],
-                                  0, volume.shape[1],
-                                  volume.shape[2] // 2, volume.shape[2] // 2)
+    slicer_actor_1.display(y=volume.shape[1] // 2)
+    slicer_actor_2.display(x=volume.shape[0] // 2)
+    slicer_actor_3.display(z=volume.shape[2] // 2)
+
+    scene.add(slicer_actor_1)
+    scene.add(slicer_actor_2)
+    scene.add(slicer_actor_3)
 
     # Bounding box to facilitate error detections
     if display_bounds:
@@ -83,9 +83,6 @@ def display(volume, volume_affine=None, streamlines=None, title='FURY',
         scene.add(text_actor_y)
         scene.add(text_actor_z)
 
-    scene.add(slicer_actor_1)
-    scene.add(slicer_actor_2)
-    scene.add(slicer_actor_3)
     if streamlines is not None:
         streamlines_actor = actor.line(streamlines,
                                        colormap.line_colors(streamlines),
