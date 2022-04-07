@@ -131,13 +131,9 @@ def main():
 
     # Approach (1)
     density_1 = density_map(sft.streamlines, sft.affine, sft.dimensions)
-    if args.reference is not None:
-        img = nib.load(args.reference)
-        display(img.get_fdata(), volume_affine=img.affine,
-                streamlines=sft.streamlines,  title='RASMM')
-    else:
-        display(density_1, volume_affine=sft.affine,
-                streamlines=sft.streamlines,  title='RASMM')
+    img = nib.load(args.reference)
+    display(img.get_fdata(), volume_affine=img.affine,
+            streamlines=sft.streamlines,  title='RASMM')
 
     # Approach (2)
     sft.to_vox()
@@ -148,22 +144,15 @@ def main():
     print('Total difference of {} voxels with total value of {}'.format(
         np.count_nonzero(diff), np.sum(np.abs(diff))))
 
-    if args.reference is not None:
-        display(img.get_fdata(), streamlines=sft.streamlines, title='VOX')
-    else:
-        display(density_2, streamlines=sft.streamlines, title='VOX')
+    display(img.get_fdata(), streamlines=sft.streamlines, title='VOX')
 
     # Try VOXMM
     sft.to_voxmm()
     affine = np.eye(4)
     affine[0:3, 0:3] *= sft.voxel_sizes
 
-    if args.reference is not None:
-        display(img.get_fdata(), volume_affine=affine,
-                streamlines=sft.streamlines, title='VOX')
-    else:
-        display(density_1, volume_affine=affine,
-                streamlines=sft.streamlines,  title='VOXMM')
+    display(img.get_fdata(), volume_affine=affine,
+            streamlines=sft.streamlines,  title='VOXMM')
 
 
 if __name__ == "__main__":
