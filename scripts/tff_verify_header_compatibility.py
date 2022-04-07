@@ -12,7 +12,7 @@ import argparse
 import os
 
 from tractography_file_format.utils import (is_header_compatible,
-                                            split_name_with_nii)
+                                            split_name_with_gz)
 
 
 def _build_arg_parser():
@@ -33,7 +33,7 @@ def main():
     for filepath in args.in_files:
         if not os.path.isfile(filepath):
             print('{} does not exist'.format(filepath))
-        _, in_extension = split_name_with_nii(filepath)
+        _, in_extension = split_name_with_gz(filepath)
         if in_extension not in ['.trk', '.nii', '.nii.gz', '.trx']:
             parser.error('{} does not have a supported extension'.format(
                 filepath))

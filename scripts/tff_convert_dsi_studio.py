@@ -23,7 +23,10 @@ import shutil
 from dipy.io.stateful_tractogram import StatefulTractogram, Space
 from dipy.io.streamline import save_tractogram, load_tractogram
 
-from tractography_file_format.utils import get_axis_shift_vector, flip_sft
+from trx_file_memmap import save, TrxFile
+
+from tractography_file_format.utils import (get_axis_shift_vector, flip_sft,
+                                            split_name_with_gz)
 
 
 def _build_arg_parser():
@@ -56,18 +59,29 @@ def main():
     args = parser.parse_args()
 
     if os.path.isfile(args.out_tractogram) and not args.overwrite:
-        raise IOError(
-            '{} already exists, use -f to overwrite.'.format(args.out_tractogram))
+        raise IOError('{} already exists, use -f to overwrite.'.format(
+            args.out_tractogram))
 
-    with gzip.open(args.in_dsi_tractogram, 'rb') as f_in:
-        with open('tmp.trk', 'wb') as f_out:
-            shutil.copyfileobj(f_in, f_out)
-            sft = load_tractogram('tmp.trk', 'same', bbox_valid_check=False)
-            os.remove('tmp.trk')
+    in_ext = split_name_with_gz(args.in_dsi_tractogram)[1]
+    out_ext = split_name_with_gz(args.out_tractogram)[1]
 
-    # LPS -> RAS convention in voxel space
+    if in_ext == '.trk.gz':
+        with gzip.open(args.in_dsi_tractogram, 'rb') as f_in:
+            with open('tmp.trk', 'wb') as f_out:
+                shutil.copyfileobj(f_in, f_out)
+                sft = load_tractogram('tmp.trk', 'same',
+                                      bbox_valid_check=False)
+                os.remove('tmp.trk')
+    elif in_ext == '.trk':
+        sft = load_tractogram(args.in_dsi_tractogram, 'same',
+                              bbox_valid_check=False)
+    else:
+        raise IOError('{} is not currently supported.'.format(in_ext))
+
     sft.to_vox()
-    sft_fix = StatefulTractogram(sft.streamlines, args.in_dsi_fa, Space.VOXMM)
+    sft_fix = StatefulTractogram(sft.streamlines, args.in_dsi_fa, Space.VOXMM,
+                                 data_per_point=sft.data_per_point,
+                                 data_per_streamline=sft.data_per_streamline)
     sft_fix.to_vox()
     flip_axis = ['x', 'y']
     sft_fix.streamlines._data -= get_axis_shift_vector(flip_axis)
@@ -78,8 +92,13 @@ def main():
 
     if args.remove_invalid:
         sft_flip.remove_invalid_streamlines()
-    save_tractogram(sft_flip, args.out_tractogram,
-                    bbox_valid_check=not args.keep_invalid)
+
+    if out_ext != '.trx':
+        save_tractogram(sft_flip, args.out_tractogram,
+                        bbox_valid_check=not args.keep_invalid)
+    else:
+        trx = TrxFile.from_sft(sft_flip)
+        save(trx, args.out_tractogram)
 
 
 if __name__ == "__main__":

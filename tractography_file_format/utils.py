@@ -13,7 +13,7 @@ import numpy as np
 import trx_file_memmap
 
 
-def split_name_with_nii(filename):
+def split_name_with_gz(filename):
     """
     Returns the clean basename and extension of a file.
     Means that this correctly manages the ".nii.gz" extensions.
@@ -34,7 +34,7 @@ def split_name_with_nii(filename):
         # Test if we have a .nii additional extension
         temp_base, add_ext = os.path.splitext(base)
 
-        if add_ext == ".nii":
+        if add_ext == ".nii" or add_ext == ".trk":
             ext = add_ext + ext
             base = temp_base
 
@@ -61,7 +61,7 @@ def get_reference_info_wrapper(reference):
     is_sft = False
     is_trx = False
     if isinstance(reference, str):
-        _, ext = split_name_with_nii(reference)
+        _, ext = split_name_with_gz(reference)
         if ext in ['.nii', '.nii.gz']:
             header = nib.load(reference).header
             is_nifti = True

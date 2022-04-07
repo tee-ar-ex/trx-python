@@ -15,7 +15,8 @@ from dipy.io.streamline import save_tractogram
 
 from trx_file_memmap import TrxFile
 from trx_file_memmap import load, save
-from tractography_file_format.utils import load_tractogram_with_reference
+from tractography_file_format.utils import (load_tractogram_with_reference,
+                                            split_name_with_gz)
 
 
 def _build_arg_parser():
@@ -46,8 +47,8 @@ def main():
         raise IOError(
             '{} already exists, use -f to overwrite.'.format(args.out_name))
 
-    in_ext = os.path.splitext(args.in_tractogram)[1]
-    out_ext = os.path.splitext(args.out_name)[1]
+    in_ext = split_name_with_gz(args.in_tractogram)[1]
+    out_ext = split_name_with_gz(args.out_name)[1]
 
     if in_ext == out_ext:
         parser.error('Input and output cannot be of the same file format')

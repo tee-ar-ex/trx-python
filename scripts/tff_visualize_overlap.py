@@ -99,7 +99,7 @@ def _build_arg_parser():
     p.add_argument('in_tractogram', metavar='IN_TRACTOGRAM',
                    help='Tractogram filename. Format must be one of \n'
                         'trk, tck, vtk, fib, dpy, trx')
-    p.add_argument('--reference',
+    p.add_argument('reference',
                    help='Reference anatomy for tck/vtk/fib/dpy file\n'
                         'support (nii or nii.gz).')
     p.add_argument('--remove_invalid', action='store_true',
