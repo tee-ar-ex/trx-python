@@ -14,6 +14,7 @@ from dipy.tracking.utils import density_map
 from dipy.viz import window, actor, colormap
 from fury.utils import get_bounds
 import fury.utils as ut_vtk
+import nibabel as nib
 import numpy as np
 import vtk
 
@@ -104,8 +105,6 @@ def _build_arg_parser():
     p.add_argument('--remove_invalid', action='store_true',
                    help='Removes invalid streamlines to avoid the density_map'
                         'function to crash.')
-    p.add_argument('-f', dest='overwrite', action='store_true',
-                   help='Force overwriting of the output files.')
 
     return p
 
@@ -132,8 +131,13 @@ def main():
 
     # Approach (1)
     density_1 = density_map(sft.streamlines, sft.affine, sft.dimensions)
-    display(density_1, volume_affine=sft.affine,
-            streamlines=sft.streamlines,  title='RASMM')
+    if args.reference is not None:
+        img = nib.load(args.reference)
+        display(img.get_fdata(), volume_affine=img.affine,
+                streamlines=sft.streamlines,  title='RASMM')
+    else:
+        display(density_1, volume_affine=sft.affine,
+                streamlines=sft.streamlines,  title='RASMM')
 
     # Approach (2)
     sft.to_vox()
@@ -143,15 +147,23 @@ def main():
     diff = density_1 - density_2
     print('Total difference of {} voxels with total value of {}'.format(
         np.count_nonzero(diff), np.sum(np.abs(diff))))
-    display(density_2, streamlines=sft.streamlines, title='VOX')
+
+    if args.reference is not None:
+        display(img.get_fdata(), streamlines=sft.streamlines, title='VOX')
+    else:
+        display(density_2, streamlines=sft.streamlines, title='VOX')
 
     # Try VOXMM
     sft.to_voxmm()
     affine = np.eye(4)
     affine[0:3, 0:3] *= sft.voxel_sizes
 
-    display(density_1, volume_affine=affine,
-            streamlines=sft.streamlines,  title='VOXMM')
+    if args.reference is not None:
+        display(img.get_fdata(), volume_affine=affine,
+                streamlines=sft.streamlines, title='VOX')
+    else:
+        display(density_1, volume_affine=affine,
+                streamlines=sft.streamlines,  title='VOXMM')
 
 
 if __name__ == "__main__":
