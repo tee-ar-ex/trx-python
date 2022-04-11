@@ -17,28 +17,20 @@ results may vary depending on the data itself as well as DSI-studio version.
 
 import argparse
 import os
-import gzip
-import shutil
 
-from dipy.io.stateful_tractogram import StatefulTractogram, Space
-from dipy.io.streamline import save_tractogram, load_tractogram
-
-from trx_file_memmap import save, TrxFile
-
-from tractography_file_format.utils import (get_axis_shift_vector, flip_sft,
-                                            split_name_with_gz)
+from tractography_file_format.workflows import convert_dsi_studio
 
 
 def _build_arg_parser():
     p = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawTextHelpFormatter)
 
-    p.add_argument('in_dsi_tractogram',
+    p.add_argument('in_dsi_tractogram', metavar='IN_DSI_TRACTOGRAM',
                    help='Path of the input tractogram file from DSI studio '
                         '(.trk).')
-    p.add_argument('in_dsi_fa',
+    p.add_argument('in_dsi_fa', metavar='IN_DSI_FA',
                    help='Path of the input FA from DSI Studio (.nii.gz).')
-    p.add_argument('out_tractogram',
+    p.add_argument('out_tractogram', metavar='OUT_TRACTOGRAM',
                    help='Path of the output tractogram file.')
 
     invalid = p.add_mutually_exclusive_group()
@@ -62,43 +54,9 @@ def main():
         raise IOError('{} already exists, use -f to overwrite.'.format(
             args.out_tractogram))
 
-    in_ext = split_name_with_gz(args.in_dsi_tractogram)[1]
-    out_ext = split_name_with_gz(args.out_tractogram)[1]
-
-    if in_ext == '.trk.gz':
-        with gzip.open(args.in_dsi_tractogram, 'rb') as f_in:
-            with open('tmp.trk', 'wb') as f_out:
-                shutil.copyfileobj(f_in, f_out)
-                sft = load_tractogram('tmp.trk', 'same',
-                                      bbox_valid_check=False)
-                os.remove('tmp.trk')
-    elif in_ext == '.trk':
-        sft = load_tractogram(args.in_dsi_tractogram, 'same',
-                              bbox_valid_check=False)
-    else:
-        raise IOError('{} is not currently supported.'.format(in_ext))
-
-    sft.to_vox()
-    sft_fix = StatefulTractogram(sft.streamlines, args.in_dsi_fa, Space.VOXMM,
-                                 data_per_point=sft.data_per_point,
-                                 data_per_streamline=sft.data_per_streamline)
-    sft_fix.to_vox()
-    flip_axis = ['x', 'y']
-    sft_fix.streamlines._data -= get_axis_shift_vector(flip_axis)
-    sft_flip = flip_sft(sft_fix, flip_axis)
-
-    sft_flip.to_rasmm()
-    sft_flip.streamlines._data -= [0.5, 0.5, -0.5]
-
-    if args.remove_invalid:
-        sft_flip.remove_invalid_streamlines()
-
-    if out_ext != '.trx':
-        save_tractogram(sft_flip, args.out_tractogram,
-                        bbox_valid_check=not args.keep_invalid)
-    else:
-        trx = TrxFile.from_sft(sft_flip)
-        save(trx, args.out_tractogram)
+    convert_dsi_studio(args.in_dsi_tractogram, args.in_dsi_fa,
+                       args.out_tractogram, remove_invalid=args.remove_invalid,
+                       keep_invalid=args.keep_invalid)
 
 
 if __name__ == "__main__":

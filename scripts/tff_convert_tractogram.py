@@ -11,12 +11,7 @@ it.
 import argparse
 import os
 
-from dipy.io.streamline import save_tractogram
-
-from trx_file_memmap import TrxFile
-from trx_file_memmap import load, save
-from tractography_file_format.utils import (load_tractogram_with_reference,
-                                            split_name_with_gz)
+from tractography_file_format.workflows import convert_tractogram
 
 
 def _build_arg_parser():
@@ -26,7 +21,7 @@ def _build_arg_parser():
     p.add_argument('in_tractogram', metavar='IN_TRACTOGRAM',
                    help='Tractogram filename. Format must be one of \n'
                         'trk, tck, vtk, fib, dpy, trx')
-    p.add_argument('out_name', metavar='OUTPUT_NAME',
+    p.add_argument('out_tractogram', metavar='OUT_TRACTOGRAM',
                    help='Output filename. Format must be one of \n'
                         'trk, tck, vtk, fib, dpy, trx')
 
@@ -43,28 +38,11 @@ def main():
     parser = _build_arg_parser()
     args = parser.parse_args()
 
-    if os.path.isfile(args.out_name) and not args.overwrite:
-        raise IOError(
-            '{} already exists, use -f to overwrite.'.format(args.out_name))
+    if os.path.isfile(args.out_tractogram) and not args.overwrite:
+        raise IOError('{} already exists, use -f to overwrite.'.format(
+            args.out_tractogram))
 
-    in_ext = split_name_with_gz(args.in_tractogram)[1]
-    out_ext = split_name_with_gz(args.out_name)[1]
-
-    if in_ext == out_ext:
-        parser.error('Input and output cannot be of the same file format')
-
-    if in_ext != '.trx':
-        sft = load_tractogram_with_reference(parser, args, args.in_tractogram,
-                                             bbox_check=False)
-    else:
-        trx = load(args.in_tractogram)
-        sft = trx.to_sft()
-
-    if out_ext != '.trx':
-        save_tractogram(sft, args.out_name, bbox_valid_check=False)
-    else:
-        trx = TrxFile.from_sft(sft)
-        save(trx, args.out_name)
+    convert_tractogram(args.in_tractogram, args.out_tractogram, args.reference)
 
 
 if __name__ == "__main__":

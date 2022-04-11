@@ -9,10 +9,7 @@ Spatial attributes are: affine, dimensions, voxel sizes and voxel order.
 """
 
 import argparse
-import os
-
-from tractography_file_format.utils import (is_header_compatible,
-                                            split_name_with_gz)
+from tractography_file_format.workflows import verify_header_compatibility
 
 
 def _build_arg_parser():
@@ -29,20 +26,7 @@ def main():
     parser = _build_arg_parser()
     args = parser.parse_args()
 
-    all_valid = True
-    for filepath in args.in_files:
-        if not os.path.isfile(filepath):
-            print('{} does not exist'.format(filepath))
-        _, in_extension = split_name_with_gz(filepath)
-        if in_extension not in ['.trk', '.nii', '.nii.gz', '.trx']:
-            parser.error('{} does not have a supported extension'.format(
-                filepath))
-        if not is_header_compatible(args.in_files[0], filepath):
-            print('{} and {} do not have compatible header.'.format(
-                args.in_files[0], filepath))
-            all_valid = False
-    if all_valid:
-        print('All input files have compatible headers.')
+    verify_header_compatibility(args.in_files)
 
 
 if __name__ == "__main__":

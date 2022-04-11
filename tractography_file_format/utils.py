@@ -168,32 +168,26 @@ def is_header_compatible(reference_1, reference_2):
     return identical_header
 
 
-def is_argument_set(args, arg_name):
-    # Check that attribute is not None
-    return not getattr(args, arg_name, None) is None
-
-
-def load_tractogram_with_reference(parser, args, filepath,
+def load_tractogram_with_reference(filepath, reference=None,
                                    bbox_check=True):
     # Force the usage of --reference for all file formats without an header
     _, ext = os.path.splitext(filepath)
     if ext == '.trk':
-        if is_argument_set(args, 'reference'):
+        if reference is not None and reference != 'same':
             logging.warning('Reference is discarded for this file format '
                             '{}.'.format(filepath))
         sft = load_tractogram(filepath, 'same',
                               bbox_valid_check=bbox_check)
     elif ext in ['.tck', '.fib', '.vtk', '.dpy']:
-        if (not is_argument_set(args, 'reference')) \
-                or (args.reference is None) or (args.reference == 'same'):
-            parser.error('--reference is required for this file format '
-                         '{}.'.format(filepath))
+        if reference is None or reference == 'same':
+            raise IOError('--reference is required for this file format '
+                          '{}.'.format(filepath))
         else:
-            sft = load_tractogram(filepath, args.reference,
+            sft = load_tractogram(filepath, reference,
                                   bbox_valid_check=bbox_check)
 
     else:
-        parser.error('{} is an unsupported file format'.format(filepath))
+        raise IOError('{} is an unsupported file format'.format(filepath))
 
     return sft
 
