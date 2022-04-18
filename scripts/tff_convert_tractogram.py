@@ -28,6 +28,14 @@ def _build_arg_parser():
     p.add_argument('--reference',
                    help='Reference anatomy for tck/vtk/fib/dpy file\n'
                    'support (.nii or .nii.gz).')
+
+    p2 = p.add_argument_group(title='Data type options')
+    p2.add_argument('--positions_dtype', default='float16',
+                    choices=['float16', 'float32', 'float64'],
+                    help='Specify the datatype for positions for trx.')
+    p2.add_argument('--offsets_dtype', default='uint64',
+                    choices=['uint32', 'uint64'],
+                    help='Specify the datatype for offsets for trx.')
     p.add_argument('-f', dest='overwrite', action='store_true',
                    help='Force overwriting of the output files.')
 
@@ -42,7 +50,9 @@ def main():
         raise IOError('{} already exists, use -f to overwrite.'.format(
             args.out_tractogram))
 
-    convert_tractogram(args.in_tractogram, args.out_tractogram, args.reference)
+    convert_tractogram(args.in_tractogram, args.out_tractogram, args.reference,
+                       pos_dtype=args.positions_dtype,
+                       offsets_dtype=args.offsets_dtype)
 
 
 if __name__ == "__main__":

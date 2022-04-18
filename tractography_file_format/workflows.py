@@ -60,7 +60,8 @@ def convert_dsi_studio(in_dsi_tractogram, in_dsi_fa, out_tractogram,
         save(trx, out_tractogram)
 
 
-def convert_tractogram(in_tractogram, out_tractogram, reference):
+def convert_tractogram(in_tractogram, out_tractogram, reference,
+                       pos_dtype='float16', offsets_dtype='uint64'):
     in_ext = split_name_with_gz(in_tractogram)[1]
     out_ext = split_name_with_gz(out_tractogram)[1]
 
@@ -78,6 +79,10 @@ def convert_tractogram(in_tractogram, out_tractogram, reference):
         save_tractogram(sft, out_tractogram, bbox_valid_check=False)
     else:
         trx = TrxFile.from_sft(sft)
+        if trx.streamlines._data.dtype.name != pos_dtype:
+            trx.streamlines._data = trx.streamlines._data.astype(pos_dtype)
+        if trx.streamlines._offsets.dtype.name != offsets_dtype:
+            trx.streamlines._offsets = trx.streamlines._offsets.astype(offsets_dtype)
         save(trx, out_tractogram)
 
 
