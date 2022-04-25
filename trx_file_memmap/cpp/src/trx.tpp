@@ -43,20 +43,26 @@ std::string _generate_filename_from_data(const ArrayBase<DT> &arr, std::string f
 }
 
 template <typename DT>
-Matrix<u_int32_t, Dynamic, Dynamic, RowMajor> _compute_lengths(const MatrixBase<DT> &offsets, int nb_vertices)
+Matrix<uint32_t, Dynamic, 1> _compute_lengths(const MatrixBase<DT> &offsets, int nb_vertices)
 {
 	if (offsets.size() > 1)
 	{
 		int last_elem_pos = _dichotomic_search(offsets);
-		Matrix<u_int32_t, 1, Dynamic, RowMajor> lengths;
+		Matrix<uint32_t, Dynamic, 1> lengths;
 
 		if (last_elem_pos == offsets.size() - 1)
 		{
 			// ediff1d
-			Matrix<u_int32_t, Dynamic, Dynamic> tmp(offsets.template cast<u_int32_t>());
-			Map<RowVector<u_int32_t, Dynamic>> v(tmp.data(), tmp.size());
-			lengths.resize(v.rows(), v.cols());
-			lengths << v(seq(1, last)) - v(seq(0, last - 1)), u_int32_t(nb_vertices - offsets(last));
+			Matrix<uint32_t, Dynamic, Dynamic> tmp(offsets.template cast<u_int32_t>());
+			Map<RowVector<uint32_t, Dynamic>> v(tmp.data(), tmp.size());
+			lengths.resize(v.size(), 1);
+
+			// TODO: figure out if there's a built in way to manage this
+			for (int i = 0; i < v.size() - 1; i++)
+			{
+				lengths(i) = v(i + 1) - v(i);
+			}
+			lengths(v.size() - 1) = u_int32_t(nb_vertices - offsets(last));
 		}
 		else
 		{
@@ -65,19 +71,24 @@ Matrix<u_int32_t, Dynamic, Dynamic, RowMajor> _compute_lengths(const MatrixBase<
 
 			// ediff1d
 			Map<RowVector<u_int32_t, Dynamic>> v(tmp.data(), tmp.size());
-			lengths.resize(v.rows(), v.cols());
-			lengths << v(seq(1, last)) - v(seq(0, last - 1)), u_int32_t(0);
+			lengths.resize(v.cols(), 1);
+
+			for (int i = 0; i < v.size() - 1; i++)
+			{
+				lengths(i) = v(i + 1) - v(i);
+			}
+
 			lengths(last_elem_pos + 1) = u_int32_t(0);
 		}
 		return lengths;
 	}
 	if (offsets.size() == 1)
 	{
-		Matrix<u_int32_t, 1, 1, RowMajor> lengths(nb_vertices);
+		Matrix<uint32_t, 1, 1, RowMajor> lengths(nb_vertices);
 		return lengths;
 	}
 
-	Matrix<u_int32_t, 1, 1, RowMajor> lengths(0);
+	Matrix<uint32_t, 1, 1, RowMajor> lengths(0);
 	return lengths;
 }
 
@@ -266,7 +277,7 @@ TrxFile<DT> *_initialize_empty_trx(int nb_streamlines, int nb_vertices, const Tr
 	std::tuple<int, int> shape_off = std::make_tuple(nb_streamlines, 1);
 
 	trx->streamlines->mmap_off = trxmmap::_create_memmap(offsets_filename, shape_off, "w+", offsets_dtype);
-	new (&(trx->streamlines->_offsets)) Map<Matrix<uint64_t, Dynamic, 1>>(reinterpret_cast<uint64_t *>(trx->streamlines->mmap_off.data()), std::get<0>(shape_off), std::get<1>(shape_off));
+	new (&(trx->streamlines->_offsets)) Map<Matrix<uint64_t, 1, Dynamic, RowMajor>>(reinterpret_cast<uint64_t *>(trx->streamlines->mmap_off.data()), std::get<0>(shape_off), std::get<1>(shape_off));
 
 	trx->streamlines->_lengths.resize(nb_streamlines, 0);
 
@@ -399,7 +410,7 @@ TrxFile<DT> *TrxFile<DT>::_create_trx_from_pointer(json header, std::map<std::st
 			filename = elem_filename;
 		}
 
-		std::string folder = std::string(dirname(elem_filename.c_str()));
+		std::string folder = std::string(dirname(const_cast<char *>(elem_filename.c_str())));
 
 		// _split_ext_with_dimensionality
 		std::tuple<std::string, int, std::string> base_tuple = _split_ext_with_dimensionality(elem_filename);
@@ -469,8 +480,12 @@ TrxFile<DT> *TrxFile<DT>::_create_trx_from_pointer(json header, std::map<std::st
 			std::tuple<int, int> shape = std::make_tuple(trx->header["NB_STREAMLINES"], 1);
 			trx->streamlines->mmap_off = trxmmap::_create_memmap(filename, shape, "r+", ext.substr(1, ext.size() - 1), mem_adress);
 
-			new (&(trx->streamlines->_offsets)) Map<Matrix<uint64_t, Dynamic, Dynamic>>(reinterpret_cast<uint64_t *>(trx->streamlines->mmap_off.data()), std::get<0>(shape), std::get<1>(shape));
-			trx->streamlines->_lengths = _compute_lengths(trx->streamlines->_offsets, trx->header["NB_VERTICES"]);
+			new (&(trx->streamlines->_offsets)) Map<Matrix<uint64_t, Dynamic, 1>>(reinterpret_cast<uint64_t *>(trx->streamlines->mmap_off.data()), std::get<0>(shape), std::get<1>(shape));
+
+			// TODO : adapt compute_lengths to accept a map
+			Matrix<uint64_t, Dynamic, 1> offsets;
+			offsets = trx->streamlines->_offsets;
+			trx->streamlines->_lengths = _compute_lengths(offsets, int(trx->header["NB_VERTICES"]));
 		}
 
 		else if (folder.compare("dps"))
@@ -553,8 +568,8 @@ TrxFile<DT> *TrxFile<DT>::_create_trx_from_pointer(json header, std::map<std::st
 				shape = std::make_tuple(1, size);
 			}
 
-			std::string data_name = std::string(basename(base.c_str()));
-			std::string sub_folder = std::string(basename(folder.c_str()));
+			std::string data_name = std::string(basename(const_cast<char *>(base.c_str())));
+			std::string sub_folder = std::string(basename(const_cast<char *>(folder.c_str())));
 
 			trx->data_per_group[sub_folder][data_name] = new MMappedMatrix<DT>();
 			trx->data_per_group[sub_folder][data_name]->mmap = trxmmap::_create_memmap(filename, shape, "r+", ext.substr(1, ext.size() - 1), mem_adress);
@@ -584,7 +599,7 @@ TrxFile<DT> *TrxFile<DT>::_create_trx_from_pointer(json header, std::map<std::st
 			{
 				shape = std::make_tuple(size, 1);
 			}
-			trx->groups[base] = new MMappedMatrix<DT>();
+			trx->groups[base] = new MMappedMatrix<uint32_t>();
 			trx->groups[base]->mmap = trxmmap::_create_memmap(filename, shape, "r+", ext.substr(1, ext.size() - 1), mem_adress);
 			new (&(trx->groups[base]->_matrix)) Map<Matrix<uint32_t, Dynamic, Dynamic>>(reinterpret_cast<uint32_t *>(trx->groups[base]->mmap.data()), std::get<0>(shape), std::get<1>(shape));
 		}
@@ -594,11 +609,80 @@ TrxFile<DT> *TrxFile<DT>::_create_trx_from_pointer(json header, std::map<std::st
 			std::cout << elem_filename << " is not part of a valid structure." << std::endl;
 		}
 	}
-	if (trx->streamlines->_data == NULL || trx->streamlines->_offsets == NULL)
+	if (trx->streamlines->_data.size() || trx->streamlines->_offsets.size())
 	{
 
 		throw std::invalid_argument("Missing essential data.");
 	}
 
 	return trx;
+}
+
+template <typename DT>
+TrxFile<DT> *load_from_zip(std::string filename)
+{
+	// TODO: check error values
+	int *errorp;
+	zip_t *zf = zip_open(filename.c_str(), 0, errorp);
+	json header = load_header(zf);
+
+	std::map<std::string, std::tuple<int, int>> file_pointer_size;
+	int global_pos = 0;
+	int mem_address = 0;
+
+	int num_entries = zip_get_num_entries(zf, ZIP_FL_UNCHANGED);
+
+	for (int i = 0; i < num_entries; ++i)
+	{
+		std::string elem_filename = zip_get_name(zf, i, ZIP_FL_UNCHANGED);
+
+		size_t lastdot = elem_filename.find_last_of(".");
+
+		if (lastdot == std::string::npos)
+			continue;
+		std::string ext = elem_filename.substr(lastdot + 1, std::string::npos);
+
+		// apparently all zip directory names end with a slash. may be a better way
+		if (ext.compare("json") == 0 || elem_filename.rfind("/") == elem_filename.size() - 1)
+		{
+			continue;
+		}
+
+		if (!_is_dtype_valid(ext))
+		{
+			continue;
+			// maybe throw error here instead?
+			// throw std::invalid_argument("The dtype is not supported");
+		}
+
+		if (ext.compare("bit") == 0)
+		{
+			ext = "bool";
+		}
+
+		// get file stats
+		zip_stat_t sb;
+
+		if (zip_stat(zf, elem_filename.c_str(), ZIP_FL_UNCHANGED, &sb) != 0)
+		{
+			return NULL;
+		}
+
+		std::ifstream file(filename, std::ios::binary);
+		file.seekg(global_pos);
+		mem_address = global_pos;
+
+		unsigned char signature[4] = {0};
+		const unsigned char local_sig[4] = {0x50, 0x4b, 0x03, 0x04};
+		file.read((char *)signature, sizeof(signature));
+
+		if (memcmp(signature, local_sig, sizeof(signature)) == 0)
+		{
+			global_pos += 30;
+			global_pos += sb.comp_size + elem_filename.size();
+		}
+
+		file_pointer_size[elem_filename] = {mem_address, global_pos};
+	}
+	return TrxFile<DT>::_create_trx_from_pointer(header, file_pointer_size, filename);
 }

@@ -2,6 +2,7 @@
 #define TRX_H
 
 #include <iostream>
+#include <fstream>
 #include <zip.h>
 #include <string.h>
 #include <nlohmann/json.hpp>
@@ -27,8 +28,8 @@ namespace trxmmap
 	struct ArraySequence
 	{
 		Map<Matrix<DT, Dynamic, Dynamic>> _data;
-		Map<Matrix<uint64_t, Dynamic, 1>> _offsets;
-		std::vector<uint32_t> _lengths;
+		Map<Matrix<uint64_t, Dynamic, Dynamic, RowMajor>> _offsets;
+		Matrix<uint32_t, Dynamic, 1> _lengths;
 		mio::shared_mmap_sink mmap_pos;
 		mio::shared_mmap_sink mmap_off;
 
@@ -53,7 +54,7 @@ namespace trxmmap
 		json header;
 		ArraySequence<DT> *streamlines;
 
-		std::map<std::string, MMappedMatrix<uint> *> groups; // vector of strings as values
+		std::map<std::string, MMappedMatrix<uint> *> groups; // vector of indices
 
 		// int or float --check python floa<t precision (singletons)
 		std::map<std::string, MMappedMatrix<DT> *> data_per_streamline;
@@ -125,7 +126,8 @@ namespace trxmmap
 	 * @param[out] status return 0 if success else 1
 	 *
 	 * */
-	int load_from_zip(const char *path);
+	template <typename DT>
+	TrxFile<DT> *load_from_zip(std::string *path);
 
 	/**
 	 * Get affine and dimensions from a Nifti or Trk file (Adapted from dipy)
@@ -171,7 +173,7 @@ namespace trxmmap
 	 * @return Matrix<uint32_t, Dynamic, Dynamic> of lengths
 	 */
 	template <typename DT>
-	Matrix<uint32_t, Dynamic, Dynamic, RowMajor> _compute_lengths(const MatrixBase<DT> &offsets, int nb_vertices);
+	Matrix<uint32_t, Dynamic, 1> _compute_lengths(const MatrixBase<DT> &offsets, int nb_vertices);
 
 	/**
 	 * @brief Find where data of a contiguous array is actually ending

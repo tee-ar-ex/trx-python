@@ -93,33 +93,33 @@ TEST(TrxFileMemmap, __split_ext_with_dimensionality)
 
 TEST(TrxFileMemmap, __compute_lengths)
 {
-	Matrix<half, 1, 5> offsets{half(0), half(1), half(2), half(3), half(4)};
-	Matrix<u_int32_t, 1, 5> lengths(trxmmap::_compute_lengths(offsets, 4));
-	Matrix<u_int32_t, 1, 5> result{u_int32_t(1), u_int32_t(1), u_int32_t(1), u_int32_t(1), u_int32_t(0)};
+	Matrix<uint64_t, 5, 1> offsets{uint64_t(0), uint64_t(1), uint64_t(2), uint64_t(3), uint64_t(4)};
+	Matrix<uint32_t, 5, 1> lengths(trxmmap::_compute_lengths(offsets, 4));
+	Matrix<uint32_t, 5, 1> result{u_int32_t(1), u_int32_t(1), u_int32_t(1), u_int32_t(1), u_int32_t(0)};
 
 	EXPECT_EQ(lengths, result);
 
-	Matrix<half, 1, 5> offsets2{half(0), half(1), half(0), half(3), half(4)};
-	Matrix<u_int32_t, 1, 5> lengths2(trxmmap::_compute_lengths(offsets2, 4));
-	Matrix<u_int32_t, 1, 5> result2{u_int32_t(1), u_int32_t(3), u_int32_t(0), u_int32_t(1), u_int32_t(0)};
+	Matrix<uint64_t, 5, 1> offsets2{uint64_t(0), uint64_t(1), uint64_t(0), uint64_t(3), uint64_t(4)};
+	Matrix<uint32_t, 5, 1> lengths2(trxmmap::_compute_lengths(offsets2, 4));
+	Matrix<uint32_t, 5, 1> result2{u_int32_t(1), u_int32_t(3), u_int32_t(0), u_int32_t(1), u_int32_t(0)};
 
 	EXPECT_EQ(lengths2, result2);
 
-	Matrix<half, 1, 4> offsets3{half(0), half(1), half(2), half(3)};
-	Matrix<u_int32_t, 1, 4> lengths3(trxmmap::_compute_lengths(offsets3, 4));
-	Matrix<u_int32_t, 1, 4> result3{u_int32_t(1), u_int32_t(1), u_int32_t(1), u_int32_t(1)};
+	Matrix<uint64_t, 4, 1> offsets3{uint64_t(0), uint64_t(1), uint64_t(2), uint64_t(3)};
+	Matrix<uint32_t, 4, 1> lengths3(trxmmap::_compute_lengths(offsets3, 4));
+	Matrix<uint32_t, 4, 1> result3{uint32_t(1), uint32_t(1), uint32_t(1), uint32_t(1)};
 
 	EXPECT_EQ(lengths3, result3);
 
-	Matrix<half, 1, 1> offsets4(half(4));
-	Matrix<u_int32_t, 1, 1> lengths4(trxmmap::_compute_lengths(offsets4, 2));
-	Matrix<u_int32_t, 1, 1> result4(u_int32_t(2));
+	Matrix<uint64_t, 1, 1> offsets4(uint64_t(4));
+	Matrix<uint32_t, 1, 1> lengths4(trxmmap::_compute_lengths(offsets4, 2));
+	Matrix<uint32_t, 1, 1> result4(uint32_t(2));
 
 	EXPECT_EQ(lengths4, result4);
 
-	Matrix<half, 0, 0> offsets5;
-	Matrix<u_int32_t, 1, 1> lengths5(trxmmap::_compute_lengths(offsets5, 2));
-	Matrix<u_int32_t, 1, 1> result5(u_int32_t(0));
+	Matrix<uint64_t, 0, 0> offsets5;
+	Matrix<uint32_t, 1, 1> lengths5(trxmmap::_compute_lengths(offsets5, 2));
+	Matrix<uint32_t, 1, 1> result5(uint32_t(0));
 
 	EXPECT_EQ(lengths5, result5);
 }
@@ -244,6 +244,12 @@ TEST(TrxFileMemmap, load_header)
 // TEST(TrxFileMemmap, _create_trx_from_pointer)
 // {
 // }
+
+TEST(TrxFileMemmap, load_zip)
+{
+	trxmmap::TrxFile<half> *trx = trxmmap::load_from_zip<half>("../../tests/data/small.trx");
+	std::cout << trx->streamlines->_data << std::endl;
+}
 
 TEST(TrxFileMemmap, TrxFile)
 {

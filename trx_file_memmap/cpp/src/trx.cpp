@@ -188,65 +188,6 @@ namespace trxmmap
 		return root;
 	}
 
-	int load_from_zip(const char *path)
-	{
-		int *errorp;
-		zip_t *zf = zip_open(path, 0, errorp);
-		json header = load_header(zf);
-
-		std::map<std::string, std::tuple<int, int>> file_pointer_size;
-		int global_pos = 0;
-		int mem_address = 0;
-
-		int num_entries = zip_get_num_entries(zf, ZIP_FL_UNCHANGED);
-
-		for (int i = 0; i < num_entries; ++i)
-		{
-			std::string elem_filename = zip_get_name(zf, i, ZIP_FL_UNCHANGED);
-
-			size_t lastdot = elem_filename.find_last_of(".");
-
-			if (lastdot == std::string::npos)
-				continue;
-			std::string ext = elem_filename.substr(lastdot + 1, std::string::npos);
-
-			if (ext.compare("bit") == 0)
-				ext = "bool";
-
-			// get file stats
-			zip_stat_t sb;
-
-			if (zip_stat(zf, elem_filename.c_str(), ZIP_FL_UNCHANGED, &sb) != 0)
-			{
-				return 1;
-			}
-
-			ifstream file(path, ios::binary);
-			file.seekg(global_pos);
-			mem_address = global_pos;
-
-			unsigned char signature[4] = {0};
-			const unsigned char local_sig[4] = {0x50, 0x4b, 0x03, 0x04};
-			file.read((char *)signature, sizeof(signature));
-
-			if (memcmp(signature, local_sig, sizeof(signature)) == 0)
-			{
-				global_pos += 30;
-				global_pos += sb.comp_size + elem_filename.size();
-			}
-
-			// It's the header, skip it
-			if (ext.compare("json") == 0)
-				continue;
-
-			if (!_is_dtype_valid(ext))
-				continue;
-
-			file_pointer_size[elem_filename] = {mem_address, global_pos};
-		}
-		return 1;
-	}
-
 	void allocate_file(const std::string &path, const int size)
 	{
 		std::ofstream file(path);
