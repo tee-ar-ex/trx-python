@@ -76,6 +76,13 @@ def convert_tractogram(in_tractogram, out_tractogram, reference,
         sft = trx.to_sft()
 
     if out_ext != '.trx':
+        if out_ext == '.vtk':
+            if sft.streamlines._data.dtype.name != pos_dtype:
+                sft.streamlines._data = sft.streamlines._data.astype(pos_dtype)
+            if offsets_dtype == 'uint64' or offsets_dtype == 'uint32':
+                offsets_dtype = offsets_dtype[1:]
+            if sft.streamlines._offsets.dtype.name != offsets_dtype:
+                sft.streamlines._offsets = sft.streamlines._offsets.astype(offsets_dtype)
         save_tractogram(sft, out_tractogram, bbox_valid_check=False)
     else:
         trx = TrxFile.from_sft(sft)

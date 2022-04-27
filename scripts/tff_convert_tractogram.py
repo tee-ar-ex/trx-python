@@ -30,12 +30,12 @@ def _build_arg_parser():
                    'support (.nii or .nii.gz).')
 
     p2 = p.add_argument_group(title='Data type options')
-    p2.add_argument('--positions_dtype', default='float16',
+    p2.add_argument('--positions_dtype', default='float32',
                     choices=['float16', 'float32', 'float64'],
-                    help='Specify the datatype for positions for trx.')
-    p2.add_argument('--offsets_dtype', default='uint64',
+                    help='Specify the datatype for positions for trx. [%(default)s]')
+    p2.add_argument('--offsets_dtype', default='uint32',
                     choices=['uint32', 'uint64'],
-                    help='Specify the datatype for offsets for trx.')
+                    help='Specify the datatype for offsets for trx. [%(default)s]')
     p.add_argument('-f', dest='overwrite', action='store_true',
                    help='Force overwriting of the output files.')
 

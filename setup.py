@@ -1,13 +1,13 @@
 import glob
-import os
 
 from setuptools import setup, find_packages
 
 SCRIPTS = glob.glob("scripts/*.py")
+REQUIRES = ['fury@git+https://github.com/frheault/fury.git@5059a529#egg=fury',
+            'dipy@git+https://github.com/frheault/dipy.git@4e192c5c6#egg=dipy']
 
-REQUIRES = ['dipy>=1.2.0', 'nibabel>=3.0.0', 'PyYAML>=5.3.1']
 setup(name='tractography_file_format',
       packages=find_packages(),
-      setup_requires=REQUIRES,
+      setup_requires=['packaging>=19.0'],
       install_requires=REQUIRES,
       scripts=SCRIPTS)
