@@ -1,4 +1,5 @@
-#!/usr/bin/env python
+#! /usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 import gzip
 import os
@@ -61,7 +62,7 @@ def convert_dsi_studio(in_dsi_tractogram, in_dsi_fa, out_tractogram,
 
 
 def convert_tractogram(in_tractogram, out_tractogram, reference,
-                       pos_dtype='float16', offsets_dtype='uint64'):
+                       pos_dtype='float32', offsets_dtype='uint32'):
     in_ext = split_name_with_gz(in_tractogram)[1]
     out_ext = split_name_with_gz(out_tractogram)[1]
 

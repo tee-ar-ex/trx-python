@@ -1,11 +1,16 @@
-#!/usr/bin/env python
-from numpy.ma.core import shape
+#! /usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 import pytest
 import numpy as np
 import trx_file_memmap.trx_file_memmap as tmm
 
 from tempfile import mkdtemp
-import os.path as path
+
+import pathlib
+import os
+
+DATA_PATH = pathlib.Path(tmm.__file__).resolve().parent
 
 
 @pytest.mark.parametrize(
@@ -24,7 +29,8 @@ def test__generate_filename_from_data(
 
     if value_error:
         with pytest.raises(ValueError):
-            new_fn = tmm._generate_filename_from_data(arr=arr, filename=filename)
+            new_fn = tmm._generate_filename_from_data(arr=arr,
+                                                      filename=filename)
             assert new_fn is None
     else:
         new_fn = tmm._generate_filename_from_data(arr=arr, filename=filename)
@@ -39,7 +45,8 @@ def test__generate_filename_from_data(
         ("mean_fa", None, True),
         ("mean_fa.5.4.int32", None, True),
         pytest.param(
-            "mean_fa.fa", None, True, marks=pytest.mark.xfail, id="invalid extension"
+            "mean_fa.fa", None, True, marks=pytest.mark.xfail,
+            id="invalid extension"
         ),
     ],
 )
@@ -55,7 +62,8 @@ def test__split_ext_with_dimensionality(filename, expected, value_error):
     "offsets,nb_vertices,expected",
     [
         (np.array(range(5), dtype=np.int16), 4, np.array([1, 1, 1, 1, 0])),
-        (np.array([0, 1, 0, 3, 4], dtype=np.int16), 4, np.array([1, 3, 0, 1, 0])),
+        (np.array([0, 1, 0, 3, 4], dtype=np.int16),
+         4, np.array([1, 3, 0, 1, 0])),
         (np.array(range(4), dtype=np.int16), 4, np.array([1, 1, 1, 1])),
     ],
 )
@@ -98,22 +106,25 @@ def test__dichotomic_search(arr, l_bound, r_bound, expected):
 @pytest.mark.parametrize(
     "basename, create, expected",
     [
-        ("offsets.int16", True, np.array(range(12), dtype=np.int16).reshape((3, 4))),
+        ("offsets.int16", True, np.array(range(12), dtype=np.int16).reshape((
+            3, 4))),
         ("offsets.float32", False, None),
     ],
 )
 def test__create_memmap(basename, create, expected):
     if create:
         # Need to create array before evaluating
-        filename = path.join(mkdtemp(), basename)
+        filename = os.path.join(mkdtemp(), basename)
         fp = np.memmap(filename, dtype=np.int16, mode="w+", shape=(3, 4))
         fp[:] = expected[:]
-        mmarr = tmm._create_memmap(filename=filename, shape=(3, 4), dtype=np.int16)
+        mmarr = tmm._create_memmap(filename=filename, shape=(3, 4),
+                                   dtype=np.int16)
         assert np.array_equal(mmarr, expected)
 
     else:
-        mmarr = tmm._create_memmap(filename=basename, shape=(0,), dtype=np.int16)
-        assert path.isfile(basename)
+        mmarr = tmm._create_memmap(filename=basename, shape=(0,),
+                                   dtype=np.int16)
+        assert os.path.isfile(basename)
         assert np.array_equal(mmarr, np.zeros(shape=(0,), dtype=np.float32))
 
 
@@ -121,14 +132,15 @@ def test__create_memmap(basename, create, expected):
 @pytest.mark.parametrize(
     "path,check_dpg,value_error",
     [
-        ("trx_file_memmap/tests/data/small_compressed.trx", False, False),
-        ("trx_file_memmap/tests/data/small.trx", True, False),
-        ("trx_file_memmap/tests/data/small_fldr.trx", False, False),
-        ("trx_file_memmap/tests/data/dontexist.trx", False, True),
+        ("tests/data/small_compressed.trx", False, False),
+        ("tests/data/small.trx", True, False),
+        ("tests/data/small_fldr.trx", False, False),
+        ("tests/data/dontexist.trx", False, True),
     ],
 )
 def test__load(path, check_dpg, value_error):
-
+    print('===============', DATA_PATH)
+    path = os.path.join(DATA_PATH, path)
     # Need to perhaps improve test
     if value_error:
         with pytest.raises(ValueError):
@@ -136,21 +148,24 @@ def test__load(path, check_dpg, value_error):
                 tmm.load(input_obj=path, check_dpg=check_dpg), tmm.TrxFile
             )
     else:
-        assert isinstance(tmm.load(input_obj=path, check_dpg=check_dpg), tmm.TrxFile)
+        assert isinstance(tmm.load(input_obj=path, check_dpg=check_dpg),
+                          tmm.TrxFile)
 
 
 @pytest.mark.parametrize(
     "path",
     [
-        ("trx_file_memmap/tests/data/small.trx"),
+        ("tests/data/small.trx"),
     ],
 )
 def test_load_zip(path):
+    path = os.path.join(DATA_PATH, path)
     assert isinstance(tmm.load_from_zip(path), tmm.TrxFile)
 
 
-@pytest.mark.parametrize("path", [("trx_file_memmap/tests/data/small_fldr.trx")])
+@pytest.mark.parametrize("path", [("tests/data/small_fldr.trx")])
 def test_load_directory(path):
+    path = os.path.join(DATA_PATH, path)
     assert isinstance(tmm.load_from_directory(path), tmm.TrxFile)
 
 
