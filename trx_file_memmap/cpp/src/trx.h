@@ -100,6 +100,14 @@ namespace trxmmap
 	std::string _get_dtype(std::string dtype);
 
 	/**
+	 * @brief Get the size of the datatype
+	 *
+	 * @param dtype the string name of the datatype
+	 * @return int corresponding to the size of the datatype
+	 */
+	int _sizeof_dtype(std::string dtype);
+
+	/**
 	 * Determine whether the extension is a valid extension
 	 *
 	 *
@@ -197,6 +205,9 @@ namespace trxmmap
 	 */
 	template <typename DT>
 	TrxFile<DT> *_initialize_empty_trx(int nb_streamlines, int nb_vertices, const TrxFile<DT> *init_as = NULL);
+
+	template <typename DT>
+	void ediff1d(Matrix<DT, Dynamic, 1> &lengths, const Matrix<DT, Dynamic, Dynamic> &tmp, uint32_t to_end);
 #include "trx.tpp"
 
 }

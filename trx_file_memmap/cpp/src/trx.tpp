@@ -1,4 +1,18 @@
 template <typename DT>
+void ediff1d(Matrix<DT, Dynamic, 1> &lengths, Matrix<DT, Dynamic, Dynamic> &tmp, uint32_t to_end)
+{
+	Map<RowVector<uint32_t, Dynamic>> v(tmp.data(), tmp.size());
+	lengths.resize(v.size(), 1);
+
+	// TODO: figure out if there's a built in way to manage this
+	for (int i = 0; i < v.size() - 1; i++)
+	{
+		lengths(i) = v(i + 1) - v(i);
+	}
+	lengths(v.size() - 1) = to_end;
+}
+
+template <typename DT>
 std::string _generate_filename_from_data(const ArrayBase<DT> &arr, std::string filename)
 {
 
@@ -52,33 +66,15 @@ Matrix<uint32_t, Dynamic, 1> _compute_lengths(const MatrixBase<DT> &offsets, int
 
 		if (last_elem_pos == offsets.size() - 1)
 		{
-			// ediff1d
 			Matrix<uint32_t, Dynamic, Dynamic> tmp(offsets.template cast<u_int32_t>());
-			Map<RowVector<uint32_t, Dynamic>> v(tmp.data(), tmp.size());
-			lengths.resize(v.size(), 1);
-
-			// TODO: figure out if there's a built in way to manage this
-			for (int i = 0; i < v.size() - 1; i++)
-			{
-				lengths(i) = v(i + 1) - v(i);
-			}
-			lengths(v.size() - 1) = u_int32_t(nb_vertices - offsets(last));
+			ediff1d(lengths, tmp, uint32_t(nb_vertices - offsets(last)));
 		}
 		else
 		{
-			Matrix<u_int32_t, Dynamic, Dynamic> tmp(offsets.template cast<u_int32_t>());
-			tmp(last_elem_pos + 1) = u_int32_t(nb_vertices);
-
-			// ediff1d
-			Map<RowVector<u_int32_t, Dynamic>> v(tmp.data(), tmp.size());
-			lengths.resize(v.cols(), 1);
-
-			for (int i = 0; i < v.size() - 1; i++)
-			{
-				lengths(i) = v(i + 1) - v(i);
-			}
-
-			lengths(last_elem_pos + 1) = u_int32_t(0);
+			Matrix<uint32_t, Dynamic, Dynamic> tmp(offsets.template cast<u_int32_t>());
+			tmp(last_elem_pos + 1) = uint32_t(nb_vertices);
+			ediff1d(lengths, tmp, 0);
+			lengths(last_elem_pos + 1) = uint32_t(0);
 		}
 		return lengths;
 	}
@@ -398,9 +394,11 @@ TrxFile<DT> *TrxFile<DT>::_create_trx_from_pointer(json header, std::map<std::st
 
 	std::string filename;
 
-	for (auto const &x : dict_pointer_size)
+	// TODO: Fix this hack of iterating through dictionary in reverse to get main files read first
+	for (auto x = dict_pointer_size.rbegin(); x != dict_pointer_size.rend(); ++x)
 	{
-		std::string elem_filename = x.first;
+		std::string elem_filename = x->first;
+
 		if (root_zip.size() > 0)
 		{
 			filename = root_zip;
@@ -410,7 +408,7 @@ TrxFile<DT> *TrxFile<DT>::_create_trx_from_pointer(json header, std::map<std::st
 			filename = elem_filename;
 		}
 
-		std::string folder = std::string(dirname(const_cast<char *>(elem_filename.c_str())));
+		std::string folder = std::string(dirname(const_cast<char *>(strdup(elem_filename.c_str()))));
 
 		// _split_ext_with_dimensionality
 		std::tuple<std::string, int, std::string> base_tuple = _split_ext_with_dimensionality(elem_filename);
@@ -423,8 +421,8 @@ TrxFile<DT> *TrxFile<DT>::_create_trx_from_pointer(json header, std::map<std::st
 			ext = ".bool";
 		}
 
-		int mem_adress = std::get<0>(x.second);
-		int size = std::get<1>(x.second);
+		int mem_adress = std::get<0>(x->second);
+		int size = std::get<1>(x->second);
 
 		std::string stripped = root;
 
@@ -440,9 +438,7 @@ TrxFile<DT> *TrxFile<DT>::_create_trx_from_pointer(json header, std::map<std::st
 			folder = folder.substr(1 + root.size(), folder.size() - (1 + root.size()));
 		}
 
-		std::cout << "Test " << folder << " root " << root << std::endl;
-
-		if (base.compare("positions") == 0 && folder.compare("") == 0)
+		if (base.compare("positions") == 0 && folder.compare(".") == 0)
 		{
 			if (size != int(trx->header["NB_VERTICES"]) * 3 || dim != 3)
 			{
@@ -469,7 +465,7 @@ TrxFile<DT> *TrxFile<DT>::_create_trx_from_pointer(json header, std::map<std::st
 			}
 		}
 
-		else if (base.compare("offsets") == 0 && folder.compare("") == 0)
+		else if (base.compare("offsets") == 0 && folder.compare(".") == 0)
 		{
 			if (size != int(trx->header["NB_STREAMLINES"]) || dim != 1)
 			{
@@ -488,7 +484,7 @@ TrxFile<DT> *TrxFile<DT>::_create_trx_from_pointer(json header, std::map<std::st
 			trx->streamlines->_lengths = _compute_lengths(offsets, int(trx->header["NB_VERTICES"]));
 		}
 
-		else if (folder.compare("dps"))
+		else if (folder.compare("dps") == 0)
 		{
 			std::tuple<int, int> shape;
 			trx->data_per_streamline[base] = new MMappedMatrix<DT>();
@@ -505,11 +501,11 @@ TrxFile<DT> *TrxFile<DT>::_create_trx_from_pointer(json header, std::map<std::st
 			}
 			trx->data_per_streamline[base]->mmap = trxmmap::_create_memmap(filename, shape, "r+", ext.substr(1, ext.size() - 1), mem_adress);
 
-			if (ext.compare(".float16") == 0)
+			if (ext.compare("float16") == 0)
 			{
 				new (&(trx->data_per_streamline[base]->_matrix)) Map<Matrix<half, Dynamic, Dynamic>>(reinterpret_cast<half *>(trx->data_per_streamline[base]->mmap.data()), std::get<0>(shape), std::get<1>(shape));
 			}
-			else if (ext.compare(".float32") == 0)
+			else if (ext.compare("float32") == 0)
 			{
 				new (&(trx->data_per_streamline[base]->_matrix)) Map<Matrix<float, Dynamic, Dynamic>>(reinterpret_cast<float *>(trx->data_per_streamline[base]->mmap.data()), std::get<0>(shape), std::get<1>(shape));
 			}
@@ -519,7 +515,7 @@ TrxFile<DT> *TrxFile<DT>::_create_trx_from_pointer(json header, std::map<std::st
 			}
 		}
 
-		else if (folder.compare("dpv"))
+		else if (folder.compare("dpv") == 0)
 		{
 			std::tuple<int, int> shape;
 			trx->data_per_vertex[base] = new ArraySequence<DT>();
@@ -536,11 +532,11 @@ TrxFile<DT> *TrxFile<DT>::_create_trx_from_pointer(json header, std::map<std::st
 			}
 			trx->data_per_vertex[base]->mmap_pos = trxmmap::_create_memmap(filename, shape, "r+", ext.substr(1, ext.size() - 1), mem_adress);
 
-			if (ext.compare(".float16") == 0)
+			if (ext.compare("float16") == 0)
 			{
 				new (&(trx->data_per_vertex[base]->_data)) Map<Matrix<half, Dynamic, Dynamic>>(reinterpret_cast<half *>(trx->data_per_vertex[base]->mmap_pos.data()), std::get<0>(shape), std::get<1>(shape));
 			}
-			else if (ext.compare(".float32") == 0)
+			else if (ext.compare("float32") == 0)
 			{
 				new (&(trx->data_per_vertex[base]->_data)) Map<Matrix<float, Dynamic, Dynamic>>(reinterpret_cast<float *>(trx->data_per_vertex[base]->mmap_pos.data()), std::get<0>(shape), std::get<1>(shape));
 			}
@@ -549,11 +545,11 @@ TrxFile<DT> *TrxFile<DT>::_create_trx_from_pointer(json header, std::map<std::st
 				new (&(trx->data_per_vertex[base]->_data)) Map<Matrix<double, Dynamic, Dynamic>>(reinterpret_cast<double *>(trx->data_per_vertex[base]->mmap_pos.data()), std::get<0>(shape), std::get<1>(shape));
 			}
 
-			trx->data_per_vertex[base]->_offsets = trx->streamlines->_offsets;
+			new (&(trx->data_per_vertex[base]->_offsets)) Map<Matrix<uint64_t, Dynamic, 1>>(reinterpret_cast<uint64_t *>(trx->streamlines->mmap_off.data()), std::get<0>(shape), std::get<1>(shape));
 			trx->data_per_vertex[base]->_lengths = trx->streamlines->_lengths;
 		}
 
-		else if (folder.compare("dpg"))
+		else if (folder.compare("dpg") == 0)
 		{
 			std::tuple<int, int> shape;
 			trx->data_per_streamline[base] = new MMappedMatrix<DT>();
@@ -574,11 +570,11 @@ TrxFile<DT> *TrxFile<DT>::_create_trx_from_pointer(json header, std::map<std::st
 			trx->data_per_group[sub_folder][data_name] = new MMappedMatrix<DT>();
 			trx->data_per_group[sub_folder][data_name]->mmap = trxmmap::_create_memmap(filename, shape, "r+", ext.substr(1, ext.size() - 1), mem_adress);
 
-			if (ext.compare(".float16") == 0)
+			if (ext.compare("float16") == 0)
 			{
 				new (&(trx->data_per_group[sub_folder][data_name]->_matrix)) Map<Matrix<half, Dynamic, Dynamic>>(reinterpret_cast<half *>(trx->data_per_group[sub_folder][data_name]->mmap.data()), std::get<0>(shape), std::get<1>(shape));
 			}
-			else if (ext.compare(".float32") == 0)
+			else if (ext.compare("float32") == 0)
 			{
 				new (&(trx->data_per_group[sub_folder][data_name]->_matrix)) Map<Matrix<float, Dynamic, Dynamic>>(reinterpret_cast<float *>(trx->data_per_group[sub_folder][data_name]->mmap.data()), std::get<0>(shape), std::get<1>(shape));
 			}
@@ -609,7 +605,7 @@ TrxFile<DT> *TrxFile<DT>::_create_trx_from_pointer(json header, std::map<std::st
 			std::cout << elem_filename << " is not part of a valid structure." << std::endl;
 		}
 	}
-	if (trx->streamlines->_data.size() || trx->streamlines->_offsets.size())
+	if (trx->streamlines->_data.size() == 0 || trx->streamlines->_offsets.size() == 0)
 	{
 
 		throw std::invalid_argument("Missing essential data.");
@@ -682,7 +678,8 @@ TrxFile<DT> *load_from_zip(std::string filename)
 			global_pos += sb.comp_size + elem_filename.size();
 		}
 
-		file_pointer_size[elem_filename] = {mem_address, global_pos};
+		int size = sb.comp_size / _sizeof_dtype(ext);
+		file_pointer_size[elem_filename] = {mem_address, size};
 	}
 	return TrxFile<DT>::_create_trx_from_pointer(header, file_pointer_size, filename);
 }

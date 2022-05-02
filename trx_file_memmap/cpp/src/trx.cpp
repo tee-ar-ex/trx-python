@@ -10,13 +10,13 @@
 using namespace Eigen;
 using namespace std;
 
-std::string get_base(const std::string &delimeter, const std::string &str)
+std::string get_base(const std::string &delimiter, const std::string &str)
 {
 	std::string token;
 
-	if (str.rfind(delimeter) + 1 < str.length())
+	if (str.rfind(delimiter) + 1 < str.length())
 	{
-		token = str.substr(str.rfind(delimeter) + 1);
+		token = str.substr(str.rfind(delimiter) + 1);
 	}
 	else
 	{
@@ -32,7 +32,7 @@ std::string get_ext(const std::string &str)
 
 	if (str.rfind(delimeter) + 1 < str.length())
 	{
-		ext = str.substr(str.rfind(delimeter));
+		ext = str.substr(str.rfind(delimeter) + 1);
 	}
 	return ext;
 }
@@ -126,7 +126,7 @@ namespace trxmmap
 
 		std::string ext = get_ext(filename);
 
-		base = base.substr(0, base.length() - ext.length());
+		base = base.substr(0, base.length() - ext.length() - 1);
 
 		if (num_splits == 1)
 		{
@@ -156,7 +156,7 @@ namespace trxmmap
 	{
 		if (ext.compare("bit") == 0)
 			return true;
-		if (std::find(trxmmap::dtypes.begin(), trxmmap::dtypes.end(), ext.substr(1)) != trxmmap::dtypes.end())
+		if (std::find(trxmmap::dtypes.begin(), trxmmap::dtypes.end(), ext) != trxmmap::dtypes.end())
 			return true;
 		return false;
 	}
