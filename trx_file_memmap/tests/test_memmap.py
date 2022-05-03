@@ -3,6 +3,7 @@
 
 import pytest
 import numpy as np
+import tractography_file_format
 import trx_file_memmap.trx_file_memmap as tmm
 
 from tempfile import mkdtemp
@@ -10,7 +11,7 @@ from tempfile import mkdtemp
 import pathlib
 import os
 
-DATA_PATH = pathlib.Path(tmm.__file__).resolve().parent.parent
+DATA_PATH = pathlib.Path(tractography_file_format.__file__).resolve().parent.parent
 
 
 @pytest.mark.parametrize(
@@ -139,8 +140,8 @@ def test__create_memmap(basename, create, expected):
     ],
 )
 def test__load(path, check_dpg, value_error):
-    print('===============', DATA_PATH)
     path = os.path.join(DATA_PATH, path)
+    print('===============', path)
     # Need to perhaps improve test
     if value_error:
         with pytest.raises(ValueError):
