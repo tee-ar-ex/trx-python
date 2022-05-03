@@ -10,7 +10,7 @@ from tempfile import mkdtemp
 import pathlib
 import os
 
-DATA_PATH = pathlib.Path(tmm.__file__).resolve().parent
+DATA_PATH = pathlib.Path(tmm.__file__).resolve().parent.parent
 
 
 @pytest.mark.parametrize(
@@ -132,10 +132,10 @@ def test__create_memmap(basename, create, expected):
 @pytest.mark.parametrize(
     "path,check_dpg,value_error",
     [
-        ("tests/data/small_compressed.trx", False, False),
-        ("tests/data/small.trx", True, False),
-        ("tests/data/small_fldr.trx", False, False),
-        ("tests/data/dontexist.trx", False, True),
+        ("trx_file_memmap/tests/data/small_compressed.trx", False, False),
+        ("trx_file_memmap/tests/data/small.trx", True, False),
+        ("trx_file_memmap/tests/data/small_fldr.trx", False, False),
+        ("trx_file_memmap/tests/data/dontexist.trx", False, True),
     ],
 )
 def test__load(path, check_dpg, value_error):
@@ -155,7 +155,7 @@ def test__load(path, check_dpg, value_error):
 @pytest.mark.parametrize(
     "path",
     [
-        ("tests/data/small.trx"),
+        ("trx_file_memmap/tests/data/small.trx"),
     ],
 )
 def test_load_zip(path):
@@ -163,7 +163,7 @@ def test_load_zip(path):
     assert isinstance(tmm.load_from_zip(path), tmm.TrxFile)
 
 
-@pytest.mark.parametrize("path", [("tests/data/small_fldr.trx")])
+@pytest.mark.parametrize("path", [("trx_file_memmap/tests/data/small_fldr.trx")])
 def test_load_directory(path):
     path = os.path.join(DATA_PATH, path)
     assert isinstance(tmm.load_from_directory(path), tmm.TrxFile)
