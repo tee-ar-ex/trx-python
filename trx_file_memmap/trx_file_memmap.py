@@ -1,3 +1,6 @@
+#! /usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 from copy import deepcopy
 import json
 import logging
@@ -594,8 +597,8 @@ class TrxFile:
             self.header = {}
             # Using the new format default type
             tmp_strs = ArraySequence()
-            tmp_strs._data = tmp_strs._data.astype(np.float16)
-            tmp_strs._offsets = tmp_strs._offsets.astype(np.uint64)
+            tmp_strs._data = tmp_strs._data.astype(np.float32)
+            tmp_strs._offsets = tmp_strs._offsets.astype(np.uint32)
             tmp_strs._lengths = tmp_strs._lengths.astype(np.uint32)
             self.streamlines = tmp_strs
             self.groups = {}
@@ -877,7 +880,7 @@ class TrxFile:
             lengths_dtype = init_as.streamlines._lengths.dtype
         else:
             positions_dtype = np.dtype(np.float16)
-            offsets_dtype = np.dtype(np.uint64)
+            offsets_dtype = np.dtype(np.uint32)
             lengths_dtype = np.dtype(np.uint32)
 
         logging.debug(
@@ -1330,7 +1333,7 @@ class TrxFile:
         return new_trx.deepcopy() if copy_safe else new_trx
 
     @staticmethod
-    def from_sft(sft, cast_position=np.float16):
+    def from_sft(sft, cast_position=np.float32):
         """Generate a valid TrxFile from a StatefulTractogram"""
         if not np.issubdtype(cast_position, np.floating):
             logging.warning(
@@ -1361,8 +1364,8 @@ class TrxFile:
         sft.to_space(old_space)
         sft.to_origin(old_origin)
 
-        # Cast the int64 of Nibabel to uint64
-        tmp_streamlines._offsets = tmp_streamlines._offsets.astype(np.uint64)
+        # Cast the int64 of Nibabel to uint32
+        tmp_streamlines._offsets = tmp_streamlines._offsets.astype(np.uint32)
         if cast_position != np.float32:
             tmp_streamlines._data = tmp_streamlines._data.astype(cast_position)
 
@@ -1379,7 +1382,7 @@ class TrxFile:
         return trx
 
     @staticmethod
-    def from_tractogram(tractogram, reference, cast_position=np.float16):
+    def from_tractogram(tractogram, reference, cast_position=np.float32):
         """Generate a valid TrxFile from a Nibabel Tractogram"""
         if not np.issubdtype(cast_position, np.floating):
             logging.warning(
@@ -1405,8 +1408,8 @@ class TrxFile:
         else:
             tmp_streamlines = tractogram.streamlines
 
-        # Cast the int64 of Nibabel to uint64
-        tmp_streamlines._offsets = tmp_streamlines._offsets.astype(np.uint64)
+        # Cast the int64 of Nibabel to uint32
+        tmp_streamlines._offsets = tmp_streamlines._offsets.astype(np.uint32)
         if cast_position != np.float32:
             tmp_streamlines._data = tmp_streamlines._data.astype(cast_position)
 
