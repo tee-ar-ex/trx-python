@@ -3,7 +3,6 @@
 
 import pytest
 import numpy as np
-import tractography_file_format
 import trx_file_memmap.trx_file_memmap as tmm
 
 from tempfile import mkdtemp
@@ -11,7 +10,7 @@ from tempfile import mkdtemp
 import pathlib
 import os
 
-DATA_PATH = pathlib.Path(tractography_file_format.__file__).resolve().parent.parent
+DATA_PATH = pathlib.Path(__file__).resolve().parent.parent.parent
 
 
 @pytest.mark.parametrize(
