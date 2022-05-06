@@ -204,7 +204,7 @@ namespace trxmmap
 		}
 	}
 
-	mio::shared_mmap_sink _create_memmap(std::string &filename, std::tuple<int, int> &shape, std::string mode, std::string dtype, int offset)
+	mio::shared_mmap_sink _create_memmap(std::string &filename, std::tuple<int, int> &shape, std::string mode, std::string dtype, long long offset)
 	{
 		if (dtype.compare("bool") == 0)
 		{

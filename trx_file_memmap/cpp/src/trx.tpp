@@ -386,7 +386,7 @@ TrxFile<DT> *_initialize_empty_trx(int nb_streamlines, int nb_vertices, const Tr
 }
 
 template <typename DT>
-TrxFile<DT> *TrxFile<DT>::_create_trx_from_pointer(json header, std::map<std::string, std::tuple<int, int>> dict_pointer_size, std::string root_zip, std::string root)
+TrxFile<DT> *TrxFile<DT>::_create_trx_from_pointer(json header, std::map<std::string, std::tuple<long long, long long>> dict_pointer_size, std::string root_zip, std::string root)
 {
 	trxmmap::TrxFile<DT> *trx = new trxmmap::TrxFile<DT>();
 	trx->header = header;
@@ -421,8 +421,8 @@ TrxFile<DT> *TrxFile<DT>::_create_trx_from_pointer(json header, std::map<std::st
 			ext = ".bool";
 		}
 
-		int mem_adress = std::get<0>(x->second);
-		int size = std::get<1>(x->second);
+		long long mem_adress = std::get<0>(x->second);
+		long long size = std::get<1>(x->second);
 
 		std::string stripped = root;
 
@@ -622,9 +622,9 @@ TrxFile<DT> *load_from_zip(std::string filename)
 	zip_t *zf = zip_open(filename.c_str(), 0, errorp);
 	json header = load_header(zf);
 
-	std::map<std::string, std::tuple<int, int>> file_pointer_size;
-	int global_pos = 0;
-	int mem_address = 0;
+	std::map<std::string, std::tuple<long long, long long>> file_pointer_size;
+	long long global_pos = 0;
+	long long mem_address = 0;
 
 	int num_entries = zip_get_num_entries(zf, ZIP_FL_UNCHANGED);
 
@@ -678,7 +678,7 @@ TrxFile<DT> *load_from_zip(std::string filename)
 			global_pos += sb.comp_size + elem_filename.size();
 		}
 
-		int size = sb.comp_size / _sizeof_dtype(ext);
+		long long size = sb.comp_size / _sizeof_dtype(ext);
 		file_pointer_size[elem_filename] = {mem_address, size};
 	}
 	return TrxFile<DT>::_create_trx_from_pointer(header, file_pointer_size, filename);

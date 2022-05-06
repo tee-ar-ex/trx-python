@@ -76,7 +76,7 @@ namespace trxmmap
 		 * @param root The dirname of the ZipFile pointer
 		 * @return TrxFile*
 		 */
-		static TrxFile<DT> *_create_trx_from_pointer(json header, std::map<std::string, std::tuple<int, int>> dict_pointer_size, std::string root_zip = "", std::string root = "");
+		static TrxFile<DT> *_create_trx_from_pointer(json header, std::map<std::string, std::tuple<long long, long long>> dict_pointer_size, std::string root_zip = "", std::string root = "");
 
 	private:
 		int len();
@@ -166,7 +166,7 @@ namespace trxmmap
 	// TODO: ADD order??
 	// TODO: change tuple to vector to support ND arrays?
 	// TODO: remove data type as that's done outside of this function
-	mio::shared_mmap_sink _create_memmap(std::string &filename, std::tuple<int, int> &shape, std::string mode = "r", std::string dtype = "float32", int offset = 0);
+	mio::shared_mmap_sink _create_memmap(std::string &filename, std::tuple<int, int> &shape, std::string mode = "r", std::string dtype = "float32", long long offset = 0);
 
 	template <typename DT>
 	std::string _generate_filename_from_data(const ArrayBase<DT> &arr, const std::string filename);
