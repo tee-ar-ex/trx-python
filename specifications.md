@@ -29,7 +29,7 @@ Only (or mostly) for use-readability, read-time checks and broader compatibility
 - As contiguous 3D array(NB_VERTICES, 3)
 
 # offsets.uint64
-- Always uint64
+- Should always be a uint32/64
 - Where is the first vertex of each streamline, start at 0
 - Two ways of knowing how many vertices there are:
     - Check the header
