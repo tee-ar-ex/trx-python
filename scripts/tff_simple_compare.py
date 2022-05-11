@@ -9,7 +9,7 @@ Difference below 1e^6 are expected for isotropic data with small rotation.
 
 import argparse
 
-from tractography_file_format.workflows import tractogram_simple_compare
+from trx.workflows import tractogram_simple_compare
 
 
 def _build_arg_parser():

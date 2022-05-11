@@ -9,7 +9,7 @@ Spatial attributes are: affine, dimensions, voxel sizes and voxel order.
 """
 
 import argparse
-from tractography_file_format.workflows import verify_header_compatibility
+from trx.workflows import verify_header_compatibility
 
 
 def _build_arg_parser():

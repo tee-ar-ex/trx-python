@@ -18,7 +18,7 @@ results may vary depending on the data itself as well as DSI-studio version.
 import argparse
 import os
 
-from tractography_file_format.workflows import convert_dsi_studio
+from trx.workflows import convert_dsi_studio
 
 
 def _build_arg_parser():
