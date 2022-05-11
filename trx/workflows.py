@@ -36,7 +36,7 @@ def convert_dsi_studio(in_dsi_tractogram, in_dsi_fa, out_tractogram,
     if in_ext == '.trk.gz':
         with gzip.open(in_dsi_tractogram, 'rb') as f_in:
             with open('tmp.trk', 'wb') as f_out:
-                shutil.copyfileobj(f_in, f_out)
+                f_out.writelines(f_in)
                 sft = load_tractogram('tmp.trk', 'same',
                                       bbox_valid_check=False)
                 os.remove('tmp.trk')
