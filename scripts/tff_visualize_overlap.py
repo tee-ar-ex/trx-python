@@ -7,7 +7,7 @@ voxmm and vox space with its bounding box.
 
 import argparse
 
-from tractography_file_format.workflows import tractogram_visualize_overlap
+from trx.workflows import tractogram_visualize_overlap
 
 
 def _build_arg_parser():

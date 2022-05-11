@@ -2,17 +2,25 @@
 # -*- coding: utf-8 -*-
 
 import itertools
+import logging
 
-from dipy.viz import window, actor, colormap
-from fury.utils import get_bounds
-import fury.utils as ut_vtk
 import numpy as np
-import vtk
+try:
+    from dipy.viz import window, actor, colormap
+    from fury.utils import get_bounds
+    import fury.utils as ut_vtk
+    import vtk
+    fury_available = True
+except ImportError:
+    fury_available = False
 
 
 def display(volume, volume_affine=None, streamlines=None, title='FURY',
             display_bounds=True):
-
+    if not fury_available:
+        logging.error('Fury library is missing, visualization functions '
+                      'are not available.')
+        return None
     volume = volume.astype(float)
     scene = window.Scene()
     scene.background((1., 0.5, 0.))

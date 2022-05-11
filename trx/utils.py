@@ -4,14 +4,19 @@
 import os
 import logging
 
-import dipy
-from dipy.io.stateful_tractogram import StatefulTractogram
-from dipy.io.streamline import load_tractogram
-from dipy.io.utils import is_reference_info_valid
 import nibabel as nib
 import numpy as np
 
-import trx_file_memmap
+try:
+    import dipy
+    from dipy.io.stateful_tractogram import StatefulTractogram
+    from dipy.io.streamline import load_tractogram
+    from dipy.io.utils import is_reference_info_valid
+    dipy_available = True
+except ImportError:
+    dipy_available = False
+
+from trx import trx_file_memmap
 
 
 def split_name_with_gz(filename):
@@ -90,7 +95,8 @@ def get_reference_info_wrapper(reference):
     elif isinstance(reference, dict) and 'NB_VERTICES' in reference:
         header = reference
         is_trx = True
-    elif isinstance(reference, dipy.io.stateful_tractogram.StatefulTractogram):
+    elif dipy_available and \
+            isinstance(reference, dipy.io.stateful_tractogram.StatefulTractogram):
         is_sft = True
 
     if is_nifti:
@@ -122,8 +128,8 @@ def get_reference_info_wrapper(reference):
     if isinstance(voxel_order, np.bytes_):
         voxel_order = voxel_order.decode('utf-8')
 
-    # Run this function to logging the warning from it
-    is_reference_info_valid(affine, dimensions, voxel_sizes, voxel_order)
+    if dipy_available:
+        is_reference_info_valid(affine, dimensions, voxel_sizes, voxel_order)
 
     return affine, dimensions, voxel_sizes, voxel_order
 
@@ -171,6 +177,10 @@ def is_header_compatible(reference_1, reference_2):
 
 def load_tractogram_with_reference(filepath, reference=None,
                                    bbox_check=True):
+    if not dipy_available:
+        logging.error('Dipy library is missing, cannot use functions related '
+                      'to the StatefulTractogram.')
+        return None
     # Force the usage of --reference for all file formats without an header
     _, ext = os.path.splitext(filepath)
     if ext == '.trk':
@@ -225,6 +235,11 @@ def get_shift_vector(sft):
 
 
 def flip_sft(sft, flip_axes):
+    if not dipy_available:
+        logging.error('Dipy library is missing, cannot use functions related '
+                      'to the StatefulTractogram.')
+        return None
+
     flip_vector = get_axis_flip_vector(flip_axes)
     shift_vector = get_shift_vector(sft)
 

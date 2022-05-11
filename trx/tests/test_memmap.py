@@ -3,7 +3,7 @@
 
 import pytest
 import numpy as np
-import trx_file_memmap.trx_file_memmap as tmm
+import trx.trx_file_memmap as tmm
 
 from tempfile import mkdtemp
 
@@ -11,7 +11,6 @@ import pathlib
 import os
 
 DATA_PATH = pathlib.Path(__file__).resolve().parent.parent.parent
-
 
 @pytest.mark.parametrize(
     "arr,expected,value_error",
@@ -132,15 +131,14 @@ def test__create_memmap(basename, create, expected):
 @pytest.mark.parametrize(
     "path,check_dpg,value_error",
     [
-        ("trx_file_memmap/tests/data/small_compressed.trx", False, False),
-        ("trx_file_memmap/tests/data/small.trx", True, False),
-        ("trx_file_memmap/tests/data/small_fldr.trx", False, False),
-        ("trx_file_memmap/tests/data/dontexist.trx", False, True),
+        ("trx/tests/data/small_compressed.trx", False, False),
+        ("trx/tests/data/small.trx", True, False),
+        ("trx/tests/data/small_fldr.trx", False, False),
+        ("trx/tests/data/dontexist.trx", False, True),
     ],
 )
 def test__load(path, check_dpg, value_error):
     path = os.path.join(DATA_PATH, path)
-    print('===============', path)
     # Need to perhaps improve test
     if value_error:
         with pytest.raises(ValueError):
@@ -155,7 +153,7 @@ def test__load(path, check_dpg, value_error):
 @pytest.mark.parametrize(
     "path",
     [
-        ("trx_file_memmap/tests/data/small.trx"),
+        ("trx/tests/data/small.trx"),
     ],
 )
 def test_load_zip(path):
@@ -163,7 +161,7 @@ def test_load_zip(path):
     assert isinstance(tmm.load_from_zip(path), tmm.TrxFile)
 
 
-@pytest.mark.parametrize("path", [("trx_file_memmap/tests/data/small_fldr.trx")])
+@pytest.mark.parametrize("path", [("trx/tests/data/small_fldr.trx")])
 def test_load_directory(path):
     path = os.path.join(DATA_PATH, path)
     assert isinstance(tmm.load_from_directory(path), tmm.TrxFile)

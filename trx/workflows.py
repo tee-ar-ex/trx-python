@@ -2,19 +2,24 @@
 # -*- coding: utf-8 -*-
 
 import gzip
+import logging
 import os
 import shutil
 
-from dipy.io.stateful_tractogram import StatefulTractogram, Space
-from dipy.io.streamline import save_tractogram, load_tractogram
-from dipy.tracking.streamline import set_number_of_points
-from dipy.tracking.utils import density_map
 import nibabel as nib
 import numpy as np
+try:
+    from dipy.io.stateful_tractogram import StatefulTractogram, Space
+    from dipy.io.streamline import save_tractogram, load_tractogram
+    from dipy.tracking.streamline import set_number_of_points
+    from dipy.tracking.utils import density_map
+    dipy_available = True
+except ImportError:
+    dipy_available = False
 
-from trx_file_memmap import load, save, TrxFile
-from tractography_file_format.viz import display
-from tractography_file_format.utils import (flip_sft, is_header_compatible,
+from trx.trx_file_memmap import load, save, TrxFile
+from trx.viz import display
+from trx.utils import (flip_sft, is_header_compatible,
                                             get_axis_shift_vector,
                                             load_tractogram_with_reference,
                                             split_name_with_gz)
@@ -22,6 +27,9 @@ from tractography_file_format.utils import (flip_sft, is_header_compatible,
 
 def convert_dsi_studio(in_dsi_tractogram, in_dsi_fa, out_tractogram,
                        remove_invalid=True, keep_invalid=False):
+    if not dipy_available:
+        logging.error('Dipy library is missing, scripts are not available.')
+        return None
     in_ext = split_name_with_gz(in_dsi_tractogram)[1]
     out_ext = split_name_with_gz(out_tractogram)[1]
 
@@ -63,6 +71,9 @@ def convert_dsi_studio(in_dsi_tractogram, in_dsi_fa, out_tractogram,
 
 def convert_tractogram(in_tractogram, out_tractogram, reference,
                        pos_dtype='float32', offsets_dtype='uint32'):
+    if not dipy_available:
+        logging.error('Dipy library is missing, scripts are not available.')
+        return None
     in_ext = split_name_with_gz(in_tractogram)[1]
     out_ext = split_name_with_gz(out_tractogram)[1]
 
@@ -95,6 +106,9 @@ def convert_tractogram(in_tractogram, out_tractogram, reference,
 
 
 def tractogram_simple_compare(in_tractograms, reference):
+    if not dipy_available:
+        logging.error('Dipy library is missing, scripts are not available.')
+        return
     in_ext = os.path.splitext(in_tractograms[0])[1]
     if in_ext != '.trx':
         sft_1 = load_tractogram_with_reference(in_tractograms[0], reference,
@@ -138,6 +152,9 @@ def tractogram_simple_compare(in_tractograms, reference):
 
 
 def verify_header_compatibility(in_files):
+    if not dipy_available:
+        logging.error('Dipy library is missing, scripts are not available.')
+        return
     all_valid = True
     for filepath in in_files:
         if not os.path.isfile(filepath):
@@ -155,6 +172,9 @@ def verify_header_compatibility(in_files):
 
 
 def tractogram_visualize_overlap(in_tractogram, reference, remove_invalid=True):
+    if not dipy_available:
+        logging.error('Dipy library is missing, scripts are not available.')
+        return None
     in_ext = os.path.splitext(in_tractogram)[1]
 
     if in_ext != '.trx':

@@ -1,17 +1,23 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import logging
 import os
 import tempfile
 
-from dipy.io.streamline import load_tractogram
+import pytest
 import numpy as np
 from numpy.testing import assert_equal, assert_array_equal
+try:
+    from dipy.io.streamline import load_tractogram
+    dipy_available = True
+except ImportError:
+    dipy_available = False
 
-from trx_file_memmap.trx_file_memmap import load
-from tractography_file_format.fetcher import (get_testing_files_dict,
+from trx.trx_file_memmap import load
+from trx.fetcher import (get_testing_files_dict,
                                               fetch_data, get_home)
-from tractography_file_format.workflows import (convert_dsi_studio,
+from trx.workflows import (convert_dsi_studio,
                                                 convert_tractogram)
 
 
@@ -21,16 +27,25 @@ tmp_dir = tempfile.TemporaryDirectory()
 
 
 def test_help_option_convert_dsi(script_runner):
+    if not dipy_available:
+        pytest.skip('Dipy library is missing, cannot test scripts involving '
+                      'tck/trk/vtk.')
     ret = script_runner.run('tff_convert_dsi_studio.py', '--help')
     assert ret.success
 
 
 def test_help_option_convert(script_runner):
+    if not dipy_available:
+        pytest.skip('Dipy library is missing, cannot test scripts involving '
+                      'tck/trk/vtk.')
     ret = script_runner.run('tff_convert_tractogram.py', '--help')
     assert ret.success
 
 
 def test_execution_convert_dsi():
+    if not dipy_available:
+        pytest.skip('Dipy library is missing, cannot test scripts involving '
+                      'tck/trk/vtk.')
     os.chdir(os.path.expanduser(tmp_dir.name))
     in_trk = os.path.join(get_home(), 'DSI',
                           'CC.trk.gz')
@@ -53,6 +68,9 @@ def test_execution_convert_dsi():
 
 
 def test_execution_convert_to_trx():
+    if not dipy_available:
+        pytest.skip('Dipy library is missing, cannot test scripts involving '
+                      'tck/trk/vtk.')
     os.chdir(os.path.expanduser(tmp_dir.name))
     in_trk = os.path.join(get_home(), 'DSI',
                           'CC_fix.trk')
@@ -73,6 +91,9 @@ def test_execution_convert_to_trx():
 
 
 def test_execution_convert_from_trx():
+    if not dipy_available:
+        pytest.skip('Dipy library is missing, cannot test scripts involving '
+                      'tck/trk/vtk.')
     os.chdir(os.path.expanduser(tmp_dir.name))
     in_trk = os.path.join(get_home(), 'DSI',
                           'CC_fix.trk')
@@ -101,6 +122,9 @@ def test_execution_convert_from_trx():
 
 
 def test_execution_convert_dtype_p16_o64():
+    if not dipy_available:
+        pytest.skip('Dipy library is missing, cannot test scripts involving '
+                      'tck/trk/vtk.')
     os.chdir(os.path.expanduser(tmp_dir.name))
     in_trk = os.path.join(get_home(), 'DSI',
                           'CC_fix.trk')
@@ -113,6 +137,9 @@ def test_execution_convert_dtype_p16_o64():
 
 
 def test_execution_convert_dtype_p64_o32():
+    if not dipy_available:
+        pytest.skip('Dipy library is missing, cannot test scripts involving '
+                      'tck/trk/vtk.')
     os.chdir(os.path.expanduser(tmp_dir.name))
     in_trk = os.path.join(get_home(), 'DSI',
                           'CC_fix.trk')

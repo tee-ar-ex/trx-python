@@ -11,7 +11,7 @@ it.
 import argparse
 import os
 
-from tractography_file_format.workflows import convert_tractogram
+from trx.workflows import convert_tractogram
 
 
 def _build_arg_parser():
