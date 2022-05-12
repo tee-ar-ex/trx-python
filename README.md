@@ -1,10 +1,11 @@
 # tee-ar-ex
 Official repository to present the TRX (tee-ar-ex) python implementation, discuss issues and keep track of everything.
 Anyone is free to contribute (issues, code reviews, pull requests).
+Due to possible changes in implementation and possibily specifications, we recommend using a virtual environement.
 
-Due to the fast change in implementation and possibily specifications, we recommend using a virtual environement.
+The technical specifications of the file format is available [here](https://github.com/tee-ar-ex/trx-spec/blob/master/specifications.md).
 
-The library can be installed locally by using:
+The library can be installed locally by using the following commands:
 ```
 export TRX_MINIMAL_INSTALL=1
 pip install -e .
