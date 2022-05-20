@@ -77,8 +77,8 @@ def convert_tractogram(in_tractogram, out_tractogram, reference,
     in_ext = split_name_with_gz(in_tractogram)[1]
     out_ext = split_name_with_gz(out_tractogram)[1]
 
-#    if in_ext == out_ext:
-#        raise IOError('Input and output cannot be of the same file format')
+    if in_ext == out_ext:
+        raise IOError('Input and output cannot be of the same file format')
 
     if in_ext != '.trx':
         sft = load_tractogram_with_reference(in_tractogram, reference,
