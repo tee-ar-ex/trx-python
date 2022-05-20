@@ -1,8 +1,0 @@
-**/CMakeCache.txt
-**/CMakeFiles
-**/*.cmake
-**/Dart*.tcl
-**/Makefile
-**/.cmake
-libtrx.a
-**/bin/*

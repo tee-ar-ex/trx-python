@@ -1,0 +1,2 @@
+Requirement already satisfied: packaging in /home/frheault/VirtualEnvs/tff/lib/python3.8/site-packages (21.3)
+Requirement already satisfied: pyparsing!=3.0.5,>=2.0.2 in /home/frheault/VirtualEnvs/tff/lib/python3.8/site-packages (from packaging) (3.0.9)
