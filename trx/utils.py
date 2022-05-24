@@ -9,7 +9,7 @@ import numpy as np
 
 try:
     import dipy
-    from dipy.io.stateful_tractogram import StatefulTractogram
+    from dipy.io.stateful_tractogram import StatefulTractogram, Space, Origin
     from dipy.io.streamline import load_tractogram
     from dipy.io.utils import is_reference_info_valid
     dipy_available = True
@@ -177,6 +177,7 @@ def is_header_compatible(reference_1, reference_2):
 
 def load_tractogram_with_reference(filepath, reference=None,
                                    bbox_check=True):
+    # TODO add docstring
     if not dipy_available:
         logging.error('Dipy library is missing, cannot use functions related '
                       'to the StatefulTractogram.')
@@ -204,6 +205,7 @@ def load_tractogram_with_reference(filepath, reference=None,
 
 
 def get_axis_shift_vector(flip_axes):
+    # TODO add docstring
     shift_vector = np.zeros(3)
     if 'x' in flip_axes:
         shift_vector[0] = -1.0
@@ -216,6 +218,7 @@ def get_axis_shift_vector(flip_axes):
 
 
 def get_axis_flip_vector(flip_axes):
+    # TODO add docstring
     flip_vector = np.ones(3)
     if 'x' in flip_axes:
         flip_vector[0] = -1.0
@@ -228,6 +231,7 @@ def get_axis_flip_vector(flip_axes):
 
 
 def get_shift_vector(sft):
+    # TODO add docstring
     dims = sft.space_attributes[1]
     shift_vector = -1.0 * (np.array(dims) / 2.0)
 
@@ -235,6 +239,7 @@ def get_shift_vector(sft):
 
 
 def flip_sft(sft, flip_axes):
+    # TODO add docstring
     if not dipy_available:
         logging.error('Dipy library is missing, cannot use functions related '
                       'to the StatefulTractogram.')
@@ -254,3 +259,32 @@ def flip_sft(sft, flip_axes):
                                           data_per_point=sft.data_per_point,
                                           data_per_streamline=sft.data_per_streamline)
     return new_sft
+
+
+def load_matrix_in_any_format(filepath):
+    # TODO add docstring
+    _, ext = os.path.splitext(filepath)
+    if ext == '.txt':
+        data = np.loadtxt(filepath)
+    elif ext == '.npy':
+        data = np.load(filepath)
+    else:
+        raise ValueError('Extension {} is not supported'.format(ext))
+
+    return data
+
+
+def get_reverse_enum(space_str, origin_str):
+    # TODO add docstring
+    if not dipy_available:
+        logging.error('Dipy library is missing, cannot use functions related '
+                      'to the StatefulTractogram.')
+    origin = Origin.NIFTI if origin_str.lower() == 'nifti' else Origin.TRACKVIS
+    if space_str.lower() == 'rasmm':
+        space = Space.RASMM
+    elif space_str.lower() == 'voxmm':
+        space = Space.VOXMM
+    else:
+        space = Space.VOX
+
+    return space, origin
