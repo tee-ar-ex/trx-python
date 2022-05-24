@@ -261,6 +261,8 @@ def generate_trx_from_scratch(reference, out_tractogram, positions_csv=False,
             "NB_VERTICES": len(sft.streamlines._data),
             "NB_STREAMLINES": len(sft.streamlines),
         }
+        if header['NB_STREAMLINES'] <= 1:
+            raise IOError('To use this script, you need at least 2 streamlines.')
 
         with open(os.path.join(tmpdirname, "header.json"), "w") as out_json:
             json.dump(header, out_json)
@@ -277,8 +279,8 @@ def generate_trx_from_scratch(reference, out_tractogram, positions_csv=False,
         if dpv:
             os.mkdir(os.path.join(tmpdirname, 'dpv'))
             for arg in dpv:
-                curr_arr = np.squeeze(
-                    load_matrix_in_any_format(arg[0]).astype(arg[1]))
+                curr_arr = np.squeeze(load_matrix_in_any_format(arg[0]).astype(
+                    arg[1]))
                 if curr_arr.ndim > 2:
                     raise IOError('Maximum of 2 dimensions for dpv/dps/dpg.')
                 dim = '' if curr_arr.ndim == 1 else '{}.'.format(
@@ -290,8 +292,9 @@ def generate_trx_from_scratch(reference, out_tractogram, positions_csv=False,
         if dps:
             os.mkdir(os.path.join(tmpdirname, 'dps'))
             for arg in dps:
-                curr_arr = np.squeeze(
-                    load_matrix_in_any_format(arg[0]).astype(arg[1]))
+                curr_arr = np.squeeze(load_matrix_in_any_format(arg[0]).astype(
+                    arg[1]))
+                arg[1] = 'bit' if arg[1] == 'bool' else arg[1]
                 if curr_arr.ndim > 2:
                     raise IOError('Maximum of 2 dimensions for dpv/dps/dpg.')
                 dim = '' if curr_arr.ndim == 1 else '{}.'.format(
@@ -304,6 +307,7 @@ def generate_trx_from_scratch(reference, out_tractogram, positions_csv=False,
             os.mkdir(os.path.join(tmpdirname, 'groups'))
             for arg in groups:
                 curr_arr = load_matrix_in_any_format(arg[0]).astype(arg[1])
+                arg[1] = 'bit' if arg[1] == 'bool' else arg[1]
                 if curr_arr.ndim > 2:
                     raise IOError('Maximum of 2 dimensions for dpv/dps/dpg.')
                 dim = '' if curr_arr.ndim == 1 else '{}.'.format(
@@ -318,6 +322,7 @@ def generate_trx_from_scratch(reference, out_tractogram, positions_csv=False,
                 if not os.path.isdir(os.path.join(tmpdirname, 'dpg', arg[0])):
                     os.mkdir(os.path.join(tmpdirname, 'dpg', arg[0]))
                 curr_arr = load_matrix_in_any_format(arg[1]).astype(arg[2])
+                arg[1] = 'bit' if arg[1] == 'bool' else arg[1]
                 if curr_arr.ndim > 2:
                     raise IOError('Maximum of 2 dimensions for dpv/dps/dpg.')
                 if curr_arr.shape == (1, 1):
