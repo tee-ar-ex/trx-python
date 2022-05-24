@@ -114,14 +114,15 @@ def main():
     if os.path.isfile(args.out_tractogram) and not args.overwrite:
         raise IOError('{} already exists, use -f to overwrite.'.format(
             args.out_tractogram))
-
+    
+    if not args.positions and not args.positions_csv:
+        parser.error('At least one positions options must be used.')
     if args.positions_csv and args.positions:
-        raise IOError('Cannot use both positions options.')
+        parser.error('Cannot use both positions options.')
     if args.positions and args.offsets is None:
-        raise IOError('--offsets must be provided if --positions is used.')
+        parser.error('--offsets must be provided if --positions is used.')
     if args.offsets and args.positions is None:
-        raise parser.error(
-            '--positions must be provided if --offsets is used.')
+        parser.error('--positions must be provided if --offsets is used.')
 
     generate_trx_from_scratch(args.reference, args.out_tractogram,
                               positions_csv=args.positions_csv,
