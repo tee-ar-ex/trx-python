@@ -13,8 +13,8 @@ if TRX_MINIMAL_INSTALL:
                 'pytest>=7.*', 'pytest-console-scripts>=0.*']
 else:
     SCRIPTS = glob.glob("scripts/*.py")
-    REQUIRES = ['fury@git+https://github.com/frheault/fury.git@b13f573#egg=fury',
-                'dipy@git+https://github.com/frheault/dipy.git@f36f7e8#egg=dipy',
+    REQUIRES = ['fury@git+https://github.com/frheault/fury.git@75a5b44#egg=fury',
+                'dipy@git+https://github.com/frheault/dipy.git@13e0fc2#egg=dipy',
                 'gdown>=4.*', 'pytest>=7.*', 'pytest-console-scripts>=0.*']
 
 setup(name='trx',
