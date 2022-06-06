@@ -1,12 +1,11 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import hashlib
 import logging
 import os
-
-from gdown import cached_download, extractall
-
-GOOGLE_URL = "https://drive.google.com/uc?id="
+import shutil
+import urllib.request
 
 
 def get_home():
@@ -19,10 +18,21 @@ def get_home():
 
 
 def get_testing_files_dict():
-    """ Get dictionary linking zip file to their GDrive ID & MD5SUM """
-    return {'DSI.zip':
-            ['18i9aAuMmPPaH6D03CH2hY4tDrAVBKTRe',
-             'a984e4f5a37273063a713ee578901127']}
+    """ Get dictionary linking zip file to their Figshare URL & MD5SUM """
+    return {
+        'DSI.zip': 
+            ('https://figshare.com/ndownloader/files/35596973',
+             'a984e4f5a37273063a713ee578901127')
+    }
+
+
+def md5sum(filename):
+    """ Compute one md5 checksum for a file """
+    h = hashlib.md5()
+    with open(filename, 'rb') as f: 
+        for chunk in iter(lambda: f.read(128 * h.block_size), b''): 
+            h.update(chunk)
+    return h.hexdigest()
 
 
 def fetch_data(files_dict, keys=None):
@@ -34,6 +44,7 @@ def fetch_data(files_dict, keys=None):
         For each file in `files_dict` the value should be (url, md5).
         The file will be downloaded from url, if the file does not already
         exist or if the file exists but the md5 checksum does not match.
+        Zip files are automatically unzipped and its content* are md5 checked.
 
     Raises
     ------
@@ -50,13 +61,21 @@ def fetch_data(files_dict, keys=None):
         keys = files_dict.keys()
     elif isinstance(keys, str):
         keys = [keys]
+
     for f in keys:
-        url, md5 = files_dict[f]
+        url, expected_md5 = files_dict[f]
         full_path = os.path.join(trx_home, f)
 
         logging.info('Downloading {} to {}'.format(f, trx_home))
-        cached_download(url=GOOGLE_URL+url,
-                        path=full_path,
-                        md5=md5,
-                        quiet=True,
-                        postprocess=extractall)
+        if not os.path.exists(full_path):
+            urllib.request.urlretrieve(url, full_path)
+
+        actual_md5 = md5sum(full_path)
+        if expected_md5 != actual_md5:
+            raise ValueError(f'md5sum for {f} does not match.')
+
+        if f.endswith('.zip'):
+            dst_dir = os.path.join(trx_home, f[:-4])
+            shutil.unpack_archive(full_path,
+                                  extract_dir=dst_dir,
+                                  format='zip')
