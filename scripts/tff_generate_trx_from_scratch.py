@@ -13,7 +13,7 @@ remove invalid streamlines (outside of the bounding box in VOX space).
 All dimensions (nbr_vertices and nbr_streamlines) and groups/dpg must match
 otherwise the script will (likely) crash.
 
-Each instance of --dps, --dps, --groups require 2 arguments (FILE, DTYPE).
+Each instance of --dps, --dpv, --groups require 2 arguments (FILE, DTYPE).
 --dpg requires 3 arguments (GROUP, FILE, DTYPE).
 The choice of DTYPE are:
     - (u)int8, (u)int16, (u)int32, (u)int64
