@@ -21,8 +21,8 @@ def get_testing_files_dict():
     """ Get dictionary linking zip file to their Figshare URL & MD5SUM """
     return {
         'DSI.zip': 
-            ('https://figshare.com/ndownloader/files/35596973',
-             'a984e4f5a37273063a713ee578901127')
+            ('https://figshare.com/ndownloader/files/35617193',
+             '7d7082f7f2e07cb39e2fef13107af169')
     }
 
 
@@ -72,7 +72,11 @@ def fetch_data(files_dict, keys=None):
 
         actual_md5 = md5sum(full_path)
         if expected_md5 != actual_md5:
-            raise ValueError(f'md5sum for {f} does not match.')
+            raise ValueError(
+                f'Md5sum for {f} does not match. '
+                'Please remove the file to download it again: ' +
+                full_path
+            )
 
         if f.endswith('.zip'):
             dst_dir = os.path.join(trx_home, f[:-4])
