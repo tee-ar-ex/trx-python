@@ -24,6 +24,7 @@ from trx.trx_file_memmap import _compute_lengths, load, save, TrxFile
 from trx.viz import display
 from trx.utils import (flip_sft, is_header_compatible,
                        get_axis_shift_vector,
+                       get_reference_info_wrapper,
                        get_reverse_enum,
                        load_matrix_in_any_format,
                        load_tractogram_with_reference,
@@ -247,33 +248,45 @@ def generate_trx_from_scratch(reference, out_tractogram, positions_csv=False,
             streamlines._offsets = offsets
             streamlines._lengths = lengths
 
-        space, origin = get_reverse_enum(space_str, origin_str)
-        sft = StatefulTractogram(streamlines, reference, space, origin)
-        if verify_invalid:
-            rem, _ = sft.remove_invalid_streamlines()
-            print('{} streamlines were removed becaused they were '
-                  'invalid.'.format(len(rem)))
-        sft.to_rasmm()
-        sft.to_center()
+        if space_str.lower() != 'rasmm' or origin_str.lower() != 'nifti' or \
+                verify_invalid:
+            if not dipy_available:
+                logging.error('Dipy library is missing, advanced options '
+                              'related to spatial transforms and invalid '
+                              'streamlines are not available.')
+                return
+
+            space, origin = get_reverse_enum(space_str, origin_str)
+            sft = StatefulTractogram(streamlines, reference, space, origin)
+            if verify_invalid:
+                rem, _ = sft.remove_invalid_streamlines()
+                print('{} streamlines were removed becaused they were '
+                      'invalid.'.format(len(rem)))
+            sft.to_rasmm()
+            sft.to_center()
+            streamlines = sft.streamlines
+
+        affine, dimensions, _, _ = get_reference_info_wrapper(reference)
         header = {
-            "DIMENSIONS": sft.dimensions.tolist(),
-            "VOXEL_TO_RASMM": sft.affine.tolist(),
-            "NB_VERTICES": len(sft.streamlines._data),
-            "NB_STREAMLINES": len(sft.streamlines),
+            "DIMENSIONS": dimensions.tolist(),
+            "VOXEL_TO_RASMM": affine.tolist(),
+            "NB_VERTICES": len(streamlines._data),
+            "NB_STREAMLINES": len(streamlines),
         }
         if header['NB_STREAMLINES'] <= 1:
-            raise IOError('To use this script, you need at least 2 streamlines.')
+            raise IOError('To use this script, you need at least 2'
+                          'streamlines.')
 
         with open(os.path.join(tmpdirname, "header.json"), "w") as out_json:
             json.dump(header, out_json)
 
         curr_filename = os.path.join(tmpdirname, 'positions.3.{}'.format(
             positions_dtype))
-        sft.streamlines._data.astype(positions_dtype).tofile(
+        streamlines._data.astype(positions_dtype).tofile(
             curr_filename)
         curr_filename = os.path.join(tmpdirname, 'offsets.{}'.format(
             offsets_dtype))
-        sft.streamlines._offsets.astype(offsets_dtype).tofile(
+        streamlines._offsets.astype(offsets_dtype).tofile(
             curr_filename)
 
         if dpv:

@@ -65,11 +65,11 @@ def _build_arg_parser():
     p1.add_argument('--space', choices=['RASMM', 'VOXMM', 'VOX'],
                     default='RASMM',
                     help='Space in which the coordinates are declared.'
-                         '[%(default)s]')
+                         '[%(default)s]\nNon-default option requires Dipy.')
     p1.add_argument('--origin', choices=['NIFTI', 'TRACKVIS'],
                     default='NIFTI',
                     help='Origin in which the coordinates are declared. '
-                         '[%(default)s]')
+                         '[%(default)s]\nNon-default option requires Dipy.')
     p2 = p.add_argument_group(title='Data type options')
     p2.add_argument('--positions_dtype', default='float32',
                     choices=['float16', 'float32', 'float64'],
@@ -100,7 +100,8 @@ def _build_arg_parser():
 
     p.add_argument('--verify_invalid', action='store_true',
                    help='Verify that the positions are all valid.\n'
-                        'None outside of the bounding box in VOX space.')
+                        'None outside of the bounding box in VOX space.\n'
+                        'Requires Dipy (due to use of SFT).')
     p.add_argument('-f', dest='overwrite', action='store_true',
                    help='Force overwriting of the output files.')
 
