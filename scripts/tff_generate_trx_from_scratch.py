@@ -4,7 +4,7 @@
 """
 Generate TRX file from a collection of CSV, TXT or NPY files by individually
 specifiying positions, offsets, data_per_vertex, data_per_streamlines,
-groups and data_per_group. Each file must have it data type specified by the
+groups and data_per_group. Each file must have its data type specified by the
 users.
 
 A reference file must be provided (NIFTI) and the option --verify_invalid will
