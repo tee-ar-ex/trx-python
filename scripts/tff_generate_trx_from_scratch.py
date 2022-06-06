@@ -4,7 +4,7 @@
 """
 Generate TRX file from a collection of CSV, TXT or NPY files by individually
 specifiying positions, offsets, data_per_vertex, data_per_streamlines,
-groups and data_per_group. Each file must have it data type specified by the
+groups and data_per_group. Each file must have its data type specified by the
 users.
 
 A reference file must be provided (NIFTI) and the option --verify_invalid will
@@ -13,7 +13,7 @@ remove invalid streamlines (outside of the bounding box in VOX space).
 All dimensions (nbr_vertices and nbr_streamlines) and groups/dpg must match
 otherwise the script will (likely) crash.
 
-Each instance of --dps, --dps, --groups require 2 arguments (FILE, DTYPE).
+Each instance of --dps, --dpv, --groups require 2 arguments (FILE, DTYPE).
 --dpg requires 3 arguments (GROUP, FILE, DTYPE).
 The choice of DTYPE are:
     - (u)int8, (u)int16, (u)int32, (u)int64
