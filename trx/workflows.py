@@ -294,6 +294,8 @@ def generate_trx_from_scratch(reference, out_tractogram, positions_csv=False,
             for arg in dpv:
                 curr_arr = np.squeeze(load_matrix_in_any_format(arg[0]).astype(
                     arg[1]))
+                if arg[1] == 'bool':
+                    arg[1] = 'bit'
                 if curr_arr.ndim > 2:
                     raise IOError('Maximum of 2 dimensions for dpv/dps/dpg.')
                 dim = '' if curr_arr.ndim == 1 else '{}.'.format(
@@ -307,7 +309,8 @@ def generate_trx_from_scratch(reference, out_tractogram, positions_csv=False,
             for arg in dps:
                 curr_arr = np.squeeze(load_matrix_in_any_format(arg[0]).astype(
                     arg[1]))
-                arg[1] = 'bit' if arg[1] == 'bool' else arg[1]
+                if arg[1] == 'bool':
+                    arg[1] = 'bit'
                 if curr_arr.ndim > 2:
                     raise IOError('Maximum of 2 dimensions for dpv/dps/dpg.')
                 dim = '' if curr_arr.ndim == 1 else '{}.'.format(
@@ -320,7 +323,8 @@ def generate_trx_from_scratch(reference, out_tractogram, positions_csv=False,
             os.mkdir(os.path.join(tmpdirname, 'groups'))
             for arg in groups:
                 curr_arr = load_matrix_in_any_format(arg[0]).astype(arg[1])
-                arg[1] = 'bit' if arg[1] == 'bool' else arg[1]
+                if arg[1] == 'bool':
+                    arg[1] = 'bit'
                 if curr_arr.ndim > 2:
                     raise IOError('Maximum of 2 dimensions for dpv/dps/dpg.')
                 dim = '' if curr_arr.ndim == 1 else '{}.'.format(
@@ -335,7 +339,8 @@ def generate_trx_from_scratch(reference, out_tractogram, positions_csv=False,
                 if not os.path.isdir(os.path.join(tmpdirname, 'dpg', arg[0])):
                     os.mkdir(os.path.join(tmpdirname, 'dpg', arg[0]))
                 curr_arr = load_matrix_in_any_format(arg[1]).astype(arg[2])
-                arg[1] = 'bit' if arg[1] == 'bool' else arg[1]
+                if arg[1] == 'bool':
+                    arg[1] = 'bit'
                 if curr_arr.ndim > 2:
                     raise IOError('Maximum of 2 dimensions for dpv/dps/dpg.')
                 if curr_arr.shape == (1, 1):
