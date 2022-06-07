@@ -9,13 +9,13 @@ TRX_MINIMAL_INSTALL = False if TRX_MINIMAL_INSTALL is None else \
 
 if TRX_MINIMAL_INSTALL:
     SCRIPTS = None
-    REQUIRES = ['numpy>=1.20.*', 'nibabel>=3.*', 'gdown>=4.*',
+    REQUIRES = ['numpy>=1.20.*', 'nibabel>=3.*',
                 'pytest>=7.*', 'pytest-console-scripts>=0.*']
 else:
     SCRIPTS = glob.glob("scripts/*.py")
     REQUIRES = ['fury@git+https://github.com/frheault/fury.git@5059a529#egg=fury',
                 'dipy@git+https://github.com/frheault/dipy.git@4e192c5c6#egg=dipy',
-                'gdown>=4.*', 'pytest>=7.*', 'pytest-console-scripts>=0.*']
+                'pytest>=7.*', 'pytest-console-scripts>=0.*']
 
 setup(name='trx',
       packages=find_packages(),
