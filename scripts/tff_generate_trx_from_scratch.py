@@ -21,18 +21,18 @@ The choice of DTYPE are:
     - bool
 
 Example command:
-tff_generate_trx_from_scratch.py fa.nii.gz generated.trx -f
-    --positions test_npy/positions.npy --positions_dtype float16 
-    --offsets test_npy/offsets.npy --offsets_dtype uint32 
-    --dpv test_npy/dpv_cx.npy uint8
-    --dpv test_npy/dpv_cy.npy uint8
-    --dpv test_npy/dpv_cz.npy uint8  
-    --dps test_npy/dps_algo.npy uint8 
-    --dps test_npy/dps_cw.npy float64 
-    --groups test_npy/g_AF_L.npy int32 
-    --groups test_npy/g_AF_R.npy int32 
-    --dpg g_AF_L test_npy/dpg_AF_L_mean_fa.npy float32 
-    --dpg g_AF_R test_npy/dpg_AF_R_mean_fa.npy float32 
+tff_generate_trx_from_scratch.py fa.nii.gz generated.trx -f \
+    --positions test_npy/positions.npy --positions_dtype float16 \
+    --offsets test_npy/offsets.npy --offsets_dtype uint32 \
+    --dpv test_npy/dpv_cx.npy uint8 \
+    --dpv test_npy/dpv_cy.npy uint8 \
+    --dpv test_npy/dpv_cz.npy uint8  \
+    --dps test_npy/dps_algo.npy uint8 \ 
+    --dps test_npy/dps_cw.npy float64  \
+    --groups test_npy/g_AF_L.npy int32 \
+    --groups test_npy/g_AF_R.npy int32 \
+    --dpg g_AF_L test_npy/dpg_AF_L_mean_fa.npy float32 \
+    --dpg g_AF_R test_npy/dpg_AF_R_mean_fa.npy float32 \
     --dpg g_AF_L test_npy/dpg_AF_L_volume.npy float32 
 """
 
