@@ -143,7 +143,7 @@ def test__create_memmap(basename, create, expected):
         ("dontexist.trx", False, True),
     ],
 )
-def test__load(path, check_dpg, value_error):
+def test_load(path, check_dpg, value_error):
     path = os.path.join(get_home(), 'memmap_test_data', path)
     # Need to perhaps improve test
     if value_error:
