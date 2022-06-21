@@ -16,8 +16,6 @@ try:
 except ImportError:
     dipy_available = False
 
-from trx import trx_file_memmap
-
 
 def split_name_with_gz(filename):
     """
@@ -62,6 +60,7 @@ def get_reference_info_wrapper(reference):
         - voxel_sizes  ndarray (3,), float32, size of voxel for each axis
         - voxel_order, string, Typically 'RAS' or 'LPS'
     """
+    from trx import trx_file_memmap
     is_nifti = False
     is_trk = False
     is_sft = False
@@ -173,34 +172,6 @@ def is_header_compatible(reference_1, reference_2):
         identical_header = False
 
     return identical_header
-
-
-def load_tractogram_with_reference(filepath, reference=None,
-                                   bbox_check=True):
-    if not dipy_available:
-        logging.error('Dipy library is missing, cannot use functions related '
-                      'to the StatefulTractogram.')
-        return None
-    # Force the usage of --reference for all file formats without an header
-    _, ext = os.path.splitext(filepath)
-    if ext == '.trk':
-        if reference is not None and reference != 'same':
-            logging.warning('Reference is discarded for this file format '
-                            '{}.'.format(filepath))
-        sft = load_tractogram(filepath, 'same',
-                              bbox_valid_check=bbox_check)
-    elif ext in ['.tck', '.fib', '.vtk', '.dpy']:
-        if reference is None or reference == 'same':
-            raise IOError('--reference is required for this file format '
-                          '{}.'.format(filepath))
-        else:
-            sft = load_tractogram(filepath, reference,
-                                  bbox_valid_check=bbox_check)
-
-    else:
-        raise IOError('{} is an unsupported file format'.format(filepath))
-
-    return sft
 
 
 def get_axis_shift_vector(flip_axes):

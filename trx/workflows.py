@@ -17,11 +17,11 @@ try:
 except ImportError:
     dipy_available = False
 
+from trx.io import load_wrapper, load_sft_with_reference
 from trx.trx_file_memmap import load, save, TrxFile
 from trx.viz import display
 from trx.utils import (flip_sft, is_header_compatible,
                                             get_axis_shift_vector,
-                                            load_tractogram_with_reference,
                                             split_name_with_gz)
 
 
@@ -81,7 +81,7 @@ def convert_tractogram(in_tractogram, out_tractogram, reference,
         raise IOError('Input and output cannot be of the same file format')
 
     if in_ext != '.trx':
-        sft = load_tractogram_with_reference(in_tractogram, reference,
+        sft = load_sft_with_reference(in_tractogram, reference,
                                              bbox_check=False)
     else:
         trx = load(in_tractogram)
@@ -111,7 +111,7 @@ def tractogram_simple_compare(in_tractograms, reference):
         return
     in_ext = os.path.splitext(in_tractograms[0])[1]
     if in_ext != '.trx':
-        sft_1 = load_tractogram_with_reference(in_tractograms[0], reference,
+        sft_1 = load_sft_with_reference(in_tractograms[0], reference,
                                                bbox_check=False)
     else:
         trx = load(in_tractograms[0])
@@ -119,7 +119,7 @@ def tractogram_simple_compare(in_tractograms, reference):
 
     in_ext = os.path.splitext(in_tractograms[1])[1]
     if in_ext != '.trx':
-        sft_2 = load_tractogram_with_reference(in_tractograms[1], reference,
+        sft_2 = load_sft_with_reference(in_tractograms[1], reference,
                                                bbox_check=False)
     else:
         trx = load(in_tractograms[1])
@@ -178,7 +178,7 @@ def tractogram_visualize_overlap(in_tractogram, reference, remove_invalid=True):
     in_ext = os.path.splitext(in_tractogram)[1]
 
     if in_ext != '.trx':
-        sft = load_tractogram_with_reference(in_tractogram, reference,
+        sft = load_sft_with_reference(in_tractogram, reference,
                                              bbox_check=False)
     else:
         trx = load(in_tractogram)
