@@ -13,12 +13,12 @@
 # import os
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
-from datetime.datetime import now
+from datetime import datetime as dt
 
 # -- Project information -----------------------------------------------------
 
 project = 'trx-python'
-copyright = copyright = f'2021-{now().year}, The TRX developers'
+copyright = copyright = f'2021-{dt.now().year}, The TRX developers'
 author = 'The TRX developers'
 
 
