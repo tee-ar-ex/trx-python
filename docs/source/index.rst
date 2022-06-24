@@ -32,23 +32,18 @@ that TRX will serve the community well and the growing computational needs of
 our field. We encourage community members to consider early contributions to our
 proposal so as to ensure the new standard will cover the needs of the wider
 audience of software developers, toolboxes, and scientists. Our long-term plan
-is to integrate TRX within the `Brain Imaging Data Structure (BIDS) <https://bids.neuroimaging.io/>` ecosystem.
+is to integrate TRX within the `Brain Imaging Data Structure (BIDS) <https://bids.neuroimaging.io/>`_ ecosystem.
 
 
 Acknowledgments
 ~~~~~~~~~~~~~~~~
-Development of TRX is supported by `NIMH grant 1R01MH126699 <https://reporter.nih.gov/search/D-c1NJBQFE-BkwP1Cxc2Lg/project-details/10253558>_`.
+Development of TRX is supported by `NIMH grant 1R01MH126699 <https://reporter.nih.gov/search/D-c1NJBQFE-BkwP1Cxc2Lg/project-details/10253558>`_.
 
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+    autoapi/index
+    contributing
+    developing/index
