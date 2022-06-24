@@ -13,12 +13,12 @@
 # import os
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
-
+import datetime
 
 # -- Project information -----------------------------------------------------
 
 project = 'trx-python'
-copyright = '2022, The TRX developers'
+copyright = copyright = f'2021-{datetime.now().year}, The TRX developers'
 author = 'The TRX developers'
 
 
@@ -83,4 +83,4 @@ html_theme_options = {
 
 autoapi_type = 'python'
 autoapi_dirs = ['../../trx']
-autoapi_ignore = ['*test*', '*version*', 'License']
+autoapi_ignore = ['*test*', '*version*']
