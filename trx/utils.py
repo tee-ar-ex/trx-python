@@ -48,7 +48,8 @@ def split_name_with_gz(filename):
 
 
 def get_reference_info_wrapper(reference):
-    """ Will compare the spatial attribute of 2 references
+    """ Will compare the spatial attribute of 2 references.
+
     Parameters
     ----------
     reference : Nifti or Trk filename, Nifti1Image or TrkFile, Nifti1Header or
@@ -135,7 +136,8 @@ def get_reference_info_wrapper(reference):
 
 
 def is_header_compatible(reference_1, reference_2):
-    """ Will compare the spatial attribute of 2 references
+    """ Will compare the spatial attribute of 2 references.
+
     Parameters
     ----------
     reference_1 : Nifti or Trk filename, Nifti1Image or TrkFile,
@@ -177,7 +179,22 @@ def is_header_compatible(reference_1, reference_2):
 
 def load_tractogram_with_reference(filepath, reference=None,
                                    bbox_check=True):
-    # TODO add docstring
+    """ Load a tractogram with a reference (if required).
+
+    Parameters
+    ----------
+    filepath : str
+        Path to the tractogram file.
+    reference : Nifti or Trk filename, Nifti1Image or TrkFile,
+        Nifti1Header or trk.header (dict)
+        Reference that provides the spatial attribute.
+    bbox_check : bool
+        Check if the tractogram is inside the bounding box of the reference.
+    Returns
+    -------
+    output : dipy.io.stateful_tractogram.StatefulTractogram
+        Tractogram object.
+    """
     if not dipy_available:
         logging.error('Dipy library is missing, cannot use functions related '
                       'to the StatefulTractogram.')
@@ -205,7 +222,18 @@ def load_tractogram_with_reference(filepath, reference=None,
 
 
 def get_axis_shift_vector(flip_axes):
-    # TODO add docstring
+    """
+    Parameters
+    ----------
+    flip_axes : list of str
+        String containing the axis to flip.
+        Possible values are 'x', 'y', 'z'
+    Returns
+    -------
+    flip_vector : np.ndarray (3,)
+        Vector containing the axis to flip.
+        Possible values are -1, 1
+    """
     shift_vector = np.zeros(3)
     if 'x' in flip_axes:
         shift_vector[0] = -1.0
@@ -218,7 +246,18 @@ def get_axis_shift_vector(flip_axes):
 
 
 def get_axis_flip_vector(flip_axes):
-    # TODO add docstring
+    """
+    Parameters
+    ----------
+    flip_axes : list of str
+        String containing the axis to flip.
+        Possible values are 'x', 'y', 'z'
+    Returns
+    -------
+    flip_vector : np.ndarray (3,)
+        Vector containing the axis to flip.
+        Possible values are -1, 1
+    """
     flip_vector = np.ones(3)
     if 'x' in flip_axes:
         flip_vector[0] = -1.0
@@ -231,7 +270,19 @@ def get_axis_flip_vector(flip_axes):
 
 
 def get_shift_vector(sft):
-    # TODO add docstring
+    """
+    When flipping a tractogram the shift vector is used to change the origin
+    of the grid from the corner to the center of the grid.
+
+    Parameters
+    ----------
+    sft : StatefulTractogram
+        StatefulTractogram object
+    Returns
+    -------
+    shift_vector : ndarray
+        Shift vector to apply to the streamlines
+    """
     dims = sft.space_attributes[1]
     shift_vector = -1.0 * (np.array(dims) / 2.0)
 
@@ -239,7 +290,22 @@ def get_shift_vector(sft):
 
 
 def flip_sft(sft, flip_axes):
-    # TODO add docstring
+    """ Flip the streamlines in the StatefulTractogram according to the
+    flip_axes. Uses the spatial information to flip according to the center
+    of the grid.
+
+    Parameters
+    ----------
+    sft : StatefulTractogram
+        StatefulTractogram to flip
+    flip_axes : list of str
+        Axes to flip.
+        Possible values are 'x', 'y', 'z'
+    Returns
+    -------
+    sft : StatefulTractogram
+        StatefulTractogram with flipped axes
+    """
     if not dipy_available:
         logging.error('Dipy library is missing, cannot use functions related '
                       'to the StatefulTractogram.')
@@ -262,7 +328,17 @@ def flip_sft(sft, flip_axes):
 
 
 def load_matrix_in_any_format(filepath):
-    # TODO add docstring
+    """ Load a matrix from a txt file OR a npy file.
+
+    Parameters
+    ----------
+    filepath : str
+        Path to the matrix file.
+    Returns
+    -------
+    matrix : numpy.ndarray
+        The matrix.
+    """
     _, ext = os.path.splitext(filepath)
     if ext == '.txt':
         data = np.loadtxt(filepath)
@@ -275,7 +351,19 @@ def load_matrix_in_any_format(filepath):
 
 
 def get_reverse_enum(space_str, origin_str):
-    # TODO add docstring
+    """ Convert string representation to enums for the StatefulTractogram.
+
+    Parameters
+    ----------
+    space_str : str
+        String representing the space.
+    origin_str : str
+        String representing the origin.
+    Returns
+    -------
+    output : str
+        Space and Origin as Enums.
+    """
     if not dipy_available:
         logging.error('Dipy library is missing, cannot use functions related '
                       'to the StatefulTractogram.')
