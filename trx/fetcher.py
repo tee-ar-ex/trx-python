@@ -20,17 +20,23 @@ def get_home():
 def get_testing_files_dict():
     """ Get dictionary linking zip file to their Figshare URL & MD5SUM """
     return {
-        'DSI.zip': 
+        'DSI.zip':
             ('https://figshare.com/ndownloader/files/35617193',
-             '7d7082f7f2e07cb39e2fef13107af169')
+             '7d7082f7f2e07cb39e2fef13107af169'),
+        'memmap_test_data.zip':
+        ('https://figshare.com/ndownloader/files/35709968',
+                '8861975246befac982c1f47e434c60cf'),
+        'trx_from_scratch.zip':
+        ('https://figshare.com/ndownloader/files/35709764',
+                '511c59a3ee8c16b4be0ef815b889e939')
     }
 
 
 def md5sum(filename):
     """ Compute one md5 checksum for a file """
     h = hashlib.md5()
-    with open(filename, 'rb') as f: 
-        for chunk in iter(lambda: f.read(128 * h.block_size), b''): 
+    with open(filename, 'rb') as f:
+        for chunk in iter(lambda: f.read(128 * h.block_size), b''):
             h.update(chunk)
     return h.hexdigest()
 
