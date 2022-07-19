@@ -4,7 +4,6 @@
 import gzip
 import logging
 import os
-import shutil
 
 import nibabel as nib
 import numpy as np
@@ -17,12 +16,13 @@ try:
 except ImportError:
     dipy_available = False
 
-from trx.io import load_wrapper, load_sft_with_reference
+from trx.io import load_wrapper, load_sft_with_reference, save_wrapper
+from trx.streamlines_ops import perform_streamlines_operation, intersection
 from trx.trx_file_memmap import load, save, TrxFile
 from trx.viz import display
 from trx.utils import (flip_sft, is_header_compatible,
-                                            get_axis_shift_vector,
-                                            split_name_with_gz)
+                       get_axis_shift_vector,
+                       split_name_with_gz)
 
 
 def convert_dsi_studio(in_dsi_tractogram, in_dsi_fa, out_tractogram,
@@ -82,7 +82,7 @@ def convert_tractogram(in_tractogram, out_tractogram, reference,
 
     if in_ext != '.trx':
         sft = load_sft_with_reference(in_tractogram, reference,
-                                             bbox_check=False)
+                                      bbox_check=False)
     else:
         trx = load(in_tractogram)
         sft = trx.to_sft()
@@ -94,14 +94,16 @@ def convert_tractogram(in_tractogram, out_tractogram, reference,
             if offsets_dtype == 'uint64' or offsets_dtype == 'uint32':
                 offsets_dtype = offsets_dtype[1:]
             if sft.streamlines._offsets.dtype.name != offsets_dtype:
-                sft.streamlines._offsets = sft.streamlines._offsets.astype(offsets_dtype)
+                sft.streamlines._offsets = sft.streamlines._offsets.astype(
+                    offsets_dtype)
         save_tractogram(sft, out_tractogram, bbox_valid_check=False)
     else:
         trx = TrxFile.from_sft(sft)
         if trx.streamlines._data.dtype.name != pos_dtype:
             trx.streamlines._data = trx.streamlines._data.astype(pos_dtype)
         if trx.streamlines._offsets.dtype.name != offsets_dtype:
-            trx.streamlines._offsets = trx.streamlines._offsets.astype(offsets_dtype)
+            trx.streamlines._offsets = trx.streamlines._offsets.astype(
+                offsets_dtype)
         save(trx, out_tractogram)
 
 
@@ -109,21 +111,17 @@ def tractogram_simple_compare(in_tractograms, reference):
     if not dipy_available:
         logging.error('Dipy library is missing, scripts are not available.')
         return
-    in_ext = os.path.splitext(in_tractograms[0])[1]
-    if in_ext != '.trx':
-        sft_1 = load_sft_with_reference(in_tractograms[0], reference,
-                                               bbox_check=False)
+    tractogram_obj = load_wrapper(in_tractograms[0], reference)
+    if not isinstance(tractogram_obj, StatefulTractogram):
+        sft_1 = tractogram_obj.to_sft()
     else:
-        trx = load(in_tractograms[0])
-        sft_1 = trx.to_sft()
+        sft_1 = tractogram_obj
 
-    in_ext = os.path.splitext(in_tractograms[1])[1]
-    if in_ext != '.trx':
-        sft_2 = load_sft_with_reference(in_tractograms[1], reference,
-                                               bbox_check=False)
+    tractogram_obj = load_wrapper(in_tractograms[1], reference)
+    if not isinstance(tractogram_obj, StatefulTractogram):
+        sft_2 = tractogram_obj.to_sft()
     else:
-        trx = load(in_tractograms[1])
-        sft_2 = trx.to_sft()
+        sft_2 = tractogram_obj
 
     if np.allclose(sft_1.streamlines._data, sft_2.streamlines._data,
                    atol=0.001):
@@ -175,15 +173,13 @@ def tractogram_visualize_overlap(in_tractogram, reference, remove_invalid=True):
     if not dipy_available:
         logging.error('Dipy library is missing, scripts are not available.')
         return None
-    in_ext = os.path.splitext(in_tractogram)[1]
 
-    if in_ext != '.trx':
-        sft = load_sft_with_reference(in_tractogram, reference,
-                                             bbox_check=False)
+    tractogram_obj = load_wrapper(in_tractogram, reference)
+    if not isinstance(tractogram_obj, StatefulTractogram):
+        sft = tractogram_obj.to_sft()
     else:
-        trx = load(in_tractogram)
-        sft = trx.to_sft()
-        sft.streamlines._data = sft.streamlines._data.astype(float)
+        sft = tractogram_obj
+    sft.streamlines._data = sft.streamlines._data.astype(float)
 
     sft.data_per_point = None
     sft.streamlines = set_number_of_points(sft.streamlines, 200)
@@ -215,3 +211,58 @@ def tractogram_visualize_overlap(in_tractogram, reference, remove_invalid=True):
 
     display(img.get_fdata(), volume_affine=affine,
             streamlines=sft.streamlines,  title='VOXMM')
+
+
+def validate_tractogram(in_tractogram, reference, out_tractogram,
+                        remove_identical_streamlines=True):
+    tractogram_obj = load_wrapper(in_tractogram, reference)
+    if not isinstance(tractogram_obj, StatefulTractogram):
+        sft = tractogram_obj.to_sft()
+    else:
+        sft = tractogram_obj
+
+    ori_len = len(sft)
+    tot_remove = 0
+    invalid_coord_ind, _ = sft.remove_invalid_streamlines()
+    tot_remove += len(invalid_coord_ind)
+    logging.warning('Removed {} streamlines with invalid coordinates.'.format(
+        len(invalid_coord_ind)))
+
+    indices = [i for i in range(len(sft)) if len(sft.streamlines[i]) <= 1]
+    tot_remove =+ len(indices)
+    logging.warning('Removed {} invalid streamlines (1 or 0 points).'.format(
+        len(indices)))
+
+    for i in np.setdiff1d(range(len(sft)), indices):
+        norm = np.linalg.norm(np.diff(sft.streamlines[i],
+                                      axis=0), axis=1)
+
+        if (norm < 0.001).any():
+            indices.append(i)
+
+    indices_val = np.setdiff1d(range(len(sft)), indices).astype(np.uint32)
+    logging.warning('Removed {} invalid streamlines (overlapping points).'.format(
+        ori_len - len(indices_val)))
+    tot_remove += ori_len - len(indices_val)
+
+    if remove_identical_streamlines:
+        _, indices_uniq = perform_streamlines_operation(intersection,
+                                                        [sft.streamlines])
+        indices_final = np.intersect1d(indices_val, indices_uniq).astype(np.uint32)
+        logging.warning('Removed {} overlapping streamlines.'.format(
+            ori_len - len(indices_final) - tot_remove))
+
+        indices_final = np.intersect1d(indices_val, indices_uniq)
+    else:
+        indices_final = indices_val
+
+    if out_tractogram:
+        streamlines = sft.streamlines[indices_final]
+        dpp = sft.data_per_point[indices_final]
+        dps = sft.data_per_streamline[indices_final]
+        new_sft = StatefulTractogram.from_sft(streamlines, sft,
+                                              data_per_point=dpp,
+                                              data_per_streamline=dps)
+        print
+        save_wrapper(new_sft,
+                     out_tractogram)

@@ -11,22 +11,9 @@ within the bounding box
 """
 
 import argparse
-import logging
 
-import numpy as np
+from trx.workflows import validate_tractogram
 
-from trx.io import save_wrapper, load_wrapper
-from trx.trx_file_memmap import TrxFile
-from trx.streamlines_ops import perform_streamlines_operation, intersection
-
-try:
-    from dipy.io.stateful_tractogram import StatefulTractogram, Space
-    from dipy.io.streamline import save_tractogram, load_tractogram
-    from dipy.tracking.streamline import set_number_of_points
-    from dipy.tracking.utils import density_map
-    dipy_available = True
-except ImportError:
-    dipy_available = False
 
 def _build_arg_parser():
     p = argparse.ArgumentParser(description=__doc__,
@@ -53,41 +40,9 @@ def main():
     parser = _build_arg_parser()
     args = parser.parse_args()
 
-    tractogram_obj = load_wrapper(args.in_tractogram, args.reference)
-    if not isinstance(tractogram_obj, StatefulTractogram):
-        sft = tractogram_obj.to_sft()
-    else:
-        sft = tractogram_obj
-
-    ori_len = len(sft)
-    _, invalid_coord_ind = sft.remove_invalid_streamlines()
-
-    indices = [i for i in range(len(sft)) if len(sft.streamlines[i]) <= 1]
-
-    for i in np.setdiff1d(range(len(sft)), indices):
-        norm = np.linalg.norm(np.gradient(sft.streamlines[i],
-                                            axis=0), axis=1)
-        if (norm < 0.001).any():
-            indices.append(i)
-
-    indices_val = np.setdiff1d(range(len(sft)), indices).astype(np.uint32)
-    logging.warning('Removed {} invalid streamlines.'.format(
-        ori_len - len(indices_val)))
-
-    if args.remove_identical_streamlines:
-        ori_len = len(indices_val)
-        _, indices_uniq = perform_streamlines_operation(intersection,
-                                                   [sft.streamlines])
-        logging.warning('Removed {} overlapping streamlines.'.format(
-            ori_len - len(indices_uniq)))
-
-        indices_final = np.intersect1d(indices_val, indices_uniq)
-        print(len(indices_val), len(indices_uniq), ori_len)
-    else:
-        indices_final = indices_val
-
-    if args.out_tractogram:
-        save_wrapper(sft[indices_final], args.out_tractogram)
+    validate_tractogram(args.in_tractogram, reference=args.reference,
+                        out_tractogram=args.out_tractogram,
+                        remove_identical_streamlines=args.remove_identical_streamlines)
 
 
 if __name__ == "__main__":
