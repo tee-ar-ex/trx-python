@@ -12,7 +12,7 @@ import nibabel as nib
 from nibabel.streamlines.array_sequence import ArraySequence
 import numpy as np
 try:
-    from dipy.io.stateful_tractogram import StatefulTractogram, Space, Origin
+    from dipy.io.stateful_tractogram import StatefulTractogram, Space
     from dipy.io.streamline import save_tractogram, load_tractogram
     from dipy.tracking.streamline import set_number_of_points
     from dipy.tracking.utils import density_map

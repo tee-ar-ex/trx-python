@@ -43,7 +43,8 @@ def main():
     parser = _build_arg_parser()
     args = parser.parse_args()
 
-    if args.out_tractogram and os.path.isfile(args.out_tractogram) and not args.overwrite:
+    if args.out_tractogram and os.path.isfile(args.out_tractogram) \
+            and not args.overwrite:
         raise IOError('{} already exists, use -f to overwrite.'.format(
             args.out_tractogram))
 
