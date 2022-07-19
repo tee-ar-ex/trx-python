@@ -9,6 +9,7 @@ TRX_MINIMAL_INSTALL = False if TRX_MINIMAL_INSTALL is None else \
 
 if TRX_MINIMAL_INSTALL:
     SCRIPTS = None
+    SCRIPTS = glob.glob("scripts/tff_generate_trx_from_scratch.py")
     REQUIRES = ['numpy>=1.20.*', 'nibabel>=3.*',
                 'pytest>=7.*', 'pytest-console-scripts>=0.*']
 else:

@@ -11,6 +11,7 @@ within the bounding box
 """
 
 import argparse
+import os
 
 from trx.workflows import validate_tractogram
 
@@ -32,6 +33,8 @@ def _build_arg_parser():
     p.add_argument('--reference',
                    help='Reference anatomy for tck/vtk/fib/dpy file\n'
                         'support (.nii or .nii.gz).')
+    p.add_argument('-f', dest='overwrite', action='store_true',
+                   help='Force overwriting of the output files.')
 
     return p
 
@@ -39,6 +42,10 @@ def _build_arg_parser():
 def main():
     parser = _build_arg_parser()
     args = parser.parse_args()
+
+    if args.out_tractogram and os.path.isfile(args.out_tractogram) and not args.overwrite:
+        raise IOError('{} already exists, use -f to overwrite.'.format(
+            args.out_tractogram))
 
     validate_tractogram(args.in_tractogram, reference=args.reference,
                         out_tractogram=args.out_tractogram,

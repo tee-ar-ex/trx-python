@@ -1,16 +1,21 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import tempfile
+
 import pytest
 import numpy as np
 import trx.trx_file_memmap as tmm
-
+from trx.fetcher import (get_testing_files_dict,
+                         fetch_data, get_home)
 from tempfile import mkdtemp
 
 import pathlib
 import os
 
-DATA_PATH = pathlib.Path(__file__).resolve().parent.parent.parent
+fetch_data(get_testing_files_dict(), keys=['memmap_test_data.zip'])
+tmp_dir = tempfile.TemporaryDirectory()
+
 
 @pytest.mark.parametrize(
     "arr,expected,value_error",
@@ -121,9 +126,10 @@ def test__create_memmap(basename, create, expected):
         assert np.array_equal(mmarr, expected)
 
     else:
-        mmarr = tmm._create_memmap(filename=basename, shape=(0,),
+        filename = os.path.join(mkdtemp(), basename)
+        mmarr = tmm._create_memmap(filename=filename, shape=(0,),
                                    dtype=np.int16)
-        assert os.path.isfile(basename)
+        assert os.path.isfile(filename)
         assert np.array_equal(mmarr, np.zeros(shape=(0,), dtype=np.float32))
 
 
@@ -131,14 +137,14 @@ def test__create_memmap(basename, create, expected):
 @pytest.mark.parametrize(
     "path,check_dpg,value_error",
     [
-        ("trx/tests/data/small_compressed.trx", False, False),
-        ("trx/tests/data/small.trx", True, False),
-        ("trx/tests/data/small_fldr.trx", False, False),
-        ("trx/tests/data/dontexist.trx", False, True),
+        ("small_compressed.trx", False, False),
+        ("small.trx", True, False),
+        ("small_fldr.trx", False, False),
+        ("dontexist.trx", False, True),
     ],
 )
-def test__load(path, check_dpg, value_error):
-    path = os.path.join(DATA_PATH, path)
+def test_load(path, check_dpg, value_error):
+    path = os.path.join(get_home(), 'memmap_test_data', path)
     # Need to perhaps improve test
     if value_error:
         with pytest.raises(ValueError):
@@ -153,17 +159,17 @@ def test__load(path, check_dpg, value_error):
 @pytest.mark.parametrize(
     "path",
     [
-        ("trx/tests/data/small.trx"),
+        ("small.trx"),
     ],
 )
 def test_load_zip(path):
-    path = os.path.join(DATA_PATH, path)
+    path = os.path.join(get_home(), 'memmap_test_data', path)
     assert isinstance(tmm.load_from_zip(path), tmm.TrxFile)
 
 
-@pytest.mark.parametrize("path", [("trx/tests/data/small_fldr.trx")])
+@pytest.mark.parametrize("path", [("small_fldr.trx")])
 def test_load_directory(path):
-    path = os.path.join(DATA_PATH, path)
+    path = os.path.join(get_home(), 'memmap_test_data', path)
     assert isinstance(tmm.load_from_directory(path), tmm.TrxFile)
 
 

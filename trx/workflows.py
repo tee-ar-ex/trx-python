@@ -1,14 +1,18 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import csv
 import gzip
+import json
 import logging
 import os
+import tempfile
 
 import nibabel as nib
+from nibabel.streamlines.array_sequence import ArraySequence
 import numpy as np
 try:
-    from dipy.io.stateful_tractogram import StatefulTractogram, Space
+    from dipy.io.stateful_tractogram import StatefulTractogram, Space, Origin
     from dipy.io.streamline import save_tractogram, load_tractogram
     from dipy.tracking.streamline import set_number_of_points
     from dipy.tracking.utils import density_map
@@ -18,10 +22,13 @@ except ImportError:
 
 from trx.io import load_wrapper, load_sft_with_reference, save_wrapper
 from trx.streamlines_ops import perform_streamlines_operation, intersection
-from trx.trx_file_memmap import load, save, TrxFile
+from trx.trx_file_memmap import _compute_lengths, load, save, TrxFile
 from trx.viz import display
 from trx.utils import (flip_sft, is_header_compatible,
                        get_axis_shift_vector,
+                       get_reference_info_wrapper,
+                       get_reverse_enum,
+                       load_matrix_in_any_format,
                        split_name_with_gz)
 
 
@@ -78,7 +85,7 @@ def convert_tractogram(in_tractogram, out_tractogram, reference,
     out_ext = split_name_with_gz(out_tractogram)[1]
 
     if in_ext == out_ext:
-        raise IOError('Input and output cannot be of the same file format')
+        raise IOError('Input and output cannot be of the same file format.')
 
     if in_ext != '.trx':
         sft = load_sft_with_reference(in_tractogram, reference,
@@ -220,7 +227,7 @@ def validate_tractogram(in_tractogram, reference, out_tractogram,
         sft = tractogram_obj.to_sft()
     else:
         sft = tractogram_obj
-
+    # print(sft)
     ori_len = len(sft)
     tot_remove = 0
     invalid_coord_ind, _ = sft.remove_invalid_streamlines()
@@ -229,7 +236,7 @@ def validate_tractogram(in_tractogram, reference, out_tractogram,
         len(invalid_coord_ind)))
 
     indices = [i for i in range(len(sft)) if len(sft.streamlines[i]) <= 1]
-    tot_remove =+ len(indices)
+    tot_remove = + len(indices)
     logging.warning('Removed {} invalid streamlines (1 or 0 points).'.format(
         len(indices)))
 
@@ -248,7 +255,8 @@ def validate_tractogram(in_tractogram, reference, out_tractogram,
     if remove_identical_streamlines:
         _, indices_uniq = perform_streamlines_operation(intersection,
                                                         [sft.streamlines])
-        indices_final = np.intersect1d(indices_val, indices_uniq).astype(np.uint32)
+        indices_final = np.intersect1d(
+            indices_val, indices_uniq).astype(np.uint32)
         logging.warning('Removed {} overlapping streamlines.'.format(
             ori_len - len(indices_final) - tot_remove))
 
@@ -257,12 +265,145 @@ def validate_tractogram(in_tractogram, reference, out_tractogram,
         indices_final = indices_val
 
     if out_tractogram:
-        streamlines = sft.streamlines[indices_final]
-        dpp = sft.data_per_point[indices_final]
-        dps = sft.data_per_streamline[indices_final]
+        streamlines = sft.streamlines[indices_final].copy()
+        dpp = {}
+        for key in dpp.keys():
+            dpp[key] = sft.data_per_point[key][indices_final]
+
+        dps = {}
+        for key in dps.keys():
+            dps[key] = sft.data_per_streamline[key][indices_final]
         new_sft = StatefulTractogram.from_sft(streamlines, sft,
                                               data_per_point=dpp,
                                               data_per_streamline=dps)
-        print
-        save_wrapper(new_sft,
-                     out_tractogram)
+        save_wrapper(new_sft, out_tractogram)
+
+
+def generate_trx_from_scratch(reference, out_tractogram, positions_csv=False,
+                              positions=False, offsets=False,
+                              positions_dtype='float32', offsets_dtype='uint64',
+                              space_str='rasmm', origin_str='nifti',
+                              verify_invalid=True, dpv=[], dps=[],
+                              groups=[], dpg=[]):
+    with tempfile.TemporaryDirectory() as tmpdirname:
+        if positions_csv:
+            with open(positions_csv, newline='') as f:
+                reader = csv.reader(f)
+                data = list(reader)
+                data = [np.reshape(i, (len(i) // 3, 3)).astype(float)
+                        for i in data]
+                streamlines = ArraySequence(data)
+        else:
+            positions = load_matrix_in_any_format(positions)
+            offsets = load_matrix_in_any_format(offsets)
+            lengths = _compute_lengths(offsets, len(positions))
+            streamlines = ArraySequence()
+            streamlines._data = positions
+            streamlines._offsets = offsets
+            streamlines._lengths = lengths
+
+        if space_str.lower() != 'rasmm' or origin_str.lower() != 'nifti' or \
+                verify_invalid:
+            if not dipy_available:
+                logging.error('Dipy library is missing, advanced options '
+                              'related to spatial transforms and invalid '
+                              'streamlines are not available.')
+                return
+
+            space, origin = get_reverse_enum(space_str, origin_str)
+            sft = StatefulTractogram(streamlines, reference, space, origin)
+            if verify_invalid:
+                rem, _ = sft.remove_invalid_streamlines()
+                print('{} streamlines were removed becaused they were '
+                      'invalid.'.format(len(rem)))
+            sft.to_rasmm()
+            sft.to_center()
+            streamlines = sft.streamlines
+
+        affine, dimensions, _, _ = get_reference_info_wrapper(reference)
+        header = {
+            "DIMENSIONS": dimensions.tolist(),
+            "VOXEL_TO_RASMM": affine.tolist(),
+            "NB_VERTICES": len(streamlines._data),
+            "NB_STREAMLINES": len(streamlines),
+        }
+        if header['NB_STREAMLINES'] <= 1:
+            raise IOError('To use this script, you need at least 2'
+                          'streamlines.')
+
+        with open(os.path.join(tmpdirname, "header.json"), "w") as out_json:
+            json.dump(header, out_json)
+
+        curr_filename = os.path.join(tmpdirname, 'positions.3.{}'.format(
+            positions_dtype))
+        streamlines._data.astype(positions_dtype).tofile(
+            curr_filename)
+        curr_filename = os.path.join(tmpdirname, 'offsets.{}'.format(
+            offsets_dtype))
+        streamlines._offsets.astype(offsets_dtype).tofile(
+            curr_filename)
+
+        if dpv:
+            os.mkdir(os.path.join(tmpdirname, 'dpv'))
+            for arg in dpv:
+                curr_arr = np.squeeze(load_matrix_in_any_format(arg[0]).astype(
+                    arg[1]))
+                if arg[1] == 'bool':
+                    arg[1] = 'bit'
+                if curr_arr.ndim > 2:
+                    raise IOError('Maximum of 2 dimensions for dpv/dps/dpg.')
+                dim = '' if curr_arr.ndim == 1 else '{}.'.format(
+                    curr_arr.shape[-1])
+                curr_filename = os.path.join(tmpdirname, 'dpv', '{}.{}{}'.format(
+                    os.path.basename(os.path.splitext(arg[0])[0]), dim, arg[1]))
+                curr_arr.tofile(curr_filename)
+
+        if dps:
+            os.mkdir(os.path.join(tmpdirname, 'dps'))
+            for arg in dps:
+                curr_arr = np.squeeze(load_matrix_in_any_format(arg[0]).astype(
+                    arg[1]))
+                if arg[1] == 'bool':
+                    arg[1] = 'bit'
+                if curr_arr.ndim > 2:
+                    raise IOError('Maximum of 2 dimensions for dpv/dps/dpg.')
+                dim = '' if curr_arr.ndim == 1 else '{}.'.format(
+                    curr_arr.shape[-1])
+                curr_filename = os.path.join(tmpdirname, 'dps', '{}.{}{}'.format(
+                    os.path.basename(os.path.splitext(arg[0])[0]), dim, arg[1]))
+                curr_arr.tofile(curr_filename)
+
+        if groups:
+            os.mkdir(os.path.join(tmpdirname, 'groups'))
+            for arg in groups:
+                curr_arr = load_matrix_in_any_format(arg[0]).astype(arg[1])
+                if arg[1] == 'bool':
+                    arg[1] = 'bit'
+                if curr_arr.ndim > 2:
+                    raise IOError('Maximum of 2 dimensions for dpv/dps/dpg.')
+                dim = '' if curr_arr.ndim == 1 else '{}.'.format(
+                    curr_arr.shape[-1])
+                curr_filename = os.path.join(tmpdirname, 'groups', '{}.{}{}'.format(
+                    os.path.basename(os.path.splitext(arg[0])[0]), dim, arg[1]))
+                curr_arr.tofile(curr_filename)
+
+        if dpg:
+            os.mkdir(os.path.join(tmpdirname, 'dpg'))
+            for arg in dpg:
+                if not os.path.isdir(os.path.join(tmpdirname, 'dpg', arg[0])):
+                    os.mkdir(os.path.join(tmpdirname, 'dpg', arg[0]))
+                curr_arr = load_matrix_in_any_format(arg[1]).astype(arg[2])
+                if arg[1] == 'bool':
+                    arg[1] = 'bit'
+                if curr_arr.ndim > 2:
+                    raise IOError('Maximum of 2 dimensions for dpv/dps/dpg.')
+                if curr_arr.shape == (1, 1):
+                    curr_arr = curr_arr.reshape((1,))
+                dim = '' if curr_arr.ndim == 1 else '{}.'.format(
+                    curr_arr.shape[-1])
+                curr_filename = os.path.join(tmpdirname, 'dpg', arg[0], '{}.{}{}'.format(
+                    os.path.basename(os.path.splitext(arg[1])[0]), dim, arg[2]))
+                curr_arr.tofile(curr_filename)
+
+        trx = load(tmpdirname)
+        save(trx, out_tractogram)

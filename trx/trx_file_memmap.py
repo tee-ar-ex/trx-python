@@ -1018,8 +1018,7 @@ class TrxFile:
                 filename = root_zip
             else:
                 filename = elem_filename
-            print(header)
-            print(dict_pointer_size)
+
             folder = os.path.dirname(elem_filename)
             base, dim, ext = _split_ext_with_dimensionality(elem_filename)
             if ext == ".bit":
