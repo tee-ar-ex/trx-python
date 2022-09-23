@@ -18,7 +18,7 @@ def _build_arg_parser():
 
     p.add_argument('in_tractograms', nargs=2, metavar='IN_TRACTOGRAM',
                    help='Tractogram filename. Format must be one of \n'
-                        'trk, tck, vtk, fib, dpy, trx')
+                        'trk, tck, vtk, fib, dpy, trx.')
     p.add_argument('--reference', metavar='REFERENCE',
                    help='Reference anatomy for tck/vtk/fib/dpy file\n'
                    'support (.nii or .nii.gz).')

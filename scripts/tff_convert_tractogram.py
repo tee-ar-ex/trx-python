@@ -20,10 +20,10 @@ def _build_arg_parser():
 
     p.add_argument('in_tractogram', metavar='IN_TRACTOGRAM',
                    help='Tractogram filename. Format must be one of \n'
-                        'trk, tck, vtk, fib, dpy, trx')
+                        'trk, tck, vtk, fib, dpy, trx.')
     p.add_argument('out_tractogram', metavar='OUT_TRACTOGRAM',
                    help='Output filename. Format must be one of \n'
-                        'trk, tck, vtk, fib, dpy, trx')
+                        'trk, tck, vtk, fib, dpy, trx.')
 
     p.add_argument('--reference',
                    help='Reference anatomy for tck/vtk/fib/dpy file\n'
@@ -33,7 +33,7 @@ def _build_arg_parser():
     p2.add_argument('--positions_dtype', default='float32',
                     choices=['float16', 'float32', 'float64'],
                     help='Specify the datatype for positions for trx. [%(default)s]')
-    p2.add_argument('--offsets_dtype', default='uint32',
+    p2.add_argument('--offsets_dtype', default='uint64',
                     choices=['uint32', 'uint64'],
                     help='Specify the datatype for offsets for trx. [%(default)s]')
     p.add_argument('-f', dest='overwrite', action='store_true',
