@@ -21,14 +21,14 @@ def get_testing_files_dict():
     """ Get dictionary linking zip file to their Figshare URL & MD5SUM """
     return {
         'DSI.zip':
-            ('https://figshare.com/ndownloader/files/35617193',
-             '7d7082f7f2e07cb39e2fef13107af169'),
+        ('https://figshare.com/ndownloader/files/37624154',
+         'b847f053fc694d55d935c0be0e5268f7'),
         'memmap_test_data.zip':
-        ('https://figshare.com/ndownloader/files/35709968',
-                '8861975246befac982c1f47e434c60cf'),
+        ('https://figshare.com/ndownloader/files/37624148',
+         '03f7651a0f9e3eeabee9aed0ad5f69e1'),
         'trx_from_scratch.zip':
-        ('https://figshare.com/ndownloader/files/35709764',
-                '511c59a3ee8c16b4be0ef815b889e939')
+        ('https://figshare.com/ndownloader/files/37624151',
+         'd9f220a095ce7f027772fcd9451a2ee5')
     }
 
 

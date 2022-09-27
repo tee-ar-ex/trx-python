@@ -1053,6 +1053,7 @@ class TrxFile:
                 )
             elif base == "offsets" and folder == "":
                 if size != trx.header["NB_STREAMLINES"]+1 or dim != 1:
+                    print('=================', size, trx.header["NB_STREAMLINES"]+1)
                     raise ValueError("Wrong offsets size/dimensionality.")
                 offsets = _create_memmap(
                     filename,
