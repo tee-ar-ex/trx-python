@@ -34,7 +34,7 @@ def _append_last_offsets(nib_offsets: NDArray, nb_vertices: int) -> NDArray:
     Returns:
         Offsets -- NDArray (VTK convention)
     """
-    is_sorted = lambda a: np.all(a[:-1] <= a[1:])
+    def is_sorted(a): return np.all(a[:-1] <= a[1:])
     if not is_sorted(nib_offsets):
         raise ValueError('Offsets must be sorted values.')
     return np.append(nib_offsets, nb_vertices).astype(nib_offsets.dtype)
@@ -1053,7 +1053,6 @@ class TrxFile:
                 )
             elif base == "offsets" and folder == "":
                 if size != trx.header["NB_STREAMLINES"]+1 or dim != 1:
-                    print('=================', size, trx.header["NB_STREAMLINES"]+1)
                     raise ValueError("Wrong offsets size/dimensionality.")
                 offsets = _create_memmap(
                     filename,
