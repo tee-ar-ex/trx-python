@@ -5,10 +5,11 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
+  tags:
+    - '*'
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
