@@ -1,0 +1,853 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>trx.utils &#8212; trx-python  documentation</title>
+  <script>
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=9b1a4fa89bdd0e95b23b" rel="stylesheet">
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=9b1a4fa89bdd0e95b23b" rel="stylesheet">
+
+  
+  <link rel="stylesheet"
+    href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=9b1a4fa89bdd0e95b23b">
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'autoapi/trx/utils/index';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="docsearch:language" content="en">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <label class="overlay overlay-primary" for="__primary"></label>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+      
+<form class="bd-search d-flex align-items-center" action="../../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+  </div>
+
+  
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fas fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../../../index.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../../_static/trx_logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../../_static/trx_logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+    <p class="title logo__title">TRX Python</p>
+  
+</a>
+    
+  </div>
+
+  
+  <div class="col-lg-9 navbar-header-items">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                <li class="nav-item">
+                    <a class="nav-link" href="../../index.html">
+                        API Reference
+                    </a>
+                </li>
+                
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      <div class="navbar-end-item navbar-end__search-button-container">
+        
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search">
+  <i class="fas fa-search"></i>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <span class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle">
+    <a class="theme-switch" data-mode="light"><i class="fas fa-sun"></i></a>
+    <a class="theme-switch" data-mode="dark"><i class="far fa-moon"></i></a>
+    <a class="theme-switch" data-mode="auto"><i class="fas fa-adjust"></i></a>
+</span>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/tee-ar-ex" title="GitHub" class="nav-link" rel="noopener" target="_blank"><span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  <div class="search-button-container--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search">
+  <i class="fas fa-search"></i>
+</button>
+  </div>
+
+  
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fas fa-outdent"></span>
+  </label>
+  
+
+</div>
+  </nav>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                <li class="nav-item">
+                    <a class="nav-link" href="../../index.html">
+                        API Reference
+                    </a>
+                </li>
+                
+    </ul>
+</nav>
+      </div>
+      
+      </div>
+    
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <span class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle">
+    <a class="theme-switch" data-mode="light"><i class="fas fa-sun"></i></a>
+    <a class="theme-switch" data-mode="dark"><i class="far fa-moon"></i></a>
+    <a class="theme-switch" data-mode="auto"><i class="fas fa-adjust"></i></a>
+</span>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/tee-ar-ex" title="GitHub" class="nav-link" rel="noopener" target="_blank"><span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  
+  <div class="sidebar-start-items sidebar-primary__section">
+    <div class="sidebar-start-items__item"><nav class="bd-links" id="bd-docs-nav" aria-label="Section navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">
+    Section Navigation
+  </p>
+  <div class="bd-toc-item navbar-nav">
+    <ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../fetcher/index.html">
+   <code class="xref py py-mod docutils literal notranslate">
+    <span class="pre">
+     trx.fetcher
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../trx_file_memmap/index.html">
+   <code class="xref py py-mod docutils literal notranslate">
+    <span class="pre">
+     trx.trx_file_memmap
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   <code class="xref py py-mod docutils literal notranslate">
+    <span class="pre">
+     trx.utils
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../viz/index.html">
+   <code class="xref py py-mod docutils literal notranslate">
+    <span class="pre">
+     trx.viz
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../workflows/index.html">
+   <code class="xref py py-mod docutils literal notranslate">
+    <span class="pre">
+     trx.workflows
+    </span>
+   </code>
+  </a>
+ </li>
+</ul>
+
+  </div>
+</nav>
+    </div>
+  </div>
+  
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
+      </div>
+      <main class="bd-main">
+        
+        
+        <div class="bd-content">
+          <div class="bd-article-container">
+            
+            <div class="bd-header-article">
+                
+            </div>
+            
+            
+            <article class="bd-article" role="main">
+              
+  <section id="module-trx.utils">
+<span id="trx-utils"></span><h1><a class="reference internal" href="#module-trx.utils" title="trx.utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trx.utils</span></code></a><a class="headerlink" href="#module-trx.utils" title="Permalink to this heading">#</a></h1>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this heading">#</a></h2>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this heading">#</a></h3>
+<table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.utils.split_name_with_gz" title="trx.utils.split_name_with_gz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">split_name_with_gz</span></code></a>(filename)</p></td>
+<td><p>Returns the clean basename and extension of a file.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#trx.utils.get_reference_info_wrapper" title="trx.utils.get_reference_info_wrapper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_reference_info_wrapper</span></code></a>(reference)</p></td>
+<td><p>Will compare the spatial attribute of 2 references.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.utils.is_header_compatible" title="trx.utils.is_header_compatible"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_header_compatible</span></code></a>(reference_1, reference_2)</p></td>
+<td><p>Will compare the spatial attribute of 2 references.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#trx.utils.load_tractogram_with_reference" title="trx.utils.load_tractogram_with_reference"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_tractogram_with_reference</span></code></a>(filepath[, reference, ...])</p></td>
+<td><p>Load a tractogram with a reference (if required).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.utils.get_axis_shift_vector" title="trx.utils.get_axis_shift_vector"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_axis_shift_vector</span></code></a>(flip_axes)</p></td>
+<td><p><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#trx.utils.get_axis_flip_vector" title="trx.utils.get_axis_flip_vector"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_axis_flip_vector</span></code></a>(flip_axes)</p></td>
+<td><p><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.utils.get_shift_vector" title="trx.utils.get_shift_vector"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_shift_vector</span></code></a>(sft)</p></td>
+<td><p>When flipping a tractogram the shift vector is used to change the origin</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#trx.utils.flip_sft" title="trx.utils.flip_sft"><code class="xref py py-obj docutils literal notranslate"><span class="pre">flip_sft</span></code></a>(sft, flip_axes)</p></td>
+<td><p>Flip the streamlines in the StatefulTractogram according to the</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.utils.load_matrix_in_any_format" title="trx.utils.load_matrix_in_any_format"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_matrix_in_any_format</span></code></a>(filepath)</p></td>
+<td><p>Load a matrix from a txt file OR a npy file.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#trx.utils.get_reverse_enum" title="trx.utils.get_reverse_enum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_reverse_enum</span></code></a>(space_str, origin_str)</p></td>
+<td><p>Convert string representation to enums for the StatefulTractogram.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="attributes">
+<h3>Attributes<a class="headerlink" href="#attributes" title="Permalink to this heading">#</a></h3>
+<table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.utils.dipy_available" title="trx.utils.dipy_available"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dipy_available</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py data">
+<dt class="sig sig-object py" id="trx.utils.dipy_available">
+<span class="sig-prename descclassname"><span class="pre">trx.utils.</span></span><span class="sig-name descname"><span class="pre">dipy_available</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">True</span></em><a class="reference internal" href="../../../_modules/trx/utils.html#dipy_available"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.utils.dipy_available" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trx.utils.split_name_with_gz">
+<span class="sig-prename descclassname"><span class="pre">trx.utils.</span></span><span class="sig-name descname"><span class="pre">split_name_with_gz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/utils.html#split_name_with_gz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.utils.split_name_with_gz" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns the clean basename and extension of a file.
+Means that this correctly manages the “.nii.gz” extensions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>filename: str</strong></dt><dd><p>The filename to clean</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>base, ext</strong><span class="classifier">tuple(str, str)</span></dt><dd></dd>
+<dt>Clean basename and the full extension</dt><dd></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trx.utils.get_reference_info_wrapper">
+<span class="sig-prename descclassname"><span class="pre">trx.utils.</span></span><span class="sig-name descname"><span class="pre">get_reference_info_wrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reference</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/utils.html#get_reference_info_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.utils.get_reference_info_wrapper" title="Permalink to this definition">#</a></dt>
+<dd><p>Will compare the spatial attribute of 2 references.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>reference</strong><span class="classifier">Nifti or Trk filename, Nifti1Image or TrkFile, Nifti1Header or</span></dt><dd><p>trk.header (dict), TrxFile or trx.header (dict)
+Reference that provides the spatial attribute.</p>
+</dd>
+<dt><strong>Returns</strong></dt><dd></dd>
+<dt><strong>——-</strong></dt><dd></dd>
+<dt><strong>output</strong><span class="classifier">tuple</span></dt><dd><ul class="simple">
+<li><p>affine ndarray (4,4), np.float32, tranformation of VOX to RASMM</p></li>
+<li><p>dimensions ndarray (3,), int16, volume shape for each axis</p></li>
+<li><p>voxel_sizes  ndarray (3,), float32, size of voxel for each axis</p></li>
+<li><p>voxel_order, string, Typically ‘RAS’ or ‘LPS’</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trx.utils.is_header_compatible">
+<span class="sig-prename descclassname"><span class="pre">trx.utils.</span></span><span class="sig-name descname"><span class="pre">is_header_compatible</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reference_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference_2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/utils.html#is_header_compatible"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.utils.is_header_compatible" title="Permalink to this definition">#</a></dt>
+<dd><p>Will compare the spatial attribute of 2 references.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>reference_1</strong><span class="classifier">Nifti or Trk filename, Nifti1Image or TrkFile,</span></dt><dd><p>Nifti1Header or trk.header (dict)
+Reference that provides the spatial attribute.</p>
+</dd>
+<dt><strong>reference_2</strong><span class="classifier">Nifti or Trk filename, Nifti1Image or TrkFile,</span></dt><dd><p>Nifti1Header or trk.header (dict)
+Reference that provides the spatial attribute.</p>
+</dd>
+<dt><strong>Returns</strong></dt><dd></dd>
+<dt><strong>——-</strong></dt><dd></dd>
+<dt><strong>output</strong><span class="classifier">bool</span></dt><dd><p>Does all the spatial attribute match</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trx.utils.load_tractogram_with_reference">
+<span class="sig-prename descclassname"><span class="pre">trx.utils.</span></span><span class="sig-name descname"><span class="pre">load_tractogram_with_reference</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bbox_check</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/utils.html#load_tractogram_with_reference"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.utils.load_tractogram_with_reference" title="Permalink to this definition">#</a></dt>
+<dd><p>Load a tractogram with a reference (if required).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>filepath</strong><span class="classifier">str</span></dt><dd><p>Path to the tractogram file.</p>
+</dd>
+<dt><strong>reference</strong><span class="classifier">Nifti or Trk filename, Nifti1Image or TrkFile,</span></dt><dd><p>Nifti1Header or trk.header (dict)
+Reference that provides the spatial attribute.</p>
+</dd>
+<dt><strong>bbox_check</strong><span class="classifier">bool</span></dt><dd><p>Check if the tractogram is inside the bounding box of the reference.</p>
+</dd>
+<dt><strong>Returns</strong></dt><dd></dd>
+<dt><strong>——-</strong></dt><dd></dd>
+<dt><strong>output</strong><span class="classifier">dipy.io.stateful_tractogram.StatefulTractogram</span></dt><dd><p>Tractogram object.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trx.utils.get_axis_shift_vector">
+<span class="sig-prename descclassname"><span class="pre">trx.utils.</span></span><span class="sig-name descname"><span class="pre">get_axis_shift_vector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flip_axes</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/utils.html#get_axis_shift_vector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.utils.get_axis_shift_vector" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>flip_axes</strong><span class="classifier">list of str</span></dt><dd><p>String containing the axis to flip.
+Possible values are ‘x’, ‘y’, ‘z’</p>
+</dd>
+<dt><strong>Returns</strong></dt><dd></dd>
+<dt><strong>——-</strong></dt><dd></dd>
+<dt><strong>flip_vector</strong><span class="classifier">np.ndarray (3,)</span></dt><dd><p>Vector containing the axis to flip.
+Possible values are -1, 1</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trx.utils.get_axis_flip_vector">
+<span class="sig-prename descclassname"><span class="pre">trx.utils.</span></span><span class="sig-name descname"><span class="pre">get_axis_flip_vector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flip_axes</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/utils.html#get_axis_flip_vector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.utils.get_axis_flip_vector" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>flip_axes</strong><span class="classifier">list of str</span></dt><dd><p>String containing the axis to flip.
+Possible values are ‘x’, ‘y’, ‘z’</p>
+</dd>
+<dt><strong>Returns</strong></dt><dd></dd>
+<dt><strong>——-</strong></dt><dd></dd>
+<dt><strong>flip_vector</strong><span class="classifier">np.ndarray (3,)</span></dt><dd><p>Vector containing the axis to flip.
+Possible values are -1, 1</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trx.utils.get_shift_vector">
+<span class="sig-prename descclassname"><span class="pre">trx.utils.</span></span><span class="sig-name descname"><span class="pre">get_shift_vector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sft</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/utils.html#get_shift_vector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.utils.get_shift_vector" title="Permalink to this definition">#</a></dt>
+<dd><p>When flipping a tractogram the shift vector is used to change the origin
+of the grid from the corner to the center of the grid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>sft</strong><span class="classifier">StatefulTractogram</span></dt><dd><p>StatefulTractogram object</p>
+</dd>
+<dt><strong>Returns</strong></dt><dd></dd>
+<dt><strong>——-</strong></dt><dd></dd>
+<dt><strong>shift_vector</strong><span class="classifier">ndarray</span></dt><dd><p>Shift vector to apply to the streamlines</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trx.utils.flip_sft">
+<span class="sig-prename descclassname"><span class="pre">trx.utils.</span></span><span class="sig-name descname"><span class="pre">flip_sft</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sft</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flip_axes</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/utils.html#flip_sft"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.utils.flip_sft" title="Permalink to this definition">#</a></dt>
+<dd><p>Flip the streamlines in the StatefulTractogram according to the
+flip_axes. Uses the spatial information to flip according to the center
+of the grid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>sft</strong><span class="classifier">StatefulTractogram</span></dt><dd><p>StatefulTractogram to flip</p>
+</dd>
+<dt><strong>flip_axes</strong><span class="classifier">list of str</span></dt><dd><p>Axes to flip.
+Possible values are ‘x’, ‘y’, ‘z’</p>
+</dd>
+<dt><strong>Returns</strong></dt><dd></dd>
+<dt><strong>——-</strong></dt><dd></dd>
+<dt><strong>sft</strong><span class="classifier">StatefulTractogram</span></dt><dd><p>StatefulTractogram with flipped axes</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trx.utils.load_matrix_in_any_format">
+<span class="sig-prename descclassname"><span class="pre">trx.utils.</span></span><span class="sig-name descname"><span class="pre">load_matrix_in_any_format</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/utils.html#load_matrix_in_any_format"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.utils.load_matrix_in_any_format" title="Permalink to this definition">#</a></dt>
+<dd><p>Load a matrix from a txt file OR a npy file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>filepath</strong><span class="classifier">str</span></dt><dd><p>Path to the matrix file.</p>
+</dd>
+<dt><strong>Returns</strong></dt><dd></dd>
+<dt><strong>——-</strong></dt><dd></dd>
+<dt><strong>matrix</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>The matrix.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trx.utils.get_reverse_enum">
+<span class="sig-prename descclassname"><span class="pre">trx.utils.</span></span><span class="sig-name descname"><span class="pre">get_reverse_enum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">space_str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">origin_str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/utils.html#get_reverse_enum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.utils.get_reverse_enum" title="Permalink to this definition">#</a></dt>
+<dd><p>Convert string representation to enums for the StatefulTractogram.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>space_str</strong><span class="classifier">str</span></dt><dd><p>String representing the space.</p>
+</dd>
+<dt><strong>origin_str</strong><span class="classifier">str</span></dt><dd><p>String representing the origin.</p>
+</dd>
+<dt><strong>Returns</strong></dt><dd></dd>
+<dt><strong>——-</strong></dt><dd></dd>
+<dt><strong>output</strong><span class="classifier">str</span></dt><dd><p>Space and Origin as Enums.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+            </article>
+            
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+            
+          </div>
+          
+          
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+<div class="tocsection onthispage">
+    <i class="fas fa-list"></i> On this page
+</div>
+<nav id="bd-toc-nav" class="page-toc">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-contents">
+   Module Contents
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#functions">
+     Functions
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#attributes">
+     Attributes
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#trx.utils.dipy_available">
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         dipy_available
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#trx.utils.split_name_with_gz">
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         split_name_with_gz()
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#trx.utils.get_reference_info_wrapper">
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         get_reference_info_wrapper()
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#trx.utils.is_header_compatible">
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         is_header_compatible()
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#trx.utils.load_tractogram_with_reference">
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         load_tractogram_with_reference()
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#trx.utils.get_axis_shift_vector">
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         get_axis_shift_vector()
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#trx.utils.get_axis_flip_vector">
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         get_axis_flip_vector()
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#trx.utils.get_shift_vector">
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         get_shift_vector()
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#trx.utils.flip_sft">
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         flip_sft()
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#trx.utils.load_matrix_in_any_format">
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         load_matrix_in_any_format()
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#trx.utils.get_reverse_enum">
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         get_reverse_enum()
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#trx.utils.dipy_available">
+       dipy_available
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#trx.utils.split_name_with_gz">
+       split_name_with_gz
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#trx.utils.get_reference_info_wrapper">
+       get_reference_info_wrapper
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#trx.utils.is_header_compatible">
+       is_header_compatible
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#trx.utils.load_tractogram_with_reference">
+       load_tractogram_with_reference
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#trx.utils.get_axis_shift_vector">
+       get_axis_shift_vector
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#trx.utils.get_axis_flip_vector">
+       get_axis_flip_vector
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#trx.utils.get_shift_vector">
+       get_shift_vector
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#trx.utils.flip_sft">
+       flip_sft
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#trx.utils.load_matrix_in_any_format">
+       load_matrix_in_any_format
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#trx.utils.get_reverse_enum">
+       get_reverse_enum
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+</nav>
+</div>
+
+<div class="toc-item">
+  
+</div>
+
+<div class="toc-item">
+  
+<div class="tocsection sourcelink">
+    <a href="../../../_sources/autoapi/trx/utils/index.rst.txt">
+        <i class="fas fa-file-alt"></i> Show Source
+    </a>
+</div>
+
+</div>
+
+            </div>
+          
+          
+        </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
+            
+          </div>
+        </footer>
+        
+      </main>
+    </div>
+  </div>
+
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=9b1a4fa89bdd0e95b23b"></script>
+
+  <footer class="bd-footer"><div class="bd-footer__inner container">
+  
+  <div class="footer-item">
+    
+<p class="copyright">
+
+    &copy; Copyright 2021-2022, The TRX developers.<br>
+
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+<p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.2.2.<br>
+</p>
+
+  </div>
+  
+</div>
+  </footer>
+  </body>
+</html>

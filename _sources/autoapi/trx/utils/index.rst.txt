@@ -1,0 +1,430 @@
+:py:mod:`trx.utils`
+===================
+
+.. py:module:: trx.utils
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   trx.utils.split_name_with_gz
+   trx.utils.get_reference_info_wrapper
+   trx.utils.is_header_compatible
+   trx.utils.load_tractogram_with_reference
+   trx.utils.get_axis_shift_vector
+   trx.utils.get_axis_flip_vector
+   trx.utils.get_shift_vector
+   trx.utils.flip_sft
+   trx.utils.load_matrix_in_any_format
+   trx.utils.get_reverse_enum
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   trx.utils.dipy_available
+
+
+.. py:data:: dipy_available
+   :annotation: = True
+
+   
+
+.. py:function:: split_name_with_gz(filename)
+
+   
+   Returns the clean basename and extension of a file.
+   Means that this correctly manages the ".nii.gz" extensions.
+
+
+   :Parameters:
+
+       **filename: str**
+           The filename to clean
+
+   :Returns:
+
+       **base, ext** : tuple(str, str)
+           ..
+
+       Clean basename and the full extension
+           ..
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: get_reference_info_wrapper(reference)
+
+   
+   Will compare the spatial attribute of 2 references.
+
+
+   :Parameters:
+
+       **reference** : Nifti or Trk filename, Nifti1Image or TrkFile, Nifti1Header or
+           trk.header (dict), TrxFile or trx.header (dict)
+           Reference that provides the spatial attribute.
+
+       **Returns**
+           ..
+
+       **-------**
+           ..
+
+       **output** : tuple
+           - affine ndarray (4,4), np.float32, tranformation of VOX to RASMM
+           - dimensions ndarray (3,), int16, volume shape for each axis
+           - voxel_sizes  ndarray (3,), float32, size of voxel for each axis
+           - voxel_order, string, Typically 'RAS' or 'LPS'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: is_header_compatible(reference_1, reference_2)
+
+   
+   Will compare the spatial attribute of 2 references.
+
+
+   :Parameters:
+
+       **reference_1** : Nifti or Trk filename, Nifti1Image or TrkFile,
+           Nifti1Header or trk.header (dict)
+           Reference that provides the spatial attribute.
+
+       **reference_2** : Nifti or Trk filename, Nifti1Image or TrkFile,
+           Nifti1Header or trk.header (dict)
+           Reference that provides the spatial attribute.
+
+       **Returns**
+           ..
+
+       **-------**
+           ..
+
+       **output** : bool
+           Does all the spatial attribute match
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: load_tractogram_with_reference(filepath, reference=None, bbox_check=True)
+
+   
+   Load a tractogram with a reference (if required).
+
+
+   :Parameters:
+
+       **filepath** : str
+           Path to the tractogram file.
+
+       **reference** : Nifti or Trk filename, Nifti1Image or TrkFile,
+           Nifti1Header or trk.header (dict)
+           Reference that provides the spatial attribute.
+
+       **bbox_check** : bool
+           Check if the tractogram is inside the bounding box of the reference.
+
+       **Returns**
+           ..
+
+       **-------**
+           ..
+
+       **output** : dipy.io.stateful_tractogram.StatefulTractogram
+           Tractogram object.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: get_axis_shift_vector(flip_axes)
+
+   
+
+
+
+   :Parameters:
+
+       **flip_axes** : list of str
+           String containing the axis to flip.
+           Possible values are 'x', 'y', 'z'
+
+       **Returns**
+           ..
+
+       **-------**
+           ..
+
+       **flip_vector** : np.ndarray (3,)
+           Vector containing the axis to flip.
+           Possible values are -1, 1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: get_axis_flip_vector(flip_axes)
+
+   
+
+
+
+   :Parameters:
+
+       **flip_axes** : list of str
+           String containing the axis to flip.
+           Possible values are 'x', 'y', 'z'
+
+       **Returns**
+           ..
+
+       **-------**
+           ..
+
+       **flip_vector** : np.ndarray (3,)
+           Vector containing the axis to flip.
+           Possible values are -1, 1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: get_shift_vector(sft)
+
+   
+   When flipping a tractogram the shift vector is used to change the origin
+   of the grid from the corner to the center of the grid.
+
+
+   :Parameters:
+
+       **sft** : StatefulTractogram
+           StatefulTractogram object
+
+       **Returns**
+           ..
+
+       **-------**
+           ..
+
+       **shift_vector** : ndarray
+           Shift vector to apply to the streamlines
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: flip_sft(sft, flip_axes)
+
+   
+   Flip the streamlines in the StatefulTractogram according to the
+   flip_axes. Uses the spatial information to flip according to the center
+   of the grid.
+
+
+   :Parameters:
+
+       **sft** : StatefulTractogram
+           StatefulTractogram to flip
+
+       **flip_axes** : list of str
+           Axes to flip.
+           Possible values are 'x', 'y', 'z'
+
+       **Returns**
+           ..
+
+       **-------**
+           ..
+
+       **sft** : StatefulTractogram
+           StatefulTractogram with flipped axes
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: load_matrix_in_any_format(filepath)
+
+   
+   Load a matrix from a txt file OR a npy file.
+
+
+   :Parameters:
+
+       **filepath** : str
+           Path to the matrix file.
+
+       **Returns**
+           ..
+
+       **-------**
+           ..
+
+       **matrix** : numpy.ndarray
+           The matrix.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: get_reverse_enum(space_str, origin_str)
+
+   
+   Convert string representation to enums for the StatefulTractogram.
+
+
+   :Parameters:
+
+       **space_str** : str
+           String representing the space.
+
+       **origin_str** : str
+           String representing the origin.
+
+       **Returns**
+           ..
+
+       **-------**
+           ..
+
+       **output** : str
+           Space and Origin as Enums.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+

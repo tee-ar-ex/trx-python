@@ -1,0 +1,19 @@
+:py:mod:`trx`
+=============
+
+.. py:module:: trx
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   fetcher/index.rst
+   trx_file_memmap/index.rst
+   utils/index.rst
+   viz/index.rst
+   workflows/index.rst
+
+

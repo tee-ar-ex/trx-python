@@ -1,0 +1,126 @@
+:py:mod:`trx.fetcher`
+=====================
+
+.. py:module:: trx.fetcher
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   trx.fetcher.get_home
+   trx.fetcher.get_testing_files_dict
+   trx.fetcher.md5sum
+   trx.fetcher.fetch_data
+
+
+
+.. py:function:: get_home()
+
+   
+   Set a user-writeable file-system location to put files 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: get_testing_files_dict()
+
+   
+   Get dictionary linking zip file to their Figshare URL & MD5SUM 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: md5sum(filename)
+
+   
+   Compute one md5 checksum for a file 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: fetch_data(files_dict, keys=None)
+
+   
+   Downloads files to folder and checks their md5 checksums
+
+
+   :Parameters:
+
+       **files_dict** : dictionary
+           For each file in `files_dict` the value should be (url, md5).
+           The file will be downloaded from url, if the file does not already
+           exist or if the file exists but the md5 checksum does not match.
+           Zip files are automatically unzipped and its content* are md5 checked.
+
+
+
+
+
+   :Raises:
+
+       ValueError
+           Raises if the md5 checksum of the file does not match the expected
+           value. The downloaded file is not deleted when this error is raised.
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+

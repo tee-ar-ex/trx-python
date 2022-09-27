@@ -1,0 +1,707 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>trx.utils &#8212; trx-python  documentation</title>
+  <script>
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=9b1a4fa89bdd0e95b23b" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=9b1a4fa89bdd0e95b23b" rel="stylesheet">
+
+  
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=9b1a4fa89bdd0e95b23b">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/trx/utils';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="docsearch:language" content="en">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <label class="overlay overlay-primary" for="__primary"></label>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+      
+<form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+  </div>
+
+  
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fas fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../../index.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../_static/trx_logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../_static/trx_logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+    <p class="title logo__title">TRX Python</p>
+  
+</a>
+    
+  </div>
+
+  
+  <div class="col-lg-9 navbar-header-items">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                <li class="nav-item">
+                    <a class="nav-link" href="../../autoapi/index.html">
+                        API Reference
+                    </a>
+                </li>
+                
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      <div class="navbar-end-item navbar-end__search-button-container">
+        
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search">
+  <i class="fas fa-search"></i>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <span class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle">
+    <a class="theme-switch" data-mode="light"><i class="fas fa-sun"></i></a>
+    <a class="theme-switch" data-mode="dark"><i class="far fa-moon"></i></a>
+    <a class="theme-switch" data-mode="auto"><i class="fas fa-adjust"></i></a>
+</span>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/tee-ar-ex" title="GitHub" class="nav-link" rel="noopener" target="_blank"><span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  <div class="search-button-container--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search">
+  <i class="fas fa-search"></i>
+</button>
+  </div>
+
+  
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fas fa-outdent"></span>
+  </label>
+  
+
+</div>
+  </nav>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                <li class="nav-item">
+                    <a class="nav-link" href="../../autoapi/index.html">
+                        API Reference
+                    </a>
+                </li>
+                
+    </ul>
+</nav>
+      </div>
+      
+      </div>
+    
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <span class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle">
+    <a class="theme-switch" data-mode="light"><i class="fas fa-sun"></i></a>
+    <a class="theme-switch" data-mode="dark"><i class="far fa-moon"></i></a>
+    <a class="theme-switch" data-mode="auto"><i class="fas fa-adjust"></i></a>
+</span>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/tee-ar-ex" title="GitHub" class="nav-link" rel="noopener" target="_blank"><span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
+      </div>
+      <main class="bd-main">
+        
+        
+        <div class="bd-content">
+          <div class="bd-article-container">
+            
+            <div class="bd-header-article">
+                
+            </div>
+            
+            
+            <article class="bd-article" role="main">
+              
+  <h1>Source code for trx.utils</h1><div class="highlight"><pre>
+<span></span><span class="ch">#! /usr/bin/env python3</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">import</span> <span class="nn">nibabel</span> <span class="k">as</span> <span class="nn">nib</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">dipy</span>
+    <span class="kn">from</span> <span class="nn">dipy.io.stateful_tractogram</span> <span class="kn">import</span> <span class="n">StatefulTractogram</span><span class="p">,</span> <span class="n">Space</span><span class="p">,</span> <span class="n">Origin</span>
+    <span class="kn">from</span> <span class="nn">dipy.io.streamline</span> <span class="kn">import</span> <span class="n">load_tractogram</span>
+    <span class="kn">from</span> <span class="nn">dipy.io.utils</span> <span class="kn">import</span> <span class="n">is_reference_info_valid</span>
+<div class="viewcode-block" id="dipy_available"><a class="viewcode-back" href="../../autoapi/trx/utils/index.html#trx.utils.dipy_available">[docs]</a>    <span class="n">dipy_available</span> <span class="o">=</span> <span class="kc">True</span></div>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">dipy_available</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="kn">from</span> <span class="nn">trx</span> <span class="kn">import</span> <span class="n">trx_file_memmap</span>
+
+
+<div class="viewcode-block" id="split_name_with_gz"><a class="viewcode-back" href="../../autoapi/trx/utils/index.html#trx.utils.split_name_with_gz">[docs]</a><span class="k">def</span> <span class="nf">split_name_with_gz</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the clean basename and extension of a file.</span>
+<span class="sd">    Means that this correctly manages the &quot;.nii.gz&quot; extensions.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filename: str</span>
+<span class="sd">        The filename to clean</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">        base, ext : tuple(str, str)</span>
+<span class="sd">        Clean basename and the full extension</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">base</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">ext</span> <span class="o">==</span> <span class="s2">&quot;.gz&quot;</span><span class="p">:</span>
+        <span class="c1"># Test if we have a .nii additional extension</span>
+        <span class="n">temp_base</span><span class="p">,</span> <span class="n">add_ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">base</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">add_ext</span> <span class="o">==</span> <span class="s2">&quot;.nii&quot;</span> <span class="ow">or</span> <span class="n">add_ext</span> <span class="o">==</span> <span class="s2">&quot;.trk&quot;</span><span class="p">:</span>
+            <span class="n">ext</span> <span class="o">=</span> <span class="n">add_ext</span> <span class="o">+</span> <span class="n">ext</span>
+            <span class="n">base</span> <span class="o">=</span> <span class="n">temp_base</span>
+
+    <span class="k">return</span> <span class="n">base</span><span class="p">,</span> <span class="n">ext</span></div>
+
+
+<div class="viewcode-block" id="get_reference_info_wrapper"><a class="viewcode-back" href="../../autoapi/trx/utils/index.html#trx.utils.get_reference_info_wrapper">[docs]</a><span class="k">def</span> <span class="nf">get_reference_info_wrapper</span><span class="p">(</span><span class="n">reference</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Will compare the spatial attribute of 2 references.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    reference : Nifti or Trk filename, Nifti1Image or TrkFile, Nifti1Header or</span>
+<span class="sd">        trk.header (dict), TrxFile or trx.header (dict)</span>
+<span class="sd">        Reference that provides the spatial attribute.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    output : tuple</span>
+<span class="sd">        - affine ndarray (4,4), np.float32, tranformation of VOX to RASMM</span>
+<span class="sd">        - dimensions ndarray (3,), int16, volume shape for each axis</span>
+<span class="sd">        - voxel_sizes  ndarray (3,), float32, size of voxel for each axis</span>
+<span class="sd">        - voxel_order, string, Typically &#39;RAS&#39; or &#39;LPS&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">is_nifti</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">is_trk</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">is_sft</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">is_trx</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">reference</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">split_name_with_gz</span><span class="p">(</span><span class="n">reference</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ext</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;.nii&#39;</span><span class="p">,</span> <span class="s1">&#39;.nii.gz&#39;</span><span class="p">]:</span>
+            <span class="n">header</span> <span class="o">=</span> <span class="n">nib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">reference</span><span class="p">)</span><span class="o">.</span><span class="n">header</span>
+            <span class="n">is_nifti</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="n">ext</span> <span class="o">==</span> <span class="s1">&#39;.trk&#39;</span><span class="p">:</span>
+            <span class="n">header</span> <span class="o">=</span> <span class="n">nib</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">reference</span><span class="p">,</span> <span class="n">lazy_load</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">header</span>
+            <span class="n">is_trk</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="n">ext</span> <span class="o">==</span> <span class="s1">&#39;.trx&#39;</span><span class="p">:</span>
+            <span class="n">header</span> <span class="o">=</span> <span class="n">trx_file_memmap</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">reference</span><span class="p">)</span><span class="o">.</span><span class="n">header</span>
+            <span class="n">is_trx</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">reference</span><span class="p">,</span> <span class="n">trx_file_memmap</span><span class="o">.</span><span class="n">trx_file_memmap</span><span class="o">.</span><span class="n">TrxFile</span><span class="p">):</span>
+        <span class="n">header</span> <span class="o">=</span> <span class="n">reference</span><span class="o">.</span><span class="n">header</span>
+        <span class="n">is_trx</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">reference</span><span class="p">,</span> <span class="n">nib</span><span class="o">.</span><span class="n">nifti1</span><span class="o">.</span><span class="n">Nifti1Image</span><span class="p">):</span>
+        <span class="n">header</span> <span class="o">=</span> <span class="n">reference</span><span class="o">.</span><span class="n">header</span>
+        <span class="n">is_nifti</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">reference</span><span class="p">,</span> <span class="n">nib</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">trk</span><span class="o">.</span><span class="n">TrkFile</span><span class="p">):</span>
+        <span class="n">header</span> <span class="o">=</span> <span class="n">reference</span><span class="o">.</span><span class="n">header</span>
+        <span class="n">is_trk</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">reference</span><span class="p">,</span> <span class="n">nib</span><span class="o">.</span><span class="n">nifti1</span><span class="o">.</span><span class="n">Nifti1Header</span><span class="p">):</span>
+        <span class="n">header</span> <span class="o">=</span> <span class="n">reference</span>
+        <span class="n">is_nifti</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">reference</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s1">&#39;magic_number&#39;</span> <span class="ow">in</span> <span class="n">reference</span><span class="p">:</span>
+        <span class="n">header</span> <span class="o">=</span> <span class="n">reference</span>
+        <span class="n">is_trk</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">reference</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s1">&#39;NB_VERTICES&#39;</span> <span class="ow">in</span> <span class="n">reference</span><span class="p">:</span>
+        <span class="n">header</span> <span class="o">=</span> <span class="n">reference</span>
+        <span class="n">is_trx</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">elif</span> <span class="n">dipy_available</span> <span class="ow">and</span> \
+            <span class="nb">isinstance</span><span class="p">(</span><span class="n">reference</span><span class="p">,</span> <span class="n">dipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">stateful_tractogram</span><span class="o">.</span><span class="n">StatefulTractogram</span><span class="p">):</span>
+        <span class="n">is_sft</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">if</span> <span class="n">is_nifti</span><span class="p">:</span>
+        <span class="n">affine</span> <span class="o">=</span> <span class="n">header</span><span class="o">.</span><span class="n">get_best_affine</span><span class="p">()</span>
+        <span class="n">dimensions</span> <span class="o">=</span> <span class="n">header</span><span class="p">[</span><span class="s1">&#39;dim&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span>
+        <span class="n">voxel_sizes</span> <span class="o">=</span> <span class="n">header</span><span class="p">[</span><span class="s1">&#39;pixdim&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">affine</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s1">&#39;Invalid affine, contains only zeros.&#39;</span>
+                <span class="s1">&#39;Cannot determine voxel order from transformation&#39;</span><span class="p">)</span>
+        <span class="n">voxel_order</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">nib</span><span class="o">.</span><span class="n">aff2axcodes</span><span class="p">(</span><span class="n">affine</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">is_trk</span><span class="p">:</span>
+        <span class="n">affine</span> <span class="o">=</span> <span class="n">header</span><span class="p">[</span><span class="s1">&#39;voxel_to_rasmm&#39;</span><span class="p">]</span>
+        <span class="n">dimensions</span> <span class="o">=</span> <span class="n">header</span><span class="p">[</span><span class="s1">&#39;dimensions&#39;</span><span class="p">]</span>
+        <span class="n">voxel_sizes</span> <span class="o">=</span> <span class="n">header</span><span class="p">[</span><span class="s1">&#39;voxel_sizes&#39;</span><span class="p">]</span>
+        <span class="n">voxel_order</span> <span class="o">=</span> <span class="n">header</span><span class="p">[</span><span class="s1">&#39;voxel_order&#39;</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="n">is_sft</span><span class="p">:</span>
+        <span class="n">affine</span><span class="p">,</span> <span class="n">dimensions</span><span class="p">,</span> <span class="n">voxel_sizes</span><span class="p">,</span> <span class="n">voxel_order</span> <span class="o">=</span>\
+            <span class="n">reference</span><span class="o">.</span><span class="n">space_attributes</span>
+    <span class="k">elif</span> <span class="n">is_trx</span><span class="p">:</span>
+        <span class="n">affine</span> <span class="o">=</span> <span class="n">header</span><span class="p">[</span><span class="s1">&#39;VOXEL_TO_RASMM&#39;</span><span class="p">]</span>
+        <span class="n">dimensions</span> <span class="o">=</span> <span class="n">header</span><span class="p">[</span><span class="s1">&#39;DIMENSIONS&#39;</span><span class="p">]</span>
+        <span class="n">voxel_sizes</span> <span class="o">=</span> <span class="n">nib</span><span class="o">.</span><span class="n">affines</span><span class="o">.</span><span class="n">voxel_sizes</span><span class="p">(</span><span class="n">affine</span><span class="p">)</span>
+        <span class="n">voxel_order</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">nib</span><span class="o">.</span><span class="n">aff2axcodes</span><span class="p">(</span><span class="n">affine</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Input reference is not one of the supported format&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">voxel_order</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">bytes_</span><span class="p">):</span>
+        <span class="n">voxel_order</span> <span class="o">=</span> <span class="n">voxel_order</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">dipy_available</span><span class="p">:</span>
+        <span class="n">is_reference_info_valid</span><span class="p">(</span><span class="n">affine</span><span class="p">,</span> <span class="n">dimensions</span><span class="p">,</span> <span class="n">voxel_sizes</span><span class="p">,</span> <span class="n">voxel_order</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">affine</span><span class="p">,</span> <span class="n">dimensions</span><span class="p">,</span> <span class="n">voxel_sizes</span><span class="p">,</span> <span class="n">voxel_order</span></div>
+
+
+<div class="viewcode-block" id="is_header_compatible"><a class="viewcode-back" href="../../autoapi/trx/utils/index.html#trx.utils.is_header_compatible">[docs]</a><span class="k">def</span> <span class="nf">is_header_compatible</span><span class="p">(</span><span class="n">reference_1</span><span class="p">,</span> <span class="n">reference_2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Will compare the spatial attribute of 2 references.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    reference_1 : Nifti or Trk filename, Nifti1Image or TrkFile,</span>
+<span class="sd">        Nifti1Header or trk.header (dict)</span>
+<span class="sd">        Reference that provides the spatial attribute.</span>
+<span class="sd">    reference_2 : Nifti or Trk filename, Nifti1Image or TrkFile,</span>
+<span class="sd">        Nifti1Header or trk.header (dict)</span>
+<span class="sd">        Reference that provides the spatial attribute.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    output : bool</span>
+<span class="sd">        Does all the spatial attribute match</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">affine_1</span><span class="p">,</span> <span class="n">dimensions_1</span><span class="p">,</span> <span class="n">voxel_sizes_1</span><span class="p">,</span> <span class="n">voxel_order_1</span> <span class="o">=</span> \
+        <span class="n">get_reference_info_wrapper</span><span class="p">(</span><span class="n">reference_1</span><span class="p">)</span>
+    <span class="n">affine_2</span><span class="p">,</span> <span class="n">dimensions_2</span><span class="p">,</span> <span class="n">voxel_sizes_2</span><span class="p">,</span> <span class="n">voxel_order_2</span> <span class="o">=</span> \
+        <span class="n">get_reference_info_wrapper</span><span class="p">(</span><span class="n">reference_2</span><span class="p">)</span>
+
+    <span class="n">identical_header</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">affine_1</span><span class="p">,</span> <span class="n">affine_2</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1e-03</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-03</span><span class="p">):</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Affine not equal&#39;</span><span class="p">)</span>
+        <span class="n">identical_header</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="n">dimensions_1</span><span class="p">,</span> <span class="n">dimensions_2</span><span class="p">):</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Dimensions not equal&#39;</span><span class="p">)</span>
+        <span class="n">identical_header</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">voxel_sizes_1</span><span class="p">,</span> <span class="n">voxel_sizes_2</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1e-03</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-03</span><span class="p">):</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Voxel_size not equal&#39;</span><span class="p">)</span>
+        <span class="n">identical_header</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">if</span> <span class="n">voxel_order_1</span> <span class="o">!=</span> <span class="n">voxel_order_2</span><span class="p">:</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Voxel_order not equal&#39;</span><span class="p">)</span>
+        <span class="n">identical_header</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">return</span> <span class="n">identical_header</span></div>
+
+
+<div class="viewcode-block" id="load_tractogram_with_reference"><a class="viewcode-back" href="../../autoapi/trx/utils/index.html#trx.utils.load_tractogram_with_reference">[docs]</a><span class="k">def</span> <span class="nf">load_tractogram_with_reference</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">reference</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                   <span class="n">bbox_check</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Load a tractogram with a reference (if required).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filepath : str</span>
+<span class="sd">        Path to the tractogram file.</span>
+<span class="sd">    reference : Nifti or Trk filename, Nifti1Image or TrkFile,</span>
+<span class="sd">        Nifti1Header or trk.header (dict)</span>
+<span class="sd">        Reference that provides the spatial attribute.</span>
+<span class="sd">    bbox_check : bool</span>
+<span class="sd">        Check if the tractogram is inside the bounding box of the reference.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    output : dipy.io.stateful_tractogram.StatefulTractogram</span>
+<span class="sd">        Tractogram object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">dipy_available</span><span class="p">:</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Dipy library is missing, cannot use functions related &#39;</span>
+                      <span class="s1">&#39;to the StatefulTractogram.&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="c1"># Force the usage of --reference for all file formats without an header</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">ext</span> <span class="o">==</span> <span class="s1">&#39;.trk&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">reference</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">reference</span> <span class="o">!=</span> <span class="s1">&#39;same&#39;</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Reference is discarded for this file format &#39;</span>
+                            <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filepath</span><span class="p">))</span>
+        <span class="n">sft</span> <span class="o">=</span> <span class="n">load_tractogram</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="s1">&#39;same&#39;</span><span class="p">,</span>
+                              <span class="n">bbox_valid_check</span><span class="o">=</span><span class="n">bbox_check</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">ext</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;.tck&#39;</span><span class="p">,</span> <span class="s1">&#39;.fib&#39;</span><span class="p">,</span> <span class="s1">&#39;.vtk&#39;</span><span class="p">,</span> <span class="s1">&#39;.dpy&#39;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">reference</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">reference</span> <span class="o">==</span> <span class="s1">&#39;same&#39;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s1">&#39;--reference is required for this file format &#39;</span>
+                          <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filepath</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">sft</span> <span class="o">=</span> <span class="n">load_tractogram</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">reference</span><span class="p">,</span>
+                                  <span class="n">bbox_valid_check</span><span class="o">=</span><span class="n">bbox_check</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> is an unsupported file format&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filepath</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">sft</span></div>
+
+
+<div class="viewcode-block" id="get_axis_shift_vector"><a class="viewcode-back" href="../../autoapi/trx/utils/index.html#trx.utils.get_axis_shift_vector">[docs]</a><span class="k">def</span> <span class="nf">get_axis_shift_vector</span><span class="p">(</span><span class="n">flip_axes</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    flip_axes : list of str</span>
+<span class="sd">        String containing the axis to flip.</span>
+<span class="sd">        Possible values are &#39;x&#39;, &#39;y&#39;, &#39;z&#39;</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    flip_vector : np.ndarray (3,)</span>
+<span class="sd">        Vector containing the axis to flip.</span>
+<span class="sd">        Possible values are -1, 1</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">shift_vector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s1">&#39;x&#39;</span> <span class="ow">in</span> <span class="n">flip_axes</span><span class="p">:</span>
+        <span class="n">shift_vector</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span>
+    <span class="k">if</span> <span class="s1">&#39;y&#39;</span> <span class="ow">in</span> <span class="n">flip_axes</span><span class="p">:</span>
+        <span class="n">shift_vector</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span>
+    <span class="k">if</span> <span class="s1">&#39;z&#39;</span> <span class="ow">in</span> <span class="n">flip_axes</span><span class="p">:</span>
+        <span class="n">shift_vector</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span>
+
+    <span class="k">return</span> <span class="n">shift_vector</span></div>
+
+
+<div class="viewcode-block" id="get_axis_flip_vector"><a class="viewcode-back" href="../../autoapi/trx/utils/index.html#trx.utils.get_axis_flip_vector">[docs]</a><span class="k">def</span> <span class="nf">get_axis_flip_vector</span><span class="p">(</span><span class="n">flip_axes</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    flip_axes : list of str</span>
+<span class="sd">        String containing the axis to flip.</span>
+<span class="sd">        Possible values are &#39;x&#39;, &#39;y&#39;, &#39;z&#39;</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    flip_vector : np.ndarray (3,)</span>
+<span class="sd">        Vector containing the axis to flip.</span>
+<span class="sd">        Possible values are -1, 1</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">flip_vector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s1">&#39;x&#39;</span> <span class="ow">in</span> <span class="n">flip_axes</span><span class="p">:</span>
+        <span class="n">flip_vector</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span>
+    <span class="k">if</span> <span class="s1">&#39;y&#39;</span> <span class="ow">in</span> <span class="n">flip_axes</span><span class="p">:</span>
+        <span class="n">flip_vector</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span>
+    <span class="k">if</span> <span class="s1">&#39;z&#39;</span> <span class="ow">in</span> <span class="n">flip_axes</span><span class="p">:</span>
+        <span class="n">flip_vector</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span>
+
+    <span class="k">return</span> <span class="n">flip_vector</span></div>
+
+
+<div class="viewcode-block" id="get_shift_vector"><a class="viewcode-back" href="../../autoapi/trx/utils/index.html#trx.utils.get_shift_vector">[docs]</a><span class="k">def</span> <span class="nf">get_shift_vector</span><span class="p">(</span><span class="n">sft</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    When flipping a tractogram the shift vector is used to change the origin</span>
+<span class="sd">    of the grid from the corner to the center of the grid.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    sft : StatefulTractogram</span>
+<span class="sd">        StatefulTractogram object</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    shift_vector : ndarray</span>
+<span class="sd">        Shift vector to apply to the streamlines</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dims</span> <span class="o">=</span> <span class="n">sft</span><span class="o">.</span><span class="n">space_attributes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">shift_vector</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dims</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">shift_vector</span></div>
+
+
+<div class="viewcode-block" id="flip_sft"><a class="viewcode-back" href="../../autoapi/trx/utils/index.html#trx.utils.flip_sft">[docs]</a><span class="k">def</span> <span class="nf">flip_sft</span><span class="p">(</span><span class="n">sft</span><span class="p">,</span> <span class="n">flip_axes</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Flip the streamlines in the StatefulTractogram according to the</span>
+<span class="sd">    flip_axes. Uses the spatial information to flip according to the center</span>
+<span class="sd">    of the grid.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    sft : StatefulTractogram</span>
+<span class="sd">        StatefulTractogram to flip</span>
+<span class="sd">    flip_axes : list of str</span>
+<span class="sd">        Axes to flip.</span>
+<span class="sd">        Possible values are &#39;x&#39;, &#39;y&#39;, &#39;z&#39;</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    sft : StatefulTractogram</span>
+<span class="sd">        StatefulTractogram with flipped axes</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">dipy_available</span><span class="p">:</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Dipy library is missing, cannot use functions related &#39;</span>
+                      <span class="s1">&#39;to the StatefulTractogram.&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="n">flip_vector</span> <span class="o">=</span> <span class="n">get_axis_flip_vector</span><span class="p">(</span><span class="n">flip_axes</span><span class="p">)</span>
+    <span class="n">shift_vector</span> <span class="o">=</span> <span class="n">get_shift_vector</span><span class="p">(</span><span class="n">sft</span><span class="p">)</span>
+
+    <span class="n">flipped_streamlines</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">streamline</span> <span class="ow">in</span> <span class="n">sft</span><span class="o">.</span><span class="n">streamlines</span><span class="p">:</span>
+        <span class="n">mod_streamline</span> <span class="o">=</span> <span class="n">streamline</span> <span class="o">+</span> <span class="n">shift_vector</span>
+        <span class="n">mod_streamline</span> <span class="o">*=</span> <span class="n">flip_vector</span>
+        <span class="n">mod_streamline</span> <span class="o">-=</span> <span class="n">shift_vector</span>
+        <span class="n">flipped_streamlines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mod_streamline</span><span class="p">)</span>
+
+    <span class="n">new_sft</span> <span class="o">=</span> <span class="n">StatefulTractogram</span><span class="o">.</span><span class="n">from_sft</span><span class="p">(</span><span class="n">flipped_streamlines</span><span class="p">,</span> <span class="n">sft</span><span class="p">,</span>
+                                          <span class="n">data_per_point</span><span class="o">=</span><span class="n">sft</span><span class="o">.</span><span class="n">data_per_point</span><span class="p">,</span>
+                                          <span class="n">data_per_streamline</span><span class="o">=</span><span class="n">sft</span><span class="o">.</span><span class="n">data_per_streamline</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">new_sft</span></div>
+
+
+<div class="viewcode-block" id="load_matrix_in_any_format"><a class="viewcode-back" href="../../autoapi/trx/utils/index.html#trx.utils.load_matrix_in_any_format">[docs]</a><span class="k">def</span> <span class="nf">load_matrix_in_any_format</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Load a matrix from a txt file OR a npy file.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filepath : str</span>
+<span class="sd">        Path to the matrix file.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    matrix : numpy.ndarray</span>
+<span class="sd">        The matrix.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">ext</span> <span class="o">==</span> <span class="s1">&#39;.txt&#39;</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">ext</span> <span class="o">==</span> <span class="s1">&#39;.npy&#39;</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Extension </span><span class="si">{}</span><span class="s1"> is not supported&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ext</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">data</span></div>
+
+
+<div class="viewcode-block" id="get_reverse_enum"><a class="viewcode-back" href="../../autoapi/trx/utils/index.html#trx.utils.get_reverse_enum">[docs]</a><span class="k">def</span> <span class="nf">get_reverse_enum</span><span class="p">(</span><span class="n">space_str</span><span class="p">,</span> <span class="n">origin_str</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Convert string representation to enums for the StatefulTractogram.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    space_str : str</span>
+<span class="sd">        String representing the space.</span>
+<span class="sd">    origin_str : str</span>
+<span class="sd">        String representing the origin.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    output : str</span>
+<span class="sd">        Space and Origin as Enums.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">dipy_available</span><span class="p">:</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Dipy library is missing, cannot use functions related &#39;</span>
+                      <span class="s1">&#39;to the StatefulTractogram.&#39;</span><span class="p">)</span>
+    <span class="n">origin</span> <span class="o">=</span> <span class="n">Origin</span><span class="o">.</span><span class="n">NIFTI</span> <span class="k">if</span> <span class="n">origin_str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;nifti&#39;</span> <span class="k">else</span> <span class="n">Origin</span><span class="o">.</span><span class="n">TRACKVIS</span>
+    <span class="k">if</span> <span class="n">space_str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;rasmm&#39;</span><span class="p">:</span>
+        <span class="n">space</span> <span class="o">=</span> <span class="n">Space</span><span class="o">.</span><span class="n">RASMM</span>
+    <span class="k">elif</span> <span class="n">space_str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;voxmm&#39;</span><span class="p">:</span>
+        <span class="n">space</span> <span class="o">=</span> <span class="n">Space</span><span class="o">.</span><span class="n">VOXMM</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">space</span> <span class="o">=</span> <span class="n">Space</span><span class="o">.</span><span class="n">VOX</span>
+
+    <span class="k">return</span> <span class="n">space</span><span class="p">,</span> <span class="n">origin</span></div>
+</pre></div>
+
+            </article>
+            
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+            
+          </div>
+          
+          
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+</div>
+
+<div class="toc-item">
+  
+</div>
+
+            </div>
+          
+          
+        </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
+            
+          </div>
+        </footer>
+        
+      </main>
+    </div>
+  </div>
+
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=9b1a4fa89bdd0e95b23b"></script>
+
+  <footer class="bd-footer"><div class="bd-footer__inner container">
+  
+  <div class="footer-item">
+    
+<p class="copyright">
+
+    &copy; Copyright 2021-2022, The TRX developers.<br>
+
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+<p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.2.2.<br>
+</p>
+
+  </div>
+  
+</div>
+  </footer>
+  </body>
+</html>
