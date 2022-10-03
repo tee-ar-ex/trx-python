@@ -22,13 +22,13 @@ def get_testing_files_dict():
     return {
         'DSI.zip':
         ('https://figshare.com/ndownloader/files/37624154',
-         'b847f053fc694d55d935c0be0e5268f7'),
+         'b847f053fc694d55d935c0be0e5268f7'), # V1 (27.09.2022)
         'memmap_test_data.zip':
         ('https://figshare.com/ndownloader/files/37624148',
-         '03f7651a0f9e3eeabee9aed0ad5f69e1'),
+         '03f7651a0f9e3eeabee9aed0ad5f69e1'), # V2 (27.09.2022)
         'trx_from_scratch.zip':
         ('https://figshare.com/ndownloader/files/37624151',
-         'd9f220a095ce7f027772fcd9451a2ee5')
+         'd9f220a095ce7f027772fcd9451a2ee5') # V2 (27.09.2022)
     }
 
 
