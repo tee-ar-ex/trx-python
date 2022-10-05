@@ -176,6 +176,8 @@ def test_execution_generate_trx_from_scratch():
     groups = [(os.path.join(raw_arr_dir, 'g_AF_L.npy'), 'int32'),
               (os.path.join(raw_arr_dir, 'g_AF_R.npy'), 'int32'),
               (os.path.join(raw_arr_dir, 'g_CST_L.npy'), 'int32')]
+    print(os.path.join(raw_arr_dir,
+                                                   'offsets.npy'))
     generate_trx_from_scratch(reference_fa, 'generated.trx',
                               positions=os.path.join(raw_arr_dir,
                                                      'positions.npy'),

@@ -17,6 +17,7 @@ fetch_data(get_testing_files_dict(), keys=['memmap_test_data.zip'])
 tmp_dir = tempfile.TemporaryDirectory()
 
 
+
 @pytest.mark.parametrize(
     "arr,expected,value_error",
     [
@@ -66,14 +67,18 @@ def test__split_ext_with_dimensionality(filename, expected, value_error):
     "offsets,nb_vertices,expected",
     [
         (np.array(range(5), dtype=np.int16), 4, np.array([1, 1, 1, 1, 0])),
-        (np.array([0, 1, 0, 3, 4], dtype=np.int16),
-         4, np.array([1, 3, 0, 1, 0])),
-        (np.array(range(4), dtype=np.int16), 4, np.array([1, 1, 1, 1])),
+        (np.array([0, 1, 1, 3, 4], dtype=np.int32),
+         4, np.array([1, 0, 2, 1, 0])),
+        (np.array(range(4), dtype=np.uint64), 4, np.array([1, 1, 1, 1])),
+        pytest.param(np.array([0, 1, 0, 3, 4], dtype=np.int16), 4,
+                     np.array([1, 3, 0, 1, 0]), marks=pytest.mark.xfail,
+                     id="offsets not sorted"),
     ],
 )
 def test__compute_lengths(offsets, nb_vertices, expected):
 
-    lengths = tmm._compute_lengths(offsets=offsets, nb_vertices=nb_vertices)
+    offsets = tmm._append_last_offsets(offsets, nb_vertices)
+    lengths = tmm._compute_lengths(offsets=offsets)
     assert np.array_equal(lengths, expected)
 
 
