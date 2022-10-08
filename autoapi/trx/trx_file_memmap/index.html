@@ -13,8 +13,8 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=9b1a4fa89bdd0e95b23b" rel="stylesheet">
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=9b1a4fa89bdd0e95b23b" rel="stylesheet">
+  <link href="../../../_static/styles/theme.css?digest=1e1de1a1873e13ef5536" rel="stylesheet">
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=1e1de1a1873e13ef5536" rel="stylesheet">
 
   
   <link rel="stylesheet"
@@ -23,12 +23,14 @@
     href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
   <link rel="preload" as="font" type="font/woff2" crossorigin
     href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=9b1a4fa89bdd0e95b23b">
+  <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=1e1de1a1873e13ef5536">
 
     <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
     <script src="../../../_static/jquery.js"></script>
@@ -60,7 +62,7 @@
     <div class="search-button__search-container">
       
 <form class="bd-search d-flex align-items-center" action="../../../search.html" method="get">
-  <i class="icon fas fa-search"></i>
+  <i class="fa-solid fa-magnifying-glass"></i>
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
 </form>
@@ -70,7 +72,7 @@
   
   <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
   <label class="sidebar-toggle primary-toggle" for="__primary">
-      <span class="fas fa-bars"></span>
+      <span class="fa-solid fa-bars"></span>
   </label>
   <div id="navbar-start">
     
@@ -125,16 +127,16 @@
     <div id="navbar-end">
       <div class="navbar-end-item navbar-end__search-button-container">
         
-<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search">
-  <i class="fas fa-search"></i>
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
 </button>
       </div>
       
       <div class="navbar-end-item">
-        <span class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle">
-    <a class="theme-switch" data-mode="light"><i class="fas fa-sun"></i></a>
-    <a class="theme-switch" data-mode="dark"><i class="far fa-moon"></i></a>
-    <a class="theme-switch" data-mode="auto"><i class="fas fa-adjust"></i></a>
+        <span class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" data-toggle="tooltip">
+    <a class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></a>
+    <a class="theme-switch" data-mode="dark"><i class="fa-regular fa-moon"></i></a>
+    <a class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></a>
 </span>
       </div>
       
@@ -147,7 +149,8 @@
           
           
           
-          <a href="https://github.com/tee-ar-ex" title="GitHub" class="nav-link" rel="noopener" target="_blank"><span><i class="fab fa-github-square"></i></span>
+          
+          <a href="https://github.com/tee-ar-ex" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-github-square"></i></span>
             <label class="sr-only">GitHub</label></a>
         </li>
       </ul>
@@ -159,14 +162,14 @@
 
   
   <div class="search-button-container--mobile">
-<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search">
-  <i class="fas fa-search"></i>
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
 </button>
   </div>
 
   
   <label class="sidebar-toggle secondary-toggle" for="__secondary">
-      <span class="fas fa-outdent"></span>
+      <span class="fa-solid fa-outdent"></span>
   </label>
   
 
@@ -210,10 +213,10 @@
     <div class="sidebar-header-items__end">
       
       <div class="navbar-end-item">
-        <span class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle">
-    <a class="theme-switch" data-mode="light"><i class="fas fa-sun"></i></a>
-    <a class="theme-switch" data-mode="dark"><i class="far fa-moon"></i></a>
-    <a class="theme-switch" data-mode="auto"><i class="fas fa-adjust"></i></a>
+        <span class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" data-toggle="tooltip">
+    <a class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></a>
+    <a class="theme-switch" data-mode="dark"><i class="fa-regular fa-moon"></i></a>
+    <a class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></a>
 </span>
       </div>
       
@@ -226,7 +229,8 @@
           
           
           
-          <a href="https://github.com/tee-ar-ex" title="GitHub" class="nav-link" rel="noopener" target="_blank"><span><i class="fab fa-github-square"></i></span>
+          
+          <a href="https://github.com/tee-ar-ex" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-github-square"></i></span>
             <label class="sr-only">GitHub</label></a>
         </li>
       </ul>
@@ -244,51 +248,11 @@
   </p>
   <div class="bd-toc-item navbar-nav">
     <ul class="current nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../fetcher/index.html">
-   <code class="xref py py-mod docutils literal notranslate">
-    <span class="pre">
-     trx.fetcher
-    </span>
-   </code>
-  </a>
- </li>
- <li class="toctree-l1 current active">
-  <a class="current reference internal" href="#">
-   <code class="xref py py-mod docutils literal notranslate">
-    <span class="pre">
-     trx.trx_file_memmap
-    </span>
-   </code>
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../utils/index.html">
-   <code class="xref py py-mod docutils literal notranslate">
-    <span class="pre">
-     trx.utils
-    </span>
-   </code>
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../viz/index.html">
-   <code class="xref py py-mod docutils literal notranslate">
-    <span class="pre">
-     trx.viz
-    </span>
-   </code>
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../workflows/index.html">
-   <code class="xref py py-mod docutils literal notranslate">
-    <span class="pre">
-     trx.workflows
-    </span>
-   </code>
-  </a>
- </li>
+<li class="toctree-l1"><a class="reference internal" href="../fetcher/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trx.fetcher</span></code></a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trx.trx_file_memmap</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trx.utils</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../viz/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trx.viz</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../workflows/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trx.workflows</span></code></a></li>
 </ul>
 
   </div>
@@ -335,48 +299,70 @@
 <h3>Functions<a class="headerlink" href="#functions" title="Permalink to this heading">#</a></h3>
 <table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#trx.trx_file_memmap._generate_filename_from_data" title="trx.trx_file_memmap._generate_filename_from_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_generate_filename_from_data</span></code></a>(→ str)</p></td>
-<td><p>Determines the data type from array data and generates the appropriate filename</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.trx_file_memmap._append_last_offsets" title="trx.trx_file_memmap._append_last_offsets"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_append_last_offsets</span></code></a>(→ numpy.typing.NDArray)</p></td>
+<td><p>Appends the last element of offsets from header information</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#trx.trx_file_memmap._split_ext_with_dimensionality" title="trx.trx_file_memmap._split_ext_with_dimensionality"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_split_ext_with_dimensionality</span></code></a>(→ Tuple[str, int, str])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#trx.trx_file_memmap._generate_filename_from_data" title="trx.trx_file_memmap._generate_filename_from_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_generate_filename_from_data</span></code></a>(→ str)</p></td>
+<td><p>Determines the data type from array data and generates the appropriate</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.trx_file_memmap._split_ext_with_dimensionality" title="trx.trx_file_memmap._split_ext_with_dimensionality"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_split_ext_with_dimensionality</span></code></a>(→ Tuple[str, int, str])</p></td>
 <td><p>Takes a filename and splits it into its components</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#trx.trx_file_memmap._compute_lengths" title="trx.trx_file_memmap._compute_lengths"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_compute_lengths</span></code></a>(→ numpy.typing.NDArray)</p></td>
-<td><p>Compute lengths from offsets and header information</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#trx.trx_file_memmap._compute_lengths" title="trx.trx_file_memmap._compute_lengths"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_compute_lengths</span></code></a>(→ numpy.typing.NDArray)</p></td>
+<td><p>Compute lengths from offsets</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#trx.trx_file_memmap._is_dtype_valid" title="trx.trx_file_memmap._is_dtype_valid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_is_dtype_valid</span></code></a>(→ bool)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.trx_file_memmap._is_dtype_valid" title="trx.trx_file_memmap._is_dtype_valid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_is_dtype_valid</span></code></a>(→ bool)</p></td>
 <td><p>Verifies that filename extension is a valid datatype</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#trx.trx_file_memmap._dichotomic_search" title="trx.trx_file_memmap._dichotomic_search"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_dichotomic_search</span></code></a>(→ int)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#trx.trx_file_memmap._dichotomic_search" title="trx.trx_file_memmap._dichotomic_search"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_dichotomic_search</span></code></a>(→ int)</p></td>
 <td><p>Find where data of a contiguous array is actually ending</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#trx.trx_file_memmap._create_memmap" title="trx.trx_file_memmap._create_memmap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_create_memmap</span></code></a>(, dtype, offset, order)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.trx_file_memmap._create_memmap" title="trx.trx_file_memmap._create_memmap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_create_memmap</span></code></a>(, dtype, offset, order)</p></td>
 <td><p>Wrapper to support empty array as memmaps</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#trx.trx_file_memmap.load" title="trx.trx_file_memmap.load"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load</span></code></a>(→ Type[TrxFile])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#trx.trx_file_memmap.load" title="trx.trx_file_memmap.load"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load</span></code></a>(→ Type[TrxFile])</p></td>
 <td><p>Load a TrxFile (compressed or not)</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#trx.trx_file_memmap.load_from_zip" title="trx.trx_file_memmap.load_from_zip"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_from_zip</span></code></a>(→ Type[TrxFile])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.trx_file_memmap.load_from_zip" title="trx.trx_file_memmap.load_from_zip"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_from_zip</span></code></a>(→ Type[TrxFile])</p></td>
 <td><p>Load a TrxFile from a single zipfile. Note: does not work with compressed zipfiles</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#trx.trx_file_memmap.load_from_directory" title="trx.trx_file_memmap.load_from_directory"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_from_directory</span></code></a>(→ Type[TrxFile])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#trx.trx_file_memmap.load_from_directory" title="trx.trx_file_memmap.load_from_directory"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_from_directory</span></code></a>(→ Type[TrxFile])</p></td>
 <td><p>Load a TrxFile from a folder containing memmaps</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#trx.trx_file_memmap.concatenate" title="trx.trx_file_memmap.concatenate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">concatenate</span></code></a>(→ TrxFile)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.trx_file_memmap.concatenate" title="trx.trx_file_memmap.concatenate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">concatenate</span></code></a>(→ TrxFile)</p></td>
 <td><p>Concatenate multiple TrxFile together, support preallocation</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#trx.trx_file_memmap.save" title="trx.trx_file_memmap.save"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save</span></code></a>(→ None)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#trx.trx_file_memmap.save" title="trx.trx_file_memmap.save"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save</span></code></a>(→ None)</p></td>
 <td><p>Save a TrxFile (compressed or not)</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#trx.trx_file_memmap.zip_from_folder" title="trx.trx_file_memmap.zip_from_folder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">zip_from_folder</span></code></a>(→ None)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.trx_file_memmap.zip_from_folder" title="trx.trx_file_memmap.zip_from_folder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">zip_from_folder</span></code></a>(→ None)</p></td>
 <td><p>Utils function to zip on-disk memmaps</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py function">
+<dt class="sig sig-object py" id="trx.trx_file_memmap._append_last_offsets">
+<span class="sig-prename descclassname"><span class="pre">trx.trx_file_memmap.</span></span><span class="sig-name descname"><span class="pre">_append_last_offsets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nib_offsets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.typing.NDArray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nb_vertices</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.typing.NDArray</span></span></span><a class="reference internal" href="../../../_modules/trx/trx_file_memmap.html#_append_last_offsets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.trx_file_memmap._append_last_offsets" title="Permalink to this definition">#</a></dt>
+<dd><p>Appends the last element of offsets from header information</p>
+<dl class="simple">
+<dt>Keyword arguments:</dt><dd><dl class="simple">
+<dt>nib_offsets – NDArray</dt><dd><p>Array of offsets with the last element being the start of the last
+streamline (nibabel convention)</p>
+</dd>
+<dt>nb_vertices – int</dt><dd><p>Total number of vertices in the streamlines</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><p>Offsets – NDArray (VTK convention)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="trx.trx_file_memmap._generate_filename_from_data">
 <span class="sig-prename descclassname"><span class="pre">trx.trx_file_memmap.</span></span><span class="sig-name descname"><span class="pre">_generate_filename_from_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.typing.ArrayLike</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../../_modules/trx/trx_file_memmap.html#_generate_filename_from_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.trx_file_memmap._generate_filename_from_data" title="Permalink to this definition">#</a></dt>
-<dd><p>Determines the data type from array data and generates the appropriate filename</p>
+<dd><p>Determines the data type from array data and generates the appropriate
+filename</p>
 <dl class="simple">
 <dt>Keyword arguments:</dt><dd><p>arr – a NumPy array (1-2D, otherwise ValueError raised)
 filename – the original filename</p>
@@ -400,11 +386,10 @@ filename – the original filename</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="trx.trx_file_memmap._compute_lengths">
-<span class="sig-prename descclassname"><span class="pre">trx.trx_file_memmap.</span></span><span class="sig-name descname"><span class="pre">_compute_lengths</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">offsets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.typing.NDArray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nb_vertices</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.typing.NDArray</span></span></span><a class="reference internal" href="../../../_modules/trx/trx_file_memmap.html#_compute_lengths"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.trx_file_memmap._compute_lengths" title="Permalink to this definition">#</a></dt>
-<dd><p>Compute lengths from offsets and header information</p>
+<span class="sig-prename descclassname"><span class="pre">trx.trx_file_memmap.</span></span><span class="sig-name descname"><span class="pre">_compute_lengths</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">offsets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.typing.NDArray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.typing.NDArray</span></span></span><a class="reference internal" href="../../../_modules/trx/trx_file_memmap.html#_compute_lengths"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.trx_file_memmap._compute_lengths" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute lengths from offsets</p>
 <dl class="simple">
-<dt>Keyword arguments:</dt><dd><p>offsets – An NDArray of offsets
-nb_vertices – integer representing the number of vertices</p>
+<dt>Keyword arguments:</dt><dd><p>offsets – An NDArray of offsets</p>
 </dd>
 <dt>Returns:</dt><dd><p>lengths – An NDArray of lengths</p>
 </dd>
@@ -775,7 +760,7 @@ copy_safe – Perform a deep-copy</p>
 <div class="toc-item">
   
 <div class="tocsection onthispage">
-    <i class="fas fa-list"></i> On this page
+    <i class="fa-solid fa-list"></i> On this page
 </div>
 <nav id="bd-toc-nav" class="page-toc">
     <ul class="visible nav section-nav flex-column">
@@ -794,6 +779,15 @@ copy_safe – Perform a deep-copy</p>
      Functions
     </a>
     <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#trx.trx_file_memmap._append_last_offsets">
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         _append_last_offsets()
+        </span>
+       </code>
+      </a>
+     </li>
      <li class="toc-h4 nav-item toc-entry">
       <a class="reference internal nav-link" href="#trx.trx_file_memmap._generate_filename_from_data">
        <code class="docutils literal notranslate">
@@ -1139,6 +1133,11 @@ copy_safe – Perform a deep-copy</p>
       </ul>
      </li>
      <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#trx.trx_file_memmap._append_last_offsets">
+       _append_last_offsets
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
       <a class="reference internal nav-link" href="#trx.trx_file_memmap._generate_filename_from_data">
        _generate_filename_from_data
       </a>
@@ -1341,13 +1340,18 @@ copy_safe – Perform a deep-copy</p>
 
 <div class="toc-item">
   
+<div id="searchbox"></div>
+</div>
+
+<div class="toc-item">
+  
 </div>
 
 <div class="toc-item">
   
 <div class="tocsection sourcelink">
     <a href="../../../_sources/autoapi/trx/trx_file_memmap/index.rst.txt">
-        <i class="fas fa-file-alt"></i> Show Source
+        <i class="fa-solid fa-file-lines"></i> Show Source
     </a>
 </div>
 
@@ -1370,7 +1374,7 @@ copy_safe – Perform a deep-copy</p>
   
     
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=9b1a4fa89bdd0e95b23b"></script>
+  <script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=1e1de1a1873e13ef5536"></script>
 
   <footer class="bd-footer"><div class="bd-footer__inner container">
   
@@ -1387,7 +1391,7 @@ copy_safe – Perform a deep-copy</p>
   <div class="footer-item">
     
 <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.2.2.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.2.3.<br>
 </p>
 
   </div>

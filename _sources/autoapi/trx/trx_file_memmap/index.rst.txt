@@ -21,6 +21,7 @@ Functions
 
 .. autoapisummary::
 
+   trx.trx_file_memmap._append_last_offsets
    trx.trx_file_memmap._generate_filename_from_data
    trx.trx_file_memmap._split_ext_with_dimensionality
    trx.trx_file_memmap._compute_lengths
@@ -36,10 +37,42 @@ Functions
 
 
 
+.. py:function:: _append_last_offsets(nib_offsets: numpy.typing.NDArray, nb_vertices: int) -> numpy.typing.NDArray
+
+   
+   Appends the last element of offsets from header information
+
+   Keyword arguments:
+       nib_offsets -- NDArray
+           Array of offsets with the last element being the start of the last
+           streamline (nibabel convention)
+       nb_vertices -- int
+           Total number of vertices in the streamlines
+   Returns:
+       Offsets -- NDArray (VTK convention)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
 .. py:function:: _generate_filename_from_data(arr: numpy.typing.ArrayLike, filename: str) -> str
 
    
-   Determines the data type from array data and generates the appropriate filename
+   Determines the data type from array data and generates the appropriate
+   filename
 
    Keyword arguments:
        arr -- a NumPy array (1-2D, otherwise ValueError raised)
@@ -93,14 +126,13 @@ Functions
    ..
        !! processed by numpydoc !!
 
-.. py:function:: _compute_lengths(offsets: numpy.typing.NDArray, nb_vertices: int) -> numpy.typing.NDArray
+.. py:function:: _compute_lengths(offsets: numpy.typing.NDArray) -> numpy.typing.NDArray
 
    
-   Compute lengths from offsets and header information
+   Compute lengths from offsets
 
    Keyword arguments:
        offsets -- An NDArray of offsets
-       nb_vertices -- integer representing the number of vertices
 
    Returns:
        lengths -- An NDArray of lengths
