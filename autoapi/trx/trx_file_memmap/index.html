@@ -299,70 +299,48 @@
 <h3>Functions<a class="headerlink" href="#functions" title="Permalink to this heading">#</a></h3>
 <table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#trx.trx_file_memmap._append_last_offsets" title="trx.trx_file_memmap._append_last_offsets"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_append_last_offsets</span></code></a>(→ numpy.typing.NDArray)</p></td>
-<td><p>Appends the last element of offsets from header information</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.trx_file_memmap._generate_filename_from_data" title="trx.trx_file_memmap._generate_filename_from_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_generate_filename_from_data</span></code></a>(→ str)</p></td>
+<td><p>Determines the data type from array data and generates the appropriate filename</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#trx.trx_file_memmap._generate_filename_from_data" title="trx.trx_file_memmap._generate_filename_from_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_generate_filename_from_data</span></code></a>(→ str)</p></td>
-<td><p>Determines the data type from array data and generates the appropriate</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#trx.trx_file_memmap._split_ext_with_dimensionality" title="trx.trx_file_memmap._split_ext_with_dimensionality"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_split_ext_with_dimensionality</span></code></a>(→ Tuple[str, int, str])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#trx.trx_file_memmap._split_ext_with_dimensionality" title="trx.trx_file_memmap._split_ext_with_dimensionality"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_split_ext_with_dimensionality</span></code></a>(→ Tuple[str, int, str])</p></td>
 <td><p>Takes a filename and splits it into its components</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#trx.trx_file_memmap._compute_lengths" title="trx.trx_file_memmap._compute_lengths"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_compute_lengths</span></code></a>(→ numpy.typing.NDArray)</p></td>
-<td><p>Compute lengths from offsets</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.trx_file_memmap._compute_lengths" title="trx.trx_file_memmap._compute_lengths"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_compute_lengths</span></code></a>(→ numpy.typing.NDArray)</p></td>
+<td><p>Compute lengths from offsets and header information</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#trx.trx_file_memmap._is_dtype_valid" title="trx.trx_file_memmap._is_dtype_valid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_is_dtype_valid</span></code></a>(→ bool)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#trx.trx_file_memmap._is_dtype_valid" title="trx.trx_file_memmap._is_dtype_valid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_is_dtype_valid</span></code></a>(→ bool)</p></td>
 <td><p>Verifies that filename extension is a valid datatype</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#trx.trx_file_memmap._dichotomic_search" title="trx.trx_file_memmap._dichotomic_search"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_dichotomic_search</span></code></a>(→ int)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.trx_file_memmap._dichotomic_search" title="trx.trx_file_memmap._dichotomic_search"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_dichotomic_search</span></code></a>(→ int)</p></td>
 <td><p>Find where data of a contiguous array is actually ending</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#trx.trx_file_memmap._create_memmap" title="trx.trx_file_memmap._create_memmap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_create_memmap</span></code></a>(, dtype, offset, order)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#trx.trx_file_memmap._create_memmap" title="trx.trx_file_memmap._create_memmap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_create_memmap</span></code></a>(, dtype, offset, order)</p></td>
 <td><p>Wrapper to support empty array as memmaps</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#trx.trx_file_memmap.load" title="trx.trx_file_memmap.load"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load</span></code></a>(→ Type[TrxFile])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.trx_file_memmap.load" title="trx.trx_file_memmap.load"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load</span></code></a>(→ Type[TrxFile])</p></td>
 <td><p>Load a TrxFile (compressed or not)</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#trx.trx_file_memmap.load_from_zip" title="trx.trx_file_memmap.load_from_zip"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_from_zip</span></code></a>(→ Type[TrxFile])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#trx.trx_file_memmap.load_from_zip" title="trx.trx_file_memmap.load_from_zip"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_from_zip</span></code></a>(→ Type[TrxFile])</p></td>
 <td><p>Load a TrxFile from a single zipfile. Note: does not work with compressed zipfiles</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#trx.trx_file_memmap.load_from_directory" title="trx.trx_file_memmap.load_from_directory"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_from_directory</span></code></a>(→ Type[TrxFile])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.trx_file_memmap.load_from_directory" title="trx.trx_file_memmap.load_from_directory"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_from_directory</span></code></a>(→ Type[TrxFile])</p></td>
 <td><p>Load a TrxFile from a folder containing memmaps</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#trx.trx_file_memmap.concatenate" title="trx.trx_file_memmap.concatenate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">concatenate</span></code></a>(→ TrxFile)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#trx.trx_file_memmap.concatenate" title="trx.trx_file_memmap.concatenate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">concatenate</span></code></a>(→ TrxFile)</p></td>
 <td><p>Concatenate multiple TrxFile together, support preallocation</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#trx.trx_file_memmap.save" title="trx.trx_file_memmap.save"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save</span></code></a>(→ None)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.trx_file_memmap.save" title="trx.trx_file_memmap.save"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save</span></code></a>(→ None)</p></td>
 <td><p>Save a TrxFile (compressed or not)</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#trx.trx_file_memmap.zip_from_folder" title="trx.trx_file_memmap.zip_from_folder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">zip_from_folder</span></code></a>(→ None)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#trx.trx_file_memmap.zip_from_folder" title="trx.trx_file_memmap.zip_from_folder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">zip_from_folder</span></code></a>(→ None)</p></td>
 <td><p>Utils function to zip on-disk memmaps</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py function">
-<dt class="sig sig-object py" id="trx.trx_file_memmap._append_last_offsets">
-<span class="sig-prename descclassname"><span class="pre">trx.trx_file_memmap.</span></span><span class="sig-name descname"><span class="pre">_append_last_offsets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nib_offsets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.typing.NDArray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nb_vertices</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.typing.NDArray</span></span></span><a class="reference internal" href="../../../_modules/trx/trx_file_memmap.html#_append_last_offsets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.trx_file_memmap._append_last_offsets" title="Permalink to this definition">#</a></dt>
-<dd><p>Appends the last element of offsets from header information</p>
-<dl class="simple">
-<dt>Keyword arguments:</dt><dd><dl class="simple">
-<dt>nib_offsets – NDArray</dt><dd><p>Array of offsets with the last element being the start of the last
-streamline (nibabel convention)</p>
-</dd>
-<dt>nb_vertices – int</dt><dd><p>Total number of vertices in the streamlines</p>
-</dd>
-</dl>
-</dd>
-<dt>Returns:</dt><dd><p>Offsets – NDArray (VTK convention)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="trx.trx_file_memmap._generate_filename_from_data">
 <span class="sig-prename descclassname"><span class="pre">trx.trx_file_memmap.</span></span><span class="sig-name descname"><span class="pre">_generate_filename_from_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.typing.ArrayLike</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../../_modules/trx/trx_file_memmap.html#_generate_filename_from_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.trx_file_memmap._generate_filename_from_data" title="Permalink to this definition">#</a></dt>
-<dd><p>Determines the data type from array data and generates the appropriate
-filename</p>
+<dd><p>Determines the data type from array data and generates the appropriate filename</p>
 <dl class="simple">
 <dt>Keyword arguments:</dt><dd><p>arr – a NumPy array (1-2D, otherwise ValueError raised)
 filename – the original filename</p>
@@ -386,10 +364,11 @@ filename – the original filename</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="trx.trx_file_memmap._compute_lengths">
-<span class="sig-prename descclassname"><span class="pre">trx.trx_file_memmap.</span></span><span class="sig-name descname"><span class="pre">_compute_lengths</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">offsets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.typing.NDArray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.typing.NDArray</span></span></span><a class="reference internal" href="../../../_modules/trx/trx_file_memmap.html#_compute_lengths"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.trx_file_memmap._compute_lengths" title="Permalink to this definition">#</a></dt>
-<dd><p>Compute lengths from offsets</p>
+<span class="sig-prename descclassname"><span class="pre">trx.trx_file_memmap.</span></span><span class="sig-name descname"><span class="pre">_compute_lengths</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">offsets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.typing.NDArray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nb_vertices</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.typing.NDArray</span></span></span><a class="reference internal" href="../../../_modules/trx/trx_file_memmap.html#_compute_lengths"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.trx_file_memmap._compute_lengths" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute lengths from offsets and header information</p>
 <dl class="simple">
-<dt>Keyword arguments:</dt><dd><p>offsets – An NDArray of offsets</p>
+<dt>Keyword arguments:</dt><dd><p>offsets – An NDArray of offsets
+nb_vertices – integer representing the number of vertices</p>
 </dd>
 <dt>Returns:</dt><dd><p>lengths – An NDArray of lengths</p>
 </dd>
@@ -780,15 +759,6 @@ copy_safe – Perform a deep-copy</p>
     </a>
     <ul class="nav section-nav flex-column">
      <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#trx.trx_file_memmap._append_last_offsets">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         _append_last_offsets()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
       <a class="reference internal nav-link" href="#trx.trx_file_memmap._generate_filename_from_data">
        <code class="docutils literal notranslate">
         <span class="pre">
@@ -1131,11 +1101,6 @@ copy_safe – Perform a deep-copy</p>
         </a>
        </li>
       </ul>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#trx.trx_file_memmap._append_last_offsets">
-       _append_last_offsets
-      </a>
      </li>
      <li class="toc-h4 nav-item toc-entry">
       <a class="reference internal nav-link" href="#trx.trx_file_memmap._generate_filename_from_data">
