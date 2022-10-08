@@ -9,3 +9,4 @@ write_to_template = """\
 __version__ = "{version}"
 """
 fallback_version = "0.0"
+local_scheme = "no-local-version"
