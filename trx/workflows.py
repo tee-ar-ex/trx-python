@@ -1,6 +1,7 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+from copy import deepcopy
 import csv
 import gzip
 import json
@@ -296,11 +297,12 @@ def generate_trx_from_scratch(reference, out_tractogram, positions_csv=False,
         else:
             positions = load_matrix_in_any_format(positions)
             offsets = load_matrix_in_any_format(offsets)
-            lengths = _compute_lengths(offsets, len(positions))
+            lengths = _compute_lengths(offsets)
             streamlines = ArraySequence()
             streamlines._data = positions
-            streamlines._offsets = offsets
+            streamlines._offsets = deepcopy(offsets)
             streamlines._lengths = lengths
+            print(len(offsets), len(lengths), len(positions))
 
         if space_str.lower() != 'rasmm' or origin_str.lower() != 'nifti' or \
                 verify_invalid:
@@ -319,14 +321,17 @@ def generate_trx_from_scratch(reference, out_tractogram, positions_csv=False,
             sft.to_rasmm()
             sft.to_center()
             streamlines = sft.streamlines
+            streamlines._offsets = offsets
 
         affine, dimensions, _, _ = get_reference_info_wrapper(reference)
         header = {
             "DIMENSIONS": dimensions.tolist(),
             "VOXEL_TO_RASMM": affine.tolist(),
             "NB_VERTICES": len(streamlines._data),
-            "NB_STREAMLINES": len(streamlines),
+            "NB_STREAMLINES": len(streamlines)-1,
         }
+        print(header)
+
         if header['NB_STREAMLINES'] <= 1:
             raise IOError('To use this script, you need at least 2'
                           'streamlines.')

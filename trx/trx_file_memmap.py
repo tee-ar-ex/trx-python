@@ -22,8 +22,27 @@ from numpy.typing import ArrayLike, NDArray
 from trx.utils import get_reference_info_wrapper
 
 
+def _append_last_offsets(nib_offsets: NDArray, nb_vertices: int) -> NDArray:
+    """Appends the last element of offsets from header information
+
+    Keyword arguments:
+        nib_offsets -- NDArray
+            Array of offsets with the last element being the start of the last
+            streamline (nibabel convention)
+        nb_vertices -- int
+            Total number of vertices in the streamlines
+    Returns:
+        Offsets -- NDArray (VTK convention)
+    """
+    def is_sorted(a): return np.all(a[:-1] <= a[1:])
+    if not is_sorted(nib_offsets):
+        raise ValueError('Offsets must be sorted values.')
+    return np.append(nib_offsets, nb_vertices).astype(nib_offsets.dtype)
+
+
 def _generate_filename_from_data(arr: ArrayLike, filename: str) -> str:
-    """Determines the data type from array data and generates the appropriate filename
+    """Determines the data type from array data and generates the appropriate
+    filename
 
     Keyword arguments:
         arr -- a NumPy array (1-2D, otherwise ValueError raised)
@@ -31,7 +50,6 @@ def _generate_filename_from_data(arr: ArrayLike, filename: str) -> str:
 
     Returns:
         An updated filename
-
     """
     base, ext = os.path.splitext(filename)
     if ext:
@@ -78,28 +96,20 @@ def _split_ext_with_dimensionality(filename: str) -> Tuple[str, int, str]:
     return basename, int(dim), ext
 
 
-def _compute_lengths(offsets: NDArray, nb_vertices: int) -> NDArray:
-    """Compute lengths from offsets and header information
+def _compute_lengths(offsets: NDArray) -> NDArray:
+    """Compute lengths from offsets
 
     Keyword arguments:
         offsets -- An NDArray of offsets
-        nb_vertices -- integer representing the number of vertices
 
     Returns:
         lengths -- An NDArray of lengths
     """
-    if len(offsets) > 1:
+    if len(offsets) > 0:
         last_elem_pos = _dichotomic_search(offsets)
-        if last_elem_pos == len(offsets) - 1:
-            lengths = np.ediff1d(
-                offsets, to_end=int(nb_vertices - offsets[-1]))
-        else:
-            tmp = offsets
-            tmp[last_elem_pos + 1] = nb_vertices
-            lengths = np.ediff1d(tmp, to_end=0)
-            lengths[last_elem_pos + 1] = 0
-    elif len(offsets) == 1:
-        lengths = np.array([nb_vertices])
+        lengths = np.ediff1d(offsets)
+        if len(lengths) > last_elem_pos:
+            lengths[last_elem_pos] = 0
     else:
         lengths = np.array([0])
 
@@ -742,9 +752,11 @@ class TrxFile:
         to_dump.tofile(positions_filename)
 
         if not self._copy_safe:
-            to_dump = self.streamlines.copy()._offsets
+            to_dump = _append_last_offsets(self.streamlines.copy()._offsets,
+                                           self.header["NB_VERTICES"])
         else:
-            to_dump = self.streamlines._offsets
+            to_dump = _append_last_offsets(self.streamlines._offsets,
+                                           self.header["NB_VERTICES"])
         offsets_filename = _generate_filename_from_data(
             self.streamlines._offsets, os.path.join(tmp_dir.name, "offsets")
         )
@@ -1055,16 +1067,16 @@ class TrxFile:
                     dtype=ext[1:],
                 )
             elif base == "offsets" and folder == "":
-                if size != trx.header["NB_STREAMLINES"] or dim != 1:
+                if size != trx.header["NB_STREAMLINES"]+1 or dim != 1:
                     raise ValueError("Wrong offsets size/dimensionality.")
                 offsets = _create_memmap(
                     filename,
                     mode="r+",
                     offset=mem_adress,
-                    shape=(trx.header["NB_STREAMLINES"],),
+                    shape=(trx.header["NB_STREAMLINES"]+1,),
                     dtype=ext[1:],
                 )
-                lengths = _compute_lengths(offsets, trx.header["NB_VERTICES"])
+                lengths = _compute_lengths(offsets)
             elif folder == "dps":
                 nb_scalar = size / trx.header["NB_STREAMLINES"]
                 if not nb_scalar.is_integer() or nb_scalar != dim:
@@ -1118,7 +1130,7 @@ class TrxFile:
         # All essential array must be declared
         if positions is not None and offsets is not None:
             trx.streamlines._data = positions
-            trx.streamlines._offsets = offsets
+            trx.streamlines._offsets = offsets[:-1]
             trx.streamlines._lengths = lengths
         else:
             raise ValueError("Missing essential data.")
@@ -1127,7 +1139,7 @@ class TrxFile:
             tmp = trx.data_per_vertex[dpv_key]
             trx.data_per_vertex[dpv_key] = ArraySequence()
             trx.data_per_vertex[dpv_key]._data = tmp
-            trx.data_per_vertex[dpv_key]._offsets = offsets
+            trx.data_per_vertex[dpv_key]._offsets = offsets[:-1]
             trx.data_per_vertex[dpv_key]._lengths = lengths
         return trx
 
