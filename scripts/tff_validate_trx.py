@@ -25,7 +25,7 @@ def _build_arg_parser():
     p.add_argument('in_tractogram',
                    help='Tractogram filename. Format must be one of \n'
                         'trk, tck, vtk, fib, dpy, trx.')
-    p.add_argument('out_tractogram',
+    p.add_argument('--out_tractogram',
                    help='Filename of the tractogram after removing invalid '
                         'streamlines.')
     p.add_argument('--remove_identical_streamlines', action='store_true',
