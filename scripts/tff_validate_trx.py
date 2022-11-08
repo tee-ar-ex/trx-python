@@ -6,8 +6,10 @@ Removal of streamlines that are out of the volume bounding box. In voxel space
 no negative coordinate and no above volume dimension coordinate are possible.
 Any streamline that do not respect these two conditions are removed.
 
-The --cut_invalid option will cut streamlines so that their longest segment are
-within the bounding box
+Also removes streamlines with single or no point.
+The --remove_identical_streamlines option will remove identical streamlines.
+'identical' is defined as having the same number of points and the same
+points coordinates (to a specific precision, using a hash table).
 """
 
 import argparse
@@ -23,10 +25,9 @@ def _build_arg_parser():
     p.add_argument('in_tractogram',
                    help='Tractogram filename. Format must be one of \n'
                         'trk, tck, vtk, fib, dpy, trx.')
-    p.add_argument('--out_tractogram',
-                   help='Save tractogram after removing streamlines with '
-                        'invalid coordinates or streamlines with single or no'
-                        ' point.')
+    p.add_argument('out_tractogram',
+                   help='Filename of the tractogram after removing invalid '
+                        'streamlines.')
     p.add_argument('--remove_identical_streamlines', action='store_true',
                    help='Remove identical streamlines from the set.')
 

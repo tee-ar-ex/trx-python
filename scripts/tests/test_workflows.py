@@ -13,12 +13,13 @@ try:
 except ImportError:
     dipy_available = False
 
-from trx.trx_file_memmap import load
+from trx.trx_file_memmap import concatenate, load, save
 from trx.fetcher import (get_testing_files_dict,
                          fetch_data, get_home)
 from trx.workflows import (convert_dsi_studio,
                            convert_tractogram,
-                           generate_trx_from_scratch)
+                           generate_trx_from_scratch,
+                           validate_tractogram)
 
 
 # If they already exist, this only takes 5 seconds (check md5sum)
@@ -176,8 +177,7 @@ def test_execution_generate_trx_from_scratch():
     groups = [(os.path.join(raw_arr_dir, 'g_AF_L.npy'), 'int32'),
               (os.path.join(raw_arr_dir, 'g_AF_R.npy'), 'int32'),
               (os.path.join(raw_arr_dir, 'g_CST_L.npy'), 'int32')]
-    print(os.path.join(raw_arr_dir,
-                                                   'offsets.npy'))
+
     generate_trx_from_scratch(reference_fa, 'generated.trx',
                               positions=os.path.join(raw_arr_dir,
                                                      'positions.npy'),
@@ -212,3 +212,45 @@ def test_execution_generate_trx_from_scratch():
             for key in exp_trx.data_per_group[group].keys():
                 assert_equal(exp_trx.data_per_group[group][key],
                              gen_trx.data_per_group[group][key])
+
+
+def test_execution_concatenate_validate_trx():
+    os.chdir(os.path.expanduser(tmp_dir.name))
+    trx1 = load(os.path.join(get_home(), 'gold_standard',
+                             'gs.trx'))
+    trx2 = load(os.path.join(get_home(), 'gold_standard',
+                             'gs.trx'))
+    trx2.streamlines._data += + 0.001
+
+    trx = concatenate([trx1, trx2], preallocation=False)
+
+    # Right size
+    assert_equal(len(trx.streamlines), 2*len(trx1.streamlines))
+
+    # Right data
+    end_idx = trx1.header['NB_VERTICES']
+    assert_allclose(trx.streamlines._data[:end_idx], trx1.streamlines._data)
+    assert_allclose(trx.streamlines._data[end_idx:], trx2.streamlines._data)
+
+    # Right data_per_*
+    for key in trx.data_per_vertex.keys():
+        assert_equal(trx.data_per_vertex[key]._data[:end_idx],
+                     trx1.data_per_vertex[key]._data)
+        assert_equal(trx.data_per_vertex[key]._data[end_idx:],
+                     trx2.data_per_vertex[key]._data)
+
+    end_idx = trx1.header['NB_STREAMLINES']
+    for key in trx.data_per_streamline.keys():
+        assert_equal(trx.data_per_streamline[key][:end_idx],
+                     trx1.data_per_streamline[key])
+        assert_equal(trx.data_per_streamline[key][end_idx:],
+                     trx2.data_per_streamline[key])
+
+    # Validate
+    save(trx, 'concat.trx')
+    validate_tractogram('concat.trx', None, 'valid.trx',
+                        remove_identical_streamlines=True)
+    trx = load('valid.trx')
+
+    # Right size
+    assert_equal(len(trx.streamlines), len(trx1.streamlines))
