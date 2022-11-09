@@ -7,7 +7,6 @@ import gzip
 import json
 import logging
 import os
-import tempfile
 
 import nibabel as nib
 from nibabel.streamlines.array_sequence import ArraySequence
@@ -21,7 +20,7 @@ try:
 except ImportError:
     dipy_available = False
 
-from trx.io import load_wrapper, load_sft_with_reference, save_wrapper
+from trx.io import get_trx_tmpdir, load_wrapper, load_sft_with_reference, save_wrapper
 from trx.streamlines_ops import perform_streamlines_operation, intersection
 from trx.trx_file_memmap import _compute_lengths, load, save, TrxFile
 from trx.viz import display
@@ -287,7 +286,7 @@ def generate_trx_from_scratch(reference, out_tractogram, positions_csv=False,
                               space_str='rasmm', origin_str='nifti',
                               verify_invalid=True, dpv=[], dps=[],
                               groups=[], dpg=[]):
-    with tempfile.TemporaryDirectory() as tmpdirname:
+    with get_trx_tmpdir() as tmpdirname:
         if positions_csv:
             with open(positions_csv, newline='') as f:
                 reader = csv.reader(f)
@@ -303,7 +302,6 @@ def generate_trx_from_scratch(reference, out_tractogram, positions_csv=False,
             streamlines._data = positions
             streamlines._offsets = deepcopy(offsets)
             streamlines._lengths = lengths
-            print(len(offsets), len(lengths), len(positions))
 
         if space_str.lower() != 'rasmm' or origin_str.lower() != 'nifti' or \
                 verify_invalid:
@@ -331,7 +329,6 @@ def generate_trx_from_scratch(reference, out_tractogram, positions_csv=False,
             "NB_VERTICES": len(streamlines._data),
             "NB_STREAMLINES": len(streamlines)-1,
         }
-        print(header)
 
         if header['NB_STREAMLINES'] <= 1:
             raise IOError('To use this script, you need at least 2'

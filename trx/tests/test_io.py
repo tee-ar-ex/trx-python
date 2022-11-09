@@ -8,13 +8,13 @@ import pytest
 import numpy as np
 from numpy.testing import assert_allclose
 from trx.trx_file_memmap import TrxFile
-from trx.io import load_wrapper, save_wrapper
+from trx.io import load_wrapper, save_wrapper, get_trx_tmpdir
 from trx.fetcher import (get_testing_files_dict,
                          fetch_data, get_home)
 
 
 fetch_data(get_testing_files_dict(), keys=['gold_standard.zip'])
-tmp_dir = tempfile.TemporaryDirectory()
+tmp_dir = get_trx_tmpdir()
 
 
 @pytest.mark.parametrize("path", [("gs.trx"), ("gs.trk"), ("gs.tck"),
