@@ -222,7 +222,7 @@ def tractogram_visualize_overlap(in_tractogram, reference, remove_invalid=True):
 
 
 def validate_tractogram(in_tractogram, reference, out_tractogram,
-                        remove_identical_streamlines=True):
+                        remove_identical_streamlines=True, precision=1):
     tractogram_obj = load_wrapper(in_tractogram, reference)
     if not isinstance(tractogram_obj, StatefulTractogram):
         sft = tractogram_obj.to_sft()
@@ -255,7 +255,8 @@ def validate_tractogram(in_tractogram, reference, out_tractogram,
 
     if remove_identical_streamlines:
         _, indices_uniq = perform_streamlines_operation(intersection,
-                                                        [sft.streamlines])
+                                                        [sft.streamlines],
+                                                        precision=precision)
         indices_final = np.intersect1d(
             indices_val, indices_uniq).astype(np.uint32)
         logging.warning('Removed {} overlapping streamlines.'.format(

@@ -15,6 +15,18 @@ def intersection(left, right):
     return {k: v for k, v in left.items() if k in right}
 
 
+def difference(left, right):
+    """Difference of two streamlines dict (see hash_streamlines)"""
+    return {k: v for k, v in left.items() if k not in right}
+
+
+def union(left, right):
+    """Union of two streamlines dict (see hash_streamlines)"""
+    result = right.copy()
+    result.update(left)
+    return result
+
+
 def get_streamline_key(streamline, precision=None):
     """Produces a key using a hash from a streamline using a few points only and
     the desired precision 
@@ -73,7 +85,6 @@ def hash_streamlines(streamlines, start_index=0, precision=None):
     starting at start_index.
 
     """
-
     keys = [get_streamline_key(s, precision) for s in streamlines]
     return {k: i for i, k in enumerate(keys, start_index)}
 

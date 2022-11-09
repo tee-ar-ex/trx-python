@@ -30,6 +30,9 @@ def _build_arg_parser():
                         'streamlines.')
     p.add_argument('--remove_identical_streamlines', action='store_true',
                    help='Remove identical streamlines from the set.')
+    p.add_argument('--precision', type=int, default=1,
+                   help='Number of decimals to keep when hashing the points '
+                        'of streamlines [%(default)s].')
 
     p.add_argument('--reference',
                    help='Reference anatomy for tck/vtk/fib/dpy file\n'
@@ -51,7 +54,8 @@ def main():
 
     validate_tractogram(args.in_tractogram, reference=args.reference,
                         out_tractogram=args.out_tractogram,
-                        remove_identical_streamlines=args.remove_identical_streamlines)
+                        remove_identical_streamlines=args.remove_identical_streamlines,
+                        precision=args.precision)
 
 
 if __name__ == "__main__":
