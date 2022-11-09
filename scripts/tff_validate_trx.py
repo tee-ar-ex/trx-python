@@ -2,14 +2,16 @@
 # -*- coding: utf-8 -*-
 
 """
-Removal of streamlines that are out of the volume bounding box. In voxel space
+Validate TRX file.
+
+Removes streamlines that are out of the volume bounding box. In voxel space,
 no negative coordinate and no above volume dimension coordinate are possible.
 Any streamline that do not respect these two conditions are removed.
 
 Also removes streamlines with single or no point.
 The --remove_identical_streamlines option will remove identical streamlines.
 'identical' is defined as having the same number of points and the same
-points coordinates (to a specific precision, using a hash table).
+points coordinates (to a specified precision, using a hash table).
 """
 
 import argparse
