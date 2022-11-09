@@ -26,14 +26,14 @@ tff_generate_trx_from_scratch.py fa.nii.gz generated.trx -f \
     --offsets test_npy/offsets.npy --offsets_dtype uint32 \
     --dpv test_npy/dpv_cx.npy uint8 \
     --dpv test_npy/dpv_cy.npy uint8 \
-    --dpv test_npy/dpv_cz.npy uint8  \
-    --dps test_npy/dps_algo.npy uint8 \ 
-    --dps test_npy/dps_cw.npy float64  \
+    --dpv test_npy/dpv_cz.npy uint8 \
+    --dps test_npy/dps_algo.npy uint8 \
+    --dps test_npy/dps_cw.npy float64 \
     --groups test_npy/g_AF_L.npy int32 \
     --groups test_npy/g_AF_R.npy int32 \
     --dpg g_AF_L test_npy/dpg_AF_L_mean_fa.npy float32 \
     --dpg g_AF_R test_npy/dpg_AF_R_mean_fa.npy float32 \
-    --dpg g_AF_L test_npy/dpg_AF_L_volume.npy float32 
+    --dpg g_AF_L test_npy/dpg_AF_L_volume.npy float32
 """
 
 import argparse
@@ -49,7 +49,7 @@ def _build_arg_parser():
                    help='Reference anatomy for tck/vtk/fib/dpy file\n'
                    'support (.nii or .nii.gz).')
     p.add_argument('out_tractogram', metavar='OUT_TRACTOGRAM',
-                   help='Output filename. Format must be one of \n'
+                   help='Output filename. Format must be one of\n'
                         'trk, tck, vtk, fib, dpy, trx.')
 
     p1 = p.add_argument_group(title='Positions options')
@@ -60,8 +60,8 @@ def _build_arg_parser():
                     help='Binary file containing the streamlines offsets (.npy)')
     p1.add_argument('--positions_csv', metavar='POSITIONS',
                     help='CSV file containing the streamlines coordinates.'
-                         '\nRows for each streamlines organized as x1,y1,z1,'
-                         'x2,y2,z2,\n...,xN,yN,zN')
+                         '\nRows for each streamlines organized as x1,y1,z1,\n'
+                         'x2,y2,z2,...,xN,yN,zN')
     p1.add_argument('--space', choices=['RASMM', 'VOXMM', 'VOX'],
                     default='RASMM',
                     help='Space in which the coordinates are declared.'
@@ -115,7 +115,7 @@ def main():
     if os.path.isfile(args.out_tractogram) and not args.overwrite:
         raise IOError('{} already exists, use -f to overwrite.'.format(
             args.out_tractogram))
-    
+
     if not args.positions and not args.positions_csv:
         parser.error('At least one positions options must be used.')
     if args.positions_csv and args.positions:

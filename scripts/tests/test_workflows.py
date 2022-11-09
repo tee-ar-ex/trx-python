@@ -249,7 +249,8 @@ def test_execution_concatenate_validate_trx():
     # Validate
     save(trx, 'concat.trx')
     validate_tractogram('concat.trx', None, 'valid.trx',
-                        remove_identical_streamlines=True)
+                        remove_identical_streamlines=True,
+                        precision=0)
     trx = load('valid.trx')
 
     # Right size

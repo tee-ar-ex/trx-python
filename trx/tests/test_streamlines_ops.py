@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
-from numpy.testing import assert_array_equal
 import pytest
 
 from trx.streamlines_ops import (perform_streamlines_operation,
