@@ -16,10 +16,16 @@ from nibabel.nifti1 import Nifti1Header, Nifti1Image
 from nibabel.orientations import aff2axcodes
 from nibabel.streamlines.array_sequence import ArraySequence
 from nibabel.streamlines.trk import TrkFile
+from nibabel.streamlines.tractogram import Tractogram, LazyTractogram
 import numpy as np
 from numpy.typing import ArrayLike, NDArray
 
 from trx.utils import get_reference_info_wrapper
+
+try:
+    from dipy.io.stateful_tractogram import StatefulTractogram
+except:
+    StatefulTractogram = None
 
 
 def _append_last_offsets(nib_offsets: NDArray, nb_vertices: int) -> NDArray:
@@ -406,6 +412,8 @@ def concatenate(
                 ref_trx.data_per_vertex[key]._data.dtype
                 != curr_trx.data_per_vertex[key]._data.dtype
             ):
+                print(key, ref_trx.data_per_vertex[key]._data.dtype,
+                      curr_trx.data_per_vertex[key]._data.dtype)
                 logging.debug(
                     "{} dpv key is not declared with the same dtype "
                     "in all TrxFile.".format(key)
@@ -1248,7 +1256,27 @@ class TrxFile:
         self.close()
         self.__dict__ = trx.__dict__
 
-    def append(self, trx: Type["TrxFile"], extra_buffer: int = 0) -> None:
+    def append(self, obj: Union["StatefulTractogram", "TrxFile",
+                                "Tractogram", "LazyTractogram"],
+               extra_buffer: int = 0) -> None:
+
+        if not isinstance(obj, (StatefulTractogram, TrxFile,
+                                Tractogram, LazyTractogram)):
+            raise TypeError("{} is not a supported object type for appending.")
+
+        elif isinstance(obj, LazyTractogram):
+            self._append_lazy_tractogram(obj, extra_buffer=extra_buffer)
+            return
+        elif isinstance(obj, Tractogram):
+            obj = self.from_tractogram(obj, reference=self.header,
+                                       cast_position=np.float32)
+        elif isinstance(obj, StatefulTractogram):
+            obj = self.from_sft(obj, cast_position=np.float32)
+
+        self._append_trx(obj, extra_buffer=extra_buffer)
+
+    def _append_trx(self, trx: Type["TrxFile"],
+                    extra_buffer: int = 0) -> None:
         """Append a TrxFile to another (support buffer)
 
         Keyword arguments:
@@ -1269,6 +1297,73 @@ class TrxFile:
                 nb_vertices=nb_vertices + extra_buffer * 100,
             )
         _ = concatenate([self, trx], preallocation=True, delete_groups=True)
+
+    def _finalize_append_lazy_tractogram(self, data):
+        streamlines = ArraySequence(data['strs'])
+        streamlines._data = streamlines._data.astype(
+            self.streamlines._data.dtype)
+
+        for key in data['dps']:
+            data['dps'][key] = np.array(data['dps'][key],
+                                        dtype=self.data_per_streamline[key].dtype)
+
+        data['data_per_point'] = {}
+        for key in data['dpp']:
+            if key not in data['data_per_point']:
+                tmp_arr = ArraySequence()
+                tmp_arr._data = data['dpp'][key].astype(
+                    self.data_per_vertex[key]._data.dtype)
+                tmp_arr._offsets = streamlines._offsets
+                tmp_arr._lengths = streamlines._lengths
+                data['data_per_point'][key] = tmp_arr
+
+        obj = Tractogram(streamlines, data_per_point=data['data_per_point'],
+                         data_per_streamline=data['dps'])
+        obj = self.from_tractogram(obj, reference=self.header)
+
+        return obj
+
+    def _append_lazy_tractogram(self, obj: Type["LazyTractogram"],
+                                extra_buffer: int = 0,
+                                chunk_size: int = 1000) -> None:
+        """Append a TrxFile to another (support buffer)
+
+        Keyword arguments:
+            trx -- The TrxFile to append to the current TrxFile
+            extra_buffer -- The additional buffer space required to append data
+        """
+
+        data = {'strs': [], 'dpp': {}, 'dps': {}}
+        count = 0
+        iterator = iter(obj)
+        while True:
+            if count < chunk_size:
+                print(count)
+                try:
+                    i = next(iterator)
+                    count += 1
+                except StopIteration:
+                    print(count, '-*')
+                    obj = self._finalize_append_lazy_tractogram(data)
+                    concatenate([self, obj], preallocation=True,
+                                delete_groups=True)
+                    print('!!!!!!!!!!!!!!!!!!!!!')
+                    print(self)
+                    break
+                data['strs'].append(i.streamline.tolist())
+                for key in i.data_for_points:
+                    if key not in data['dpp']:
+                        data['dpp'][key] = np.array([])
+                    data['dpp'][key] = np.append(
+                        data['dpp'][key], i.data_for_points[key])
+                for key in i.data_for_streamline:
+                    if key not in data['dps']:
+                        data['dps'][key] = []
+                    data['dps'][key].append(i.data_for_streamline[key])
+            else:
+                obj = self._finalize_append_lazy_tractogram(data)
+                concatenate([self, obj], preallocation=True,
+                            delete_groups=True)
 
     def get_group(
         self, key: str, keep_group: bool = True, copy_safe: bool = False

@@ -78,7 +78,7 @@ def get_reference_info_wrapper(reference):
         elif ext == '.trx':
             header = trx_file_memmap.load(reference).header
             is_trx = True
-    elif isinstance(reference, trx_file_memmap.trx_file_memmap.TrxFile):
+    elif isinstance(reference, trx_file_memmap.TrxFile):
         header = reference.header
         is_trx = True
     elif isinstance(reference, nib.nifti1.Nifti1Image):
