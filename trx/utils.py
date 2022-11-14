@@ -1,6 +1,9 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+from nibabel.streamlines.tractogram import TractogramItem
+from nibabel.streamlines.tractogram import Tractogram
+from nibabel.streamlines.array_sequence import ArraySequence
 import os
 import logging
 
@@ -376,3 +379,50 @@ def get_reverse_enum(space_str, origin_str):
         space = Space.VOX
 
     return space, origin
+
+
+def convert_data_dict_to_tractogram(data):
+    """ Convert a data from a lazy tractogram to a tractogram
+
+    Keyword arguments:
+        data -- The data dictionary to convert into a nibabel tractogram
+
+    Returns:
+        A Tractogram object
+    """
+    streamlines = ArraySequence(data['strs'])
+    streamlines._data = streamlines._data
+
+    for key in data['dps']:
+        data['dps'][key] = np.array(data['dps'][key])
+
+    data['data_per_point'] = {}
+    for key in data['dpp']:
+        if key not in data['data_per_point']:
+            tmp_arr = ArraySequence()
+            tmp_arr._data = data['dpp'][key]
+            tmp_arr._offsets = streamlines._offsets
+            tmp_arr._lengths = streamlines._lengths
+            data['data_per_point'][key] = tmp_arr
+
+    obj = Tractogram(streamlines, data_per_point=data['data_per_point'],
+                     data_per_streamline=data['dps'])
+
+    return obj
+
+
+def append_generator_to_dict(gen, data):
+    if isinstance(gen, TractogramItem):
+        data['strs'].append(gen.streamline.tolist())
+        for key in gen.data_for_points:
+            if key not in data['dpp']:
+                data['dpp'][key] = np.array([])
+            data['dpp'][key] = np.append(
+                data['dpp'][key], gen.data_for_points[key])
+        for key in gen.data_for_streamline:
+            if key not in data['dps']:
+                data['dps'][key] = np.array([])
+            data['dps'][key] = np.append(
+                data['dps'][key], gen.data_for_streamline[key])
+    else:
+        data['strs'].append(gen.tolist())

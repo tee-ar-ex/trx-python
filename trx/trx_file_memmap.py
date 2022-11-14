@@ -20,7 +20,9 @@ from nibabel.streamlines.tractogram import Tractogram, LazyTractogram
 import numpy as np
 from numpy.typing import ArrayLike, NDArray
 
-from trx.utils import get_reference_info_wrapper
+from trx.utils import (get_reference_info_wrapper,
+                       convert_data_dict_to_tractogram,
+                       append_generator_to_dict)
 
 try:
     from dipy.io.stateful_tractogram import StatefulTractogram
@@ -1261,12 +1263,8 @@ class TrxFile:
                extra_buffer: int = 0) -> None:
 
         if not isinstance(obj, (StatefulTractogram, TrxFile,
-                                Tractogram, LazyTractogram)):
+                                Tractogram)):
             raise TypeError("{} is not a supported object type for appending.")
-
-        elif isinstance(obj, LazyTractogram):
-            self._append_lazy_tractogram(obj, extra_buffer=extra_buffer)
-            return
         elif isinstance(obj, Tractogram):
             obj = self.from_tractogram(obj, reference=self.header,
                                        cast_position=np.float32)
@@ -1297,73 +1295,6 @@ class TrxFile:
                 nb_vertices=nb_vertices + extra_buffer * 100,
             )
         _ = concatenate([self, trx], preallocation=True, delete_groups=True)
-
-    def _finalize_append_lazy_tractogram(self, data):
-        streamlines = ArraySequence(data['strs'])
-        streamlines._data = streamlines._data.astype(
-            self.streamlines._data.dtype)
-
-        for key in data['dps']:
-            data['dps'][key] = np.array(data['dps'][key],
-                                        dtype=self.data_per_streamline[key].dtype)
-
-        data['data_per_point'] = {}
-        for key in data['dpp']:
-            if key not in data['data_per_point']:
-                tmp_arr = ArraySequence()
-                tmp_arr._data = data['dpp'][key].astype(
-                    self.data_per_vertex[key]._data.dtype)
-                tmp_arr._offsets = streamlines._offsets
-                tmp_arr._lengths = streamlines._lengths
-                data['data_per_point'][key] = tmp_arr
-
-        obj = Tractogram(streamlines, data_per_point=data['data_per_point'],
-                         data_per_streamline=data['dps'])
-        obj = self.from_tractogram(obj, reference=self.header)
-
-        return obj
-
-    def _append_lazy_tractogram(self, obj: Type["LazyTractogram"],
-                                extra_buffer: int = 0,
-                                chunk_size: int = 1000) -> None:
-        """Append a TrxFile to another (support buffer)
-
-        Keyword arguments:
-            trx -- The TrxFile to append to the current TrxFile
-            extra_buffer -- The additional buffer space required to append data
-        """
-
-        data = {'strs': [], 'dpp': {}, 'dps': {}}
-        count = 0
-        iterator = iter(obj)
-        while True:
-            if count < chunk_size:
-                print(count)
-                try:
-                    i = next(iterator)
-                    count += 1
-                except StopIteration:
-                    print(count, '-*')
-                    obj = self._finalize_append_lazy_tractogram(data)
-                    concatenate([self, obj], preallocation=True,
-                                delete_groups=True)
-                    print('!!!!!!!!!!!!!!!!!!!!!')
-                    print(self)
-                    break
-                data['strs'].append(i.streamline.tolist())
-                for key in i.data_for_points:
-                    if key not in data['dpp']:
-                        data['dpp'][key] = np.array([])
-                    data['dpp'][key] = np.append(
-                        data['dpp'][key], i.data_for_points[key])
-                for key in i.data_for_streamline:
-                    if key not in data['dps']:
-                        data['dps'][key] = []
-                    data['dps'][key].append(i.data_for_streamline[key])
-            else:
-                obj = self._finalize_append_lazy_tractogram(data)
-                concatenate([self, obj], preallocation=True,
-                            delete_groups=True)
 
     def get_group(
         self, key: str, keep_group: bool = True, copy_safe: bool = False
@@ -1466,6 +1397,57 @@ class TrxFile:
         new_trx.header["NB_VERTICES"] = len(new_trx.streamlines._data)
         new_trx.header["NB_STREAMLINES"] = len(new_trx.streamlines._lengths)
         return new_trx.deepcopy() if copy_safe else new_trx
+
+    @staticmethod
+    def from_lazy_tractogram(obj: ["LazyTractogram"], reference,
+                             extra_buffer: int = 0,
+                             chunk_size: int = 10000) -> None:
+        """Append a TrxFile to another (support buffer)
+
+        Keyword arguments:
+            trx -- The TrxFile to append to the current TrxFile
+            extra_buffer -- The buffer space between reallocation.
+                            This number should be a number of streamlines.
+                            Use 0 for no buffer.
+            chunk_size -- The number of streamlines to save at a time.
+        """
+
+        data = {'strs': [], 'dpp': {}, 'dps': {}}
+        concat = None
+        count = 0
+        iterator = iter(obj)
+        while True:
+            if count < chunk_size:
+                try:
+                    i = next(iterator)
+                    count += 1
+                except StopIteration:
+                    obj = convert_data_dict_to_tractogram(data)
+                    if concat is None:
+                        if len(obj.streamlines) == 0:
+                            concat = TrxFile()
+                        else:
+                            concat = TrxFile.from_tractogram(obj,
+                                                             reference=reference)
+                    elif len(obj.streamlines) > 0:
+                        curr_obj = TrxFile.from_tractogram(obj,
+                                                           reference=reference)
+                        concat.append(curr_obj)
+                    break
+                append_generator_to_dict(i, data)
+            else:
+                obj = convert_data_dict_to_tractogram(data)
+                if concat is None:
+                    concat = TrxFile.from_tractogram(obj, reference=reference)
+                else:
+                    curr_obj = TrxFile.from_tractogram(obj,
+                                                       reference=reference)
+                    concat.append(curr_obj, extra_buffer=extra_buffer)
+                data = {'strs': [], 'dpp': {}, 'dps': {}}
+                count = 0
+
+        concat.resize()
+        return concat
 
     @staticmethod
     def from_sft(sft, cast_position=np.float32):
