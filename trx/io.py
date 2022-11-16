@@ -48,7 +48,7 @@ def load_sft_with_reference(filepath, reference=None,
     return sft
 
 
-def load_wrapper(tractogram_filename, reference):
+def load(tractogram_filename, reference):
     in_ext = split_name_with_gz(tractogram_filename)[1]
     if in_ext != '.trx' and not os.path.isdir(tractogram_filename):
         tractogram_obj = load_sft_with_reference(tractogram_filename,
@@ -60,7 +60,7 @@ def load_wrapper(tractogram_filename, reference):
     return tractogram_obj
 
 
-def save_wrapper(tractogram_obj, tractogram_filename):
+def save(tractogram_obj, tractogram_filename):
     out_ext = split_name_with_gz(tractogram_filename)[1]
 
     if out_ext != '.trx':

@@ -21,7 +21,7 @@ try:
 except ImportError:
     dipy_available = False
 
-from trx.io import load_wrapper, load_sft_with_reference, save_wrapper
+from trx.io import load, load_sft_with_reference, save
 from trx.streamlines_ops import perform_streamlines_operation, intersection
 import trx.trx_file_memmap as tmm
 from trx.viz import display
@@ -119,13 +119,13 @@ def tractogram_simple_compare(in_tractograms, reference):
     if not dipy_available:
         logging.error('Dipy library is missing, scripts are not available.')
         return
-    tractogram_obj = load_wrapper(in_tractograms[0], reference)
+    tractogram_obj = load(in_tractograms[0], reference)
     if not isinstance(tractogram_obj, StatefulTractogram):
         sft_1 = tractogram_obj.to_sft()
     else:
         sft_1 = tractogram_obj
 
-    tractogram_obj = load_wrapper(in_tractograms[1], reference)
+    tractogram_obj = load(in_tractograms[1], reference)
     if not isinstance(tractogram_obj, StatefulTractogram):
         sft_2 = tractogram_obj.to_sft()
     else:
@@ -182,7 +182,7 @@ def tractogram_visualize_overlap(in_tractogram, reference, remove_invalid=True):
         logging.error('Dipy library is missing, scripts are not available.')
         return None
 
-    tractogram_obj = load_wrapper(in_tractogram, reference)
+    tractogram_obj = load(in_tractogram, reference)
     if not isinstance(tractogram_obj, StatefulTractogram):
         sft = tractogram_obj.to_sft()
     else:
@@ -223,7 +223,7 @@ def tractogram_visualize_overlap(in_tractogram, reference, remove_invalid=True):
 
 def validate_tractogram(in_tractogram, reference, out_tractogram,
                         remove_identical_streamlines=True, precision=1):
-    tractogram_obj = load_wrapper(in_tractogram, reference)
+    tractogram_obj = load(in_tractogram, reference)
     if not isinstance(tractogram_obj, StatefulTractogram):
         sft = tractogram_obj.to_sft()
     else:
@@ -278,7 +278,7 @@ def validate_tractogram(in_tractogram, reference, out_tractogram,
         new_sft = StatefulTractogram.from_sft(streamlines, sft,
                                               data_per_point=dpp,
                                               data_per_streamline=dps)
-        save_wrapper(new_sft, out_tractogram)
+        save(new_sft, out_tractogram)
 
 
 def generate_trx_from_scratch(reference, out_tractogram, positions_csv=False,

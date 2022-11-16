@@ -11,7 +11,7 @@ tractograms, the data must be deleted first.
 import argparse
 import os
 
-from trx.io import load_wrapper, save_wrapper
+from trx.io import load, save
 from trx.trx_file_memmap import TrxFile, concatenate
 
 
@@ -54,7 +54,7 @@ def main():
     trx_list = []
     has_group = False
     for filename in args.in_tractograms:
-        tractogram_obj = load_wrapper(filename, args.reference)
+        tractogram_obj = load(filename, args.reference)
 
         if not isinstance(tractogram_obj, TrxFile):
             tractogram_obj = TrxFile.from_sft(tractogram_obj)
@@ -67,7 +67,7 @@ def main():
                       delete_groups=args.delete_groups or not has_group,
                       check_space_attributes=True,
                       preallocation=False)
-    save_wrapper(trx, args.out_tractogram)
+    save(trx, args.out_tractogram)
 
 
 if __name__ == "__main__":
