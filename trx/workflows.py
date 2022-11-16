@@ -23,7 +23,7 @@ except ImportError:
 
 from trx.io import load_wrapper, load_sft_with_reference, save_wrapper
 from trx.streamlines_ops import perform_streamlines_operation, intersection
-from trx.trx_file_memmap import _compute_lengths, load, save, TrxFile
+import trx.trx_file_memmap as tmm
 from trx.viz import display
 from trx.utils import (flip_sft, is_header_compatible,
                        get_axis_shift_vector,
@@ -73,8 +73,8 @@ def convert_dsi_studio(in_dsi_tractogram, in_dsi_fa, out_tractogram,
         save_tractogram(sft_flip, out_tractogram,
                         bbox_valid_check=not keep_invalid)
     else:
-        trx = TrxFile.from_sft(sft_flip)
-        save(trx, out_tractogram)
+        trx = tmm.TrxFile.from_sft(sft_flip)
+        tmm.save(trx, out_tractogram)
 
 
 def convert_tractogram(in_tractogram, out_tractogram, reference,
@@ -92,7 +92,7 @@ def convert_tractogram(in_tractogram, out_tractogram, reference,
         sft = load_sft_with_reference(in_tractogram, reference,
                                       bbox_check=False)
     else:
-        trx = load(in_tractogram)
+        trx = tmm.load(in_tractogram)
         sft = trx.to_sft()
 
     if out_ext != '.trx':
@@ -106,13 +106,13 @@ def convert_tractogram(in_tractogram, out_tractogram, reference,
                     offsets_dtype)
         save_tractogram(sft, out_tractogram, bbox_valid_check=False)
     else:
-        trx = TrxFile.from_sft(sft)
+        trx = tmm.TrxFile.from_sft(sft)
         if trx.streamlines._data.dtype.name != pos_dtype:
             trx.streamlines._data = trx.streamlines._data.astype(pos_dtype)
         if trx.streamlines._offsets.dtype.name != offsets_dtype:
             trx.streamlines._offsets = trx.streamlines._offsets.astype(
                 offsets_dtype)
-        save(trx, out_tractogram)
+        tmm.save(trx, out_tractogram)
 
 
 def tractogram_simple_compare(in_tractograms, reference):
@@ -298,12 +298,11 @@ def generate_trx_from_scratch(reference, out_tractogram, positions_csv=False,
         else:
             positions = load_matrix_in_any_format(positions)
             offsets = load_matrix_in_any_format(offsets)
-            lengths = _compute_lengths(offsets)
+            lengths = tmm._compute_lengths(offsets)
             streamlines = ArraySequence()
             streamlines._data = positions
             streamlines._offsets = deepcopy(offsets)
             streamlines._lengths = lengths
-            print(len(offsets), len(lengths), len(positions))
 
         if space_str.lower() != 'rasmm' or origin_str.lower() != 'nifti' or \
                 verify_invalid:
@@ -331,7 +330,6 @@ def generate_trx_from_scratch(reference, out_tractogram, positions_csv=False,
             "NB_VERTICES": len(streamlines._data),
             "NB_STREAMLINES": len(streamlines)-1,
         }
-        print(header)
 
         if header['NB_STREAMLINES'] <= 1:
             raise IOError('To use this script, you need at least 2'
@@ -411,5 +409,5 @@ def generate_trx_from_scratch(reference, out_tractogram, positions_csv=False,
                     os.path.basename(os.path.splitext(arg[1])[0]), dim, arg[2]))
                 curr_arr.tofile(curr_filename)
 
-        trx = load(tmpdirname)
-        save(trx, out_tractogram)
+        trx = tmm.load(tmpdirname)
+        tmm.save(trx, out_tractogram)

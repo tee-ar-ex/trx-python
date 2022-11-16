@@ -17,7 +17,7 @@ except ImportError:
     dipy_available = False
 
 from trx.utils import split_name_with_gz
-from trx.trx_file_memmap import load, save, TrxFile
+import trx.trx_file_memmap as tmm
 
 
 def load_sft_with_reference(filepath, reference=None,
@@ -55,7 +55,7 @@ def load_wrapper(tractogram_filename, reference):
                                                  reference,
                                                  bbox_check=False)
     else:
-        tractogram_obj = load(tractogram_filename)
+        tractogram_obj = tmm.load(tractogram_filename)
 
     return tractogram_obj
 
@@ -69,6 +69,6 @@ def save_wrapper(tractogram_obj, tractogram_filename):
         save_tractogram(tractogram_obj, tractogram_filename,
                         bbox_valid_check=False)
     else:
-        if not isinstance(tractogram_obj, TrxFile):
-            tractogram_obj = TrxFile.from_sft(tractogram_obj)
-        save(tractogram_obj, tractogram_filename)
+        if not isinstance(tractogram_obj, tmm.TrxFile):
+            tractogram_obj = tmm.TrxFile.from_sft(tractogram_obj)
+        tmm.save(tractogram_obj, tractogram_filename)
