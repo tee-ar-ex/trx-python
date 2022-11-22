@@ -247,37 +247,36 @@ def test_append_Tractogram(path, buffer):
                                                 ("small.trx", 0, 0),
                                                 ("small.trx", 25000, 10000)])
 def test_from_lazy_tractogram(path, size, buffer):
-    DATA = {}
-    DATA['rng'] = np.random.RandomState(1776)
-    DATA['streamlines'] = []
-    DATA['fa'] = []
-    DATA['commit_weights'] = []
-    DATA['clusters_QB'] = []
+    rng = np.random.RandomState(1776)
+    streamlines = []
+    fa = []
+    commit_weights = []
+    clusters_QB = []
     gen_range = [1, 2, 5, 2, 1] * (size // 5)
     for i in gen_range:
         data = make_dummy_streamline(i)
         streamline, data_per_point, data_for_streamline = data
-        DATA['streamlines'].append(streamline)
-        DATA['fa'].append(data_per_point['fa'].astype(np.float16))
-        DATA['commit_weights'].append(
+        streamlines.append(streamline)
+        fa.append(data_per_point['fa'].astype(np.float16))
+        commit_weights.append(
             data_for_streamline['mean_curvature'].astype(np.float32))
-        DATA['clusters_QB'].append(
+        clusters_QB.append(
             data_for_streamline['mean_torsion'].astype(np.uint16))
 
-    DATA['data_per_point'] = {'fa': [e for e in DATA['fa']]}
-    DATA['data_per_streamline'] = {
-        'commit_weights': [e for e in DATA['commit_weights']],
-        'clusters_QB': [e for e in DATA['clusters_QB']]}
+    data_per_point = {'fa': [e for e in fa]}
+    data_per_streamline = {
+        'commit_weights': [e for e in commit_weights],
+        'clusters_QB': [e for e in clusters_QB]}
 
-    DATA['streamlines_func'] = lambda: (e for e in DATA['streamlines'])
-    DATA['data_per_point_func'] = {'fa': lambda: (e for e in DATA['fa'])}
-    DATA['data_per_streamline_func'] = {
-        'commit_weights': lambda: (e for e in DATA['commit_weights']),
-        'clusters_QB': lambda: (e for e in DATA['clusters_QB'])}
+    streamlines_func = lambda: (e for e in streamlines)
+    data_per_point_func = {'fa': lambda: (e for e in fa)}
+    data_per_streamline_func = {
+        'commit_weights': lambda: (e for e in commit_weights),
+        'clusters_QB': lambda: (e for e in clusters_QB)}
 
-    obj = LazyTractogram(DATA['streamlines_func'],
-                         DATA['data_per_streamline_func'],
-                         DATA['data_per_point_func'],
+    obj = LazyTractogram(streamlines_func,
+                         data_per_streamline_func,
+                         data_per_point_func,
                          affine_to_rasmm=np.eye(4))
 
     path = os.path.join(get_home(), 'memmap_test_data', path)
