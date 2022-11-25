@@ -16,8 +16,6 @@ try:
 except ImportError:
     dipy_available = False
 
-from trx import trx_file_memmap
-
 
 def split_name_with_gz(filename):
     """
@@ -63,6 +61,7 @@ def get_reference_info_wrapper(reference):
         - voxel_sizes  ndarray (3,), float32, size of voxel for each axis
         - voxel_order, string, Typically 'RAS' or 'LPS'
     """
+    from trx import trx_file_memmap
     is_nifti = False
     is_trk = False
     is_sft = False

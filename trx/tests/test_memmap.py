@@ -1,21 +1,19 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import os
 import tempfile
+from tempfile import mkdtemp
 
 import pytest
 import numpy as np
 import trx.trx_file_memmap as tmm
 from trx.fetcher import (get_testing_files_dict,
                          fetch_data, get_home)
-from tempfile import mkdtemp
 
-import pathlib
-import os
 
 fetch_data(get_testing_files_dict(), keys=['memmap_test_data.zip'])
 tmp_dir = tempfile.TemporaryDirectory()
-
 
 
 @pytest.mark.parametrize(

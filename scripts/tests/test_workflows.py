@@ -13,12 +13,13 @@ try:
 except ImportError:
     dipy_available = False
 
-from trx.trx_file_memmap import load
+import trx.trx_file_memmap as tmm
 from trx.fetcher import (get_testing_files_dict,
                          fetch_data, get_home)
 from trx.workflows import (convert_dsi_studio,
                            convert_tractogram,
-                           generate_trx_from_scratch)
+                           generate_trx_from_scratch,
+                           validate_tractogram)
 
 
 # If they already exist, this only takes 5 seconds (check md5sum)
@@ -88,7 +89,7 @@ def test_execution_convert_to_trx():
     data_fix = np.load(exp_data)
     offsets_fix = np.load(exp_offsets)
 
-    trx = load('CC_fix.trx')
+    trx = tmm.load('CC_fix.trx')
     assert_equal(trx.streamlines._data.dtype, np.float32)
     assert_equal(trx.streamlines._offsets.dtype, np.uint32)
     assert_array_equal(trx.streamlines._data, data_fix)
@@ -136,7 +137,7 @@ def test_execution_convert_dtype_p16_o64():
     convert_tractogram(in_trk, 'CC_fix_p16_o64.trx', None,
                        pos_dtype='float16', offsets_dtype='uint64')
 
-    trx = load('CC_fix_p16_o64.trx')
+    trx = tmm.load('CC_fix_p16_o64.trx')
     assert_equal(trx.streamlines._data.dtype, np.float16)
     assert_equal(trx.streamlines._offsets.dtype, np.uint64)
 
@@ -151,7 +152,7 @@ def test_execution_convert_dtype_p64_o32():
     convert_tractogram(in_trk, 'CC_fix_p64_o32.trx', None,
                        pos_dtype='float64', offsets_dtype='uint32')
 
-    trx = load('CC_fix_p64_o32.trx')
+    trx = tmm.load('CC_fix_p64_o32.trx')
     assert_equal(trx.streamlines._data.dtype, np.float64)
     assert_equal(trx.streamlines._offsets.dtype, np.uint32)
 
@@ -176,8 +177,7 @@ def test_execution_generate_trx_from_scratch():
     groups = [(os.path.join(raw_arr_dir, 'g_AF_L.npy'), 'int32'),
               (os.path.join(raw_arr_dir, 'g_AF_R.npy'), 'int32'),
               (os.path.join(raw_arr_dir, 'g_CST_L.npy'), 'int32')]
-    print(os.path.join(raw_arr_dir,
-                                                   'offsets.npy'))
+
     generate_trx_from_scratch(reference_fa, 'generated.trx',
                               positions=os.path.join(raw_arr_dir,
                                                      'positions.npy'),
@@ -189,8 +189,8 @@ def test_execution_generate_trx_from_scratch():
                               verify_invalid=True, dpv=dpv, dps=dps,
                               groups=groups, dpg=dpg)
 
-    exp_trx = load(expected_trx)
-    gen_trx = load('generated.trx')
+    exp_trx = tmm.load(expected_trx)
+    gen_trx = tmm.load('generated.trx')
 
     assert_allclose(exp_trx.streamlines._data, gen_trx.streamlines._data,
                     atol=0.1, rtol=0.1)
@@ -212,3 +212,46 @@ def test_execution_generate_trx_from_scratch():
             for key in exp_trx.data_per_group[group].keys():
                 assert_equal(exp_trx.data_per_group[group][key],
                              gen_trx.data_per_group[group][key])
+
+
+def test_execution_concatenate_validate_trx():
+    os.chdir(os.path.expanduser(tmp_dir.name))
+    trx1 = tmm.load(os.path.join(get_home(), 'gold_standard',
+                                 'gs.trx'))
+    trx2 = tmm.load(os.path.join(get_home(), 'gold_standard',
+                                 'gs.trx'))
+    trx2.streamlines._data += + 0.001
+
+    trx = tmm.concatenate([trx1, trx2], preallocation=False)
+
+    # Right size
+    assert_equal(len(trx.streamlines), 2*len(trx1.streamlines))
+
+    # Right data
+    end_idx = trx1.header['NB_VERTICES']
+    assert_allclose(trx.streamlines._data[:end_idx], trx1.streamlines._data)
+    assert_allclose(trx.streamlines._data[end_idx:], trx2.streamlines._data)
+
+    # Right data_per_*
+    for key in trx.data_per_vertex.keys():
+        assert_equal(trx.data_per_vertex[key]._data[:end_idx],
+                     trx1.data_per_vertex[key]._data)
+        assert_equal(trx.data_per_vertex[key]._data[end_idx:],
+                     trx2.data_per_vertex[key]._data)
+
+    end_idx = trx1.header['NB_STREAMLINES']
+    for key in trx.data_per_streamline.keys():
+        assert_equal(trx.data_per_streamline[key][:end_idx],
+                     trx1.data_per_streamline[key])
+        assert_equal(trx.data_per_streamline[key][end_idx:],
+                     trx2.data_per_streamline[key])
+
+    # Validate
+    tmm.save(trx, 'concat.trx')
+    validate_tractogram('concat.trx', None, 'valid.trx',
+                        remove_identical_streamlines=True,
+                        precision=0)
+    trx = tmm.load('valid.trx')
+
+    # Right size
+    assert_equal(len(trx.streamlines), len(trx1.streamlines))
