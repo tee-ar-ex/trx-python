@@ -3,6 +3,7 @@
 
 import os
 import tempfile
+from tempfile import mkdtemp
 
 from nibabel.streamlines.tests.test_tractogram import make_dummy_streamline
 from nibabel.streamlines import LazyTractogram

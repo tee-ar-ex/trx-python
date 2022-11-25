@@ -180,7 +180,7 @@ def _create_memmap(
     """Wrapper to support empty array as memmaps
 
     Keyword arguments:
-        filename -- filename of the file where the empty memmap should be created
+        filename -- filename where the empty memmap should be created
         mode -- file open mode (see: np.memmap for options)
         shape -- shape of memmapped NDArray
         dtype -- datatype of memmapped NDArray
@@ -188,7 +188,8 @@ def _create_memmap(
         order -- data representation on disk (C or Fortran)
 
     Returns:
-        mmapped NDArray or a zero-filled Numpy array if array has a shape of 0 in the first dimension
+        mmapped NDArray or a zero-filled Numpy array if array has a shape of 0
+            in the first dimension
     """
     if np.dtype(dtype) == bool:
         filename = filename.replace(".bool", ".bit")
@@ -360,12 +361,17 @@ def concatenate(
 
     Keyword arguments:
         trx_list -- A list containing TrxFiles to concatenate
-        delete_dpv -- Delete dpv keys that do not exist in all the provided TrxFiles
-        delete_dps -- Delete dps keys that do not exist in all the provided TrxFile
-        delete_groups -- Delete all the groups that currently exist in the TrxFiles
-        check_space_attributes -- Verify that dimensions and size of data are similar between all the TrxFiles
-        preallocation -- Preallocated TrxFile has already been generated and is the first element in trx_list
-                         (Note: delete_groups must be set to True as well)
+        delete_dpv -- Delete dpv keys that do not exist in all the provided
+            TrxFiles
+        delete_dps -- Delete dps keys that do not exist in all the provided
+            TrxFile
+        delete_groups -- Delete all the groups that currently exist in the
+            TrxFiles
+        check_space_attributes -- Verify that dimensions and size of data are
+            similar between all the TrxFiles
+        preallocation -- Preallocated TrxFile has already been generated and
+            is the first element in trx_list
+            (Note: delete_groups must be set to True as well)
 
     Returns:
         TrxFile representing the concatenated data
@@ -403,7 +409,8 @@ def concatenate(
     # Verifying the validity of fixed-size arrays, coherence between inputs
     for curr_trx in trx_list:
         for key in all_dpv:
-            if key not in ref_trx.data_per_vertex.keys() or key not in curr_trx.data_per_vertex.keys():
+            if key not in ref_trx.data_per_vertex.keys() \
+                    or key not in curr_trx.data_per_vertex.keys():
                 if not delete_dpv:
                     logging.debug(
                         "{} dpv key does not exist in all TrxFile.".format(key)
@@ -424,7 +431,8 @@ def concatenate(
 
     for curr_trx in trx_list:
         for key in all_dps:
-            if key not in ref_trx.data_per_streamline.keys() or key not in curr_trx.data_per_streamline.keys():
+            if key not in ref_trx.data_per_streamline.keys() \
+                    or key not in curr_trx.data_per_streamline.keys():
                 if not delete_dps:
                     logging.debug(
                         "{} dps key does not exist in all " "TrxFile.".format(
@@ -528,7 +536,8 @@ def save(
     Keyword arguments:
         trx -- The TrxFile to save
         filename -- The path to save the TrxFile to
-        compression_standard -- The compression standard to use, as defined by the ZipFile library
+        compression_standard -- The compression standard to use, as defined by
+            the ZipFile library
     """
     if os.path.splitext(filename)[1] and not os.path.splitext(filename)[1] in [
         ".zip",
@@ -560,7 +569,8 @@ def zip_from_folder(
     Keyword arguments
         directory -- The path to the on-disk memmap
         filename -- The path where the zip file should be created
-        compression_standard -- The compression standard to use, as defined by the ZipFile library
+        compression_standard -- The compression standard to use, as defined by
+            the ZipFile library
 
     """
     with zipfile.ZipFile(filename, mode="w", compression=compression_standard) as zf:
@@ -817,7 +827,8 @@ class TrxFile:
         """Get the real size of data (ignoring zeros of preallocation)
 
         Returns
-            A tuple representing the index of the last streamline and the total length of all the streamlines
+            A tuple representing the index of the last streamline and the total
+                length of all the streamlines
         """
         if len(self.streamlines._lengths) == 0:
             return 0, 0
@@ -894,8 +905,10 @@ class TrxFile:
         """Create on-disk memmaps of a certain size (preallocation)
 
         Keyword arguments:
-            nb_streamlines -- The number of streamlines that the empty TrxFile will be initialized with
-            nb_vertices -- The number of vertices that the empty TrxFile will be initialized with
+            nb_streamlines -- The number of streamlines that the empty TrxFile
+                will be initialized with
+            nb_vertices -- The number of vertices that the empty TrxFile will
+                be initialized with
             init_as -- A TrxFile to initialize the empty TrxFile with
 
         Returns:
@@ -1023,8 +1036,10 @@ class TrxFile:
         """After reading the structure of a zip/folder, create a TrxFile
 
         Keyword arguments:
-            header -- A TrxFile header dictionary which will be used for the new TrxFile
-            dict_pointer_size -- A dictionary containing the filenames of all the files within the TrxFile disk file/folder
+            header -- A TrxFile header dictionary which will be used for the
+                new TrxFile
+            dict_pointer_size -- A dictionary containing the filenames of all
+                the files within the TrxFile disk file/folder
             root_zip -- The path of the ZipFile pointer
             root -- The dirname of the ZipFile pointer
 
@@ -1452,12 +1467,6 @@ class TrxFile:
     @staticmethod
     def from_sft(sft, cast_position=np.float32):
         """Generate a valid TrxFile from a StatefulTractogram"""
-        try:
-            from dipy.io.stateful_tractogram import StatefulTractogram, Space
-        except ImportError:
-            logging.error('Dipy library is missing, cannot convert to '
-                          'StatefulTractogram.')
-            return None
 
         if not np.issubdtype(cast_position, np.floating):
             logging.warning(
