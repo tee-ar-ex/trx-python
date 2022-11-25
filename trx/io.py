@@ -55,21 +55,21 @@ def load_sft_with_reference(filepath, reference=None,
     return sft
 
 
-def load_wrapper(tractogram_filename, reference):
-    from trx.trx_file_memmap import load
+def load(tractogram_filename, reference):
+    import trx.trx_file_memmap as tmm
     in_ext = split_name_with_gz(tractogram_filename)[1]
     if in_ext != '.trx' and not os.path.isdir(tractogram_filename):
         tractogram_obj = load_sft_with_reference(tractogram_filename,
                                                  reference,
                                                  bbox_check=False)
     else:
-        tractogram_obj = load(tractogram_filename)
+        tractogram_obj = tmm.load(tractogram_filename)
 
     return tractogram_obj
 
 
-def save_wrapper(tractogram_obj, tractogram_filename):
-    from trx.trx_file_memmap import save, TrxFile
+def save(tractogram_obj, tractogram_filename):
+    import trx.trx_file_memmap as tmm
     out_ext = split_name_with_gz(tractogram_filename)[1]
 
     if out_ext != '.trx':
@@ -78,6 +78,6 @@ def save_wrapper(tractogram_obj, tractogram_filename):
         save_tractogram(tractogram_obj, tractogram_filename,
                         bbox_valid_check=False)
     else:
-        if not isinstance(tractogram_obj, TrxFile):
-            tractogram_obj = TrxFile.from_sft(tractogram_obj)
-        save(tractogram_obj, tractogram_filename)
+        if not isinstance(tractogram_obj, tmm.TrxFile):
+            tractogram_obj = tmm.TrxFile.from_sft(tractogram_obj)
+        tmm.save(tractogram_obj, tractogram_filename)

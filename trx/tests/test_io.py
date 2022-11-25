@@ -2,13 +2,12 @@
 # -*- coding: utf-8 -*-
 
 import os
-import tempfile
 
 import pytest
 import numpy as np
 from numpy.testing import assert_allclose
 from trx.trx_file_memmap import TrxFile
-from trx.io import load_wrapper, save_wrapper, get_trx_tmpdir
+from trx.io import load, save, get_trx_tmpdir
 from trx.fetcher import (get_testing_files_dict,
                          fetch_data, get_home)
 
@@ -24,7 +23,7 @@ def test_load_vox(path):
     path = os.path.join(dir, path)
     coord = np.loadtxt(os.path.join(get_home(), 'gold_standard',
                                     'gs_vox_space.txt'))
-    obj = load_wrapper(path, os.path.join(dir, 'gs.nii'))
+    obj = load(path, os.path.join(dir, 'gs.nii'))
 
     sft = obj.to_sft() if isinstance(obj, TrxFile) else obj
     sft.to_vox()
@@ -39,7 +38,7 @@ def test_load_voxmm(path):
     path = os.path.join(dir, path)
     coord = np.loadtxt(os.path.join(get_home(), 'gold_standard',
                                     'gs_voxmm_space.txt'))
-    obj = load_wrapper(path, os.path.join(dir, 'gs.nii'))
+    obj = load(path, os.path.join(dir, 'gs.nii'))
 
     sft = obj.to_sft() if isinstance(obj, TrxFile) else obj
     sft.to_voxmm()
@@ -56,9 +55,9 @@ def test_multi_load_save_rasmm(path):
     coord = np.loadtxt(os.path.join(get_home(), 'gold_standard',
                                     'gs_rasmm_space.txt'))
 
-    obj = load_wrapper(path, os.path.join(dir, 'gs.nii'))
+    obj = load(path, os.path.join(dir, 'gs.nii'))
     for _ in range(100):
-        save_wrapper(obj, out_path)
-        obj = load_wrapper(out_path, os.path.join(dir, 'gs.nii'))
+        save(obj, out_path)
+        obj = load(out_path, os.path.join(dir, 'gs.nii'))
 
     assert_allclose(obj.streamlines._data, coord, rtol=1e-04, atol=1e-06)

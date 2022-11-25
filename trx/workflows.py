@@ -20,9 +20,9 @@ try:
 except ImportError:
     dipy_available = False
 
-from trx.io import get_trx_tmpdir, load_wrapper, load_sft_with_reference, save_wrapper
+from trx.io import get_trx_tmpdir, load, load_sft_with_reference, save
 from trx.streamlines_ops import perform_streamlines_operation, intersection
-from trx.trx_file_memmap import _compute_lengths, load, save, TrxFile
+import trx.trx_file_memmap as tmm
 from trx.viz import display
 from trx.utils import (flip_sft, is_header_compatible,
                        get_axis_shift_vector,
@@ -72,8 +72,8 @@ def convert_dsi_studio(in_dsi_tractogram, in_dsi_fa, out_tractogram,
         save_tractogram(sft_flip, out_tractogram,
                         bbox_valid_check=not keep_invalid)
     else:
-        trx = TrxFile.from_sft(sft_flip)
-        save(trx, out_tractogram)
+        trx = tmm.TrxFile.from_sft(sft_flip)
+        tmm.save(trx, out_tractogram)
 
 
 def convert_tractogram(in_tractogram, out_tractogram, reference,
@@ -91,7 +91,7 @@ def convert_tractogram(in_tractogram, out_tractogram, reference,
         sft = load_sft_with_reference(in_tractogram, reference,
                                       bbox_check=False)
     else:
-        trx = load(in_tractogram)
+        trx = tmm.load(in_tractogram)
         sft = trx.to_sft()
 
     if out_ext != '.trx':
@@ -105,26 +105,26 @@ def convert_tractogram(in_tractogram, out_tractogram, reference,
                     offsets_dtype)
         save_tractogram(sft, out_tractogram, bbox_valid_check=False)
     else:
-        trx = TrxFile.from_sft(sft)
+        trx = tmm.TrxFile.from_sft(sft)
         if trx.streamlines._data.dtype.name != pos_dtype:
             trx.streamlines._data = trx.streamlines._data.astype(pos_dtype)
         if trx.streamlines._offsets.dtype.name != offsets_dtype:
             trx.streamlines._offsets = trx.streamlines._offsets.astype(
                 offsets_dtype)
-        save(trx, out_tractogram)
+        tmm.save(trx, out_tractogram)
 
 
 def tractogram_simple_compare(in_tractograms, reference):
     if not dipy_available:
         logging.error('Dipy library is missing, scripts are not available.')
         return
-    tractogram_obj = load_wrapper(in_tractograms[0], reference)
+    tractogram_obj = load(in_tractograms[0], reference)
     if not isinstance(tractogram_obj, StatefulTractogram):
         sft_1 = tractogram_obj.to_sft()
     else:
         sft_1 = tractogram_obj
 
-    tractogram_obj = load_wrapper(in_tractograms[1], reference)
+    tractogram_obj = load(in_tractograms[1], reference)
     if not isinstance(tractogram_obj, StatefulTractogram):
         sft_2 = tractogram_obj.to_sft()
     else:
@@ -181,7 +181,7 @@ def tractogram_visualize_overlap(in_tractogram, reference, remove_invalid=True):
         logging.error('Dipy library is missing, scripts are not available.')
         return None
 
-    tractogram_obj = load_wrapper(in_tractogram, reference)
+    tractogram_obj = load(in_tractogram, reference)
     if not isinstance(tractogram_obj, StatefulTractogram):
         sft = tractogram_obj.to_sft()
     else:
@@ -222,7 +222,7 @@ def tractogram_visualize_overlap(in_tractogram, reference, remove_invalid=True):
 
 def validate_tractogram(in_tractogram, reference, out_tractogram,
                         remove_identical_streamlines=True, precision=1):
-    tractogram_obj = load_wrapper(in_tractogram, reference)
+    tractogram_obj = load(in_tractogram, reference)
     if not isinstance(tractogram_obj, StatefulTractogram):
         sft = tractogram_obj.to_sft()
     else:
@@ -277,7 +277,7 @@ def validate_tractogram(in_tractogram, reference, out_tractogram,
         new_sft = StatefulTractogram.from_sft(streamlines, sft,
                                               data_per_point=dpp,
                                               data_per_streamline=dps)
-        save_wrapper(new_sft, out_tractogram)
+        save(new_sft, out_tractogram)
 
 
 def generate_trx_from_scratch(reference, out_tractogram, positions_csv=False,
@@ -297,7 +297,7 @@ def generate_trx_from_scratch(reference, out_tractogram, positions_csv=False,
         else:
             positions = load_matrix_in_any_format(positions)
             offsets = load_matrix_in_any_format(offsets)
-            lengths = _compute_lengths(offsets)
+            lengths = tmm._compute_lengths(offsets)
             streamlines = ArraySequence()
             streamlines._data = positions
             streamlines._offsets = deepcopy(offsets)
@@ -408,5 +408,5 @@ def generate_trx_from_scratch(reference, out_tractogram, positions_csv=False,
                     os.path.basename(os.path.splitext(arg[1])[0]), dim, arg[2]))
                 curr_arr.tofile(curr_filename)
 
-        trx = load(tmpdirname)
-        save(trx, out_tractogram)
+        trx = tmm.load(tmpdirname)
+        tmm.save(trx, out_tractogram)
