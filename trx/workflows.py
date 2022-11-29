@@ -7,7 +7,6 @@ import gzip
 import json
 import logging
 import os
-import tempfile
 
 import nibabel as nib
 from nibabel.streamlines.array_sequence import ArraySequence
@@ -21,7 +20,7 @@ try:
 except ImportError:
     dipy_available = False
 
-from trx.io import load, load_sft_with_reference, save
+from trx.io import get_trx_tmpdir, load, load_sft_with_reference, save
 from trx.streamlines_ops import perform_streamlines_operation, intersection
 import trx.trx_file_memmap as tmm
 from trx.viz import display
@@ -287,7 +286,7 @@ def generate_trx_from_scratch(reference, out_tractogram, positions_csv=False,
                               space_str='rasmm', origin_str='nifti',
                               verify_invalid=True, dpv=[], dps=[],
                               groups=[], dpg=[]):
-    with tempfile.TemporaryDirectory() as tmpdirname:
+    with get_trx_tmpdir() as tmpdirname:
         if positions_csv:
             with open(positions_csv, newline='') as f:
                 reader = csv.reader(f)

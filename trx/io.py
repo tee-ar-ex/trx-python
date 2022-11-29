@@ -3,21 +3,28 @@
 
 import os
 import logging
-
-from nibabel.streamlines.array_sequence import ArraySequence
-import numpy as np
+import tempfile
 
 try:
-    import dipy
     from dipy.io.stateful_tractogram import StatefulTractogram
     from dipy.io.streamline import load_tractogram, save_tractogram
-    from dipy.io.utils import is_header_compatible
     dipy_available = True
 except ImportError:
     dipy_available = False
 
 from trx.utils import split_name_with_gz
-import trx.trx_file_memmap as tmm
+
+
+def get_trx_tmpdir():
+    if os.getenv('TRX_TMPDIR') is not None:
+        if os.getenv('TRX_TMPDIR') == 'use_working_dir':
+            trx_tmp_dir = os.getcwd()
+        else:
+            trx_tmp_dir = os.getenv('TRX_TMPDIR')
+    else:
+        trx_tmp_dir = tempfile.gettempdir()
+
+    return tempfile.TemporaryDirectory(dir=trx_tmp_dir, prefix='trx_')
 
 
 def load_sft_with_reference(filepath, reference=None,
@@ -49,6 +56,7 @@ def load_sft_with_reference(filepath, reference=None,
 
 
 def load(tractogram_filename, reference):
+    import trx.trx_file_memmap as tmm
     in_ext = split_name_with_gz(tractogram_filename)[1]
     if in_ext != '.trx' and not os.path.isdir(tractogram_filename):
         tractogram_obj = load_sft_with_reference(tractogram_filename,
@@ -61,6 +69,7 @@ def load(tractogram_filename, reference):
 
 
 def save(tractogram_obj, tractogram_filename):
+    import trx.trx_file_memmap as tmm
     out_ext = split_name_with_gz(tractogram_filename)[1]
 
     if out_ext != '.trx':
