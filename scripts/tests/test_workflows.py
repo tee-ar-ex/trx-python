@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import os
-import tempfile
 
 import pytest
 import numpy as np
@@ -13,9 +12,10 @@ try:
 except ImportError:
     dipy_available = False
 
-import trx.trx_file_memmap as tmm
 from trx.fetcher import (get_testing_files_dict,
                          fetch_data, get_home)
+from trx.io import get_trx_tmpdir
+import trx.trx_file_memmap as tmm
 from trx.workflows import (convert_dsi_studio,
                            convert_tractogram,
                            generate_trx_from_scratch,
@@ -24,7 +24,7 @@ from trx.workflows import (convert_dsi_studio,
 
 # If they already exist, this only takes 5 seconds (check md5sum)
 fetch_data(get_testing_files_dict(), keys=['DSI.zip', 'trx_from_scratch.zip'])
-tmp_dir = tempfile.TemporaryDirectory()
+tmp_dir = get_trx_tmpdir()
 
 
 def test_help_option_convert_dsi(script_runner):

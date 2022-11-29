@@ -2,22 +2,20 @@
 # -*- coding: utf-8 -*-
 
 import os
-import tempfile
-from tempfile import mkdtemp
 
 from nibabel.streamlines.tests.test_tractogram import make_dummy_streamline
 from nibabel.streamlines import LazyTractogram
 import numpy as np
 import pytest
-from tempfile import mkdtemp
 
+from trx.io import get_trx_tmpdir
 import trx.trx_file_memmap as tmm
 from trx.fetcher import (get_testing_files_dict,
                          fetch_data, get_home)
 
 
 fetch_data(get_testing_files_dict(), keys=['memmap_test_data.zip'])
-tmp_dir = tempfile.TemporaryDirectory()
+tmp_dir = get_trx_tmpdir()
 
 
 @pytest.mark.parametrize(
@@ -125,19 +123,22 @@ def test__dichotomic_search(arr, l_bound, r_bound, expected):
 def test__create_memmap(basename, create, expected):
     if create:
         # Need to create array before evaluating
-        filename = os.path.join(mkdtemp(), basename)
-        fp = np.memmap(filename, dtype=np.int16, mode="w+", shape=(3, 4))
-        fp[:] = expected[:]
-        mmarr = tmm._create_memmap(filename=filename, shape=(3, 4),
-                                   dtype=np.int16)
-        assert np.array_equal(mmarr, expected)
+        with get_trx_tmpdir() as dirname:
+            filename = os.path.join(dirname, basename)
+            fp = np.memmap(filename, dtype=np.int16, mode="w+", shape=(3, 4))
+            fp[:] = expected[:]
+            mmarr = tmm._create_memmap(filename=filename, shape=(3, 4),
+                                       dtype=np.int16)
+            assert np.array_equal(mmarr, expected)
 
     else:
-        filename = os.path.join(mkdtemp(), basename)
-        mmarr = tmm._create_memmap(filename=filename, shape=(0,),
-                                   dtype=np.int16)
-        assert os.path.isfile(filename)
-        assert np.array_equal(mmarr, np.zeros(shape=(0,), dtype=np.float32))
+        with get_trx_tmpdir() as dirname:
+            filename = os.path.join(dirname, basename)
+            mmarr = tmm._create_memmap(filename=filename, shape=(0,),
+                                       dtype=np.int16)
+            assert os.path.isfile(filename)
+            assert np.array_equal(mmarr, np.zeros(
+                shape=(0,), dtype=np.float32))
 
 
 # need dpg test with missing keys
@@ -269,7 +270,7 @@ def test_from_lazy_tractogram(path, size, buffer):
         'commit_weights': [e for e in commit_weights],
         'clusters_QB': [e for e in clusters_QB]}
 
-    streamlines_func = lambda: (e for e in streamlines)
+    def streamlines_func(): return (e for e in streamlines)
     data_per_point_func = {'fa': lambda: (e for e in fa)}
     data_per_streamline_func = {
         'commit_weights': lambda: (e for e in commit_weights),

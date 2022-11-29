@@ -6,7 +6,6 @@ import json
 import logging
 import os
 import shutil
-import tempfile
 from typing import Any, List, Tuple, Type, Union, Optional
 import zipfile
 
@@ -20,6 +19,7 @@ from nibabel.streamlines.tractogram import Tractogram, LazyTractogram
 import numpy as np
 from numpy.typing import ArrayLike, NDArray
 
+from trx.io import get_trx_tmpdir
 from trx.utils import (get_reference_info_wrapper,
                        convert_data_dict_to_tractogram,
                        append_generator_to_dict)
@@ -227,7 +227,7 @@ def load(input_obj: str, check_dpg: bool = True) -> Type["TrxFile"]:
                     break
         if was_compressed:
             with zipfile.ZipFile(input_obj, "r") as zf:
-                tmpdir = tempfile.TemporaryDirectory()
+                tmpdir = get_trx_tmpdir()
                 zf.extractall(tmpdir.name)
                 trx = load_from_directory(tmpdir.name)
                 trx._uncompressed_folder_handle = tmpdir
@@ -737,7 +737,7 @@ class TrxFile:
         Returns
             A deepcopied TrxFile of the current TrxFile
         """
-        tmp_dir = tempfile.TemporaryDirectory()
+        tmp_dir = get_trx_tmpdir()
         out_json = open(os.path.join(tmp_dir.name, "header.json"), "w")
         tmp_header = deepcopy(self.header)
 
@@ -915,7 +915,7 @@ class TrxFile:
             An empty TrxFile preallocated with a certain size
         """
         trx = TrxFile()
-        tmp_dir = tempfile.TemporaryDirectory()
+        tmp_dir = get_trx_tmpdir()
         logging.info("Temporary folder for memmaps: {}".format(tmp_dir.name))
 
         trx.header["NB_VERTICES"] = nb_vertices
@@ -1506,7 +1506,7 @@ class TrxFile:
         trx.data_per_vertex = sft.data_per_point
 
         # For safety and for RAM, convert the whole object to memmaps
-        tmpdir = tempfile.TemporaryDirectory()
+        tmpdir = get_trx_tmpdir()
         save(trx, tmpdir.name)
         trx = load_from_directory(tmpdir.name)
         trx._uncompressed_folder_handle = tmpdir
@@ -1550,7 +1550,7 @@ class TrxFile:
         trx.data_per_vertex = tractogram.data_per_point
 
         # For safety and for RAM, convert the whole object to memmaps
-        tmpdir = tempfile.TemporaryDirectory()
+        tmpdir = get_trx_tmpdir()
         save(trx, tmpdir.name)
         trx = load_from_directory(tmpdir.name)
         trx._uncompressed_folder_handle = tmpdir
