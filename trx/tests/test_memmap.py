@@ -3,8 +3,11 @@
 
 import os
 
-import pytest
+from nibabel.streamlines.tests.test_tractogram import make_dummy_streamline
+from nibabel.streamlines import LazyTractogram
 import numpy as np
+import pytest
+
 from trx.io import get_trx_tmpdir
 import trx.trx_file_memmap as tmm
 from trx.fetcher import (get_testing_files_dict,
@@ -161,12 +164,7 @@ def test_load(path, check_dpg, value_error):
                           tmm.TrxFile)
 
 
-@pytest.mark.parametrize(
-    "path",
-    [
-        ("small.trx"),
-    ],
-)
+@pytest.mark.parametrize("path", [("small.trx")])
 def test_load_zip(path):
     path = os.path.join(get_home(), 'memmap_test_data', path)
     assert isinstance(tmm.load_from_zip(path), tmm.TrxFile)
@@ -178,12 +176,116 @@ def test_load_directory(path):
     assert isinstance(tmm.load_from_directory(path), tmm.TrxFile)
 
 
-def test_concatenate():
-    pass
+@pytest.mark.parametrize("path", [("small.trx")])
+def test_concatenate(path):
+    path = os.path.join(get_home(), 'memmap_test_data', path)
+    trx1 = tmm.load(path)
+    trx2 = tmm.load(path)
+    concat = tmm.concatenate([trx1, trx2])
+    assert len(concat) == 2 * len(trx2)
 
 
-def test_save():
-    pass
+@pytest.mark.parametrize("path", [("small.trx")])
+def test_resize(path):
+    path = os.path.join(get_home(), 'memmap_test_data', path)
+    trx1 = tmm.load(path)
+    concat = tmm.TrxFile(nb_vertices=1000000, nb_streamlines=10000,
+                         init_as=trx1)
+
+    tmm.concatenate([concat, trx1], preallocation=True, delete_groups=True)
+    concat.resize()
+    assert len(concat) == len(trx1)
+
+
+@pytest.mark.parametrize(
+    "path, buffer",
+    [
+        ("small.trx", 10000),
+        ("small.trx", 0)
+    ]
+)
+def test_append(path, buffer):
+    path = os.path.join(get_home(), 'memmap_test_data', path)
+    trx1 = tmm.load(path)
+    concat = tmm.TrxFile(nb_vertices=1, nb_streamlines=1,
+                         init_as=trx1)
+
+    concat.append(trx1, extra_buffer=buffer)
+    if buffer > 0:
+        concat.resize()
+    assert len(concat) == len(trx1)
+
+
+@pytest.mark.parametrize("path, buffer", [("small.trx", 10000)])
+def test_append_StatefulTractogram(path, buffer):
+    path = os.path.join(get_home(), 'memmap_test_data', path)
+    trx = tmm.load(path)
+    obj = trx.to_sft()
+    concat = tmm.TrxFile(nb_vertices=1, nb_streamlines=1, init_as=trx)
+
+    concat.append(obj, extra_buffer=buffer)
+    if buffer > 0:
+        concat.resize()
+    assert len(concat) == len(obj)
+
+
+@pytest.mark.parametrize("path, buffer", [("small.trx", 10000)])
+def test_append_Tractogram(path, buffer):
+    path = os.path.join(get_home(), 'memmap_test_data', path)
+    trx = tmm.load(path)
+    obj = trx.to_tractogram()
+    concat = tmm.TrxFile(nb_vertices=1, nb_streamlines=1, init_as=trx)
+
+    concat.append(obj, extra_buffer=buffer)
+    if buffer > 0:
+        concat.resize()
+    assert len(concat) == len(obj)
+
+
+@pytest.mark.parametrize("path, size, buffer", [("small.trx", 50, 10000),
+                                                ("small.trx", 0, 10000),
+                                                ("small.trx", 25000, 10000),
+                                                ("small.trx", 50, 0),
+                                                ("small.trx", 0, 0),
+                                                ("small.trx", 25000, 10000)])
+def test_from_lazy_tractogram(path, size, buffer):
+    rng = np.random.RandomState(1776)
+    streamlines = []
+    fa = []
+    commit_weights = []
+    clusters_QB = []
+    gen_range = [1, 2, 5, 2, 1] * (size // 5)
+    for i in gen_range:
+        data = make_dummy_streamline(i)
+        streamline, data_per_point, data_for_streamline = data
+        streamlines.append(streamline)
+        fa.append(data_per_point['fa'].astype(np.float16))
+        commit_weights.append(
+            data_for_streamline['mean_curvature'].astype(np.float32))
+        clusters_QB.append(
+            data_for_streamline['mean_torsion'].astype(np.uint16))
+
+    data_per_point = {'fa': [e for e in fa]}
+    data_per_streamline = {
+        'commit_weights': [e for e in commit_weights],
+        'clusters_QB': [e for e in clusters_QB]}
+
+    def streamlines_func(): return (e for e in streamlines)
+    data_per_point_func = {'fa': lambda: (e for e in fa)}
+    data_per_streamline_func = {
+        'commit_weights': lambda: (e for e in commit_weights),
+        'clusters_QB': lambda: (e for e in clusters_QB)}
+
+    obj = LazyTractogram(streamlines_func,
+                         data_per_streamline_func,
+                         data_per_point_func,
+                         affine_to_rasmm=np.eye(4))
+
+    path = os.path.join(get_home(), 'memmap_test_data', path)
+    trx = tmm.TrxFile.from_lazy_tractogram(obj, reference=path,
+                                           extra_buffer=buffer,
+                                           chunk_size=1000)
+    assert len(trx) == len(gen_range)
 
 
 def test_zip_from_folder():
@@ -199,7 +301,8 @@ def test_trxfile_print():
 
 
 def test_trxfile_len():
-    pass
+    fake = tmm.TrxFile(nb_vertices=100, nb_streamlines=10)
+    assert len(fake) == 10
 
 
 def test_trxfile_getitem():
@@ -211,7 +314,8 @@ def test_trxfile_deepcopy():
 
 
 def test_get_real_len():
-    pass
+    fake = tmm.TrxFile(nb_vertices=100, nb_streamlines=10)
+    assert fake._get_real_len() == (0, 0)
 
 
 def test_copy_fixed_arrays_from():
@@ -223,14 +327,6 @@ def test_initialize_empty_trx():
 
 
 def test_create_trx_from_pointer():
-    pass
-
-
-def test_trxfile_resize():
-    pass
-
-
-def test_trxfile_append():
     pass
 
 
