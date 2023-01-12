@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>trx.fetcher &#8212; trx-python  documentation</title>
+    <title>trx.io &#8212; trx-python  documentation</title>
   
   
   
@@ -39,7 +39,7 @@
     <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../_static/doctools.js"></script>
     <script src="../../../_static/sphinx_highlight.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'autoapi/trx/fetcher/index';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'autoapi/trx/io/index';</script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -257,8 +257,8 @@
   </p>
   <div class="bd-toc-item navbar-nav">
     <ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trx.fetcher</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="../io/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trx.io</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fetcher/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trx.fetcher</span></code></a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trx.io</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../streamlines_ops/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trx.streamlines_ops</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../trx_file_memmap/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trx.trx_file_memmap</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trx.utils</span></code></a></li>
@@ -295,69 +295,62 @@
             
             <article class="bd-article" role="main">
               
-  <section id="module-trx.fetcher">
-<span id="trx-fetcher"></span><h1><a class="reference internal" href="#module-trx.fetcher" title="trx.fetcher"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trx.fetcher</span></code></a><a class="headerlink" href="#module-trx.fetcher" title="Permalink to this heading">#</a></h1>
+  <section id="module-trx.io">
+<span id="trx-io"></span><h1><a class="reference internal" href="#module-trx.io" title="trx.io"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trx.io</span></code></a><a class="headerlink" href="#module-trx.io" title="Permalink to this heading">#</a></h1>
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this heading">#</a></h2>
 <section id="functions">
 <h3>Functions<a class="headerlink" href="#functions" title="Permalink to this heading">#</a></h3>
 <table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#trx.fetcher.get_home" title="trx.fetcher.get_home"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_home</span></code></a>()</p></td>
-<td><p>Set a user-writeable file-system location to put files</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.io.get_trx_tmpdir" title="trx.io.get_trx_tmpdir"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_trx_tmpdir</span></code></a>()</p></td>
+<td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#trx.fetcher.get_testing_files_dict" title="trx.fetcher.get_testing_files_dict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_testing_files_dict</span></code></a>()</p></td>
-<td><p>Get dictionary linking zip file to their Figshare URL &amp; MD5SUM</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#trx.io.load_sft_with_reference" title="trx.io.load_sft_with_reference"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_sft_with_reference</span></code></a>(filepath[, reference, bbox_check])</p></td>
+<td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#trx.fetcher.md5sum" title="trx.fetcher.md5sum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">md5sum</span></code></a>(filename)</p></td>
-<td><p>Compute one md5 checksum for a file</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.io.load" title="trx.io.load"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load</span></code></a>(tractogram_filename, reference)</p></td>
+<td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#trx.fetcher.fetch_data" title="trx.fetcher.fetch_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fetch_data</span></code></a>(files_dict[, keys])</p></td>
-<td><p>Downloads files to folder and checks their md5 checksums</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#trx.io.save" title="trx.io.save"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save</span></code></a>(tractogram_obj, tractogram_filename)</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
-<dl class="py function">
-<dt class="sig sig-object py" id="trx.fetcher.get_home">
-<span class="sig-prename descclassname"><span class="pre">trx.fetcher.</span></span><span class="sig-name descname"><span class="pre">get_home</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/fetcher.html#get_home"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.fetcher.get_home" title="Permalink to this definition">#</a></dt>
-<dd><p>Set a user-writeable file-system location to put files</p>
-</dd></dl>
+</section>
+<section id="attributes">
+<h3>Attributes<a class="headerlink" href="#attributes" title="Permalink to this heading">#</a></h3>
+<table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.io.dipy_available" title="trx.io.dipy_available"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dipy_available</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py data">
+<dt class="sig sig-object py" id="trx.io.dipy_available">
+<span class="sig-prename descclassname"><span class="pre">trx.io.</span></span><span class="sig-name descname"><span class="pre">dipy_available</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">True</span></em><a class="reference internal" href="../../../_modules/trx/io.html#dipy_available"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.io.dipy_available" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="trx.fetcher.get_testing_files_dict">
-<span class="sig-prename descclassname"><span class="pre">trx.fetcher.</span></span><span class="sig-name descname"><span class="pre">get_testing_files_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/fetcher.html#get_testing_files_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.fetcher.get_testing_files_dict" title="Permalink to this definition">#</a></dt>
-<dd><p>Get dictionary linking zip file to their Figshare URL &amp; MD5SUM</p>
-</dd></dl>
+<dt class="sig sig-object py" id="trx.io.get_trx_tmpdir">
+<span class="sig-prename descclassname"><span class="pre">trx.io.</span></span><span class="sig-name descname"><span class="pre">get_trx_tmpdir</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/io.html#get_trx_tmpdir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.io.get_trx_tmpdir" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="trx.fetcher.md5sum">
-<span class="sig-prename descclassname"><span class="pre">trx.fetcher.</span></span><span class="sig-name descname"><span class="pre">md5sum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/fetcher.html#md5sum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.fetcher.md5sum" title="Permalink to this definition">#</a></dt>
-<dd><p>Compute one md5 checksum for a file</p>
-</dd></dl>
+<dt class="sig sig-object py" id="trx.io.load_sft_with_reference">
+<span class="sig-prename descclassname"><span class="pre">trx.io.</span></span><span class="sig-name descname"><span class="pre">load_sft_with_reference</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bbox_check</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/io.html#load_sft_with_reference"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.io.load_sft_with_reference" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="trx.fetcher.fetch_data">
-<span class="sig-prename descclassname"><span class="pre">trx.fetcher.</span></span><span class="sig-name descname"><span class="pre">fetch_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">files_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/fetcher.html#fetch_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.fetcher.fetch_data" title="Permalink to this definition">#</a></dt>
-<dd><p>Downloads files to folder and checks their md5 checksums</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>files_dict</strong><span class="classifier">dictionary</span></dt><dd><p>For each file in <cite>files_dict</cite> the value should be (url, md5).
-The file will be downloaded from url, if the file does not already
-exist or if the file exists but the md5 checksum does not match.
-Zip files are automatically unzipped and its content* are md5 checked.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>ValueError</dt><dd><p>Raises if the md5 checksum of the file does not match the expected
-value. The downloaded file is not deleted when this error is raised.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
+<dt class="sig sig-object py" id="trx.io.load">
+<span class="sig-prename descclassname"><span class="pre">trx.io.</span></span><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tractogram_filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/io.html#load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.io.load" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trx.io.save">
+<span class="sig-prename descclassname"><span class="pre">trx.io.</span></span><span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tractogram_obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tractogram_filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/io.html#save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.io.save" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
 
 </section>
 </section>
@@ -396,61 +389,80 @@ value. The downloaded file is not deleted when this error is raised.</p>
     <a class="reference internal nav-link" href="#functions">
      Functions
     </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#attributes">
+     Attributes
+    </a>
     <ul class="nav section-nav flex-column">
      <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#trx.fetcher.get_home">
+      <a class="reference internal nav-link" href="#trx.io.dipy_available">
        <code class="docutils literal notranslate">
         <span class="pre">
-         get_home()
+         dipy_available
         </span>
        </code>
       </a>
      </li>
      <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#trx.fetcher.get_testing_files_dict">
+      <a class="reference internal nav-link" href="#trx.io.get_trx_tmpdir">
        <code class="docutils literal notranslate">
         <span class="pre">
-         get_testing_files_dict()
+         get_trx_tmpdir()
         </span>
        </code>
       </a>
      </li>
      <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#trx.fetcher.md5sum">
+      <a class="reference internal nav-link" href="#trx.io.load_sft_with_reference">
        <code class="docutils literal notranslate">
         <span class="pre">
-         md5sum()
+         load_sft_with_reference()
         </span>
        </code>
       </a>
      </li>
      <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#trx.fetcher.fetch_data">
+      <a class="reference internal nav-link" href="#trx.io.load">
        <code class="docutils literal notranslate">
         <span class="pre">
-         fetch_data()
+         load()
         </span>
        </code>
       </a>
      </li>
      <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#trx.fetcher.get_home">
-       get_home
+      <a class="reference internal nav-link" href="#trx.io.save">
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         save()
+        </span>
+       </code>
       </a>
      </li>
      <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#trx.fetcher.get_testing_files_dict">
-       get_testing_files_dict
+      <a class="reference internal nav-link" href="#trx.io.dipy_available">
+       dipy_available
       </a>
      </li>
      <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#trx.fetcher.md5sum">
-       md5sum
+      <a class="reference internal nav-link" href="#trx.io.get_trx_tmpdir">
+       get_trx_tmpdir
       </a>
      </li>
      <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#trx.fetcher.fetch_data">
-       fetch_data
+      <a class="reference internal nav-link" href="#trx.io.load_sft_with_reference">
+       load_sft_with_reference
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#trx.io.load">
+       load
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#trx.io.save">
+       save
       </a>
      </li>
     </ul>
@@ -474,7 +486,7 @@ value. The downloaded file is not deleted when this error is raised.</p>
 <div class="toc-item">
   
 <div class="tocsection sourcelink">
-    <a href="../../../_sources/autoapi/trx/fetcher/index.rst.txt">
+    <a href="../../../_sources/autoapi/trx/io/index.rst.txt">
         <i class="fa-solid fa-file-lines"></i> Show Source
     </a>
 </div>

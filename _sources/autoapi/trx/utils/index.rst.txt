@@ -23,6 +23,8 @@ Functions
    trx.utils.flip_sft
    trx.utils.load_matrix_in_any_format
    trx.utils.get_reverse_enum
+   trx.utils.convert_data_dict_to_tractogram
+   trx.utils.append_generator_to_dict
 
 
 
@@ -427,4 +429,35 @@ Attributes
 
    ..
        !! processed by numpydoc !!
+
+.. py:function:: convert_data_dict_to_tractogram(data)
+
+   
+   Convert a data from a lazy tractogram to a tractogram
+
+   Keyword arguments:
+       data -- The data dictionary to convert into a nibabel tractogram
+
+   Returns:
+       A Tractogram object
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: append_generator_to_dict(gen, data)
+
 

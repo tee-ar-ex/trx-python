@@ -21,6 +21,7 @@ Functions
 
 .. autoapisummary::
 
+   trx.trx_file_memmap._append_last_offsets
    trx.trx_file_memmap._generate_filename_from_data
    trx.trx_file_memmap._split_ext_with_dimensionality
    trx.trx_file_memmap._compute_lengths
@@ -36,10 +37,55 @@ Functions
 
 
 
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   trx.trx_file_memmap.StatefulTractogram
+
+
+.. py:data:: StatefulTractogram
+   
+
+   
+
+.. py:function:: _append_last_offsets(nib_offsets: numpy.typing.NDArray, nb_vertices: int) -> numpy.typing.NDArray
+
+   
+   Appends the last element of offsets from header information
+
+   Keyword arguments:
+       nib_offsets -- NDArray
+           Array of offsets with the last element being the start of the last
+           streamline (nibabel convention)
+       nb_vertices -- int
+           Total number of vertices in the streamlines
+   Returns:
+       Offsets -- NDArray (VTK convention)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
 .. py:function:: _generate_filename_from_data(arr: numpy.typing.ArrayLike, filename: str) -> str
 
    
-   Determines the data type from array data and generates the appropriate filename
+   Determines the data type from array data and generates the appropriate
+   filename
 
    Keyword arguments:
        arr -- a NumPy array (1-2D, otherwise ValueError raised)
@@ -93,14 +139,13 @@ Functions
    ..
        !! processed by numpydoc !!
 
-.. py:function:: _compute_lengths(offsets: numpy.typing.NDArray, nb_vertices: int) -> numpy.typing.NDArray
+.. py:function:: _compute_lengths(offsets: numpy.typing.NDArray) -> numpy.typing.NDArray
 
    
-   Compute lengths from offsets and header information
+   Compute lengths from offsets
 
    Keyword arguments:
        offsets -- An NDArray of offsets
-       nb_vertices -- integer representing the number of vertices
 
    Returns:
        lengths -- An NDArray of lengths
@@ -185,7 +230,7 @@ Functions
    Wrapper to support empty array as memmaps
 
    Keyword arguments:
-       filename -- filename of the file where the empty memmap should be created
+       filename -- filename where the empty memmap should be created
        mode -- file open mode (see: np.memmap for options)
        shape -- shape of memmapped NDArray
        dtype -- datatype of memmapped NDArray
@@ -193,7 +238,8 @@ Functions
        order -- data representation on disk (C or Fortran)
 
    Returns:
-       mmapped NDArray or a zero-filled Numpy array if array has a shape of 0 in the first dimension
+       mmapped NDArray or a zero-filled Numpy array if array has a shape of 0
+           in the first dimension
 
 
 
@@ -304,12 +350,17 @@ Functions
 
    Keyword arguments:
        trx_list -- A list containing TrxFiles to concatenate
-       delete_dpv -- Delete dpv keys that do not exist in all the provided TrxFiles
-       delete_dps -- Delete dps keys that do not exist in all the provided TrxFile
-       delete_groups -- Delete all the groups that currently exist in the TrxFiles
-       check_space_attributes -- Verify that dimensions and size of data are similar between all the TrxFiles
-       preallocation -- Preallocated TrxFile has already been generated and is the first element in trx_list
-                        (Note: delete_groups must be set to True as well)
+       delete_dpv -- Delete dpv keys that do not exist in all the provided
+           TrxFiles
+       delete_dps -- Delete dps keys that do not exist in all the provided
+           TrxFile
+       delete_groups -- Delete all the groups that currently exist in the
+           TrxFiles
+       check_space_attributes -- Verify that dimensions and size of data are
+           similar between all the TrxFiles
+       preallocation -- Preallocated TrxFile has already been generated and
+           is the first element in trx_list
+           (Note: delete_groups must be set to True as well)
 
    Returns:
        TrxFile representing the concatenated data
@@ -339,7 +390,8 @@ Functions
    Keyword arguments:
        trx -- The TrxFile to save
        filename -- The path to save the TrxFile to
-       compression_standard -- The compression standard to use, as defined by the ZipFile library
+       compression_standard -- The compression standard to use, as defined by
+           the ZipFile library
 
 
 
@@ -366,7 +418,8 @@ Functions
    Keyword arguments
        directory -- The path to the on-disk memmap
        filename -- The path where the zip file should be created
-       compression_standard -- The compression standard to use, as defined by the ZipFile library
+       compression_standard -- The compression standard to use, as defined by
+           the ZipFile library
 
 
 
@@ -540,7 +593,8 @@ Functions
       Get the real size of data (ignoring zeros of preallocation)
 
       Returns
-          A tuple representing the index of the last streamline and the total length of all the streamlines
+          A tuple representing the index of the last streamline and the total
+              length of all the streamlines
 
 
 
@@ -597,8 +651,10 @@ Functions
       Create on-disk memmaps of a certain size (preallocation)
 
       Keyword arguments:
-          nb_streamlines -- The number of streamlines that the empty TrxFile will be initialized with
-          nb_vertices -- The number of vertices that the empty TrxFile will be initialized with
+          nb_streamlines -- The number of streamlines that the empty TrxFile
+              will be initialized with
+          nb_vertices -- The number of vertices that the empty TrxFile will
+              be initialized with
           init_as -- A TrxFile to initialize the empty TrxFile with
 
       Returns:
@@ -627,8 +683,10 @@ Functions
       After reading the structure of a zip/folder, create a TrxFile
 
       Keyword arguments:
-          header -- A TrxFile header dictionary which will be used for the new TrxFile
-          dict_pointer_size -- A dictionary containing the filenames of all the files within the TrxFile disk file/folder
+          header -- A TrxFile header dictionary which will be used for the
+              new TrxFile
+          dict_pointer_size -- A dictionary containing the filenames of all
+              the files within the TrxFile disk file/folder
           root_zip -- The path of the ZipFile pointer
           root -- The dirname of the ZipFile pointer
 
@@ -679,7 +737,10 @@ Functions
       ..
           !! processed by numpydoc !!
 
-   .. py:method:: append(trx: Type[TrxFile], extra_buffer: int = 0) -> None
+   .. py:method:: append(obj: Union[dipy.io.stateful_tractogram.StatefulTractogram, TrxFile, nibabel.streamlines.tractogram.Tractogram, nibabel.streamlines.tractogram.LazyTractogram], extra_buffer: int = 0) -> None
+
+
+   .. py:method:: _append_trx(trx: Type[TrxFile], extra_buffer: int = 0) -> None
 
       
       Append a TrxFile to another (support buffer)
@@ -747,6 +808,36 @@ Functions
 
       Returns:
           A TrxFile containing data originating from the selected indices
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: from_lazy_tractogram(obj: [nibabel.streamlines.tractogram.LazyTractogram], reference, extra_buffer: int = 0, chunk_size: int = 10000) -> None
+      :staticmethod:
+
+      
+      Append a TrxFile to another (support buffer)
+
+      Keyword arguments:
+          trx -- The TrxFile to append to the current TrxFile
+          extra_buffer -- The buffer space between reallocation.
+                          This number should be a number of streamlines.
+                          Use 0 for no buffer.
+          chunk_size -- The number of streamlines to save at a time.
 
 
 

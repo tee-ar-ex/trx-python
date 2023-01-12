@@ -6,30 +6,31 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>trx.workflows &#8212; trx-python  documentation</title>
-  <script>
+  
+  
+  
+  <script data-cfasync="false">
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=1e1de1a1873e13ef5536" rel="stylesheet">
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=1e1de1a1873e13ef5536" rel="stylesheet">
+  <link href="../../_static/styles/theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../_static/styles/bootstrap.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
 
   
-  <link rel="stylesheet"
-    href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css">
-  <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
-  <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
-  <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1e1de1a1873e13ef5536">
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94">
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94">
 
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
@@ -46,6 +47,10 @@
   
   
   <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
 
   
   <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
@@ -111,11 +116,11 @@
     </p>
     <ul id="navbar-main-elements" class="navbar-nav">
         
-                <li class="nav-item">
-                    <a class="nav-link" href="../../autoapi/index.html">
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../autoapi/index.html">
                         API Reference
-                    </a>
-                </li>
+                      </a>
+                    </li>
                 
     </ul>
 </nav>
@@ -124,19 +129,21 @@
     </div>
 
     <div id="navbar-end">
-      <div class="navbar-end-item navbar-end__search-button-container">
-        
-<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" data-toggle="tooltip">
+      
+        <div class="navbar-end-item navbar-persistent--container">
+          
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
   <i class="fa-solid fa-magnifying-glass"></i>
 </button>
-      </div>
+        </div>
+      
       
       <div class="navbar-end-item">
-        <span class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" data-toggle="tooltip">
-    <a class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></a>
-    <a class="theme-switch" data-mode="dark"><i class="fa-regular fa-moon"></i></a>
-    <a class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></a>
-</span>
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
       </div>
       
       <div class="navbar-end-item">
@@ -160,11 +167,13 @@
 
 
   
-  <div class="search-button-container--mobile">
-<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" data-toggle="tooltip">
+  
+    <div class="navbar-persistent--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
   <i class="fa-solid fa-magnifying-glass"></i>
 </button>
-  </div>
+    </div>
+  
 
   
   <label class="sidebar-toggle secondary-toggle" for="__secondary">
@@ -194,11 +203,11 @@
     </p>
     <ul id="navbar-main-elements" class="navbar-nav">
         
-                <li class="nav-item">
-                    <a class="nav-link" href="../../autoapi/index.html">
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../autoapi/index.html">
                         API Reference
-                    </a>
-                </li>
+                      </a>
+                    </li>
                 
     </ul>
 </nav>
@@ -212,11 +221,11 @@
     <div class="sidebar-header-items__end">
       
       <div class="navbar-end-item">
-        <span class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" data-toggle="tooltip">
-    <a class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></a>
-    <a class="theme-switch" data-mode="dark"><i class="fa-regular fa-moon"></i></a>
-    <a class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></a>
-</span>
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
       </div>
       
       <div class="navbar-end-item">
@@ -247,8 +256,11 @@
     </div>
   </div>
 
+  
+  <div id="rtd-footer-container"></div>
+
       </div>
-      <main class="bd-main">
+      <main id="main-content" class="bd-main">
         
         
         <div class="bd-content">
@@ -265,18 +277,18 @@
 <span></span><span class="ch">#! /usr/bin/env python3</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
 <span class="kn">import</span> <span class="nn">csv</span>
 <span class="kn">import</span> <span class="nn">gzip</span>
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">tempfile</span>
 
 <span class="kn">import</span> <span class="nn">nibabel</span> <span class="k">as</span> <span class="nn">nib</span>
 <span class="kn">from</span> <span class="nn">nibabel.streamlines.array_sequence</span> <span class="kn">import</span> <span class="n">ArraySequence</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">dipy.io.stateful_tractogram</span> <span class="kn">import</span> <span class="n">StatefulTractogram</span><span class="p">,</span> <span class="n">Space</span><span class="p">,</span> <span class="n">Origin</span>
+    <span class="kn">from</span> <span class="nn">dipy.io.stateful_tractogram</span> <span class="kn">import</span> <span class="n">StatefulTractogram</span><span class="p">,</span> <span class="n">Space</span>
     <span class="kn">from</span> <span class="nn">dipy.io.streamline</span> <span class="kn">import</span> <span class="n">save_tractogram</span><span class="p">,</span> <span class="n">load_tractogram</span>
     <span class="kn">from</span> <span class="nn">dipy.tracking.streamline</span> <span class="kn">import</span> <span class="n">set_number_of_points</span>
     <span class="kn">from</span> <span class="nn">dipy.tracking.utils</span> <span class="kn">import</span> <span class="n">density_map</span>
@@ -284,14 +296,15 @@
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">dipy_available</span> <span class="o">=</span> <span class="kc">False</span>
 
-<span class="kn">from</span> <span class="nn">trx.trx_file_memmap</span> <span class="kn">import</span> <span class="n">_compute_lengths</span><span class="p">,</span> <span class="n">load</span><span class="p">,</span> <span class="n">save</span><span class="p">,</span> <span class="n">TrxFile</span>
+<span class="kn">from</span> <span class="nn">trx.io</span> <span class="kn">import</span> <span class="n">get_trx_tmpdir</span><span class="p">,</span> <span class="n">load</span><span class="p">,</span> <span class="n">load_sft_with_reference</span><span class="p">,</span> <span class="n">save</span>
+<span class="kn">from</span> <span class="nn">trx.streamlines_ops</span> <span class="kn">import</span> <span class="n">perform_streamlines_operation</span><span class="p">,</span> <span class="n">intersection</span>
+<span class="kn">import</span> <span class="nn">trx.trx_file_memmap</span> <span class="k">as</span> <span class="nn">tmm</span>
 <span class="kn">from</span> <span class="nn">trx.viz</span> <span class="kn">import</span> <span class="n">display</span>
 <span class="kn">from</span> <span class="nn">trx.utils</span> <span class="kn">import</span> <span class="p">(</span><span class="n">flip_sft</span><span class="p">,</span> <span class="n">is_header_compatible</span><span class="p">,</span>
                        <span class="n">get_axis_shift_vector</span><span class="p">,</span>
                        <span class="n">get_reference_info_wrapper</span><span class="p">,</span>
                        <span class="n">get_reverse_enum</span><span class="p">,</span>
                        <span class="n">load_matrix_in_any_format</span><span class="p">,</span>
-                       <span class="n">load_tractogram_with_reference</span><span class="p">,</span>
                        <span class="n">split_name_with_gz</span><span class="p">)</span>
 
 
@@ -335,8 +348,8 @@
         <span class="n">save_tractogram</span><span class="p">(</span><span class="n">sft_flip</span><span class="p">,</span> <span class="n">out_tractogram</span><span class="p">,</span>
                         <span class="n">bbox_valid_check</span><span class="o">=</span><span class="ow">not</span> <span class="n">keep_invalid</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">trx</span> <span class="o">=</span> <span class="n">TrxFile</span><span class="o">.</span><span class="n">from_sft</span><span class="p">(</span><span class="n">sft_flip</span><span class="p">)</span>
-        <span class="n">save</span><span class="p">(</span><span class="n">trx</span><span class="p">,</span> <span class="n">out_tractogram</span><span class="p">)</span></div>
+        <span class="n">trx</span> <span class="o">=</span> <span class="n">tmm</span><span class="o">.</span><span class="n">TrxFile</span><span class="o">.</span><span class="n">from_sft</span><span class="p">(</span><span class="n">sft_flip</span><span class="p">)</span>
+        <span class="n">tmm</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">trx</span><span class="p">,</span> <span class="n">out_tractogram</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="convert_tractogram"><a class="viewcode-back" href="../../autoapi/trx/workflows/index.html#trx.workflows.convert_tractogram">[docs]</a><span class="k">def</span> <span class="nf">convert_tractogram</span><span class="p">(</span><span class="n">in_tractogram</span><span class="p">,</span> <span class="n">out_tractogram</span><span class="p">,</span> <span class="n">reference</span><span class="p">,</span>
@@ -351,10 +364,10 @@
         <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s1">&#39;Input and output cannot be of the same file format.&#39;</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">in_ext</span> <span class="o">!=</span> <span class="s1">&#39;.trx&#39;</span><span class="p">:</span>
-        <span class="n">sft</span> <span class="o">=</span> <span class="n">load_tractogram_with_reference</span><span class="p">(</span><span class="n">in_tractogram</span><span class="p">,</span> <span class="n">reference</span><span class="p">,</span>
-                                             <span class="n">bbox_check</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">sft</span> <span class="o">=</span> <span class="n">load_sft_with_reference</span><span class="p">(</span><span class="n">in_tractogram</span><span class="p">,</span> <span class="n">reference</span><span class="p">,</span>
+                                      <span class="n">bbox_check</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">trx</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="n">in_tractogram</span><span class="p">)</span>
+        <span class="n">trx</span> <span class="o">=</span> <span class="n">tmm</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">in_tractogram</span><span class="p">)</span>
         <span class="n">sft</span> <span class="o">=</span> <span class="n">trx</span><span class="o">.</span><span class="n">to_sft</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">out_ext</span> <span class="o">!=</span> <span class="s1">&#39;.trx&#39;</span><span class="p">:</span>
@@ -368,34 +381,30 @@
                     <span class="n">offsets_dtype</span><span class="p">)</span>
         <span class="n">save_tractogram</span><span class="p">(</span><span class="n">sft</span><span class="p">,</span> <span class="n">out_tractogram</span><span class="p">,</span> <span class="n">bbox_valid_check</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">trx</span> <span class="o">=</span> <span class="n">TrxFile</span><span class="o">.</span><span class="n">from_sft</span><span class="p">(</span><span class="n">sft</span><span class="p">)</span>
+        <span class="n">trx</span> <span class="o">=</span> <span class="n">tmm</span><span class="o">.</span><span class="n">TrxFile</span><span class="o">.</span><span class="n">from_sft</span><span class="p">(</span><span class="n">sft</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">trx</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="n">pos_dtype</span><span class="p">:</span>
             <span class="n">trx</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">trx</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">pos_dtype</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">trx</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_offsets</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="n">offsets_dtype</span><span class="p">:</span>
             <span class="n">trx</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_offsets</span> <span class="o">=</span> <span class="n">trx</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_offsets</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span>
                 <span class="n">offsets_dtype</span><span class="p">)</span>
-        <span class="n">save</span><span class="p">(</span><span class="n">trx</span><span class="p">,</span> <span class="n">out_tractogram</span><span class="p">)</span></div>
+        <span class="n">tmm</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">trx</span><span class="p">,</span> <span class="n">out_tractogram</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="tractogram_simple_compare"><a class="viewcode-back" href="../../autoapi/trx/workflows/index.html#trx.workflows.tractogram_simple_compare">[docs]</a><span class="k">def</span> <span class="nf">tractogram_simple_compare</span><span class="p">(</span><span class="n">in_tractograms</span><span class="p">,</span> <span class="n">reference</span><span class="p">):</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">dipy_available</span><span class="p">:</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Dipy library is missing, scripts are not available.&#39;</span><span class="p">)</span>
         <span class="k">return</span>
-    <span class="n">in_ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">in_tractograms</span><span class="p">[</span><span class="mi">0</span><span class="p">])[</span><span class="mi">1</span><span class="p">]</span>
-    <span class="k">if</span> <span class="n">in_ext</span> <span class="o">!=</span> <span class="s1">&#39;.trx&#39;</span><span class="p">:</span>
-        <span class="n">sft_1</span> <span class="o">=</span> <span class="n">load_tractogram_with_reference</span><span class="p">(</span><span class="n">in_tractograms</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">reference</span><span class="p">,</span>
-                                               <span class="n">bbox_check</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">tractogram_obj</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="n">in_tractograms</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">reference</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tractogram_obj</span><span class="p">,</span> <span class="n">StatefulTractogram</span><span class="p">):</span>
+        <span class="n">sft_1</span> <span class="o">=</span> <span class="n">tractogram_obj</span><span class="o">.</span><span class="n">to_sft</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">trx</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="n">in_tractograms</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="n">sft_1</span> <span class="o">=</span> <span class="n">trx</span><span class="o">.</span><span class="n">to_sft</span><span class="p">()</span>
+        <span class="n">sft_1</span> <span class="o">=</span> <span class="n">tractogram_obj</span>
 
-    <span class="n">in_ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">in_tractograms</span><span class="p">[</span><span class="mi">1</span><span class="p">])[</span><span class="mi">1</span><span class="p">]</span>
-    <span class="k">if</span> <span class="n">in_ext</span> <span class="o">!=</span> <span class="s1">&#39;.trx&#39;</span><span class="p">:</span>
-        <span class="n">sft_2</span> <span class="o">=</span> <span class="n">load_tractogram_with_reference</span><span class="p">(</span><span class="n">in_tractograms</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">reference</span><span class="p">,</span>
-                                               <span class="n">bbox_check</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">tractogram_obj</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="n">in_tractograms</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">reference</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tractogram_obj</span><span class="p">,</span> <span class="n">StatefulTractogram</span><span class="p">):</span>
+        <span class="n">sft_2</span> <span class="o">=</span> <span class="n">tractogram_obj</span><span class="o">.</span><span class="n">to_sft</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">trx</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="n">in_tractograms</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-        <span class="n">sft_2</span> <span class="o">=</span> <span class="n">trx</span><span class="o">.</span><span class="n">to_sft</span><span class="p">()</span>
+        <span class="n">sft_2</span> <span class="o">=</span> <span class="n">tractogram_obj</span>
 
     <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">sft_1</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="p">,</span> <span class="n">sft_2</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="p">,</span>
                    <span class="n">atol</span><span class="o">=</span><span class="mf">0.001</span><span class="p">):</span>
@@ -447,15 +456,13 @@
     <span class="k">if</span> <span class="ow">not</span> <span class="n">dipy_available</span><span class="p">:</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Dipy library is missing, scripts are not available.&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span>
-    <span class="n">in_ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">in_tractogram</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
 
-    <span class="k">if</span> <span class="n">in_ext</span> <span class="o">!=</span> <span class="s1">&#39;.trx&#39;</span><span class="p">:</span>
-        <span class="n">sft</span> <span class="o">=</span> <span class="n">load_tractogram_with_reference</span><span class="p">(</span><span class="n">in_tractogram</span><span class="p">,</span> <span class="n">reference</span><span class="p">,</span>
-                                             <span class="n">bbox_check</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">tractogram_obj</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="n">in_tractogram</span><span class="p">,</span> <span class="n">reference</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tractogram_obj</span><span class="p">,</span> <span class="n">StatefulTractogram</span><span class="p">):</span>
+        <span class="n">sft</span> <span class="o">=</span> <span class="n">tractogram_obj</span><span class="o">.</span><span class="n">to_sft</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">trx</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="n">in_tractogram</span><span class="p">)</span>
-        <span class="n">sft</span> <span class="o">=</span> <span class="n">trx</span><span class="o">.</span><span class="n">to_sft</span><span class="p">()</span>
-        <span class="n">sft</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">sft</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+        <span class="n">sft</span> <span class="o">=</span> <span class="n">tractogram_obj</span>
+    <span class="n">sft</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">sft</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
 
     <span class="n">sft</span><span class="o">.</span><span class="n">data_per_point</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">sft</span><span class="o">.</span><span class="n">streamlines</span> <span class="o">=</span> <span class="n">set_number_of_points</span><span class="p">(</span><span class="n">sft</span><span class="o">.</span><span class="n">streamlines</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
@@ -489,13 +496,73 @@
             <span class="n">streamlines</span><span class="o">=</span><span class="n">sft</span><span class="o">.</span><span class="n">streamlines</span><span class="p">,</span>  <span class="n">title</span><span class="o">=</span><span class="s1">&#39;VOXMM&#39;</span><span class="p">)</span></div>
 
 
+<div class="viewcode-block" id="validate_tractogram"><a class="viewcode-back" href="../../autoapi/trx/workflows/index.html#trx.workflows.validate_tractogram">[docs]</a><span class="k">def</span> <span class="nf">validate_tractogram</span><span class="p">(</span><span class="n">in_tractogram</span><span class="p">,</span> <span class="n">reference</span><span class="p">,</span> <span class="n">out_tractogram</span><span class="p">,</span>
+                        <span class="n">remove_identical_streamlines</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">precision</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="n">tractogram_obj</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="n">in_tractogram</span><span class="p">,</span> <span class="n">reference</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tractogram_obj</span><span class="p">,</span> <span class="n">StatefulTractogram</span><span class="p">):</span>
+        <span class="n">sft</span> <span class="o">=</span> <span class="n">tractogram_obj</span><span class="o">.</span><span class="n">to_sft</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">sft</span> <span class="o">=</span> <span class="n">tractogram_obj</span>
+    <span class="c1"># print(sft)</span>
+    <span class="n">ori_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sft</span><span class="p">)</span>
+    <span class="n">tot_remove</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">invalid_coord_ind</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">sft</span><span class="o">.</span><span class="n">remove_invalid_streamlines</span><span class="p">()</span>
+    <span class="n">tot_remove</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">invalid_coord_ind</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Removed </span><span class="si">{}</span><span class="s1"> streamlines with invalid coordinates.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="nb">len</span><span class="p">(</span><span class="n">invalid_coord_ind</span><span class="p">)))</span>
+
+    <span class="n">indices</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sft</span><span class="p">))</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sft</span><span class="o">.</span><span class="n">streamlines</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">tot_remove</span> <span class="o">=</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Removed </span><span class="si">{}</span><span class="s1"> invalid streamlines (1 or 0 points).&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="nb">len</span><span class="p">(</span><span class="n">indices</span><span class="p">)))</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">setdiff1d</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sft</span><span class="p">)),</span> <span class="n">indices</span><span class="p">):</span>
+        <span class="n">norm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">sft</span><span class="o">.</span><span class="n">streamlines</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                                      <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">norm</span> <span class="o">&lt;</span> <span class="mf">0.001</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+            <span class="n">indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+    <span class="n">indices_val</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">setdiff1d</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sft</span><span class="p">)),</span> <span class="n">indices</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Removed </span><span class="si">{}</span><span class="s1"> invalid streamlines (overlapping points).&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="n">ori_len</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">indices_val</span><span class="p">)))</span>
+    <span class="n">tot_remove</span> <span class="o">+=</span> <span class="n">ori_len</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">indices_val</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">remove_identical_streamlines</span><span class="p">:</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">indices_uniq</span> <span class="o">=</span> <span class="n">perform_streamlines_operation</span><span class="p">(</span><span class="n">intersection</span><span class="p">,</span>
+                                                        <span class="p">[</span><span class="n">sft</span><span class="o">.</span><span class="n">streamlines</span><span class="p">],</span>
+                                                        <span class="n">precision</span><span class="o">=</span><span class="n">precision</span><span class="p">)</span>
+        <span class="n">indices_final</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">intersect1d</span><span class="p">(</span>
+            <span class="n">indices_val</span><span class="p">,</span> <span class="n">indices_uniq</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Removed </span><span class="si">{}</span><span class="s1"> overlapping streamlines.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">ori_len</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">indices_final</span><span class="p">)</span> <span class="o">-</span> <span class="n">tot_remove</span><span class="p">))</span>
+
+        <span class="n">indices_final</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">intersect1d</span><span class="p">(</span><span class="n">indices_val</span><span class="p">,</span> <span class="n">indices_uniq</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">indices_final</span> <span class="o">=</span> <span class="n">indices_val</span>
+
+    <span class="k">if</span> <span class="n">out_tractogram</span><span class="p">:</span>
+        <span class="n">streamlines</span> <span class="o">=</span> <span class="n">sft</span><span class="o">.</span><span class="n">streamlines</span><span class="p">[</span><span class="n">indices_final</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">dpp</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">dpp</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">dpp</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">sft</span><span class="o">.</span><span class="n">data_per_point</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">indices_final</span><span class="p">]</span>
+
+        <span class="n">dps</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">dps</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">dps</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">sft</span><span class="o">.</span><span class="n">data_per_streamline</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">indices_final</span><span class="p">]</span>
+        <span class="n">new_sft</span> <span class="o">=</span> <span class="n">StatefulTractogram</span><span class="o">.</span><span class="n">from_sft</span><span class="p">(</span><span class="n">streamlines</span><span class="p">,</span> <span class="n">sft</span><span class="p">,</span>
+                                              <span class="n">data_per_point</span><span class="o">=</span><span class="n">dpp</span><span class="p">,</span>
+                                              <span class="n">data_per_streamline</span><span class="o">=</span><span class="n">dps</span><span class="p">)</span>
+        <span class="n">save</span><span class="p">(</span><span class="n">new_sft</span><span class="p">,</span> <span class="n">out_tractogram</span><span class="p">)</span></div>
+
+
 <div class="viewcode-block" id="generate_trx_from_scratch"><a class="viewcode-back" href="../../autoapi/trx/workflows/index.html#trx.workflows.generate_trx_from_scratch">[docs]</a><span class="k">def</span> <span class="nf">generate_trx_from_scratch</span><span class="p">(</span><span class="n">reference</span><span class="p">,</span> <span class="n">out_tractogram</span><span class="p">,</span> <span class="n">positions_csv</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                               <span class="n">positions</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">offsets</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                               <span class="n">positions_dtype</span><span class="o">=</span><span class="s1">&#39;float32&#39;</span><span class="p">,</span> <span class="n">offsets_dtype</span><span class="o">=</span><span class="s1">&#39;uint64&#39;</span><span class="p">,</span>
                               <span class="n">space_str</span><span class="o">=</span><span class="s1">&#39;rasmm&#39;</span><span class="p">,</span> <span class="n">origin_str</span><span class="o">=</span><span class="s1">&#39;nifti&#39;</span><span class="p">,</span>
                               <span class="n">verify_invalid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dpv</span><span class="o">=</span><span class="p">[],</span> <span class="n">dps</span><span class="o">=</span><span class="p">[],</span>
                               <span class="n">groups</span><span class="o">=</span><span class="p">[],</span> <span class="n">dpg</span><span class="o">=</span><span class="p">[]):</span>
-    <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">tmpdirname</span><span class="p">:</span>
+    <span class="k">with</span> <span class="n">get_trx_tmpdir</span><span class="p">()</span> <span class="k">as</span> <span class="n">tmpdirname</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">positions_csv</span><span class="p">:</span>
             <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">positions_csv</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
                 <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
@@ -506,10 +573,10 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">positions</span> <span class="o">=</span> <span class="n">load_matrix_in_any_format</span><span class="p">(</span><span class="n">positions</span><span class="p">)</span>
             <span class="n">offsets</span> <span class="o">=</span> <span class="n">load_matrix_in_any_format</span><span class="p">(</span><span class="n">offsets</span><span class="p">)</span>
-            <span class="n">lengths</span> <span class="o">=</span> <span class="n">_compute_lengths</span><span class="p">(</span><span class="n">offsets</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">positions</span><span class="p">))</span>
+            <span class="n">lengths</span> <span class="o">=</span> <span class="n">tmm</span><span class="o">.</span><span class="n">_compute_lengths</span><span class="p">(</span><span class="n">offsets</span><span class="p">)</span>
             <span class="n">streamlines</span> <span class="o">=</span> <span class="n">ArraySequence</span><span class="p">()</span>
             <span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">positions</span>
-            <span class="n">streamlines</span><span class="o">.</span><span class="n">_offsets</span> <span class="o">=</span> <span class="n">offsets</span>
+            <span class="n">streamlines</span><span class="o">.</span><span class="n">_offsets</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">offsets</span><span class="p">)</span>
             <span class="n">streamlines</span><span class="o">.</span><span class="n">_lengths</span> <span class="o">=</span> <span class="n">lengths</span>
 
         <span class="k">if</span> <span class="n">space_str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s1">&#39;rasmm&#39;</span> <span class="ow">or</span> <span class="n">origin_str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s1">&#39;nifti&#39;</span> <span class="ow">or</span> \
@@ -529,14 +596,16 @@
             <span class="n">sft</span><span class="o">.</span><span class="n">to_rasmm</span><span class="p">()</span>
             <span class="n">sft</span><span class="o">.</span><span class="n">to_center</span><span class="p">()</span>
             <span class="n">streamlines</span> <span class="o">=</span> <span class="n">sft</span><span class="o">.</span><span class="n">streamlines</span>
+            <span class="n">streamlines</span><span class="o">.</span><span class="n">_offsets</span> <span class="o">=</span> <span class="n">offsets</span>
 
         <span class="n">affine</span><span class="p">,</span> <span class="n">dimensions</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_reference_info_wrapper</span><span class="p">(</span><span class="n">reference</span><span class="p">)</span>
         <span class="n">header</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;DIMENSIONS&quot;</span><span class="p">:</span> <span class="n">dimensions</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
             <span class="s2">&quot;VOXEL_TO_RASMM&quot;</span><span class="p">:</span> <span class="n">affine</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
             <span class="s2">&quot;NB_VERTICES&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="p">),</span>
-            <span class="s2">&quot;NB_STREAMLINES&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">streamlines</span><span class="p">),</span>
+            <span class="s2">&quot;NB_STREAMLINES&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">streamlines</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span>
         <span class="p">}</span>
+
         <span class="k">if</span> <span class="n">header</span><span class="p">[</span><span class="s1">&#39;NB_STREAMLINES&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s1">&#39;To use this script, you need at least 2&#39;</span>
                           <span class="s1">&#39;streamlines.&#39;</span><span class="p">)</span>
@@ -615,8 +684,8 @@
                     <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">arg</span><span class="p">[</span><span class="mi">1</span><span class="p">])[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">dim</span><span class="p">,</span> <span class="n">arg</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
                 <span class="n">curr_arr</span><span class="o">.</span><span class="n">tofile</span><span class="p">(</span><span class="n">curr_filename</span><span class="p">)</span>
 
-        <span class="n">trx</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="n">tmpdirname</span><span class="p">)</span>
-        <span class="n">save</span><span class="p">(</span><span class="n">trx</span><span class="p">,</span> <span class="n">out_tractogram</span><span class="p">)</span></div>
+        <span class="n">trx</span> <span class="o">=</span> <span class="n">tmm</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">tmpdirname</span><span class="p">)</span>
+        <span class="n">tmm</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">trx</span><span class="p">,</span> <span class="n">out_tractogram</span><span class="p">)</span></div>
 </pre></div>
 
             </article>
@@ -665,7 +734,8 @@
   
     
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1e1de1a1873e13ef5536"></script>
+  <script src="../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94"></script>
 
   <footer class="bd-footer"><div class="bd-footer__inner container">
   
@@ -673,16 +743,26 @@
     
 <p class="copyright">
 
-    &copy; Copyright 2021-2022, The TRX developers.<br>
+    &copy; Copyright 2021-2023, The TRX developers.<br>
 
 </p>
 
   </div>
   
   <div class="footer-item">
+    <p class="theme-version">
+    Built with the
+    <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">
+        PyData Sphinx Theme
+    </a>
+    0.12.0.
+</p>
+  </div>
+  
+  <div class="footer-item">
     
 <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.2.3.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
 </p>
 
   </div>

@@ -18,6 +18,7 @@ Functions
    trx.workflows.tractogram_simple_compare
    trx.workflows.verify_header_compatibility
    trx.workflows.tractogram_visualize_overlap
+   trx.workflows.validate_tractogram
    trx.workflows.generate_trx_from_scratch
 
 
@@ -48,6 +49,9 @@ Attributes
 
 
 .. py:function:: tractogram_visualize_overlap(in_tractogram, reference, remove_invalid=True)
+
+
+.. py:function:: validate_tractogram(in_tractogram, reference, out_tractogram, remove_identical_streamlines=True, precision=1)
 
 
 .. py:function:: generate_trx_from_scratch(reference, out_tractogram, positions_csv=False, positions=False, offsets=False, positions_dtype='float32', offsets_dtype='uint64', space_str='rasmm', origin_str='nifti', verify_invalid=True, dpv=[], dps=[], groups=[], dpg=[])
