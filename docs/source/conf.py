@@ -63,7 +63,7 @@ html_logo = "../_static/trx_logo.png"
 
 
 html_theme_options = {
-    "html_logo": {
+    "logo": {
         "text": "TRX Python",
     },
     "icon_links": [
