@@ -68,7 +68,7 @@ def load(tractogram_filename, reference):
     return tractogram_obj
 
 
-def save(tractogram_obj, tractogram_filename):
+def save(tractogram_obj, tractogram_filename, bbox_valid_check=False):
     import trx.trx_file_memmap as tmm
     out_ext = split_name_with_gz(tractogram_filename)[1]
 
@@ -76,7 +76,7 @@ def save(tractogram_obj, tractogram_filename):
         if not isinstance(tractogram_obj, StatefulTractogram):
             tractogram_obj = tractogram_obj.to_sft()
         save_tractogram(tractogram_obj, tractogram_filename,
-                        bbox_valid_check=False)
+                        bbox_valid_check=bbox_valid_check)
     else:
         if not isinstance(tractogram_obj, tmm.TrxFile):
             tractogram_obj = tmm.TrxFile.from_sft(tractogram_obj)

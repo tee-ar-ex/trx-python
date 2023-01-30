@@ -249,7 +249,7 @@ def test_append_Tractogram(path, buffer):
                                                 ("small.trx", 0, 0),
                                                 ("small.trx", 25000, 10000)])
 def test_from_lazy_tractogram(path, size, buffer):
-    rng = np.random.RandomState(1776)
+    _ = np.random.RandomState(1776)
     streamlines = []
     fa = []
     commit_weights = []
@@ -265,11 +265,6 @@ def test_from_lazy_tractogram(path, size, buffer):
         clusters_QB.append(
             data_for_streamline['mean_torsion'].astype(np.uint16))
 
-    data_per_point = {'fa': [e for e in fa]}
-    data_per_streamline = {
-        'commit_weights': [e for e in commit_weights],
-        'clusters_QB': [e for e in clusters_QB]}
-
     def streamlines_func(): return (e for e in streamlines)
     data_per_point_func = {'fa': lambda: (e for e in fa)}
     data_per_streamline_func = {
@@ -281,10 +276,16 @@ def test_from_lazy_tractogram(path, size, buffer):
                          data_per_point_func,
                          affine_to_rasmm=np.eye(4))
 
+    dtype_dict = {'positions': np.float32, 'offsets': np.uint32,
+                  'dpv': {'fa': np.float16},
+                  'dps': {'commit_weights': np.float32,
+                          'clusters_QB': np.uint16}}
     path = os.path.join(get_home(), 'memmap_test_data', path)
     trx = tmm.TrxFile.from_lazy_tractogram(obj, reference=path,
                                            extra_buffer=buffer,
-                                           chunk_size=1000)
+                                           chunk_size=1000,
+                                           dtype_dict=dtype_dict)
+
     assert len(trx) == len(gen_range)
 
 

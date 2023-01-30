@@ -393,18 +393,20 @@ def convert_data_dict_to_tractogram(data):
     streamlines._data = streamlines._data
 
     for key in data['dps']:
-        data['dps'][key] = np.array(data['dps'][key])
+        shape = (len(streamlines), len(data['dps'][key]) // len(streamlines))
+        data['dps'][key] = np.array(data['dps'][key]).reshape(shape)
 
-    data['data_per_point'] = {}
-    for key in data['dpp']:
-        if key not in data['data_per_point']:
-            tmp_arr = ArraySequence()
-            tmp_arr._data = data['dpp'][key]
-            tmp_arr._offsets = streamlines._offsets
-            tmp_arr._lengths = streamlines._lengths
-            data['data_per_point'][key] = tmp_arr
+    for key in data['dpv']:
+        shape = (len(streamlines._data), len(data['dpv'][key]) // len(streamlines._data))
+        data['dpv'][key] = np.array(data['dpv'][key]).reshape(shape)
 
-    obj = Tractogram(streamlines, data_per_point=data['data_per_point'],
+        tmp_arr = ArraySequence()
+        tmp_arr._data = data['dpv'][key]
+        tmp_arr._offsets = streamlines._offsets
+        tmp_arr._lengths = streamlines._lengths
+        data['dpv'][key] = tmp_arr
+
+    obj = Tractogram(streamlines, data_per_point=data['dpv'],
                      data_per_streamline=data['dps'])
 
     return obj
@@ -414,10 +416,10 @@ def append_generator_to_dict(gen, data):
     if isinstance(gen, TractogramItem):
         data['strs'].append(gen.streamline.tolist())
         for key in gen.data_for_points:
-            if key not in data['dpp']:
-                data['dpp'][key] = np.array([])
-            data['dpp'][key] = np.append(
-                data['dpp'][key], gen.data_for_points[key])
+            if key not in data['dpv']:
+                data['dpv'][key] = np.array([])
+            data['dpv'][key] = np.append(
+                data['dpv'][key], gen.data_for_points[key])
         for key in gen.data_for_streamline:
             if key not in data['dps']:
                 data['dps'][key] = np.array([])
