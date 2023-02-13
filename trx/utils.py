@@ -397,7 +397,8 @@ def convert_data_dict_to_tractogram(data):
         data['dps'][key] = np.array(data['dps'][key]).reshape(shape)
 
     for key in data['dpv']:
-        shape = (len(streamlines._data), len(data['dpv'][key]) // len(streamlines._data))
+        shape = (len(streamlines._data), len(
+            data['dpv'][key]) // len(streamlines._data))
         data['dpv'][key] = np.array(data['dpv'][key]).reshape(shape)
 
         tmp_arr = ArraySequence()
@@ -427,3 +428,57 @@ def append_generator_to_dict(gen, data):
                 data['dps'][key], gen.data_for_streamline[key])
     else:
         data['strs'].append(gen.tolist())
+
+
+def verify_trx_dtype(trx, dict_dtype):
+    """ Verify if the dtype of the data in the trx is the same as the one in
+    the dict.
+
+    Parameters
+    ----------
+    trx : Tractogram
+        Tractogram to verify.
+    dict_dtype : dict
+        Dictionary containing the dtype to verify.
+    Returns
+    -------
+    output : bool
+        True if the dtype is the same, False otherwise.
+    """
+    identical = True
+    for key in dict_dtype:
+        if key == 'positions':
+            if trx.streamlines._data.dtype != dict_dtype[key]:
+                logging.warning('Positions dtype is different')
+                identical = False
+        elif key == 'offsets':
+            if trx.streamlines._offsets.dtype != dict_dtype[key]:
+                logging.warning('Offsets dtype is different')
+                identical = False
+        elif key == 'dpv':
+            for key_dpv in dict_dtype[key]:
+                if trx.data_per_vertex[key_dpv]._data.dtype != dict_dtype[key][key_dpv]:
+                    logging.warning(
+                        'Data per vertex ({}) dtype is different'.format(key_dpv))
+                    identical = False
+        elif key == 'dps':
+            for key_dps in dict_dtype[key]:
+                if trx.data_per_streamline[key_dps].dtype != dict_dtype[key][key_dps]:
+                    logging.warning(
+                        'Data per streamline ({}) dtype is different'.format(key_dps))
+                    identical = False
+        elif key == 'dpg':
+            for key_group in dict_dtype[key]:
+                for key_dpg in dict_dtype[key][key_group]:
+                    if trx.data_per_point[key_group][key_dpg].dtype != dict_dtype[key][key_group][key_dpg]:
+                        logging.warning(
+                            'Data per group ({}) dtype is different'.format(key_dpg))
+                        identical = False
+        elif key == 'groups':
+            for key_group in dict_dtype[key]:
+                if trx.data_per_point[key_group]._data.dtype != dict_dtype[key][key_group]:
+                    logging.warning(
+                        'Data per group ({}) dtype is different'.format(key_group))
+                    identical = False
+
+    return identical

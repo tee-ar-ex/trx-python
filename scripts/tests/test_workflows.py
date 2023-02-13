@@ -1,6 +1,7 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+from deepdiff import DeepDiff
 import os
 
 import pytest
@@ -18,8 +19,9 @@ from trx.io import get_trx_tmpdir
 import trx.trx_file_memmap as tmm
 from trx.workflows import (convert_dsi_studio,
                            convert_tractogram,
+                           manipulate_trx_datatype,
                            generate_trx_from_scratch,
-                           validate_tractogram)
+                           validate_tractogram,)
 
 
 # If they already exist, this only takes 5 seconds (check md5sum)
@@ -255,3 +257,45 @@ def test_execution_concatenate_validate_trx():
 
     # Right size
     assert_equal(len(trx.streamlines), len(trx1.streamlines))
+
+
+def test_execution_manipulate_trx_datatype():
+    os.chdir(os.path.expanduser(tmp_dir.name))
+    expected_trx = os.path.join(get_home(), 'trx_from_scratch',
+                                'expected.trx')
+    trx = tmm.load(expected_trx)
+
+    expected_dtype = {'positions': np.dtype('float16'),
+                      'offsets': np.dtype('uint64'),
+                      'dpv': {'dpv_cx': np.dtype('uint8'),
+                              'dpv_cy': np.dtype('uint8'),
+                              'dpv_cz': np.dtype('uint8')},
+                      'dps': {'dps_algo': np.dtype('uint8'),
+                              'dps_cw': np.dtype('float64')},
+                      'dpg': {'g_AF_L':
+                              {'dpg_AF_L_mean_fa': np.dtype('float32'),
+                               'dpg_AF_L_volume': np.dtype('float32')},
+                              'g_AF_R':
+                              {'dpg_AF_R_mean_fa': np.dtype('float32')}},
+                      'groups': {'g_AF_L': np.dtype('int32'),
+                                 'g_AF_R': np.dtype('int32')}}
+    assert DeepDiff(trx.get_dtype_dict(), expected_dtype) == {}
+
+    generated_dtype = {'positions': np.dtype('float32'),
+                       'offsets': np.dtype('uint32'),
+                       'dpv': {'dpv_cx': np.dtype('uint16'),
+                               'dpv_cy': np.dtype('uint16'),
+                               'dpv_cz': np.dtype('uint16')},
+                       'dps': {'dps_algo': np.dtype('uint8'),
+                               'dps_cw': np.dtype('float32')},
+                       'dpg': {'g_AF_L':
+                               {'dpg_AF_L_mean_fa': np.dtype('float64'),
+                                'dpg_AF_L_volume': np.dtype('float32')},
+                               'g_AF_R':
+                               {'dpg_AF_R_mean_fa': np.dtype('float64')}},
+                       'groups': {'g_AF_L': np.dtype('uint16'),
+                                  'g_AF_R': np.dtype('uint16')}}
+
+    manipulate_trx_datatype(expected_trx, 'generated.trx', generated_dtype)
+    trx = tmm.load('generated.trx')
+    assert DeepDiff(trx.get_dtype_dict(), generated_dtype) == {}

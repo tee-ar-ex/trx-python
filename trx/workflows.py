@@ -7,6 +7,7 @@ import gzip
 import json
 import logging
 import os
+import tempfile
 
 import nibabel as nib
 from nibabel.streamlines.array_sequence import ArraySequence
@@ -410,3 +411,60 @@ def generate_trx_from_scratch(reference, out_tractogram, positions_csv=False,
 
         trx = tmm.load(tmpdirname)
         tmm.save(trx, out_tractogram)
+
+
+def manipulate_trx_datatype(in_filename, out_filename, dict_dtype):
+    trx = tmm.load(in_filename)
+
+    # For each key in dict_dtype, we create a new memmap with the new dtype
+    # and we copy the data from the old memmap to the new one.
+    for key in dict_dtype:
+        if key == 'positions':
+            tmp_mm = np.memmap(tempfile.NamedTemporaryFile(),
+                               dtype=dict_dtype[key],
+                               mode='w+',
+                               shape=trx.streamlines._data.shape)
+            tmp_mm[:] = trx.streamlines._data[:]
+            trx.streamlines._data = tmp_mm
+        elif key == 'offsets':
+            tmp_mm = np.memmap(tempfile.NamedTemporaryFile(),
+                               dtype=dict_dtype[key],
+                               mode='w+',
+                               shape=trx.streamlines._offsets.shape)
+            tmp_mm[:] = trx.streamlines._offsets[:]
+            trx.streamlines._offsets = tmp_mm
+        elif key == 'dpv':
+            for key_dpv in dict_dtype[key]:
+                tmp_mm = np.memmap(tempfile.NamedTemporaryFile(),
+                                   dtype=dict_dtype[key][key_dpv],
+                                   mode='w+',
+                                   shape=trx.data_per_vertex[key_dpv]._data.shape)
+                tmp_mm[:] = trx.data_per_vertex[key_dpv]._data[:]
+                trx.data_per_vertex[key_dpv]._data = tmp_mm
+        elif key == 'dps':
+            for key_dps in dict_dtype[key]:
+                tmp_mm = np.memmap(tempfile.NamedTemporaryFile(),
+                                   dtype=dict_dtype[key][key_dps],
+                                   mode='w+',
+                                   shape=trx.data_per_streamline[key_dps].shape)
+                tmp_mm[:] = trx.data_per_streamline[key_dps][:]
+                trx.data_per_streamline[key_dps] = tmp_mm
+        elif key == 'dpg':
+            for key_group in dict_dtype[key]:
+                for key_dpg in dict_dtype[key][key_group]:
+                    tmp_mm = np.memmap(tempfile.NamedTemporaryFile(),
+                                       dtype=dict_dtype[key][key_group][key_dpg],
+                                       mode='w+',
+                                       shape=trx.data_per_group[key_group][key_dpg].shape)
+                    tmp_mm[:] = trx.data_per_group[key_group][key_dpg][:]
+                    trx.data_per_group[key_group][key_dpg] = tmp_mm
+        elif key == 'groups':
+            for key_group in dict_dtype[key]:
+                tmp_mm = np.memmap(tempfile.NamedTemporaryFile(),
+                                   dtype=dict_dtype[key][key_group],
+                                   mode='w+',
+                                   shape=trx.groups[key_group].shape)
+                tmp_mm[:] = trx.groups[key_group][:]
+                trx.groups[key_group] = tmp_mm
+
+    tmm.save(trx, out_filename)

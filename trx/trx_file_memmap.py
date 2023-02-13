@@ -1289,12 +1289,21 @@ class TrxFile:
         """
         dtype_dict = {"positions": self.streamlines._data.dtype,
                       "offsets": self.streamlines._offsets.dtype,
-                      "dpv": {}, "dps": {}, "dpg": {}}
+                      "dpv": {}, "dps": {}, "dpg": {}, "groups": {}}
 
         for key in self.data_per_vertex.keys():
             dtype_dict['dpv'][key] = self.data_per_vertex[key]._data.dtype
         for key in self.data_per_streamline.keys():
             dtype_dict['dps'][key] = self.data_per_streamline[key].dtype
+
+        for group_key in self.data_per_group.keys():
+            dtype_dict['groups'][group_key] = self.groups[group_key].dtype
+
+        for group_key in self.data_per_group.keys():
+            dtype_dict['dpg'][group_key] = {}
+            for dpg_key in self.data_per_group[group_key].keys():
+                dtype_dict['dpg'][group_key][dpg_key] = \
+                    self.data_per_group[group_key][dpg_key].dtype
 
         return dtype_dict
 
