@@ -95,7 +95,7 @@ def main():
         dtype_dict['dpg'] = {}
         for group, name, dtype in args.dpg:
             dtype_dict['dpg'][group] = {name: np.dtype(dtype)}
-    print(dtype_dict)
+
     manipulate_trx_datatype(args.in_tractogram, args.out_tractogram, dtype_dict)
 
 

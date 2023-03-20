@@ -1279,7 +1279,7 @@ class TrxFile:
         self.close()
         self.__dict__ = trx.__dict__
 
-    def get_dtype_dict(self) -> dict[str, np.dtype]:
+    def get_dtype_dict(self):
         """Get the dtype dictionary for the TrxFile
 
         Returns
