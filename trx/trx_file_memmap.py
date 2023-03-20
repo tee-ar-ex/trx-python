@@ -424,8 +424,6 @@ def concatenate(
                 ref_trx.data_per_vertex[key]._data.dtype
                 != curr_trx.data_per_vertex[key]._data.dtype
             ):
-                print(key, ref_trx.data_per_vertex[key]._data.dtype,
-                      curr_trx.data_per_vertex[key]._data.dtype)
                 logging.debug(
                     "{} dpv key is not declared with the same dtype "
                     "in all TrxFile.".format(key)
@@ -1515,6 +1513,8 @@ class TrxFile:
 
         if len(sft.dtype_dict) > 0:
             dtype_dict = sft.dtype_dict
+        if 'dpp' in dtype_dict:
+            dtype_dict['dpv'] = dtype_dict.pop('dpp')
         elif len(dtype_dict) == 0:
             dtype_dict = {'positions': np.float32, 'offsets': np.uint32,
                           'dpv': {}, 'dps': {}}
@@ -1716,6 +1716,9 @@ class TrxFile:
             data_per_point=self.data_per_vertex,
             data_per_streamline=self.data_per_streamline,
         )
+        tmp_dict = self.get_dtype_dict()
+        if 'dpv' in tmp_dict:
+            tmp_dict['dpp'] = tmp_dict.pop('dpv')
         sft.dtype_dict = self.get_dtype_dict()
 
         return sft

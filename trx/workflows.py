@@ -228,9 +228,11 @@ def validate_tractogram(in_tractogram, reference, out_tractogram,
         sft = tractogram_obj.to_sft()
     else:
         sft = tractogram_obj
-    # print(sft)
+
+    ori_dtype = sft.dtype_dict
     ori_len = len(sft)
     tot_remove = 0
+
     invalid_coord_ind, _ = sft.remove_invalid_streamlines()
     tot_remove += len(invalid_coord_ind)
     logging.warning('Removed {} streamlines with invalid coordinates.'.format(
@@ -269,15 +271,16 @@ def validate_tractogram(in_tractogram, reference, out_tractogram,
     if out_tractogram:
         streamlines = sft.streamlines[indices_final].copy()
         dpp = {}
-        for key in dpp.keys():
-            dpp[key] = sft.data_per_point[key][indices_final]
+        for key in sft.data_per_point.keys():
+            dpp[key] = sft.data_per_point[key][indices_final].copy()
 
         dps = {}
-        for key in dps.keys():
+        for key in sft.data_per_streamline.keys():
             dps[key] = sft.data_per_streamline[key][indices_final]
         new_sft = StatefulTractogram.from_sft(streamlines, sft,
                                               data_per_point=dpp,
                                               data_per_streamline=dps)
+        new_sft.dtype_dict = ori_dtype
         save(new_sft, out_tractogram)
 
 

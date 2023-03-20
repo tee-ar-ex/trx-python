@@ -194,6 +194,8 @@ def test_execution_generate_trx_from_scratch():
     exp_trx = tmm.load(expected_trx)
     gen_trx = tmm.load('generated.trx')
 
+    assert DeepDiff(exp_trx.get_dtype_dict(), gen_trx.get_dtype_dict()) == {}
+
     assert_allclose(exp_trx.streamlines._data, gen_trx.streamlines._data,
                     atol=0.1, rtol=0.1)
     assert_equal(exp_trx.streamlines._offsets, gen_trx.streamlines._offsets)
@@ -223,7 +225,6 @@ def test_execution_concatenate_validate_trx():
     trx2 = tmm.load(os.path.join(get_home(), 'gold_standard',
                                  'gs.trx'))
     trx2.streamlines._data += + 0.001
-
     trx = tmm.concatenate([trx1, trx2], preallocation=False)
 
     # Right size
@@ -253,10 +254,13 @@ def test_execution_concatenate_validate_trx():
     validate_tractogram('concat.trx', None, 'valid.trx',
                         remove_identical_streamlines=True,
                         precision=0)
-    trx = tmm.load('valid.trx')
+    trx_val = tmm.load('valid.trx')
+
+    # Right dtype
+    assert DeepDiff(trx.get_dtype_dict(), trx_val.get_dtype_dict()) == {}
 
     # Right size
-    assert_equal(len(trx.streamlines), len(trx1.streamlines))
+    assert_equal(len(trx1.streamlines), len(trx_val.streamlines))
 
 
 def test_execution_manipulate_trx_datatype():
