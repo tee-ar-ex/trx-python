@@ -25,7 +25,7 @@ tmp_dir = get_trx_tmpdir()
 
 @pytest.mark.parametrize("path", [("gs.trx"), ("gs.trk"), ("gs.tck"),
                                   ("gs.vtk")])
-@pytest.mark.skipif(not dipy_available, reason="Dipy is not installed")
+@pytest.mark.skipif(not dipy_available, reason='Dipy is not installed.')
 def test_load_vox(path):
     dir = os.path.join(get_home(), 'gold_standard')
     path = os.path.join(dir, path)
@@ -41,7 +41,7 @@ def test_load_vox(path):
 
 @pytest.mark.parametrize("path", [("gs.trx"), ("gs.trk"), ("gs.tck"),
                                   ("gs.vtk")])
-@pytest.mark.skipif(not dipy_available, reason="Dipy is not installed")
+@pytest.mark.skipif(not dipy_available, reason='Dipy is not installed.')
 def test_load_voxmm(path):
     dir = os.path.join(get_home(), 'gold_standard')
     path = os.path.join(dir, path)
@@ -56,7 +56,7 @@ def test_load_voxmm(path):
 
 
 @pytest.mark.parametrize("path", [("gs.trk"), ("gs.trx"), ("gs_fldr.trx")])
-@pytest.mark.skipif(not dipy_available, reason="Dipy is not installed")
+@pytest.mark.skipif(not dipy_available, reason='Dipy is not installed.')
 def test_multi_load_save_rasmm(path):
     dir = os.path.join(get_home(), 'gold_standard')
     basename, ext = os.path.splitext(path)

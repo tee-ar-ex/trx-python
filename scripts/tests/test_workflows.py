@@ -30,17 +30,11 @@ tmp_dir = get_trx_tmpdir()
 
 
 def test_help_option_convert_dsi(script_runner):
-    if not dipy_available:
-        pytest.skip('Dipy library is missing, cannot test scripts involving '
-                    'tck/trk/vtk.')
     ret = script_runner.run('tff_convert_dsi_studio.py', '--help')
     assert ret.success
 
 
 def test_help_option_convert(script_runner):
-    if not dipy_available:
-        pytest.skip('Dipy library is missing, cannot test scripts involving '
-                    'tck/trk/vtk.')
     ret = script_runner.run('tff_convert_tractogram.py', '--help')
     assert ret.success
 
@@ -50,10 +44,9 @@ def test_help_option_generate_trx_from_scratch(script_runner):
     assert ret.success
 
 
+@pytest.mark.skipif(not dipy_available,
+                    reason='Dipy is not installed.')
 def test_execution_convert_dsi():
-    if not dipy_available:
-        pytest.skip('Dipy library is missing, cannot test scripts involving '
-                    'tck/trk/vtk.')
     os.chdir(os.path.expanduser(tmp_dir.name))
     in_trk = os.path.join(get_home(), 'DSI',
                           'CC.trk.gz')
@@ -75,10 +68,9 @@ def test_execution_convert_dsi():
     assert_equal(sft.streamlines._offsets, offsets_fix)
 
 
+@pytest.mark.skipif(not dipy_available,
+                    reason='Dipy is not installed.')
 def test_execution_convert_to_trx():
-    if not dipy_available:
-        pytest.skip('Dipy library is missing, cannot test scripts involving '
-                    'tck/trk/vtk.')
     os.chdir(os.path.expanduser(tmp_dir.name))
     in_trk = os.path.join(get_home(), 'DSI',
                           'CC_fix.trk')
@@ -98,10 +90,9 @@ def test_execution_convert_to_trx():
     assert_array_equal(trx.streamlines._offsets, offsets_fix)
 
 
+@pytest.mark.skipif(not dipy_available,
+                    reason='Dipy is not installed.')
 def test_execution_convert_from_trx():
-    if not dipy_available:
-        pytest.skip('Dipy library is missing, cannot test scripts involving '
-                    'tck/trk/vtk.')
     os.chdir(os.path.expanduser(tmp_dir.name))
     in_trk = os.path.join(get_home(), 'DSI',
                           'CC_fix.trk')
@@ -129,10 +120,9 @@ def test_execution_convert_from_trx():
     assert_equal(sft.streamlines._offsets, offsets_fix)
 
 
+@pytest.mark.skipif(not dipy_available,
+                    reason='Dipy is not installed.')
 def test_execution_convert_dtype_p16_o64():
-    if not dipy_available:
-        pytest.skip('Dipy library is missing, cannot test scripts involving '
-                    'tck/trk/vtk.')
     os.chdir(os.path.expanduser(tmp_dir.name))
     in_trk = os.path.join(get_home(), 'DSI',
                           'CC_fix.trk')
@@ -144,10 +134,9 @@ def test_execution_convert_dtype_p16_o64():
     assert_equal(trx.streamlines._offsets.dtype, np.uint64)
 
 
+@pytest.mark.skipif(not dipy_available,
+                    reason='Dipy is not installed.')
 def test_execution_convert_dtype_p64_o32():
-    if not dipy_available:
-        pytest.skip('Dipy library is missing, cannot test scripts involving '
-                    'tck/trk/vtk.')
     os.chdir(os.path.expanduser(tmp_dir.name))
     in_trk = os.path.join(get_home(), 'DSI',
                           'CC_fix.trk')
@@ -159,6 +148,8 @@ def test_execution_convert_dtype_p64_o32():
     assert_equal(trx.streamlines._offsets.dtype, np.uint32)
 
 
+@pytest.mark.skipif(not dipy_available,
+                    reason='Dipy is not installed.')
 def test_execution_generate_trx_from_scratch():
     os.chdir(os.path.expanduser(tmp_dir.name))
     reference_fa = os.path.join(get_home(), 'trx_from_scratch',
@@ -218,6 +209,8 @@ def test_execution_generate_trx_from_scratch():
                              gen_trx.data_per_group[group][key])
 
 
+@pytest.mark.skipif(not dipy_available,
+                    reason='Dipy is not installed.')
 def test_execution_concatenate_validate_trx():
     os.chdir(os.path.expanduser(tmp_dir.name))
     trx1 = tmm.load(os.path.join(get_home(), 'gold_standard',
@@ -263,6 +256,8 @@ def test_execution_concatenate_validate_trx():
     assert_equal(len(trx1.streamlines), len(trx_val.streamlines))
 
 
+@pytest.mark.skipif(not dipy_available,
+                    reason='Dipy is not installed.')
 def test_execution_manipulate_trx_datatype():
     os.chdir(os.path.expanduser(tmp_dir.name))
     expected_trx = os.path.join(get_home(), 'trx_from_scratch',
