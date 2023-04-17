@@ -17,7 +17,6 @@ from nibabel.streamlines.array_sequence import ArraySequence
 from nibabel.streamlines.trk import TrkFile
 from nibabel.streamlines.tractogram import Tractogram, LazyTractogram
 import numpy as np
-from numpy.typing import ArrayLike, NDArray
 
 from trx.io import get_trx_tmpdir
 from trx.utils import (get_reference_info_wrapper,
@@ -31,17 +30,17 @@ except:
     dipy_available = False
 
 
-def _append_last_offsets(nib_offsets: NDArray, nb_vertices: int) -> NDArray:
+def _append_last_offsets(nib_offsets: np.ndarray, nb_vertices: int) -> np.ndarray:
     """Appends the last element of offsets from header information
 
     Keyword arguments:
-        nib_offsets -- NDArray
+        nib_offsets -- np.ndarray
             Array of offsets with the last element being the start of the last
             streamline (nibabel convention)
         nb_vertices -- int
             Total number of vertices in the streamlines
     Returns:
-        Offsets -- NDArray (VTK convention)
+        Offsets -- np.ndarray (VTK convention)
     """
     def is_sorted(a): return np.all(a[:-1] <= a[1:])
     if not is_sorted(nib_offsets):
@@ -49,7 +48,7 @@ def _append_last_offsets(nib_offsets: NDArray, nb_vertices: int) -> NDArray:
     return np.append(nib_offsets, nb_vertices).astype(nib_offsets.dtype)
 
 
-def _generate_filename_from_data(arr: ArrayLike, filename: str) -> str:
+def _generate_filename_from_data(arr: np.ndarray, filename: str) -> str:
     """Determines the data type from array data and generates the appropriate
     filename
 
@@ -105,14 +104,14 @@ def _split_ext_with_dimensionality(filename: str) -> Tuple[str, int, str]:
     return basename, int(dim), ext
 
 
-def _compute_lengths(offsets: NDArray) -> NDArray:
+def _compute_lengths(offsets: np.ndarray) -> np.ndarray:
     """Compute lengths from offsets
 
     Keyword arguments:
-        offsets -- An NDArray of offsets
+        offsets -- An np.ndarray of offsets
 
     Returns:
-        lengths -- An NDArray of lengths
+        lengths -- An np.ndarray of lengths
     """
     if len(offsets) > 0:
         last_elem_pos = _dichotomic_search(offsets)
@@ -144,12 +143,12 @@ def _is_dtype_valid(ext: str) -> bool:
 
 
 def _dichotomic_search(
-    x: NDArray, l_bound: Optional[int] = None, r_bound: Optional[int] = None
+    x: np.ndarray, l_bound: Optional[int] = None, r_bound: Optional[int] = None
 ) -> int:
     """Find where data of a contiguous array is actually ending
 
     Keyword arguments:
-        x -- NDArray of values
+        x -- np.ndarray of values
         l_bound -- lower bound index for search
         r_bound -- upper bound index for search
     Returns:
@@ -177,19 +176,19 @@ def _create_memmap(
     dtype: np.dtype = np.float32,
     offset: int = 0,
     order: str = "C",
-) -> NDArray:
+) -> np.ndarray:
     """Wrapper to support empty array as memmaps
 
     Keyword arguments:
         filename -- filename where the empty memmap should be created
         mode -- file open mode (see: np.memmap for options)
-        shape -- shape of memmapped NDArray
-        dtype -- datatype of memmapped NDArray
+        shape -- shape of memmapped np.ndarray
+        dtype -- datatype of memmapped np.ndarray
         offset -- offset of the data within the file
         order -- data representation on disk (C or Fortran)
 
     Returns:
-        mmapped NDArray or a zero-filled Numpy array if array has a shape of 0
+        mmapped np.ndarray or a zero-filled Numpy array if array has a shape of 0
             in the first dimension
     """
     if np.dtype(dtype) == bool:
@@ -1362,7 +1361,7 @@ class TrxFile:
         return self.select(self.groups[key], keep_group=keep_group, copy_safe=copy_safe)
 
     def select(
-        self, indices: ArrayLike, keep_group: bool = True, copy_safe: bool = False
+        self, indices: np.ndarray, keep_group: bool = True, copy_safe: bool = False
     ) -> Type["TrxFile"]:
         """Get a subset of items, always vertices to the same memmaps
 
