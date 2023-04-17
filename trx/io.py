@@ -6,8 +6,7 @@ import logging
 import tempfile
 
 try:
-    from dipy.io.stateful_tractogram import StatefulTractogram
-    from dipy.io.streamline import load_tractogram, save_tractogram
+    import dipy
     dipy_available = True
 except ImportError:
     dipy_available = False
@@ -33,6 +32,8 @@ def load_sft_with_reference(filepath, reference=None,
         logging.error('Dipy library is missing, cannot use functions related '
                       'to the StatefulTractogram.')
         return None
+    from dipy.io.streamline import load_tractogram
+
     # Force the usage of --reference for all file formats without an header
     _, ext = os.path.splitext(filepath)
     if ext == '.trk':
@@ -69,7 +70,14 @@ def load(tractogram_filename, reference):
 
 
 def save(tractogram_obj, tractogram_filename, bbox_valid_check=False):
+    if not dipy_available:
+        logging.error('Dipy library is missing, cannot use functions related '
+                    'to the StatefulTractogram.')
+        return None
+    from dipy.io.stateful_tractogram import StatefulTractogram
+    from dipy.io.streamline import save_tractogram
     import trx.trx_file_memmap as tmm
+
     out_ext = split_name_with_gz(tractogram_filename)[1]
 
     if out_ext != '.trx':

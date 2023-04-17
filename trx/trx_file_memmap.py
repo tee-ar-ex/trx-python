@@ -25,9 +25,10 @@ from trx.utils import (get_reference_info_wrapper,
                        append_generator_to_dict)
 
 try:
-    from dipy.io.stateful_tractogram import StatefulTractogram
+    import dipy
+    dipy_available = True
 except:
-    StatefulTractogram = None
+    dipy_available = False
 
 
 def _append_last_offsets(nib_offsets: NDArray, nb_vertices: int) -> NDArray:
@@ -1305,19 +1306,19 @@ class TrxFile:
 
         return dtype_dict
 
-    def append(self, obj: Union["StatefulTractogram", "TrxFile",
-                                "Tractogram"],
-               extra_buffer: int = 0) -> None:
-
+    def append(self, obj, extra_buffer: int = 0) -> None:
         curr_dtype_dict = self.get_dtype_dict()
+        if dipy_available:
+            from dipy.io.stateful_tractogram import StatefulTractogram
 
-        if not isinstance(obj, (StatefulTractogram, TrxFile,
-                                Tractogram)):
-            raise TypeError("{} is not a supported object type for appending.")
+
+        if not isinstance(obj, (TrxFile, Tractogram)) \
+            and (dipy_available and not isinstance(obj, StatefulTractogram)):
+            raise TypeError("{} is not a supported object type for appending.".format(type(obj)))
         elif isinstance(obj, Tractogram):
             obj = self.from_tractogram(obj, reference=self.header,
                                        dtype_dict=curr_dtype_dict)
-        elif isinstance(obj, StatefulTractogram):
+        elif dipy_available and isinstance(obj, StatefulTractogram):
             obj = self.from_sft(obj, dtype_dict=curr_dtype_dict)
 
         self._append_trx(obj, extra_buffer=extra_buffer)

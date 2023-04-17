@@ -8,6 +8,12 @@ from nibabel.streamlines import LazyTractogram
 import numpy as np
 import pytest
 
+try:
+    import dipy
+    dipy_available = True
+except ImportError:
+    dipy_available = False
+
 from trx.io import get_trx_tmpdir
 import trx.trx_file_memmap as tmm
 from trx.fetcher import (get_testing_files_dict,
@@ -217,6 +223,7 @@ def test_append(path, buffer):
 
 
 @pytest.mark.parametrize("path, buffer", [("small.trx", 10000)])
+@pytest.mark.skipif(not dipy_available, reason="Dipy is not installed")
 def test_append_StatefulTractogram(path, buffer):
     path = os.path.join(get_home(), 'memmap_test_data', path)
     trx = tmm.load(path)

@@ -12,9 +12,6 @@ import numpy as np
 
 try:
     import dipy
-    from dipy.io.stateful_tractogram import StatefulTractogram, Space, Origin
-    from dipy.io.streamline import load_tractogram
-    from dipy.io.utils import is_reference_info_valid
     dipy_available = True
 except ImportError:
     dipy_available = False
@@ -132,6 +129,7 @@ def get_reference_info_wrapper(reference):
         voxel_order = voxel_order.decode('utf-8')
 
     if dipy_available:
+        from dipy.io.utils import is_reference_info_valid
         is_reference_info_valid(affine, dimensions, voxel_sizes, voxel_order)
 
     return affine, dimensions, voxel_sizes, voxel_order
@@ -177,50 +175,6 @@ def is_header_compatible(reference_1, reference_2):
         identical_header = False
 
     return identical_header
-
-
-def load_tractogram_with_reference(filepath, reference=None,
-                                   bbox_check=True):
-    """ Load a tractogram with a reference (if required).
-
-    Parameters
-    ----------
-    filepath : str
-        Path to the tractogram file.
-    reference : Nifti or Trk filename, Nifti1Image or TrkFile,
-        Nifti1Header or trk.header (dict)
-        Reference that provides the spatial attribute.
-    bbox_check : bool
-        Check if the tractogram is inside the bounding box of the reference.
-    Returns
-    -------
-    output : dipy.io.stateful_tractogram.StatefulTractogram
-        Tractogram object.
-    """
-    if not dipy_available:
-        logging.error('Dipy library is missing, cannot use functions related '
-                      'to the StatefulTractogram.')
-        return None
-    # Force the usage of --reference for all file formats without an header
-    _, ext = os.path.splitext(filepath)
-    if ext == '.trk':
-        if reference is not None and reference != 'same':
-            logging.warning('Reference is discarded for this file format '
-                            '{}.'.format(filepath))
-        sft = load_tractogram(filepath, 'same',
-                              bbox_valid_check=bbox_check)
-    elif ext in ['.tck', '.fib', '.vtk', '.dpy']:
-        if reference is None or reference == 'same':
-            raise IOError('--reference is required for this file format '
-                          '{}.'.format(filepath))
-        else:
-            sft = load_tractogram(filepath, reference,
-                                  bbox_valid_check=bbox_check)
-
-    else:
-        raise IOError('{} is an unsupported file format'.format(filepath))
-
-    return sft
 
 
 def get_axis_shift_vector(flip_axes):
@@ -323,6 +277,7 @@ def flip_sft(sft, flip_axes):
         mod_streamline -= shift_vector
         flipped_streamlines.append(mod_streamline)
 
+    from dipy.io.stateful_tractogram import StatefulTractogram
     new_sft = StatefulTractogram.from_sft(flipped_streamlines, sft,
                                           data_per_point=sft.data_per_point,
                                           data_per_streamline=sft.data_per_streamline)
@@ -369,6 +324,8 @@ def get_reverse_enum(space_str, origin_str):
     if not dipy_available:
         logging.error('Dipy library is missing, cannot use functions related '
                       'to the StatefulTractogram.')
+        return None
+    from dipy.io.stateful_tractogram import Space, Origin
     origin = Origin.NIFTI if origin_str.lower() == 'nifti' else Origin.TRACKVIS
     if space_str.lower() == 'rasmm':
         space = Space.RASMM

@@ -224,7 +224,7 @@ def test_execution_concatenate_validate_trx():
                                  'gs.trx'))
     trx2 = tmm.load(os.path.join(get_home(), 'gold_standard',
                                  'gs.trx'))
-    trx2.streamlines._data += + 0.001
+    # trx2.streamlines._data += 0.001
     trx = tmm.concatenate([trx1, trx2], preallocation=False)
 
     # Right size

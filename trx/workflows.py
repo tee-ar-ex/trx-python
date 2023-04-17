@@ -224,11 +224,13 @@ def tractogram_visualize_overlap(in_tractogram, reference, remove_invalid=True):
 def validate_tractogram(in_tractogram, reference, out_tractogram,
                         remove_identical_streamlines=True, precision=1):
     tractogram_obj = load(in_tractogram, reference)
+    
     if not isinstance(tractogram_obj, StatefulTractogram):
         sft = tractogram_obj.to_sft()
     else:
         sft = tractogram_obj
 
+    
     ori_dtype = sft.dtype_dict
     ori_len = len(sft)
     tot_remove = 0
