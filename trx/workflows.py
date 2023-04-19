@@ -329,6 +329,7 @@ def generate_trx_from_scratch(reference, out_tractogram, positions_csv=False,
                               'related to spatial transforms and invalid '
                               'streamlines are not available.')
                 return
+            from dipy.io.stateful_tractogram import StatefulTractogram
 
             space, origin = get_reverse_enum(space_str, origin_str)
             sft = StatefulTractogram(streamlines, reference, space, origin)
