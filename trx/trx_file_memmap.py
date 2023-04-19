@@ -1310,10 +1310,10 @@ class TrxFile:
         if dipy_available:
             from dipy.io.stateful_tractogram import StatefulTractogram
 
-
         if not isinstance(obj, (TrxFile, Tractogram)) \
-            and (dipy_available and not isinstance(obj, StatefulTractogram)):
-            raise TypeError("{} is not a supported object type for appending.".format(type(obj)))
+                and (dipy_available and not isinstance(obj, StatefulTractogram)):
+            raise TypeError(
+                "{} is not a supported object type for appending.".format(type(obj)))
         elif isinstance(obj, Tractogram):
             obj = self.from_tractogram(obj, reference=self.header,
                                        dtype_dict=curr_dtype_dict)

@@ -13,10 +13,7 @@ import nibabel as nib
 from nibabel.streamlines.array_sequence import ArraySequence
 import numpy as np
 try:
-    from dipy.io.stateful_tractogram import StatefulTractogram, Space
-    from dipy.io.streamline import save_tractogram, load_tractogram
-    from dipy.tracking.streamline import set_number_of_points
-    from dipy.tracking.utils import density_map
+    import dipy
     dipy_available = True
 except ImportError:
     dipy_available = False
@@ -38,6 +35,9 @@ def convert_dsi_studio(in_dsi_tractogram, in_dsi_fa, out_tractogram,
     if not dipy_available:
         logging.error('Dipy library is missing, scripts are not available.')
         return None
+    from dipy.io.stateful_tractogram import StatefulTractogram, Space
+    from dipy.io.streamline import save_tractogram, load_tractogram
+
     in_ext = split_name_with_gz(in_dsi_tractogram)[1]
     out_ext = split_name_with_gz(out_tractogram)[1]
 
@@ -82,6 +82,8 @@ def convert_tractogram(in_tractogram, out_tractogram, reference,
     if not dipy_available:
         logging.error('Dipy library is missing, scripts are not available.')
         return None
+    from dipy.io.streamline import save_tractogram
+
     in_ext = split_name_with_gz(in_tractogram)[1]
     out_ext = split_name_with_gz(out_tractogram)[1]
 
@@ -119,6 +121,8 @@ def tractogram_simple_compare(in_tractograms, reference):
     if not dipy_available:
         logging.error('Dipy library is missing, scripts are not available.')
         return
+    from dipy.io.stateful_tractogram import StatefulTractogram
+
     tractogram_obj = load(in_tractograms[0], reference)
     if not isinstance(tractogram_obj, StatefulTractogram):
         sft_1 = tractogram_obj.to_sft()
@@ -161,6 +165,7 @@ def verify_header_compatibility(in_files):
     if not dipy_available:
         logging.error('Dipy library is missing, scripts are not available.')
         return
+
     all_valid = True
     for filepath in in_files:
         if not os.path.isfile(filepath):
@@ -181,6 +186,9 @@ def tractogram_visualize_overlap(in_tractogram, reference, remove_invalid=True):
     if not dipy_available:
         logging.error('Dipy library is missing, scripts are not available.')
         return None
+    from dipy.io.stateful_tractogram import StatefulTractogram
+    from dipy.tracking.streamline import set_number_of_points
+    from dipy.tracking.utils import density_map
 
     tractogram_obj = load(in_tractogram, reference)
     if not isinstance(tractogram_obj, StatefulTractogram):
@@ -223,14 +231,19 @@ def tractogram_visualize_overlap(in_tractogram, reference, remove_invalid=True):
 
 def validate_tractogram(in_tractogram, reference, out_tractogram,
                         remove_identical_streamlines=True, precision=1):
+
+    if not dipy_available:
+        logging.error('Dipy library is missing, scripts are not available.')
+        return None
+    from dipy.io.stateful_tractogram import StatefulTractogram
+
     tractogram_obj = load(in_tractogram, reference)
-    
+
     if not isinstance(tractogram_obj, StatefulTractogram):
         sft = tractogram_obj.to_sft()
     else:
         sft = tractogram_obj
 
-    
     ori_dtype = sft.dtype_dict
     ori_len = len(sft)
     tot_remove = 0
