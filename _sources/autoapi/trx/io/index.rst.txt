@@ -29,7 +29,7 @@ Attributes
 
 
 .. py:data:: dipy_available
-   :annotation: = True
+   :value: True
 
    
 
@@ -42,6 +42,6 @@ Attributes
 .. py:function:: load(tractogram_filename, reference)
 
 
-.. py:function:: save(tractogram_obj, tractogram_filename)
+.. py:function:: save(tractogram_obj, tractogram_filename, bbox_valid_check=False)
 
 

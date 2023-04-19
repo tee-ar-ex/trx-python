@@ -26,7 +26,7 @@ Attributes
 
 
 .. py:data:: fury_available
-   :annotation: = True
+   :value: True
 
    
 

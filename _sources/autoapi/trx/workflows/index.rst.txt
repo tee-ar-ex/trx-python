@@ -20,6 +20,7 @@ Functions
    trx.workflows.tractogram_visualize_overlap
    trx.workflows.validate_tractogram
    trx.workflows.generate_trx_from_scratch
+   trx.workflows.manipulate_trx_datatype
 
 
 
@@ -32,7 +33,7 @@ Attributes
 
 
 .. py:data:: dipy_available
-   :annotation: = True
+   :value: True
 
    
 
@@ -55,5 +56,8 @@ Attributes
 
 
 .. py:function:: generate_trx_from_scratch(reference, out_tractogram, positions_csv=False, positions=False, offsets=False, positions_dtype='float32', offsets_dtype='uint64', space_str='rasmm', origin_str='nifti', verify_invalid=True, dpv=[], dps=[], groups=[], dpg=[])
+
+
+.. py:function:: manipulate_trx_datatype(in_filename, out_filename, dict_dtype)
 
 

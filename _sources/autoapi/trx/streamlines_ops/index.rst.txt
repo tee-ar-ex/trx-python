@@ -32,12 +32,11 @@ Attributes
 
 
 .. py:data:: MIN_NB_POINTS
-   :annotation: = 5
+   :value: 5
 
    
 
 .. py:data:: KEY_INDEX
-   
 
    
 
