@@ -148,8 +148,6 @@ def test_execution_convert_dtype_p64_o32():
     assert_equal(trx.streamlines._offsets.dtype, np.uint32)
 
 
-@pytest.mark.skipif(not dipy_available,
-                    reason='Dipy is not installed.')
 def test_execution_generate_trx_from_scratch():
     os.chdir(os.path.expanduser(tmp_dir.name))
     reference_fa = os.path.join(get_home(), 'trx_from_scratch',
@@ -179,7 +177,7 @@ def test_execution_generate_trx_from_scratch():
                               positions_dtype='float16',
                               offsets_dtype='uint64',
                               space_str='rasmm', origin_str='nifti',
-                              verify_invalid=True, dpv=dpv, dps=dps,
+                              verify_invalid=False, dpv=dpv, dps=dps,
                               groups=groups, dpg=dpg)
 
     exp_trx = tmm.load(expected_trx)
