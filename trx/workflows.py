@@ -7,15 +7,13 @@ import gzip
 import json
 import logging
 import os
+import tempfile
 
 import nibabel as nib
 from nibabel.streamlines.array_sequence import ArraySequence
 import numpy as np
 try:
-    from dipy.io.stateful_tractogram import StatefulTractogram, Space
-    from dipy.io.streamline import save_tractogram, load_tractogram
-    from dipy.tracking.streamline import set_number_of_points
-    from dipy.tracking.utils import density_map
+    import dipy
     dipy_available = True
 except ImportError:
     dipy_available = False
@@ -37,6 +35,9 @@ def convert_dsi_studio(in_dsi_tractogram, in_dsi_fa, out_tractogram,
     if not dipy_available:
         logging.error('Dipy library is missing, scripts are not available.')
         return None
+    from dipy.io.stateful_tractogram import StatefulTractogram, Space
+    from dipy.io.streamline import save_tractogram, load_tractogram
+
     in_ext = split_name_with_gz(in_dsi_tractogram)[1]
     out_ext = split_name_with_gz(out_tractogram)[1]
 
@@ -81,6 +82,8 @@ def convert_tractogram(in_tractogram, out_tractogram, reference,
     if not dipy_available:
         logging.error('Dipy library is missing, scripts are not available.')
         return None
+    from dipy.io.streamline import save_tractogram
+
     in_ext = split_name_with_gz(in_tractogram)[1]
     out_ext = split_name_with_gz(out_tractogram)[1]
 
@@ -118,6 +121,8 @@ def tractogram_simple_compare(in_tractograms, reference):
     if not dipy_available:
         logging.error('Dipy library is missing, scripts are not available.')
         return
+    from dipy.io.stateful_tractogram import StatefulTractogram
+
     tractogram_obj = load(in_tractograms[0], reference)
     if not isinstance(tractogram_obj, StatefulTractogram):
         sft_1 = tractogram_obj.to_sft()
@@ -160,6 +165,7 @@ def verify_header_compatibility(in_files):
     if not dipy_available:
         logging.error('Dipy library is missing, scripts are not available.')
         return
+
     all_valid = True
     for filepath in in_files:
         if not os.path.isfile(filepath):
@@ -180,6 +186,9 @@ def tractogram_visualize_overlap(in_tractogram, reference, remove_invalid=True):
     if not dipy_available:
         logging.error('Dipy library is missing, scripts are not available.')
         return None
+    from dipy.io.stateful_tractogram import StatefulTractogram
+    from dipy.tracking.streamline import set_number_of_points
+    from dipy.tracking.utils import density_map
 
     tractogram_obj = load(in_tractogram, reference)
     if not isinstance(tractogram_obj, StatefulTractogram):
@@ -222,14 +231,23 @@ def tractogram_visualize_overlap(in_tractogram, reference, remove_invalid=True):
 
 def validate_tractogram(in_tractogram, reference, out_tractogram,
                         remove_identical_streamlines=True, precision=1):
+
+    if not dipy_available:
+        logging.error('Dipy library is missing, scripts are not available.')
+        return None
+    from dipy.io.stateful_tractogram import StatefulTractogram
+
     tractogram_obj = load(in_tractogram, reference)
+
     if not isinstance(tractogram_obj, StatefulTractogram):
         sft = tractogram_obj.to_sft()
     else:
         sft = tractogram_obj
-    # print(sft)
+
+    ori_dtype = sft.dtype_dict
     ori_len = len(sft)
     tot_remove = 0
+
     invalid_coord_ind, _ = sft.remove_invalid_streamlines()
     tot_remove += len(invalid_coord_ind)
     logging.warning('Removed {} streamlines with invalid coordinates.'.format(
@@ -268,15 +286,16 @@ def validate_tractogram(in_tractogram, reference, out_tractogram,
     if out_tractogram:
         streamlines = sft.streamlines[indices_final].copy()
         dpp = {}
-        for key in dpp.keys():
-            dpp[key] = sft.data_per_point[key][indices_final]
+        for key in sft.data_per_point.keys():
+            dpp[key] = sft.data_per_point[key][indices_final].copy()
 
         dps = {}
-        for key in dps.keys():
+        for key in sft.data_per_streamline.keys():
             dps[key] = sft.data_per_streamline[key][indices_final]
         new_sft = StatefulTractogram.from_sft(streamlines, sft,
                                               data_per_point=dpp,
                                               data_per_streamline=dps)
+        new_sft.dtype_dict = ori_dtype
         save(new_sft, out_tractogram)
 
 
@@ -410,3 +429,60 @@ def generate_trx_from_scratch(reference, out_tractogram, positions_csv=False,
 
         trx = tmm.load(tmpdirname)
         tmm.save(trx, out_tractogram)
+
+
+def manipulate_trx_datatype(in_filename, out_filename, dict_dtype):
+    trx = tmm.load(in_filename)
+
+    # For each key in dict_dtype, we create a new memmap with the new dtype
+    # and we copy the data from the old memmap to the new one.
+    for key in dict_dtype:
+        if key == 'positions':
+            tmp_mm = np.memmap(tempfile.NamedTemporaryFile(),
+                               dtype=dict_dtype[key],
+                               mode='w+',
+                               shape=trx.streamlines._data.shape)
+            tmp_mm[:] = trx.streamlines._data[:]
+            trx.streamlines._data = tmp_mm
+        elif key == 'offsets':
+            tmp_mm = np.memmap(tempfile.NamedTemporaryFile(),
+                               dtype=dict_dtype[key],
+                               mode='w+',
+                               shape=trx.streamlines._offsets.shape)
+            tmp_mm[:] = trx.streamlines._offsets[:]
+            trx.streamlines._offsets = tmp_mm
+        elif key == 'dpv':
+            for key_dpv in dict_dtype[key]:
+                tmp_mm = np.memmap(tempfile.NamedTemporaryFile(),
+                                   dtype=dict_dtype[key][key_dpv],
+                                   mode='w+',
+                                   shape=trx.data_per_vertex[key_dpv]._data.shape)
+                tmp_mm[:] = trx.data_per_vertex[key_dpv]._data[:]
+                trx.data_per_vertex[key_dpv]._data = tmp_mm
+        elif key == 'dps':
+            for key_dps in dict_dtype[key]:
+                tmp_mm = np.memmap(tempfile.NamedTemporaryFile(),
+                                   dtype=dict_dtype[key][key_dps],
+                                   mode='w+',
+                                   shape=trx.data_per_streamline[key_dps].shape)
+                tmp_mm[:] = trx.data_per_streamline[key_dps][:]
+                trx.data_per_streamline[key_dps] = tmp_mm
+        elif key == 'dpg':
+            for key_group in dict_dtype[key]:
+                for key_dpg in dict_dtype[key][key_group]:
+                    tmp_mm = np.memmap(tempfile.NamedTemporaryFile(),
+                                       dtype=dict_dtype[key][key_group][key_dpg],
+                                       mode='w+',
+                                       shape=trx.data_per_group[key_group][key_dpg].shape)
+                    tmp_mm[:] = trx.data_per_group[key_group][key_dpg][:]
+                    trx.data_per_group[key_group][key_dpg] = tmp_mm
+        elif key == 'groups':
+            for key_group in dict_dtype[key]:
+                tmp_mm = np.memmap(tempfile.NamedTemporaryFile(),
+                                   dtype=dict_dtype[key][key_group],
+                                   mode='w+',
+                                   shape=trx.groups[key_group].shape)
+                tmp_mm[:] = trx.groups[key_group][:]
+                trx.groups[key_group] = tmp_mm
+
+    tmm.save(trx, out_filename)

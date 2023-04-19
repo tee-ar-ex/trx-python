@@ -6,6 +6,13 @@ import os
 import pytest
 import numpy as np
 from numpy.testing import assert_allclose
+
+try:
+    import dipy
+    dipy_available = True
+except ImportError:
+    dipy_available = False
+
 from trx.trx_file_memmap import TrxFile
 from trx.io import load, save, get_trx_tmpdir
 from trx.fetcher import (get_testing_files_dict,
@@ -18,6 +25,7 @@ tmp_dir = get_trx_tmpdir()
 
 @pytest.mark.parametrize("path", [("gs.trx"), ("gs.trk"), ("gs.tck"),
                                   ("gs.vtk")])
+@pytest.mark.skipif(not dipy_available, reason='Dipy is not installed.')
 def test_load_vox(path):
     dir = os.path.join(get_home(), 'gold_standard')
     path = os.path.join(dir, path)
@@ -33,6 +41,7 @@ def test_load_vox(path):
 
 @pytest.mark.parametrize("path", [("gs.trx"), ("gs.trk"), ("gs.tck"),
                                   ("gs.vtk")])
+@pytest.mark.skipif(not dipy_available, reason='Dipy is not installed.')
 def test_load_voxmm(path):
     dir = os.path.join(get_home(), 'gold_standard')
     path = os.path.join(dir, path)
@@ -46,7 +55,8 @@ def test_load_voxmm(path):
     assert_allclose(sft.streamlines._data, coord, rtol=1e-04, atol=1e-06)
 
 
-@pytest.mark.parametrize("path", [("gs.trk"), ("gs.trx"), ("gs_fldr.trx"), ])
+@pytest.mark.parametrize("path", [("gs.trk"), ("gs.trx"), ("gs_fldr.trx")])
+@pytest.mark.skipif(not dipy_available, reason='Dipy is not installed.')
 def test_multi_load_save_rasmm(path):
     dir = os.path.join(get_home(), 'gold_standard')
     basename, ext = os.path.splitext(path)

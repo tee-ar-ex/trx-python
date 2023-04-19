@@ -1,6 +1,7 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+from deepdiff import DeepDiff
 import os
 
 import pytest
@@ -18,8 +19,9 @@ from trx.io import get_trx_tmpdir
 import trx.trx_file_memmap as tmm
 from trx.workflows import (convert_dsi_studio,
                            convert_tractogram,
+                           manipulate_trx_datatype,
                            generate_trx_from_scratch,
-                           validate_tractogram)
+                           validate_tractogram,)
 
 
 # If they already exist, this only takes 5 seconds (check md5sum)
@@ -28,17 +30,11 @@ tmp_dir = get_trx_tmpdir()
 
 
 def test_help_option_convert_dsi(script_runner):
-    if not dipy_available:
-        pytest.skip('Dipy library is missing, cannot test scripts involving '
-                    'tck/trk/vtk.')
     ret = script_runner.run('tff_convert_dsi_studio.py', '--help')
     assert ret.success
 
 
 def test_help_option_convert(script_runner):
-    if not dipy_available:
-        pytest.skip('Dipy library is missing, cannot test scripts involving '
-                    'tck/trk/vtk.')
     ret = script_runner.run('tff_convert_tractogram.py', '--help')
     assert ret.success
 
@@ -48,10 +44,9 @@ def test_help_option_generate_trx_from_scratch(script_runner):
     assert ret.success
 
 
+@pytest.mark.skipif(not dipy_available,
+                    reason='Dipy is not installed.')
 def test_execution_convert_dsi():
-    if not dipy_available:
-        pytest.skip('Dipy library is missing, cannot test scripts involving '
-                    'tck/trk/vtk.')
     os.chdir(os.path.expanduser(tmp_dir.name))
     in_trk = os.path.join(get_home(), 'DSI',
                           'CC.trk.gz')
@@ -73,10 +68,9 @@ def test_execution_convert_dsi():
     assert_equal(sft.streamlines._offsets, offsets_fix)
 
 
+@pytest.mark.skipif(not dipy_available,
+                    reason='Dipy is not installed.')
 def test_execution_convert_to_trx():
-    if not dipy_available:
-        pytest.skip('Dipy library is missing, cannot test scripts involving '
-                    'tck/trk/vtk.')
     os.chdir(os.path.expanduser(tmp_dir.name))
     in_trk = os.path.join(get_home(), 'DSI',
                           'CC_fix.trk')
@@ -96,10 +90,9 @@ def test_execution_convert_to_trx():
     assert_array_equal(trx.streamlines._offsets, offsets_fix)
 
 
+@pytest.mark.skipif(not dipy_available,
+                    reason='Dipy is not installed.')
 def test_execution_convert_from_trx():
-    if not dipy_available:
-        pytest.skip('Dipy library is missing, cannot test scripts involving '
-                    'tck/trk/vtk.')
     os.chdir(os.path.expanduser(tmp_dir.name))
     in_trk = os.path.join(get_home(), 'DSI',
                           'CC_fix.trk')
@@ -127,10 +120,9 @@ def test_execution_convert_from_trx():
     assert_equal(sft.streamlines._offsets, offsets_fix)
 
 
+@pytest.mark.skipif(not dipy_available,
+                    reason='Dipy is not installed.')
 def test_execution_convert_dtype_p16_o64():
-    if not dipy_available:
-        pytest.skip('Dipy library is missing, cannot test scripts involving '
-                    'tck/trk/vtk.')
     os.chdir(os.path.expanduser(tmp_dir.name))
     in_trk = os.path.join(get_home(), 'DSI',
                           'CC_fix.trk')
@@ -142,10 +134,9 @@ def test_execution_convert_dtype_p16_o64():
     assert_equal(trx.streamlines._offsets.dtype, np.uint64)
 
 
+@pytest.mark.skipif(not dipy_available,
+                    reason='Dipy is not installed.')
 def test_execution_convert_dtype_p64_o32():
-    if not dipy_available:
-        pytest.skip('Dipy library is missing, cannot test scripts involving '
-                    'tck/trk/vtk.')
     os.chdir(os.path.expanduser(tmp_dir.name))
     in_trk = os.path.join(get_home(), 'DSI',
                           'CC_fix.trk')
@@ -157,6 +148,8 @@ def test_execution_convert_dtype_p64_o32():
     assert_equal(trx.streamlines._offsets.dtype, np.uint32)
 
 
+@pytest.mark.skipif(not dipy_available,
+                    reason='Dipy is not installed.')
 def test_execution_generate_trx_from_scratch():
     os.chdir(os.path.expanduser(tmp_dir.name))
     reference_fa = os.path.join(get_home(), 'trx_from_scratch',
@@ -192,6 +185,8 @@ def test_execution_generate_trx_from_scratch():
     exp_trx = tmm.load(expected_trx)
     gen_trx = tmm.load('generated.trx')
 
+    assert DeepDiff(exp_trx.get_dtype_dict(), gen_trx.get_dtype_dict()) == {}
+
     assert_allclose(exp_trx.streamlines._data, gen_trx.streamlines._data,
                     atol=0.1, rtol=0.1)
     assert_equal(exp_trx.streamlines._offsets, gen_trx.streamlines._offsets)
@@ -214,14 +209,15 @@ def test_execution_generate_trx_from_scratch():
                              gen_trx.data_per_group[group][key])
 
 
+@pytest.mark.skipif(not dipy_available,
+                    reason='Dipy is not installed.')
 def test_execution_concatenate_validate_trx():
     os.chdir(os.path.expanduser(tmp_dir.name))
     trx1 = tmm.load(os.path.join(get_home(), 'gold_standard',
                                  'gs.trx'))
     trx2 = tmm.load(os.path.join(get_home(), 'gold_standard',
                                  'gs.trx'))
-    trx2.streamlines._data += + 0.001
-
+    # trx2.streamlines._data += 0.001
     trx = tmm.concatenate([trx1, trx2], preallocation=False)
 
     # Right size
@@ -251,7 +247,54 @@ def test_execution_concatenate_validate_trx():
     validate_tractogram('concat.trx', None, 'valid.trx',
                         remove_identical_streamlines=True,
                         precision=0)
-    trx = tmm.load('valid.trx')
+    trx_val = tmm.load('valid.trx')
+
+    # Right dtype
+    assert DeepDiff(trx.get_dtype_dict(), trx_val.get_dtype_dict()) == {}
 
     # Right size
-    assert_equal(len(trx.streamlines), len(trx1.streamlines))
+    assert_equal(len(trx1.streamlines), len(trx_val.streamlines))
+
+
+@pytest.mark.skipif(not dipy_available,
+                    reason='Dipy is not installed.')
+def test_execution_manipulate_trx_datatype():
+    os.chdir(os.path.expanduser(tmp_dir.name))
+    expected_trx = os.path.join(get_home(), 'trx_from_scratch',
+                                'expected.trx')
+    trx = tmm.load(expected_trx)
+
+    expected_dtype = {'positions': np.dtype('float16'),
+                      'offsets': np.dtype('uint64'),
+                      'dpv': {'dpv_cx': np.dtype('uint8'),
+                              'dpv_cy': np.dtype('uint8'),
+                              'dpv_cz': np.dtype('uint8')},
+                      'dps': {'dps_algo': np.dtype('uint8'),
+                              'dps_cw': np.dtype('float64')},
+                      'dpg': {'g_AF_L':
+                              {'dpg_AF_L_mean_fa': np.dtype('float32'),
+                               'dpg_AF_L_volume': np.dtype('float32')},
+                              'g_AF_R':
+                              {'dpg_AF_R_mean_fa': np.dtype('float32')}},
+                      'groups': {'g_AF_L': np.dtype('int32'),
+                                 'g_AF_R': np.dtype('int32')}}
+    assert DeepDiff(trx.get_dtype_dict(), expected_dtype) == {}
+
+    generated_dtype = {'positions': np.dtype('float32'),
+                       'offsets': np.dtype('uint32'),
+                       'dpv': {'dpv_cx': np.dtype('uint16'),
+                               'dpv_cy': np.dtype('uint16'),
+                               'dpv_cz': np.dtype('uint16')},
+                       'dps': {'dps_algo': np.dtype('uint8'),
+                               'dps_cw': np.dtype('float32')},
+                       'dpg': {'g_AF_L':
+                               {'dpg_AF_L_mean_fa': np.dtype('float64'),
+                                'dpg_AF_L_volume': np.dtype('float32')},
+                               'g_AF_R':
+                               {'dpg_AF_R_mean_fa': np.dtype('float64')}},
+                       'groups': {'g_AF_L': np.dtype('uint16'),
+                                  'g_AF_R': np.dtype('uint16')}}
+
+    manipulate_trx_datatype(expected_trx, 'generated.trx', generated_dtype)
+    trx = tmm.load('generated.trx')
+    assert DeepDiff(trx.get_dtype_dict(), generated_dtype) == {}

@@ -12,9 +12,6 @@ import numpy as np
 
 try:
     import dipy
-    from dipy.io.stateful_tractogram import StatefulTractogram, Space, Origin
-    from dipy.io.streamline import load_tractogram
-    from dipy.io.utils import is_reference_info_valid
     dipy_available = True
 except ImportError:
     dipy_available = False
@@ -132,6 +129,7 @@ def get_reference_info_wrapper(reference):
         voxel_order = voxel_order.decode('utf-8')
 
     if dipy_available:
+        from dipy.io.utils import is_reference_info_valid
         is_reference_info_valid(affine, dimensions, voxel_sizes, voxel_order)
 
     return affine, dimensions, voxel_sizes, voxel_order
@@ -177,50 +175,6 @@ def is_header_compatible(reference_1, reference_2):
         identical_header = False
 
     return identical_header
-
-
-def load_tractogram_with_reference(filepath, reference=None,
-                                   bbox_check=True):
-    """ Load a tractogram with a reference (if required).
-
-    Parameters
-    ----------
-    filepath : str
-        Path to the tractogram file.
-    reference : Nifti or Trk filename, Nifti1Image or TrkFile,
-        Nifti1Header or trk.header (dict)
-        Reference that provides the spatial attribute.
-    bbox_check : bool
-        Check if the tractogram is inside the bounding box of the reference.
-    Returns
-    -------
-    output : dipy.io.stateful_tractogram.StatefulTractogram
-        Tractogram object.
-    """
-    if not dipy_available:
-        logging.error('Dipy library is missing, cannot use functions related '
-                      'to the StatefulTractogram.')
-        return None
-    # Force the usage of --reference for all file formats without an header
-    _, ext = os.path.splitext(filepath)
-    if ext == '.trk':
-        if reference is not None and reference != 'same':
-            logging.warning('Reference is discarded for this file format '
-                            '{}.'.format(filepath))
-        sft = load_tractogram(filepath, 'same',
-                              bbox_valid_check=bbox_check)
-    elif ext in ['.tck', '.fib', '.vtk', '.dpy']:
-        if reference is None or reference == 'same':
-            raise IOError('--reference is required for this file format '
-                          '{}.'.format(filepath))
-        else:
-            sft = load_tractogram(filepath, reference,
-                                  bbox_valid_check=bbox_check)
-
-    else:
-        raise IOError('{} is an unsupported file format'.format(filepath))
-
-    return sft
 
 
 def get_axis_shift_vector(flip_axes):
@@ -323,6 +277,7 @@ def flip_sft(sft, flip_axes):
         mod_streamline -= shift_vector
         flipped_streamlines.append(mod_streamline)
 
+    from dipy.io.stateful_tractogram import StatefulTractogram
     new_sft = StatefulTractogram.from_sft(flipped_streamlines, sft,
                                           data_per_point=sft.data_per_point,
                                           data_per_streamline=sft.data_per_streamline)
@@ -369,6 +324,8 @@ def get_reverse_enum(space_str, origin_str):
     if not dipy_available:
         logging.error('Dipy library is missing, cannot use functions related '
                       'to the StatefulTractogram.')
+        return None
+    from dipy.io.stateful_tractogram import Space, Origin
     origin = Origin.NIFTI if origin_str.lower() == 'nifti' else Origin.TRACKVIS
     if space_str.lower() == 'rasmm':
         space = Space.RASMM
@@ -393,18 +350,21 @@ def convert_data_dict_to_tractogram(data):
     streamlines._data = streamlines._data
 
     for key in data['dps']:
-        data['dps'][key] = np.array(data['dps'][key])
+        shape = (len(streamlines), len(data['dps'][key]) // len(streamlines))
+        data['dps'][key] = np.array(data['dps'][key]).reshape(shape)
 
-    data['data_per_point'] = {}
-    for key in data['dpp']:
-        if key not in data['data_per_point']:
-            tmp_arr = ArraySequence()
-            tmp_arr._data = data['dpp'][key]
-            tmp_arr._offsets = streamlines._offsets
-            tmp_arr._lengths = streamlines._lengths
-            data['data_per_point'][key] = tmp_arr
+    for key in data['dpv']:
+        shape = (len(streamlines._data), len(
+            data['dpv'][key]) // len(streamlines._data))
+        data['dpv'][key] = np.array(data['dpv'][key]).reshape(shape)
 
-    obj = Tractogram(streamlines, data_per_point=data['data_per_point'],
+        tmp_arr = ArraySequence()
+        tmp_arr._data = data['dpv'][key]
+        tmp_arr._offsets = streamlines._offsets
+        tmp_arr._lengths = streamlines._lengths
+        data['dpv'][key] = tmp_arr
+
+    obj = Tractogram(streamlines, data_per_point=data['dpv'],
                      data_per_streamline=data['dps'])
 
     return obj
@@ -414,10 +374,10 @@ def append_generator_to_dict(gen, data):
     if isinstance(gen, TractogramItem):
         data['strs'].append(gen.streamline.tolist())
         for key in gen.data_for_points:
-            if key not in data['dpp']:
-                data['dpp'][key] = np.array([])
-            data['dpp'][key] = np.append(
-                data['dpp'][key], gen.data_for_points[key])
+            if key not in data['dpv']:
+                data['dpv'][key] = np.array([])
+            data['dpv'][key] = np.append(
+                data['dpv'][key], gen.data_for_points[key])
         for key in gen.data_for_streamline:
             if key not in data['dps']:
                 data['dps'][key] = np.array([])
@@ -425,3 +385,57 @@ def append_generator_to_dict(gen, data):
                 data['dps'][key], gen.data_for_streamline[key])
     else:
         data['strs'].append(gen.tolist())
+
+
+def verify_trx_dtype(trx, dict_dtype):
+    """ Verify if the dtype of the data in the trx is the same as the one in
+    the dict.
+
+    Parameters
+    ----------
+    trx : Tractogram
+        Tractogram to verify.
+    dict_dtype : dict
+        Dictionary containing the dtype to verify.
+    Returns
+    -------
+    output : bool
+        True if the dtype is the same, False otherwise.
+    """
+    identical = True
+    for key in dict_dtype:
+        if key == 'positions':
+            if trx.streamlines._data.dtype != dict_dtype[key]:
+                logging.warning('Positions dtype is different')
+                identical = False
+        elif key == 'offsets':
+            if trx.streamlines._offsets.dtype != dict_dtype[key]:
+                logging.warning('Offsets dtype is different')
+                identical = False
+        elif key == 'dpv':
+            for key_dpv in dict_dtype[key]:
+                if trx.data_per_vertex[key_dpv]._data.dtype != dict_dtype[key][key_dpv]:
+                    logging.warning(
+                        'Data per vertex ({}) dtype is different'.format(key_dpv))
+                    identical = False
+        elif key == 'dps':
+            for key_dps in dict_dtype[key]:
+                if trx.data_per_streamline[key_dps].dtype != dict_dtype[key][key_dps]:
+                    logging.warning(
+                        'Data per streamline ({}) dtype is different'.format(key_dps))
+                    identical = False
+        elif key == 'dpg':
+            for key_group in dict_dtype[key]:
+                for key_dpg in dict_dtype[key][key_group]:
+                    if trx.data_per_point[key_group][key_dpg].dtype != dict_dtype[key][key_group][key_dpg]:
+                        logging.warning(
+                            'Data per group ({}) dtype is different'.format(key_dpg))
+                        identical = False
+        elif key == 'groups':
+            for key_group in dict_dtype[key]:
+                if trx.data_per_point[key_group]._data.dtype != dict_dtype[key][key_group]:
+                    logging.warning(
+                        'Data per group ({}) dtype is different'.format(key_group))
+                    identical = False
+
+    return identical
