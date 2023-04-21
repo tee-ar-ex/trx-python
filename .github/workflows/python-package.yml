@@ -20,19 +20,6 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Install dependencies
-      run: |
-        python -m pip install cython nibabel numpy scipy
-        python -m pip install packaging
-
-    - name: Did we get cython in there?
-      run: |
-        python -c"import cython; print(cython.__version__)"
-
-    - name: Did we get packaging in there?
-      run: |
-        python -c"import packaging; print(packaging.__version__)"
-
     - name: Install the package
       run: |
         python -m pip install --upgrade pip
