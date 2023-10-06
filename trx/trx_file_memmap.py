@@ -1096,7 +1096,10 @@ class TrxFile:
                     shape=(trx.header["NB_STREAMLINES"]+1,),
                     dtype=ext[1:],
                 )
-                lengths = _compute_lengths(offsets)
+                if offsets[-1] != 0:
+                    lengths = _compute_lengths(offsets)
+                else:
+                    lengths = [0]
             elif folder == "dps":
                 nb_scalar = size / trx.header["NB_STREAMLINES"]
                 if not nb_scalar.is_integer() or nb_scalar != dim:
