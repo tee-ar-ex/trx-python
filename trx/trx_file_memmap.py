@@ -1065,8 +1065,15 @@ class TrxFile:
                 ext = ".bool"
             mem_adress, size = dict_pointer_size[elem_filename]
 
-            if root is not None and folder.startswith(root.rstrip("/")):
-                folder = folder.replace(root, "").lstrip("/")
+            if root is not None:
+                # This is for Unix
+                if os.name != 'nt' and folder.startswith(root.rstrip("/")):
+                    folder = folder.replace(root, "").lstrip("/")
+                # These two are for Windows
+                elif os.path.isdir(folder) and os.path.basename(folder) in ['dpg', 'dpv', 'dps']:
+                    folder = os.path.basename(folder)
+                else:
+                    folder = ''
 
             # Parse/walk the directory tree
             if base == "positions" and folder == "":
@@ -1089,7 +1096,10 @@ class TrxFile:
                     shape=(trx.header["NB_STREAMLINES"]+1,),
                     dtype=ext[1:],
                 )
-                lengths = _compute_lengths(offsets)
+                if offsets[-1] != 0:
+                    lengths = _compute_lengths(offsets)
+                else:
+                    lengths = [0]
             elif folder == "dps":
                 nb_scalar = size / trx.header["NB_STREAMLINES"]
                 if not nb_scalar.is_integer() or nb_scalar != dim:

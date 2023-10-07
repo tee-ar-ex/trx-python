@@ -78,7 +78,6 @@ def main():
         dtype_dict['positions'] = np.dtype(args.positions_dtype)
     if args.offsets_dtype:
         dtype_dict['offsets'] = np.dtype(args.offsets_dtype)
-    
     if args.dpv:
         dtype_dict['dpv'] = {}
         for name, dtype in args.dpv:
