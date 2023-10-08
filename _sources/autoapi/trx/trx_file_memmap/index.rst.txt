@@ -441,6 +441,7 @@ Attributes
 
 .. py:class:: TrxFile(nb_vertices: Optional[int] = None, nb_streamlines: Optional[int] = None, init_as: Optional[Type[TrxFile]] = None, reference: Union[str, dict, Type[nibabel.nifti1.Nifti1Image], Type[nibabel.streamlines.trk.TrkFile], Type[nibabel.nifti1.Nifti1Header], None] = None)
 
+
    
    Core class of the TrxFile
 
