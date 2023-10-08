@@ -14,12 +14,6 @@ Or, to install from source:
     cd trx-python
     pip install .
 
-### Install Dipy for integration
-If you wish to use all the scripts and run the test you will need to install Dipy
-
-    pip install cython packaging
-    pip install dipy@git+https://git@github.com/frheault/dipy@ba3ce0c59#egg=dipy
-
 ### Temporary Directory
 The TRX file format uses memmaps to limit RAM usage. When dealing with large files this means several gigabytes could be required on disk (instead of RAM). 
 
