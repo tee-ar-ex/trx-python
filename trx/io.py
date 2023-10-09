@@ -22,9 +22,24 @@ def get_trx_tmpdir():
             trx_tmp_dir = os.getenv('TRX_TMPDIR')
     else:
         trx_tmp_dir = tempfile.gettempdir()
-
     return tempfile.TemporaryDirectory(dir=trx_tmp_dir, prefix='trx_')
-
+    # Step 1: Traverse the directory tree
+    for dirpath, dirnames, filenames in os.walk(tmpdir_path, topdown=False):
+        
+        # Step 2 and 3: Identify and remove symlinks (for files)
+        for filename in filenames:
+            filepath = os.path.join(dirpath, filename)
+            if os.path.islink(filepath):
+                os.unlink(filepath)
+        
+        # Step 2 and 3: Identify and remove symlinks (for directories)
+        for dirname in dirnames:
+            dir_full_path = os.path.join(dirpath, dirname)
+            if os.path.islink(dir_full_path):
+                os.unlink(dir_full_path)
+    
+    # Step 4: Remove the temporary directory
+    shutil.rmtree(tmpdir_path)
 
 def load_sft_with_reference(filepath, reference=None,
                             bbox_check=True):
@@ -72,7 +87,7 @@ def load(tractogram_filename, reference):
 def save(tractogram_obj, tractogram_filename, bbox_valid_check=False):
     if not dipy_available:
         logging.error('Dipy library is missing, cannot use functions related '
-                    'to the StatefulTractogram.')
+                      'to the StatefulTractogram.')
         return None
     from dipy.io.stateful_tractogram import StatefulTractogram
     from dipy.io.streamline import save_tractogram
