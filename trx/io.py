@@ -4,6 +4,7 @@
 import os
 import logging
 import tempfile
+import sys
 
 try:
     import dipy
@@ -23,7 +24,11 @@ def get_trx_tmpdir():
     else:
         trx_tmp_dir = tempfile.gettempdir()
 
-    return tempfile.TemporaryDirectory(dir=trx_tmp_dir, prefix='trx_')
+    if sys.version_info[1] >= 10:
+        return tempfile.TemporaryDirectory(dir=trx_tmp_dir, prefix='trx_',
+                                           ignore_cleanup_errors=True)
+    else:
+        return tempfile.TemporaryDirectory(dir=trx_tmp_dir, prefix='trx_')
 
 
 def load_sft_with_reference(filepath, reference=None,
@@ -72,7 +77,7 @@ def load(tractogram_filename, reference):
 def save(tractogram_obj, tractogram_filename, bbox_valid_check=False):
     if not dipy_available:
         logging.error('Dipy library is missing, cannot use functions related '
-                    'to the StatefulTractogram.')
+                      'to the StatefulTractogram.')
         return None
     from dipy.io.stateful_tractogram import StatefulTractogram
     from dipy.io.streamline import save_tractogram
