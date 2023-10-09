@@ -257,8 +257,8 @@ def test_execution_concatenate_validate_trx():
     # Right size
     assert_equal(len(trx1.streamlines), len(trx_val.streamlines))
     trx.close()
-    trx_1.close()
-    trx_2.close()
+    trx1.close()
+    trx2.close()
     trx_val.close()
 
 
@@ -306,4 +306,3 @@ def test_execution_manipulate_trx_datatype():
     trx = tmm.load('generated.trx')
     assert DeepDiff(trx.get_dtype_dict(), generated_dtype) == {}
     trx.close()
-    expected_trx.close()
