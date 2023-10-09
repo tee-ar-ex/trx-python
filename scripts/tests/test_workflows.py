@@ -88,6 +88,7 @@ def test_execution_convert_to_trx():
     assert_equal(trx.streamlines._offsets.dtype, np.uint32)
     assert_array_equal(trx.streamlines._data, data_fix)
     assert_array_equal(trx.streamlines._offsets, offsets_fix)
+    trx.close()
 
 
 @pytest.mark.skipif(not dipy_available,
@@ -132,6 +133,7 @@ def test_execution_convert_dtype_p16_o64():
     trx = tmm.load('CC_fix_p16_o64.trx')
     assert_equal(trx.streamlines._data.dtype, np.float16)
     assert_equal(trx.streamlines._offsets.dtype, np.uint64)
+    trx.close()
 
 
 @pytest.mark.skipif(not dipy_available,
@@ -146,6 +148,7 @@ def test_execution_convert_dtype_p64_o32():
     trx = tmm.load('CC_fix_p64_o32.trx')
     assert_equal(trx.streamlines._data.dtype, np.float64)
     assert_equal(trx.streamlines._offsets.dtype, np.uint32)
+    trx.close()
 
 
 def test_execution_generate_trx_from_scratch():
@@ -205,7 +208,8 @@ def test_execution_generate_trx_from_scratch():
             for key in exp_trx.data_per_group[group].keys():
                 assert_equal(exp_trx.data_per_group[group][key],
                              gen_trx.data_per_group[group][key])
-
+    exp_trx.close()
+    gen_trx.close()
 
 @pytest.mark.skipif(not dipy_available,
                     reason='Dipy is not installed.')
@@ -252,6 +256,10 @@ def test_execution_concatenate_validate_trx():
 
     # Right size
     assert_equal(len(trx1.streamlines), len(trx_val.streamlines))
+    trx.close()
+    trx_1.close()
+    trx_2.close()
+    trx_val.close()
 
 
 @pytest.mark.skipif(not dipy_available,
@@ -277,6 +285,7 @@ def test_execution_manipulate_trx_datatype():
                       'groups': {'g_AF_L': np.dtype('int32'),
                                  'g_AF_R': np.dtype('int32')}}
     assert DeepDiff(trx.get_dtype_dict(), expected_dtype) == {}
+    trx.close()
 
     generated_dtype = {'positions': np.dtype('float32'),
                        'offsets': np.dtype('uint32'),
@@ -296,3 +305,5 @@ def test_execution_manipulate_trx_datatype():
     manipulate_trx_datatype(expected_trx, 'generated.trx', generated_dtype)
     trx = tmm.load('generated.trx')
     assert DeepDiff(trx.get_dtype_dict(), generated_dtype) == {}
+    trx.close()
+    expected_trx.close()

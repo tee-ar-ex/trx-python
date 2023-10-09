@@ -96,6 +96,7 @@ def convert_tractogram(in_tractogram, out_tractogram, reference,
     else:
         trx = tmm.load(in_tractogram)
         sft = trx.to_sft()
+        trx.close()
 
     if out_ext != '.trx':
         if out_ext == '.vtk':
@@ -115,6 +116,7 @@ def convert_tractogram(in_tractogram, out_tractogram, reference,
             trx.streamlines._offsets = trx.streamlines._offsets.astype(
                 offsets_dtype)
         tmm.save(trx, out_tractogram)
+        trx.close()
 
 
 def tractogram_simple_compare(in_tractograms, reference):
@@ -126,12 +128,14 @@ def tractogram_simple_compare(in_tractograms, reference):
     tractogram_obj = load(in_tractograms[0], reference)
     if not isinstance(tractogram_obj, StatefulTractogram):
         sft_1 = tractogram_obj.to_sft()
+        tractogram_obj.close()
     else:
         sft_1 = tractogram_obj
 
     tractogram_obj = load(in_tractograms[1], reference)
     if not isinstance(tractogram_obj, StatefulTractogram):
         sft_2 = tractogram_obj.to_sft()
+        tractogram_obj.close()
     else:
         sft_2 = tractogram_obj
 
@@ -193,6 +197,7 @@ def tractogram_visualize_overlap(in_tractogram, reference, remove_invalid=True):
     tractogram_obj = load(in_tractogram, reference)
     if not isinstance(tractogram_obj, StatefulTractogram):
         sft = tractogram_obj.to_sft()
+        tractogram_obj.close()
     else:
         sft = tractogram_obj
     sft.streamlines._data = sft.streamlines._data.astype(float)
@@ -241,6 +246,7 @@ def validate_tractogram(in_tractogram, reference, out_tractogram,
 
     if not isinstance(tractogram_obj, StatefulTractogram):
         sft = tractogram_obj.to_sft()
+        tractogram_obj.close()
     else:
         sft = tractogram_obj
 
@@ -430,6 +436,7 @@ def generate_trx_from_scratch(reference, out_tractogram, positions_csv=False,
 
         trx = tmm.load(tmpdirname)
         tmm.save(trx, out_tractogram)
+        trx.close()
 
 
 def manipulate_trx_datatype(in_filename, out_filename, dict_dtype):
@@ -487,3 +494,4 @@ def manipulate_trx_datatype(in_filename, out_filename, dict_dtype):
                 trx.groups[key_group] = tmp_mm
 
     tmm.save(trx, out_filename)
+    trx.close()
