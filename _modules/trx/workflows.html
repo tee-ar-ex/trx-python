@@ -441,6 +441,7 @@ document.write(`
     <span class="k">else</span><span class="p">:</span>
         <span class="n">trx</span> <span class="o">=</span> <span class="n">tmm</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">in_tractogram</span><span class="p">)</span>
         <span class="n">sft</span> <span class="o">=</span> <span class="n">trx</span><span class="o">.</span><span class="n">to_sft</span><span class="p">()</span>
+        <span class="n">trx</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">out_ext</span> <span class="o">!=</span> <span class="s1">&#39;.trx&#39;</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">out_ext</span> <span class="o">==</span> <span class="s1">&#39;.vtk&#39;</span><span class="p">:</span>
@@ -459,7 +460,8 @@ document.write(`
         <span class="k">if</span> <span class="n">trx</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_offsets</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="n">offsets_dtype</span><span class="p">:</span>
             <span class="n">trx</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_offsets</span> <span class="o">=</span> <span class="n">trx</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_offsets</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span>
                 <span class="n">offsets_dtype</span><span class="p">)</span>
-        <span class="n">tmm</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">trx</span><span class="p">,</span> <span class="n">out_tractogram</span><span class="p">)</span></div>
+        <span class="n">tmm</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">trx</span><span class="p">,</span> <span class="n">out_tractogram</span><span class="p">)</span>
+        <span class="n">trx</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
 
 
@@ -474,12 +476,14 @@ document.write(`
     <span class="n">tractogram_obj</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="n">in_tractograms</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">reference</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tractogram_obj</span><span class="p">,</span> <span class="n">StatefulTractogram</span><span class="p">):</span>
         <span class="n">sft_1</span> <span class="o">=</span> <span class="n">tractogram_obj</span><span class="o">.</span><span class="n">to_sft</span><span class="p">()</span>
+        <span class="n">tractogram_obj</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">sft_1</span> <span class="o">=</span> <span class="n">tractogram_obj</span>
 
     <span class="n">tractogram_obj</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="n">in_tractograms</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">reference</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tractogram_obj</span><span class="p">,</span> <span class="n">StatefulTractogram</span><span class="p">):</span>
         <span class="n">sft_2</span> <span class="o">=</span> <span class="n">tractogram_obj</span><span class="o">.</span><span class="n">to_sft</span><span class="p">()</span>
+        <span class="n">tractogram_obj</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">sft_2</span> <span class="o">=</span> <span class="n">tractogram_obj</span>
 
@@ -547,6 +551,7 @@ document.write(`
     <span class="n">tractogram_obj</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="n">in_tractogram</span><span class="p">,</span> <span class="n">reference</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tractogram_obj</span><span class="p">,</span> <span class="n">StatefulTractogram</span><span class="p">):</span>
         <span class="n">sft</span> <span class="o">=</span> <span class="n">tractogram_obj</span><span class="o">.</span><span class="n">to_sft</span><span class="p">()</span>
+        <span class="n">tractogram_obj</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">sft</span> <span class="o">=</span> <span class="n">tractogram_obj</span>
     <span class="n">sft</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">sft</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -598,6 +603,7 @@ document.write(`
 
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tractogram_obj</span><span class="p">,</span> <span class="n">StatefulTractogram</span><span class="p">):</span>
         <span class="n">sft</span> <span class="o">=</span> <span class="n">tractogram_obj</span><span class="o">.</span><span class="n">to_sft</span><span class="p">()</span>
+        <span class="n">tractogram_obj</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">sft</span> <span class="o">=</span> <span class="n">tractogram_obj</span>
 
@@ -789,7 +795,8 @@ document.write(`
                 <span class="n">curr_arr</span><span class="o">.</span><span class="n">tofile</span><span class="p">(</span><span class="n">curr_filename</span><span class="p">)</span>
 
         <span class="n">trx</span> <span class="o">=</span> <span class="n">tmm</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">tmpdirname</span><span class="p">)</span>
-        <span class="n">tmm</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">trx</span><span class="p">,</span> <span class="n">out_tractogram</span><span class="p">)</span></div>
+        <span class="n">tmm</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">trx</span><span class="p">,</span> <span class="n">out_tractogram</span><span class="p">)</span>
+        <span class="n">trx</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
 
 
@@ -849,7 +856,8 @@ document.write(`
                 <span class="n">tmp_mm</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">trx</span><span class="o">.</span><span class="n">groups</span><span class="p">[</span><span class="n">key_group</span><span class="p">][:]</span>
                 <span class="n">trx</span><span class="o">.</span><span class="n">groups</span><span class="p">[</span><span class="n">key_group</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp_mm</span>
 
-    <span class="n">tmm</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">trx</span><span class="p">,</span> <span class="n">out_filename</span><span class="p">)</span></div>
+    <span class="n">tmm</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">trx</span><span class="p">,</span> <span class="n">out_filename</span><span class="p">)</span>
+    <span class="n">trx</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
 </pre></div>
 
