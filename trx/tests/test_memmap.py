@@ -188,7 +188,11 @@ def test_concatenate(path):
     trx1 = tmm.load(path)
     trx2 = tmm.load(path)
     concat = tmm.concatenate([trx1, trx2])
+
     assert len(concat) == 2 * len(trx2)
+    trx1.close()
+    trx2.close()
+    concat.close()
 
 
 @pytest.mark.parametrize("path", [("small.trx")])
@@ -200,7 +204,10 @@ def test_resize(path):
 
     tmm.concatenate([concat, trx1], preallocation=True, delete_groups=True)
     concat.resize()
+
     assert len(concat) == len(trx1)
+    trx1.close()
+    concat.close()
 
 
 @pytest.mark.parametrize(
@@ -219,7 +226,10 @@ def test_append(path, buffer):
     concat.append(trx1, extra_buffer=buffer)
     if buffer > 0:
         concat.resize()
+
     assert len(concat) == len(trx1)
+    trx1.close()
+    concat.close()
 
 
 @pytest.mark.parametrize("path, buffer", [("small.trx", 10000)])
@@ -233,7 +243,10 @@ def test_append_StatefulTractogram(path, buffer):
     concat.append(obj, extra_buffer=buffer)
     if buffer > 0:
         concat.resize()
+
     assert len(concat) == len(obj)
+    trx.close()
+    concat.close()
 
 
 @pytest.mark.parametrize("path, buffer", [("small.trx", 10000)])
@@ -246,7 +259,10 @@ def test_append_Tractogram(path, buffer):
     concat.append(obj, extra_buffer=buffer)
     if buffer > 0:
         concat.resize()
+
     assert len(concat) == len(obj)
+    trx.close()
+    concat.close()
 
 
 @pytest.mark.parametrize("path, size, buffer", [("small.trx", 50, 10000),

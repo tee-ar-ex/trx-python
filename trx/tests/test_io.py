@@ -37,6 +37,8 @@ def test_load_vox(path):
     sft.to_vox()
 
     assert_allclose(sft.streamlines._data, coord, rtol=1e-04, atol=1e-06)
+    if isinstance(obj, TrxFile):
+        obj.close()
 
 
 @pytest.mark.parametrize("path", [("gs.trx"), ("gs.trk"), ("gs.tck"),
@@ -53,6 +55,8 @@ def test_load_voxmm(path):
     sft.to_voxmm()
 
     assert_allclose(sft.streamlines._data, coord, rtol=1e-04, atol=1e-06)
+    if isinstance(obj, TrxFile):
+        obj.close()
 
 
 @pytest.mark.parametrize("path", [("gs.trk"), ("gs.trx"), ("gs_fldr.trx")])
@@ -68,6 +72,8 @@ def test_multi_load_save_rasmm(path):
     obj = load(path, os.path.join(dir, 'gs.nii'))
     for _ in range(100):
         save(obj, out_path)
+        if isinstance(obj, TrxFile):
+            obj.close()
         obj = load(out_path, os.path.join(dir, 'gs.nii'))
 
     assert_allclose(obj.streamlines._data, coord, rtol=1e-04, atol=1e-06)
