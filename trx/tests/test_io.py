@@ -113,6 +113,9 @@ def test_close_tmp_file(path):
     sft.to_vox()
     assert_allclose(sft.streamlines._data, coord_vox, rtol=1e-04, atol=1e-06)
 
+    trx3 = tmm.load(path)
+    assert_allclose(trx3.streamlines._data, coord_rasmm, rtol=1e-04, atol=1e-06)
+    trx3.close()
 
 @pytest.mark.parametrize("tmp_path", [("~"), ("use_working_dir")])
 def test_change_tmp_dir(tmp_path):
