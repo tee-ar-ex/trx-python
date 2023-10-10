@@ -3,6 +3,7 @@
 
 from copy import deepcopy
 import os
+import psutil
 
 import pytest
 import numpy as np
@@ -83,7 +84,7 @@ def test_multi_load_save_rasmm(path):
 
 @pytest.mark.parametrize("path", [("gs.trx"), ("gs_fldr.trx")])
 @pytest.mark.skipif(not dipy_available, reason='Dipy is not installed.')
-def test_close_tmp_file(path):
+def test_delete_tmp_dir(path):
     dir = os.path.join(get_home(), 'gold_standard')
     path = os.path.join(dir, path)
 
@@ -104,18 +105,47 @@ def test_close_tmp_file(path):
         assert not os.path.isdir(tmp_dir)
 
     assert_allclose(sft.streamlines._data, coord_rasmm, rtol=1e-04, atol=1e-06)
-    
+
     # Reloading the TRX and checking its data, then closing
     trx2 = tmm.load(path)
-    assert_allclose(trx2.streamlines._data, sft.streamlines._data, rtol=1e-04, atol=1e-06)
+    assert_allclose(trx2.streamlines._data,
+                    sft.streamlines._data, rtol=1e-04, atol=1e-06)
     trx2.close()
 
     sft.to_vox()
     assert_allclose(sft.streamlines._data, coord_vox, rtol=1e-04, atol=1e-06)
 
     trx3 = tmm.load(path)
-    assert_allclose(trx3.streamlines._data, coord_rasmm, rtol=1e-04, atol=1e-06)
+    assert_allclose(trx3.streamlines._data,
+                    coord_rasmm, rtol=1e-04, atol=1e-06)
     trx3.close()
+
+
+@pytest.mark.parametrize("path", [("gs.trx")])
+@pytest.mark.skipif(not dipy_available, reason='Dipy is not installed.')
+def test_close_tmp_files(path):
+    dir = os.path.join(get_home(), 'gold_standard')
+    path = os.path.join(dir, path)
+
+    trx = tmm.load(path)
+    process = psutil.Process(os.getpid())
+    open_files = process.open_files()
+
+    count = 0
+    for open_file in open_files:
+        if 'trx' in open_file.path:
+            count += 1
+
+    assert count == 6
+    trx.close()
+
+    open_files = process.open_files()
+    count = 0
+    for open_file in open_files:
+        if 'trx' in open_file.path:
+            count += 1
+    assert not count
+
 
 @pytest.mark.parametrize("tmp_path", [("~"), ("use_working_dir")])
 def test_change_tmp_dir(tmp_path):

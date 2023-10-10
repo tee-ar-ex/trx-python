@@ -233,7 +233,7 @@ def load(input_obj: str, check_dpg: bool = True) -> Type["TrxFile"]:
                 trx = load_from_directory(tmpdir.name)
                 trx._uncompressed_folder_handle = tmpdir
                 logging.info(
-                    "File was compressed, call the close() " "function before"
+                    "File was compressed, call the close() function before"
                     "exiting."
                 )
         else:
