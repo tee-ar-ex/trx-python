@@ -341,6 +341,7 @@ document.write(`
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">import</span> <span class="nn">sys</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">dipy</span>
@@ -365,7 +366,11 @@ document.write(`
     <span class="k">else</span><span class="p">:</span>
         <span class="n">trx_tmp_dir</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">gettempdir</span><span class="p">()</span>
 
-    <span class="k">return</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">(</span><span class="nb">dir</span><span class="o">=</span><span class="n">trx_tmp_dir</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;trx_&#39;</span><span class="p">)</span></div>
+    <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">10</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">(</span><span class="nb">dir</span><span class="o">=</span><span class="n">trx_tmp_dir</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;trx_&#39;</span><span class="p">,</span>
+                                           <span class="n">ignore_cleanup_errors</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">(</span><span class="nb">dir</span><span class="o">=</span><span class="n">trx_tmp_dir</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;trx_&#39;</span><span class="p">)</span></div>
 
 
 
@@ -423,7 +428,7 @@ document.write(`
 <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="n">tractogram_obj</span><span class="p">,</span> <span class="n">tractogram_filename</span><span class="p">,</span> <span class="n">bbox_valid_check</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">dipy_available</span><span class="p">:</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Dipy library is missing, cannot use functions related &#39;</span>
-                    <span class="s1">&#39;to the StatefulTractogram.&#39;</span><span class="p">)</span>
+                      <span class="s1">&#39;to the StatefulTractogram.&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span>
     <span class="kn">from</span> <span class="nn">dipy.io.stateful_tractogram</span> <span class="kn">import</span> <span class="n">StatefulTractogram</span>
     <span class="kn">from</span> <span class="nn">dipy.io.streamline</span> <span class="kn">import</span> <span class="n">save_tractogram</span>
