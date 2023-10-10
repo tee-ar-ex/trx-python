@@ -17,6 +17,28 @@ except ImportError:
     dipy_available = False
 
 
+def close_or_delete_mmap(obj):
+    """
+    Close the memory-mapped file if it exists, otherwise set the object to None.
+
+    Parameters:
+    -----------
+    obj : object
+        The object that potentially has a memory-mapped file to be closed.
+
+    """
+    if hasattr(obj, '_mmap') and obj._mmap is not None:
+        obj._mmap.close()
+    elif isinstance(obj, ArraySequence):
+        close_or_delete_mmap(obj._data)
+        close_or_delete_mmap(obj._offsets)
+        close_or_delete_mmap(obj._lengths)
+    elif isinstance(obj, np.memmap):
+        del obj
+    else:
+        logging.warning('Object to be close or deleted must be np.memmap')
+
+
 def split_name_with_gz(filename):
     """
     Returns the clean basename and extension of a file.
@@ -115,8 +137,7 @@ def get_reference_info_wrapper(reference):
         voxel_sizes = header['voxel_sizes']
         voxel_order = header['voxel_order']
     elif is_sft:
-        affine, dimensions, voxel_sizes, voxel_order =\
-            reference.space_attributes
+        affine, dimensions, voxel_sizes, voxel_order = reference.space_attributes
     elif is_trx:
         affine = header['VOXEL_TO_RASMM']
         dimensions = header['DIMENSIONS']
@@ -152,10 +173,10 @@ def is_header_compatible(reference_1, reference_2):
         Does all the spatial attribute match
     """
 
-    affine_1, dimensions_1, voxel_sizes_1, voxel_order_1 = \
-        get_reference_info_wrapper(reference_1)
-    affine_2, dimensions_2, voxel_sizes_2, voxel_order_2 = \
-        get_reference_info_wrapper(reference_2)
+    affine_1, dimensions_1, voxel_sizes_1, voxel_order_1 = get_reference_info_wrapper(
+        reference_1)
+    affine_2, dimensions_2, voxel_sizes_2, voxel_order_2 = get_reference_info_wrapper(
+        reference_2)
 
     identical_header = True
     if not np.allclose(affine_1, affine_2, rtol=1e-03, atol=1e-03):
