@@ -233,7 +233,7 @@ def load(input_obj: str, check_dpg: bool = True) -> Type["TrxFile"]:
                 trx = load_from_directory(tmpdir.name)
                 trx._uncompressed_folder_handle = tmpdir
                 logging.info(
-                    "File was compressed, call the close() " "function before"
+                    "File was compressed, call the close() function before"
                     "exiting."
                 )
         else:
@@ -1736,24 +1736,10 @@ class TrxFile:
     def close(self) -> None:
         """Cleanup on-disk temporary folder and initialize an empty TrxFile"""
         if self._uncompressed_folder_handle is not None:
-            # Problem on Windows that is solving only in Python above 3.10
-            # Step 1: Traverse the directory tree
-            for dirpath, dirnames, filenames in \
-                os.walk(self._uncompressed_folder_handle.name, topdown=False):
-                
-                # Step 2 and 3: Identify and remove symlinks (for files)
-                for filename in filenames:
-                    filepath = os.path.join(dirpath, filename)
-                    if os.path.islink(filepath):
-                        os.unlink(filepath)
-                
-                # Step 2 and 3: Identify and remove symlinks (for directories)
-                for dirname in dirnames:
-                    dir_full_path = os.path.join(dirpath, dirname)
-                    if os.path.islink(dir_full_path):
-                        os.unlink(dir_full_path)
-            
-            # Step 4: Remove the temporary directory
-            shutil.rmtree(self._uncompressed_folder_handle.name)
+            try:
+                self._uncompressed_folder_handle.cleanup()
+            except PermissionError:
+                logging.error("Windows PermissionError, temporary directory {}" +
+                              "was not deleted!".format(self._uncompressed_folder_handle.name))
         self.__init__()
         logging.debug("Deleted memmaps and intialized empty TrxFile.")

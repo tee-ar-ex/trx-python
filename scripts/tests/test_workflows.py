@@ -30,17 +30,17 @@ tmp_dir = get_trx_tmpdir()
 
 
 def test_help_option_convert_dsi(script_runner):
-    ret = script_runner.run('tff_convert_dsi_studio.py', '--help')
+    ret = script_runner.run(['tff_convert_dsi_studio.py', '--help'])
     assert ret.success
 
 
 def test_help_option_convert(script_runner):
-    ret = script_runner.run('tff_convert_tractogram.py', '--help')
+    ret = script_runner.run(['tff_convert_tractogram.py', '--help'])
     assert ret.success
 
 
 def test_help_option_generate_trx_from_scratch(script_runner):
-    ret = script_runner.run('tff_generate_trx_from_scratch.py', '--help')
+    ret = script_runner.run(['tff_generate_trx_from_scratch.py', '--help'])
     assert ret.success
 
 
@@ -210,6 +210,7 @@ def test_execution_generate_trx_from_scratch():
                              gen_trx.data_per_group[group][key])
     exp_trx.close()
     gen_trx.close()
+
 
 @pytest.mark.skipif(not dipy_available,
                     reason='Dipy is not installed.')
