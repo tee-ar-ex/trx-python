@@ -87,12 +87,12 @@ def test_close_tmp_file(path):
     dir = os.path.join(get_home(), 'gold_standard')
     path = os.path.join(dir, path)
 
-    trx = tmm.load(path)
-    tmp_dir = deepcopy(trx._uncompressed_folder_handle)
+    trx1 = tmm.load(path)
+    tmp_dir = deepcopy(trx._uncompressed_folder_handle.name)
     if os.path.isfile(path):
-        assert os.path.isdir(tmp_dir.name)
-    sft = trx.to_sft()
-    trx.close()
+        assert os.path.isdir(tmp_dir)
+    sft = trx1.to_sft()
+    trx1.close()
 
     coord_rasmm = np.loadtxt(os.path.join(get_home(), 'gold_standard',
                                           'gs_rasmm_space.txt'))
@@ -101,8 +101,13 @@ def test_close_tmp_file(path):
 
     # The folder trx representation does not need tmp files
     if os.path.isfile(path):
-        assert not os.path.isdir(tmp_dir.name)
+        assert not os.path.isdir(tmp_dir)
     assert_allclose(sft.streamlines._data, coord_rasmm, rtol=1e-04, atol=1e-06)
+    # Reloading the TRX and checking its data, then closing
+    trx2 = tmm.load(path)
+    assert_allclose(trx2.streamlines._data, sft.streamlines._data, rtol=1e-04, atol=1e-06)
+    trx2.close()
+
     sft.to_vox()
     assert_allclose(sft.streamlines._data, coord_vox, rtol=1e-04, atol=1e-06)
 
@@ -118,12 +123,12 @@ def test_close_tmp_file(tmp_path):
         os.environ['TRX_TMPDIR'] = os.path.expanduser(tmp_path)
 
     trx = tmm.load(path)
-    tmp_dir = deepcopy(trx._uncompressed_folder_handle)
+    tmp_dir = deepcopy(trx._uncompressed_folder_handle.name)
 
     if tmp_path == 'use_working_dir':
-        assert os.path.dirname(tmp_dir.name) == os.getcwd()
+        assert os.path.dirname(tmp_dir) == os.getcwd()
     else:
-        assert os.path.dirname(tmp_dir.name) == os.path.expanduser(tmp_path)
+        assert os.path.dirname(tmp_dir) == os.path.expanduser(tmp_path)
 
     trx.close()
-    assert not os.path.isdir(tmp_dir.name)
+    assert not os.path.isdir(tmp_dir)
