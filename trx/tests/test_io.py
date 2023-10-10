@@ -105,3 +105,25 @@ def test_close_tmp_file(path):
     assert_allclose(sft.streamlines._data, coord_rasmm, rtol=1e-04, atol=1e-06)
     sft.to_vox()
     assert_allclose(sft.streamlines._data, coord_vox, rtol=1e-04, atol=1e-06)
+
+
+@pytest.mark.parametrize("tmp_path", [("~"), ("use_working_dir")])
+def test_close_tmp_file(tmp_path):
+    dir = os.path.join(get_home(), 'gold_standard')
+    path = os.path.join(dir, 'gs.trx')
+
+    if tmp_path == 'use_working_dir':
+        os.environ['TRX_TMPDIR'] = 'use_working_dir'
+    else:
+        os.environ['TRX_TMPDIR'] = os.path.expanduser(tmp_path)
+
+    trx = tmm.load(path)
+    tmp_dir = deepcopy(trx._uncompressed_folder_handle)
+
+    if tmp_path == 'use_working_dir':
+        assert os.path.dirname(tmp_dir.name) == os.getcwd()
+    else:
+        assert os.path.dirname(tmp_dir.name) == os.path.expanduser(tmp_path)
+
+    trx.close()
+    assert not os.path.isdir(tmp_dir.name)
