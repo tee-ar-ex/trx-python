@@ -88,7 +88,7 @@ def test_close_tmp_file(path):
     path = os.path.join(dir, path)
 
     trx1 = tmm.load(path)
-    tmp_dir = deepcopy(trx._uncompressed_folder_handle.name)
+    tmp_dir = deepcopy(trx1._uncompressed_folder_handle.name)
     if os.path.isfile(path):
         assert os.path.isdir(tmp_dir)
     sft = trx1.to_sft()
