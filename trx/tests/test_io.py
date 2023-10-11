@@ -4,6 +4,7 @@
 from copy import deepcopy
 import os
 import psutil
+from tempfile import TemporaryDirectory
 import zipfile
 
 import pytest
@@ -11,7 +12,7 @@ import numpy as np
 from numpy.testing import assert_allclose
 
 try:
-    from dipy.io.streamline import save_tractogram
+    from dipy.io.streamline import save_tractogram, load_tractogram
     dipy_available = True
 except ImportError:
     dipy_available = False
@@ -31,15 +32,18 @@ tmp_gs_dir = get_trx_tmp_dir()
                                   ("gs.vtk")])
 @pytest.mark.skipif(not dipy_available, reason='Dipy is not installed.')
 def test_seq_ops(path):
-    gs_dir = os.path.join(get_home(), 'gold_standard')
-    path = os.path.join(gs_dir, path)
+    with TemporaryDirectory() as tmp_dir:
+        gs_dir = os.path.join(get_home(), 'gold_standard')
+        path = os.path.join(tmp_dir, path)
 
-    obj = load(os.path.join(gs_dir, 'gs.trx'),
-               os.path.join(gs_dir, 'gs.nii'))
-    sft = obj.to_sft()
-    save_tractogram(sft, path)
-    obj.close()
-    save_tractogram(sft, path)
+        obj = load(os.path.join(gs_dir, 'gs.trx'),
+                   os.path.join(gs_dir, 'gs.nii'))
+        sft_1 = obj.to_sft()
+        save_tractogram(sft_1, path)
+        obj.close()
+        save_tractogram(sft_1, 'tmp.trx')
+
+        sft_2 = load_tractogram('tmp.trx', 'same')
 
 
 @pytest.mark.parametrize("path", [("gs.trx"), ("gs.trk"), ("gs.tck"),
