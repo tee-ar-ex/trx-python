@@ -31,7 +31,7 @@ tmp_gs_dir = get_trx_tmp_dir()
 @pytest.mark.parametrize("path", [("gs.trk"), ("gs.tck"),
                                   ("gs.vtk")])
 @pytest.mark.skipif(not dipy_available, reason='Dipy is not installed.')
-def test_seq_ops(path):
+def test_seq_ops_sft(path):
     with TemporaryDirectory() as tmp_dir:
         gs_dir = os.path.join(get_home(), 'gold_standard')
         path = os.path.join(tmp_dir, path)
@@ -41,9 +41,20 @@ def test_seq_ops(path):
         sft_1 = obj.to_sft()
         save_tractogram(sft_1, path)
         obj.close()
-        save_tractogram(sft_1, 'tmp.trx')
+        save_tractogram(sft_1, os.path.join(tmp_dir, 'tmp.trx'))
 
-        sft_2 = load_tractogram('tmp.trx', 'same')
+        sft_2 = load_tractogram(os.path.join(tmp_dir, 'tmp.trx'), 'same')
+
+
+def test_seq_ops_trx():
+    with TemporaryDirectory() as tmp_dir:
+        gs_dir = os.path.join(get_home(), 'gold_standard')
+        path = os.path.join(gs_dir, 'gs.trx')
+
+        trx_1 = tmm.load(path)
+        tmm.save(trx_1, os.path.join(tmp_dir, 'tmp.trx'))
+        trx_1.close()
+        trx_2 = tmm.load(os.path.join(tmp_dir, 'tmp.trx'))
 
 
 @pytest.mark.parametrize("path", [("gs.trx"), ("gs.trk"), ("gs.tck"),
