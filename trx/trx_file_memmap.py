@@ -229,10 +229,10 @@ def load(input_obj: str, check_dpg: bool = True) -> Type["TrxFile"]:
                     break
         if was_compressed:
             with zipfile.ZipFile(input_obj, "r") as zf:
-                tmpdir = get_trx_tmp_dir()
-                zf.extractall(tmpdir.name)
-                trx = load_from_directory(tmpdir.name)
-                trx._uncompressed_folder_handle = tmpdir
+                tmp_dir = get_trx_tmp_dir()
+                zf.extractall(tmp_dir.name)
+                trx = load_from_directory(tmp_dir.name)
+                trx._uncompressed_folder_handle = tmp_dir
                 logging.info(
                     "File was compressed, call the close() function before"
                     "exiting."
@@ -542,20 +542,15 @@ def save(
         compression_standard -- The compression standard to use, as defined by
             the ZipFile library
     """
-    if os.path.splitext(filename)[1] and not os.path.splitext(filename)[1] in [
-        ".zip",
-        ".trx",
-    ]:
+    _, ext = os.path.splitext(filename)
+    if ext not in [".zip", ".trx", ""]:
         raise ValueError("Unsupported extension.")
 
     copy_trx = trx.deepcopy()
     copy_trx.resize()
 
     tmp_dir_name = copy_trx._uncompressed_folder_handle.name
-    if os.path.splitext(filename)[1] and os.path.splitext(filename)[1] in [
-        ".zip",
-        ".trx",
-    ]:
+    if ext in [".zip", ".trx"]:
         zip_from_folder(tmp_dir_name, filename, compression_standard)
     else:
         if os.path.isdir(filename):
@@ -1582,10 +1577,10 @@ class TrxFile:
                 dtype_to_use)
 
         # For safety and for RAM, convert the whole object to memmaps
-        tmpdir = get_trx_tmp_dir()
-        save(trx, tmpdir.name)
-        trx = load_from_directory(tmpdir.name)
-        trx._uncompressed_folder_handle = tmpdir
+        tmp_dir = get_trx_tmp_dir()
+        save(trx, tmp_dir.name)
+        trx.close()
+        trx = load_from_directory(tmp_dir.name)
 
         sft.to_space(old_space)
         sft.to_origin(old_origin)
@@ -1651,10 +1646,11 @@ class TrxFile:
                 tractogram.data_per_streamline[key].astype(dtype_to_use)
 
         # For safety and for RAM, convert the whole object to memmaps
-        tmpdir = get_trx_tmp_dir()
-        save(trx, tmpdir.name)
-        trx = load_from_directory(tmpdir.name)
-        trx._uncompressed_folder_handle = tmpdir
+        tmp_dir = get_trx_tmp_dir()
+        save(trx, tmp_dir.name)
+        trx.close()
+
+        trx = load_from_directory(tmp_dir.name)
         del tmp_streamlines
 
         return trx

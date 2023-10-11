@@ -36,7 +36,7 @@ def close_or_delete_mmap(obj):
     elif isinstance(obj, np.memmap):
         del obj
     else:
-        logging.warning('Object to be close or deleted must be np.memmap')
+        logging.debug('Object to be close or deleted must be np.memmap')
 
 
 def split_name_with_gz(filename):
