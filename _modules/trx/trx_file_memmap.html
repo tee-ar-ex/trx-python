@@ -2182,11 +2182,11 @@ document.write(`
         <span class="k">if</span> <span class="n">resize</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">resize</span><span class="p">()</span>
         <span class="n">sft</span> <span class="o">=</span> <span class="n">StatefulTractogram</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">streamlines</span><span class="p">,</span>
+            <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">streamlines</span><span class="p">),</span>
             <span class="n">space_attributes</span><span class="p">,</span>
             <span class="n">Space</span><span class="o">.</span><span class="n">RASMM</span><span class="p">,</span>
-            <span class="n">data_per_point</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">data_per_vertex</span><span class="p">,</span>
-            <span class="n">data_per_streamline</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">data_per_streamline</span><span class="p">,</span>
+            <span class="n">data_per_point</span><span class="o">=</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_per_vertex</span><span class="p">),</span>
+            <span class="n">data_per_streamline</span><span class="o">=</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_per_streamline</span><span class="p">),</span>
         <span class="p">)</span>
         <span class="n">tmp_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_dtype_dict</span><span class="p">()</span>
         <span class="k">if</span> <span class="s1">&#39;dpv&#39;</span> <span class="ow">in</span> <span class="n">tmp_dict</span><span class="p">:</span>
