@@ -356,9 +356,10 @@ document.write(`
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">trx.io</span> <span class="kn">import</span> <span class="n">get_trx_tmpdir</span>
-<span class="kn">from</span> <span class="nn">trx.utils</span> <span class="kn">import</span> <span class="p">(</span><span class="n">get_reference_info_wrapper</span><span class="p">,</span>
+<span class="kn">from</span> <span class="nn">trx.utils</span> <span class="kn">import</span> <span class="p">(</span><span class="n">append_generator_to_dict</span><span class="p">,</span>
+                       <span class="n">close_or_delete_mmap</span><span class="p">,</span>
                        <span class="n">convert_data_dict_to_tractogram</span><span class="p">,</span>
-                       <span class="n">append_generator_to_dict</span><span class="p">)</span>
+                       <span class="n">get_reference_info_wrapper</span><span class="p">)</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">dipy</span>
@@ -2200,6 +2201,22 @@ document.write(`
     <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Cleanup on-disk temporary folder and initialize an empty TrxFile&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_uncompressed_folder_handle</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">close_or_delete_mmap</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">streamlines</span><span class="p">)</span>
+
+            <span class="c1"># # Close or delete attributes in dictionaries</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_per_vertex</span><span class="p">:</span>
+                <span class="n">close_or_delete_mmap</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_per_vertex</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_per_streamline</span><span class="p">:</span>
+                <span class="n">close_or_delete_mmap</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_per_streamline</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">groups</span><span class="p">:</span>
+                <span class="n">close_or_delete_mmap</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">groups</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_per_group</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">dpg</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_per_group</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span>
+                    <span class="n">close_or_delete_mmap</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_per_group</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">dpg</span><span class="p">])</span>
+
             <span class="k">try</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_uncompressed_folder_handle</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span>
             <span class="k">except</span> <span class="ne">PermissionError</span><span class="p">:</span>

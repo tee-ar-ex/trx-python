@@ -357,6 +357,31 @@ document.write(`
     <span class="n">dipy_available</span> <span class="o">=</span> <span class="kc">False</span>
 
 
+<div class="viewcode-block" id="close_or_delete_mmap">
+<a class="viewcode-back" href="../../autoapi/trx/utils/index.html#trx.utils.close_or_delete_mmap">[docs]</a>
+<span class="k">def</span> <span class="nf">close_or_delete_mmap</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Close the memory-mapped file if it exists, otherwise set the object to None.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    obj : object</span>
+<span class="sd">        The object that potentially has a memory-mapped file to be closed.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s1">&#39;_mmap&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">obj</span><span class="o">.</span><span class="n">_mmap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">_mmap</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">ArraySequence</span><span class="p">):</span>
+        <span class="n">close_or_delete_mmap</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">_data</span><span class="p">)</span>
+        <span class="n">close_or_delete_mmap</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">_offsets</span><span class="p">)</span>
+        <span class="n">close_or_delete_mmap</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">_lengths</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">memmap</span><span class="p">):</span>
+        <span class="k">del</span> <span class="n">obj</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Object to be close or deleted must be np.memmap&#39;</span><span class="p">)</span></div>
+
+
+
 <div class="viewcode-block" id="split_name_with_gz">
 <a class="viewcode-back" href="../../autoapi/trx/utils/index.html#trx.utils.split_name_with_gz">[docs]</a>
 <span class="k">def</span> <span class="nf">split_name_with_gz</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
@@ -460,8 +485,7 @@ document.write(`
         <span class="n">voxel_sizes</span> <span class="o">=</span> <span class="n">header</span><span class="p">[</span><span class="s1">&#39;voxel_sizes&#39;</span><span class="p">]</span>
         <span class="n">voxel_order</span> <span class="o">=</span> <span class="n">header</span><span class="p">[</span><span class="s1">&#39;voxel_order&#39;</span><span class="p">]</span>
     <span class="k">elif</span> <span class="n">is_sft</span><span class="p">:</span>
-        <span class="n">affine</span><span class="p">,</span> <span class="n">dimensions</span><span class="p">,</span> <span class="n">voxel_sizes</span><span class="p">,</span> <span class="n">voxel_order</span> <span class="o">=</span>\
-            <span class="n">reference</span><span class="o">.</span><span class="n">space_attributes</span>
+        <span class="n">affine</span><span class="p">,</span> <span class="n">dimensions</span><span class="p">,</span> <span class="n">voxel_sizes</span><span class="p">,</span> <span class="n">voxel_order</span> <span class="o">=</span> <span class="n">reference</span><span class="o">.</span><span class="n">space_attributes</span>
     <span class="k">elif</span> <span class="n">is_trx</span><span class="p">:</span>
         <span class="n">affine</span> <span class="o">=</span> <span class="n">header</span><span class="p">[</span><span class="s1">&#39;VOXEL_TO_RASMM&#39;</span><span class="p">]</span>
         <span class="n">dimensions</span> <span class="o">=</span> <span class="n">header</span><span class="p">[</span><span class="s1">&#39;DIMENSIONS&#39;</span><span class="p">]</span>
@@ -500,10 +524,10 @@ document.write(`
 <span class="sd">        Does all the spatial attribute match</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">affine_1</span><span class="p">,</span> <span class="n">dimensions_1</span><span class="p">,</span> <span class="n">voxel_sizes_1</span><span class="p">,</span> <span class="n">voxel_order_1</span> <span class="o">=</span> \
-        <span class="n">get_reference_info_wrapper</span><span class="p">(</span><span class="n">reference_1</span><span class="p">)</span>
-    <span class="n">affine_2</span><span class="p">,</span> <span class="n">dimensions_2</span><span class="p">,</span> <span class="n">voxel_sizes_2</span><span class="p">,</span> <span class="n">voxel_order_2</span> <span class="o">=</span> \
-        <span class="n">get_reference_info_wrapper</span><span class="p">(</span><span class="n">reference_2</span><span class="p">)</span>
+    <span class="n">affine_1</span><span class="p">,</span> <span class="n">dimensions_1</span><span class="p">,</span> <span class="n">voxel_sizes_1</span><span class="p">,</span> <span class="n">voxel_order_1</span> <span class="o">=</span> <span class="n">get_reference_info_wrapper</span><span class="p">(</span>
+        <span class="n">reference_1</span><span class="p">)</span>
+    <span class="n">affine_2</span><span class="p">,</span> <span class="n">dimensions_2</span><span class="p">,</span> <span class="n">voxel_sizes_2</span><span class="p">,</span> <span class="n">voxel_order_2</span> <span class="o">=</span> <span class="n">get_reference_info_wrapper</span><span class="p">(</span>
+        <span class="n">reference_2</span><span class="p">)</span>
 
     <span class="n">identical_header</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">affine_1</span><span class="p">,</span> <span class="n">affine_2</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1e-03</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-03</span><span class="p">):</span>

@@ -372,48 +372,51 @@ document.write(`
 <h3>Functions<a class="headerlink" href="#functions" title="Link to this heading">#</a></h3>
 <table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#trx.utils.split_name_with_gz" title="trx.utils.split_name_with_gz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">split_name_with_gz</span></code></a>(filename)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.utils.close_or_delete_mmap" title="trx.utils.close_or_delete_mmap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">close_or_delete_mmap</span></code></a>(obj)</p></td>
+<td><p>Close the memory-mapped file if it exists, otherwise set the object to None.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#trx.utils.split_name_with_gz" title="trx.utils.split_name_with_gz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">split_name_with_gz</span></code></a>(filename)</p></td>
 <td><p>Returns the clean basename and extension of a file.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#trx.utils.get_reference_info_wrapper" title="trx.utils.get_reference_info_wrapper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_reference_info_wrapper</span></code></a>(reference)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.utils.get_reference_info_wrapper" title="trx.utils.get_reference_info_wrapper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_reference_info_wrapper</span></code></a>(reference)</p></td>
 <td><p>Will compare the spatial attribute of 2 references.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#trx.utils.is_header_compatible" title="trx.utils.is_header_compatible"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_header_compatible</span></code></a>(reference_1, reference_2)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#trx.utils.is_header_compatible" title="trx.utils.is_header_compatible"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_header_compatible</span></code></a>(reference_1, reference_2)</p></td>
 <td><p>Will compare the spatial attribute of 2 references.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#trx.utils.get_axis_shift_vector" title="trx.utils.get_axis_shift_vector"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_axis_shift_vector</span></code></a>(flip_axes)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.utils.get_axis_shift_vector" title="trx.utils.get_axis_shift_vector"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_axis_shift_vector</span></code></a>(flip_axes)</p></td>
 <td><p><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p></p></dd>
 </dl>
 </p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#trx.utils.get_axis_flip_vector" title="trx.utils.get_axis_flip_vector"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_axis_flip_vector</span></code></a>(flip_axes)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#trx.utils.get_axis_flip_vector" title="trx.utils.get_axis_flip_vector"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_axis_flip_vector</span></code></a>(flip_axes)</p></td>
 <td><p><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p></p></dd>
 </dl>
 </p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#trx.utils.get_shift_vector" title="trx.utils.get_shift_vector"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_shift_vector</span></code></a>(sft)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.utils.get_shift_vector" title="trx.utils.get_shift_vector"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_shift_vector</span></code></a>(sft)</p></td>
 <td><p>When flipping a tractogram the shift vector is used to change the origin</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#trx.utils.flip_sft" title="trx.utils.flip_sft"><code class="xref py py-obj docutils literal notranslate"><span class="pre">flip_sft</span></code></a>(sft, flip_axes)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#trx.utils.flip_sft" title="trx.utils.flip_sft"><code class="xref py py-obj docutils literal notranslate"><span class="pre">flip_sft</span></code></a>(sft, flip_axes)</p></td>
 <td><p>Flip the streamlines in the StatefulTractogram according to the</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#trx.utils.load_matrix_in_any_format" title="trx.utils.load_matrix_in_any_format"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_matrix_in_any_format</span></code></a>(filepath)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.utils.load_matrix_in_any_format" title="trx.utils.load_matrix_in_any_format"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_matrix_in_any_format</span></code></a>(filepath)</p></td>
 <td><p>Load a matrix from a txt file OR a npy file.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#trx.utils.get_reverse_enum" title="trx.utils.get_reverse_enum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_reverse_enum</span></code></a>(space_str, origin_str)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#trx.utils.get_reverse_enum" title="trx.utils.get_reverse_enum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_reverse_enum</span></code></a>(space_str, origin_str)</p></td>
 <td><p>Convert string representation to enums for the StatefulTractogram.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#trx.utils.convert_data_dict_to_tractogram" title="trx.utils.convert_data_dict_to_tractogram"><code class="xref py py-obj docutils literal notranslate"><span class="pre">convert_data_dict_to_tractogram</span></code></a>(data)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.utils.convert_data_dict_to_tractogram" title="trx.utils.convert_data_dict_to_tractogram"><code class="xref py py-obj docutils literal notranslate"><span class="pre">convert_data_dict_to_tractogram</span></code></a>(data)</p></td>
 <td><p>Convert a data from a lazy tractogram to a tractogram</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#trx.utils.append_generator_to_dict" title="trx.utils.append_generator_to_dict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">append_generator_to_dict</span></code></a>(gen, data)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#trx.utils.append_generator_to_dict" title="trx.utils.append_generator_to_dict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">append_generator_to_dict</span></code></a>(gen, data)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#trx.utils.verify_trx_dtype" title="trx.utils.verify_trx_dtype"><code class="xref py py-obj docutils literal notranslate"><span class="pre">verify_trx_dtype</span></code></a>(trx, dict_dtype)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.utils.verify_trx_dtype" title="trx.utils.verify_trx_dtype"><code class="xref py py-obj docutils literal notranslate"><span class="pre">verify_trx_dtype</span></code></a>(trx, dict_dtype)</p></td>
 <td><p>Verify if the dtype of the data in the trx is the same as the one in</p></td>
 </tr>
 </tbody>
@@ -432,6 +435,12 @@ document.write(`
 <dt class="sig sig-object py" id="trx.utils.dipy_available">
 <span class="sig-prename descclassname"><span class="pre">trx.utils.</span></span><span class="sig-name descname"><span class="pre">dipy_available</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="reference internal" href="../../../_modules/trx/utils.html#dipy_available"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.utils.dipy_available" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trx.utils.close_or_delete_mmap">
+<span class="sig-prename descclassname"><span class="pre">trx.utils.</span></span><span class="sig-name descname"><span class="pre">close_or_delete_mmap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/utils.html#close_or_delete_mmap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.utils.close_or_delete_mmap" title="Link to this definition">#</a></dt>
+<dd><p>Close the memory-mapped file if it exists, otherwise set the object to None.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="trx.utils.split_name_with_gz">
@@ -707,6 +716,7 @@ the dict.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#functions">Functions</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#attributes">Attributes</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.utils.dipy_available"><code class="docutils literal notranslate"><span class="pre">dipy_available</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.utils.close_or_delete_mmap"><code class="docutils literal notranslate"><span class="pre">close_or_delete_mmap()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.utils.split_name_with_gz"><code class="docutils literal notranslate"><span class="pre">split_name_with_gz()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.utils.get_reference_info_wrapper"><code class="docutils literal notranslate"><span class="pre">get_reference_info_wrapper()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.utils.is_header_compatible"><code class="docutils literal notranslate"><span class="pre">is_header_compatible()</span></code></a></li>

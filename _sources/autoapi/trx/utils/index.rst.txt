@@ -13,6 +13,7 @@ Functions
 
 .. autoapisummary::
 
+   trx.utils.close_or_delete_mmap
    trx.utils.split_name_with_gz
    trx.utils.get_reference_info_wrapper
    trx.utils.is_header_compatible
@@ -40,6 +41,29 @@ Attributes
    :value: True
 
    
+
+.. py:function:: close_or_delete_mmap(obj)
+
+   
+   Close the memory-mapped file if it exists, otherwise set the object to None.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 
 .. py:function:: split_name_with_gz(filename)
 
