@@ -106,7 +106,8 @@ def test_multi_load_save_rasmm(path):
 
         obj = load(path, os.path.join(gs_dir, 'gs.nii'))
         for i in range(3):
-            out_path = os.path.join(tmp_gs_dir, '{}_tmp{}_{}'.format(basename, i, ext))
+            out_path = os.path.join(
+                tmp_gs_dir, '{}_tmp{}_{}'.format(basename, i, ext))
             save(obj, out_path)
 
             if isinstance(obj, TrxFile):

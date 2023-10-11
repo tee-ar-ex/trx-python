@@ -27,6 +27,7 @@ from trx.workflows import (convert_dsi_studio,
 # If they already exist, this only takes 5 seconds (check md5sum)
 fetch_data(get_testing_files_dict(), keys=['DSI.zip', 'trx_from_scratch.zip'])
 
+
 def test_help_option_convert_dsi(script_runner):
     ret = script_runner.run(['tff_convert_dsi_studio.py', '--help'])
     assert ret.success
@@ -191,11 +192,13 @@ def test_execution_generate_trx_from_scratch():
         exp_trx = tmm.load(expected_trx)
         gen_trx = tmm.load(out_gen_path)
 
-        assert DeepDiff(exp_trx.get_dtype_dict(), gen_trx.get_dtype_dict()) == {}
+        assert DeepDiff(exp_trx.get_dtype_dict(),
+                        gen_trx.get_dtype_dict()) == {}
 
         assert_allclose(exp_trx.streamlines._data, gen_trx.streamlines._data,
                         atol=0.1, rtol=0.1)
-        assert_equal(exp_trx.streamlines._offsets, gen_trx.streamlines._offsets)
+        assert_equal(exp_trx.streamlines._offsets,
+                     gen_trx.streamlines._offsets)
 
         for key in exp_trx.data_per_vertex.keys():
             assert_equal(exp_trx.data_per_vertex[key]._data,
@@ -233,8 +236,10 @@ def test_execution_concatenate_validate_trx():
 
         # Right data
         end_idx = trx1.header['NB_VERTICES']
-        assert_allclose(trx.streamlines._data[:end_idx], trx1.streamlines._data)
-        assert_allclose(trx.streamlines._data[end_idx:], trx2.streamlines._data)
+        assert_allclose(
+            trx.streamlines._data[:end_idx], trx1.streamlines._data)
+        assert_allclose(
+            trx.streamlines._data[end_idx:], trx2.streamlines._data)
 
         # Right data_per_*
         for key in trx.data_per_vertex.keys():
