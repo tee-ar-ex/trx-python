@@ -94,3 +94,4 @@ def save(tractogram_obj, tractogram_filename, bbox_valid_check=False):
         if not isinstance(tractogram_obj, tmm.TrxFile):
             tractogram_obj = tmm.TrxFile.from_sft(tractogram_obj)
         tmm.save(tractogram_obj, tractogram_filename)
+        tractogram_obj.close()
