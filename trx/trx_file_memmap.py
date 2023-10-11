@@ -220,6 +220,7 @@ def load(input_obj: str, check_dpg: bool = True) -> Type["TrxFile"]:
     # TODO Check if 0 streamlines, then 0 vertices is expected (vice-versa)
     # TODO 4x4 affine matrices should contains values (no all-zeros)
     # TODO 3x1 dimensions array should contains values at each position (int)
+
     if os.path.isfile(input_obj):
         was_compressed = False
         with zipfile.ZipFile(input_obj, "r") as zf:
@@ -548,7 +549,6 @@ def save(
 
     copy_trx = trx.deepcopy()
     copy_trx.resize()
-
     tmp_dir_name = copy_trx._uncompressed_folder_handle.name
     if ext in [".zip", ".trx"]:
         zip_from_folder(tmp_dir_name, filename, compression_standard)
@@ -572,11 +572,11 @@ def zip_from_folder(
 
     """
     with zipfile.ZipFile(filename, mode="w", compression=compression_standard) as zf:
-        for root, dirs, files in os.walk(directory):
+        for root, _, files in os.walk(directory):
             for name in files:
-                tmp_filename = os.path.join(root, name)
-                zf.write(tmp_filename, tmp_filename.replace(
-                    directory + "/", ""))
+                curr_filename = os.path.join(root, name)
+                tmp_filename = curr_filename.replace(directory, "")[1:]
+                zf.write(curr_filename, tmp_filename)
 
 
 class TrxFile:

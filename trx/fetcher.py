@@ -13,7 +13,7 @@ def get_home():
     if 'TRX_HOME' in os.environ:
         trx_home = os.environ['TRX_HOME']
     else:
-        trx_home = os.path.join(os.path.expanduser('~'), '.tee_ar_ex/')
+        trx_home = os.path.join(os.path.expanduser('~'), '.tee_ar_ex')
     return trx_home
 
 
