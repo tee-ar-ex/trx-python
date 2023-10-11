@@ -417,7 +417,7 @@ def verify_trx_dtype(trx, dict_dtype):
     trx : Tractogram
         Tractogram to verify.
     dict_dtype : dict
-        Dictionary containing the dtype to verify.
+        Dictionary containing all elements dtype to verify.
     Returns
     -------
     output : bool

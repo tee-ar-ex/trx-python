@@ -27,7 +27,7 @@ from trx.utils import (append_generator_to_dict,
 try:
     import dipy
     dipy_available = True
-except:
+except ImportError:
     dipy_available = False
 
 
@@ -1752,7 +1752,7 @@ class TrxFile:
             try:
                 self._uncompressed_folder_handle.cleanup()
             except PermissionError:
-                logging.error("Windows PermissionError, temporary directory {}" +
+                logging.error("Windows PermissionError, temporary directory {}"
                               "was not deleted!".format(self._uncompressed_folder_handle.name))
         self.__init__()
         logging.debug("Deleted memmaps and intialized empty TrxFile.")

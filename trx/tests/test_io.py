@@ -4,13 +4,13 @@
 from copy import deepcopy
 import os
 import psutil
+import zipfile
 
 import pytest
 import numpy as np
 from numpy.testing import assert_allclose
 
 try:
-    import dipy
     from dipy.io.streamline import save_tractogram
     dipy_available = True
 except ImportError:
@@ -30,11 +30,12 @@ tmp_gs_dir = get_trx_tmp_dir()
 @pytest.mark.parametrize("path", [("gs.trk"), ("gs.tck"),
                                   ("gs.vtk")])
 @pytest.mark.skipif(not dipy_available, reason='Dipy is not installed.')
-def test_load_vox(path):
+def test_seq_ops(path):
     gs_dir = os.path.join(get_home(), 'gold_standard')
     path = os.path.join(gs_dir, path)
 
-    obj = load(path, os.path.join(gs_dir, 'gs.nii'))
+    obj = load(os.path.join(gs_dir, 'gs.trx'),
+               os.path.join(gs_dir, 'gs.nii'))
     sft = obj.to_sft()
     save_tractogram(sft, path)
     obj.close()
@@ -182,3 +183,42 @@ def test_change_tmp_dir(tmp_path):
 
     trx.close()
     assert not os.path.isdir(tmp_gs_dir)
+
+
+@pytest.mark.parametrize("path", [("gs.trx"), ("gs_fldr.trx")])
+def test_complete_dir_from_trx(path):
+    gs_dir = os.path.join(get_home(), 'gold_standard')
+    path = os.path.join(gs_dir, path)
+
+    trx = tmm.load(path)
+    if trx._uncompressed_folder_handle is None:
+        dir_to_check = path
+    else:
+        dir_to_check = trx._uncompressed_folder_handle.name
+
+    file_paths = []
+    for dirpath, _, filenames in os.walk(dir_to_check):
+        for filename in filenames:
+            full_path = os.path.join(dirpath, filename)
+            cut_path = full_path.split(dir_to_check)[1][1:]
+            file_paths.append(cut_path)
+
+    expected_content = ['offsets.uint32', 'positions.3.float32',
+                        'header.json', 'dps/random_coord.3.float32',
+                        'dpv/color_y.float32', 'dpv/color_x.float32',
+                        'dpv/color_z.float32']
+    assert set(file_paths) == set(expected_content)
+
+
+def test_complete_zip_from_trx():
+    gs_dir = os.path.join(get_home(), 'gold_standard')
+    path = os.path.join(gs_dir, 'gs.trx')
+
+    with zipfile.ZipFile(path, mode="r") as zf:
+        zip_file_list = zf.namelist()
+
+    expected_content = ['offsets.uint32', 'positions.3.float32',
+                        'header.json', 'dps/random_coord.3.float32',
+                        'dpv/color_y.float32', 'dpv/color_x.float32',
+                        'dpv/color_z.float32']
+    assert set(zip_file_list) == set(expected_content)

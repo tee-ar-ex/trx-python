@@ -29,7 +29,7 @@ def union(left, right):
 
 def get_streamline_key(streamline, precision=None):
     """Produces a key using a hash from a streamline using a few points only and
-    the desired precision 
+    the desired precision
 
     Parameters
     ----------
