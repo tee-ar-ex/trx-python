@@ -541,13 +541,13 @@ def save(
             the ZipFile library
     """
     _, ext = os.path.splitext(filename)
-    if ext not in [".zip", ".trx", ""]:
+    if ext.lower() not in [".zip", ".trx", ""]:
         raise ValueError("Unsupported extension.")
 
     copy_trx = trx.deepcopy()
     copy_trx.resize()
     tmp_dir_name = copy_trx._uncompressed_folder_handle.name
-    if ext in [".zip", ".trx"]:
+    if ext.lower() in [".zip", ".trx"]:
         zip_from_folder(tmp_dir_name, filename, compression_standard)
     else:
         if os.path.isdir(filename):
