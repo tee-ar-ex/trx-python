@@ -389,7 +389,7 @@ document.write(`
                 <span class="n">f_out</span><span class="o">.</span><span class="n">writelines</span><span class="p">(</span><span class="n">f_in</span><span class="p">)</span>
                 <span class="n">sft</span> <span class="o">=</span> <span class="n">load_tractogram</span><span class="p">(</span><span class="s1">&#39;tmp.trk&#39;</span><span class="p">,</span> <span class="s1">&#39;same&#39;</span><span class="p">,</span>
                                       <span class="n">bbox_valid_check</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-                <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;tmp.trk&#39;</span><span class="p">)</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;tmp.trk&#39;</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">in_ext</span> <span class="o">==</span> <span class="s1">&#39;.trk&#39;</span><span class="p">:</span>
         <span class="n">sft</span> <span class="o">=</span> <span class="n">load_tractogram</span><span class="p">(</span><span class="n">in_dsi_tractogram</span><span class="p">,</span> <span class="s1">&#39;same&#39;</span><span class="p">,</span>
                               <span class="n">bbox_valid_check</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -603,7 +603,7 @@ document.write(`
 
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tractogram_obj</span><span class="p">,</span> <span class="n">StatefulTractogram</span><span class="p">):</span>
         <span class="n">sft</span> <span class="o">=</span> <span class="n">tractogram_obj</span><span class="o">.</span><span class="n">to_sft</span><span class="p">()</span>
-        <span class="n">tractogram_obj</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="c1"># tractogram_obj.close()</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">sft</span> <span class="o">=</span> <span class="n">tractogram_obj</span>
 
@@ -761,7 +761,6 @@ document.write(`
                 <span class="n">curr_filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp_dir_name</span><span class="p">,</span> <span class="s1">&#39;dps&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">.</span><span class="si">{}{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                     <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">arg</span><span class="p">[</span><span class="mi">0</span><span class="p">])[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">dim</span><span class="p">,</span> <span class="n">arg</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
                 <span class="n">curr_arr</span><span class="o">.</span><span class="n">tofile</span><span class="p">(</span><span class="n">curr_filename</span><span class="p">)</span>
-
         <span class="k">if</span> <span class="n">groups</span><span class="p">:</span>
             <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp_dir_name</span><span class="p">,</span> <span class="s1">&#39;groups&#39;</span><span class="p">))</span>
             <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">groups</span><span class="p">:</span>

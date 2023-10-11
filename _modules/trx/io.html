@@ -444,7 +444,8 @@ document.write(`
     <span class="k">else</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tractogram_obj</span><span class="p">,</span> <span class="n">tmm</span><span class="o">.</span><span class="n">TrxFile</span><span class="p">):</span>
             <span class="n">tractogram_obj</span> <span class="o">=</span> <span class="n">tmm</span><span class="o">.</span><span class="n">TrxFile</span><span class="o">.</span><span class="n">from_sft</span><span class="p">(</span><span class="n">tractogram_obj</span><span class="p">)</span>
-        <span class="n">tmm</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">tractogram_obj</span><span class="p">,</span> <span class="n">tractogram_filename</span><span class="p">)</span></div>
+        <span class="n">tmm</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">tractogram_obj</span><span class="p">,</span> <span class="n">tractogram_filename</span><span class="p">)</span>
+        <span class="n">tractogram_obj</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
 </pre></div>
 

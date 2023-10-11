@@ -615,7 +615,6 @@ document.write(`
                     <span class="s2">&quot;An undeclared group (</span><span class="si">{}</span><span class="s2">) has &quot;</span> <span class="s2">&quot;data_per_group.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                         <span class="n">dpg</span><span class="p">)</span>
                 <span class="p">)</span>
-
     <span class="k">return</span> <span class="n">trx</span></div>
 
 
@@ -710,7 +709,6 @@ document.write(`
 
             <span class="n">dtype_size</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">ext</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span><span class="o">.</span><span class="n">itemsize</span>
             <span class="n">size</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">elem_filename</span><span class="p">)</span> <span class="o">/</span> <span class="n">dtype_size</span>
-
             <span class="k">if</span> <span class="n">size</span><span class="o">.</span><span class="n">is_integer</span><span class="p">():</span>
                 <span class="n">files_pointer_size</span><span class="p">[</span><span class="n">elem_filename</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
             <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">elem_filename</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
@@ -923,7 +921,6 @@ document.write(`
 
     <span class="n">copy_trx</span> <span class="o">=</span> <span class="n">trx</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">()</span>
     <span class="n">copy_trx</span><span class="o">.</span><span class="n">resize</span><span class="p">()</span>
-
     <span class="n">tmp_dir_name</span> <span class="o">=</span> <span class="n">copy_trx</span><span class="o">.</span><span class="n">_uncompressed_folder_handle</span><span class="o">.</span><span class="n">name</span>
     <span class="k">if</span> <span class="n">ext</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;.zip&quot;</span><span class="p">,</span> <span class="s2">&quot;.trx&quot;</span><span class="p">]:</span>
         <span class="n">zip_from_folder</span><span class="p">(</span><span class="n">tmp_dir_name</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">compression_standard</span><span class="p">)</span>
@@ -950,11 +947,11 @@ document.write(`
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">with</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">compression</span><span class="o">=</span><span class="n">compression_standard</span><span class="p">)</span> <span class="k">as</span> <span class="n">zf</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">root</span><span class="p">,</span> <span class="n">dirs</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">directory</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">root</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">directory</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
-                <span class="n">tmp_filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
-                <span class="n">zf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">tmp_filename</span><span class="p">,</span> <span class="n">tmp_filename</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
-                    <span class="n">directory</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span></div>
+                <span class="n">curr_filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+                <span class="n">tmp_filename</span> <span class="o">=</span> <span class="n">curr_filename</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">:]</span>
+                <span class="n">zf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">curr_filename</span><span class="p">,</span> <span class="n">tmp_filename</span><span class="p">)</span></div>
 
 
 
@@ -1490,9 +1487,11 @@ document.write(`
                 <span class="c1"># This is for Unix</span>
                 <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="s1">&#39;nt&#39;</span> <span class="ow">and</span> <span class="n">folder</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)):</span>
                     <span class="n">folder</span> <span class="o">=</span> <span class="n">folder</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-                <span class="c1"># These two are for Windows</span>
-                <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;dpg&#39;</span><span class="p">,</span> <span class="s1">&#39;dpv&#39;</span><span class="p">,</span> <span class="s1">&#39;dps&#39;</span><span class="p">]:</span>
+                <span class="c1"># These three are for Windows</span>
+                <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;dpv&#39;</span><span class="p">,</span> <span class="s1">&#39;dps&#39;</span><span class="p">,</span> <span class="s1">&#39;groups&#39;</span><span class="p">]:</span>
                     <span class="n">folder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">folder</span><span class="p">))</span> <span class="o">==</span> <span class="s1">&#39;dpg&#39;</span><span class="p">:</span>
+                    <span class="n">folder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;dpg&#39;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">folder</span><span class="p">))</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">folder</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
 
@@ -2030,6 +2029,7 @@ document.write(`
         <span class="n">save</span><span class="p">(</span><span class="n">trx</span><span class="p">,</span> <span class="n">tmp_dir</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
         <span class="n">trx</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="n">trx</span> <span class="o">=</span> <span class="n">load_from_directory</span><span class="p">(</span><span class="n">tmp_dir</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">trx</span><span class="o">.</span><span class="n">_uncompressed_folder_handle</span> <span class="o">=</span> <span class="n">tmp_dir</span>
 
         <span class="n">sft</span><span class="o">.</span><span class="n">to_space</span><span class="p">(</span><span class="n">old_space</span><span class="p">)</span>
         <span class="n">sft</span><span class="o">.</span><span class="n">to_origin</span><span class="p">(</span><span class="n">old_origin</span><span class="p">)</span>
