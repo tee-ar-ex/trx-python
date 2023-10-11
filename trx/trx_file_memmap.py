@@ -252,7 +252,6 @@ def load(input_obj: str, check_dpg: bool = True) -> Type["TrxFile"]:
                     "An undeclared group ({}) has " "data_per_group.".format(
                         dpg)
                 )
-
     return trx
 
 
@@ -341,7 +340,6 @@ def load_from_directory(directory: str) -> Type["TrxFile"]:
 
             dtype_size = np.dtype(ext[1:]).itemsize
             size = os.path.getsize(elem_filename) / dtype_size
-
             if size.is_integer():
                 files_pointer_size[elem_filename] = 0, int(size)
             elif os.path.getsize(elem_filename) == 1:
@@ -548,7 +546,6 @@ def save(
 
     copy_trx = trx.deepcopy()
     copy_trx.resize()
-
     tmp_dir_name = copy_trx._uncompressed_folder_handle.name
     if ext in [".zip", ".trx"]:
         zip_from_folder(tmp_dir_name, filename, compression_standard)
@@ -572,11 +569,11 @@ def zip_from_folder(
 
     """
     with zipfile.ZipFile(filename, mode="w", compression=compression_standard) as zf:
-        for root, dirs, files in os.walk(directory):
+        for root, _, files in os.walk(directory):
             for name in files:
-                tmp_filename = os.path.join(root, name)
-                zf.write(tmp_filename, tmp_filename.replace(
-                    directory + "/", ""))
+                curr_filename = os.path.join(root, name)
+                tmp_filename = curr_filename.replace(directory, "")[1:]
+                zf.write(curr_filename, tmp_filename)
 
 
 class TrxFile:
@@ -1065,9 +1062,11 @@ class TrxFile:
                 # This is for Unix
                 if os.name != 'nt' and folder.startswith(root.rstrip("/")):
                     folder = folder.replace(root, "").lstrip("/")
-                # These two are for Windows
-                elif os.path.isdir(folder) and os.path.basename(folder) in ['dpg', 'dpv', 'dps']:
+                # These three are for Windows
+                elif os.path.isdir(folder) and os.path.basename(folder) in ['dpv', 'dps', 'groups']:
                     folder = os.path.basename(folder)
+                elif os.path.basename(os.path.dirname(folder)) == 'dpg':
+                    folder = os.path.join('dpg', os.path.basename(folder))
                 else:
                     folder = ''
 
@@ -1581,6 +1580,7 @@ class TrxFile:
         save(trx, tmp_dir.name)
         trx.close()
         trx = load_from_directory(tmp_dir.name)
+        trx._uncompressed_folder_handle = tmp_dir
 
         sft.to_space(old_space)
         sft.to_origin(old_origin)

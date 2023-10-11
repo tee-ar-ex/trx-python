@@ -47,7 +47,7 @@ def convert_dsi_studio(in_dsi_tractogram, in_dsi_fa, out_tractogram,
                 f_out.writelines(f_in)
                 sft = load_tractogram('tmp.trk', 'same',
                                       bbox_valid_check=False)
-                os.remove('tmp.trk')
+            os.remove('tmp.trk')
     elif in_ext == '.trk':
         sft = load_tractogram(in_dsi_tractogram, 'same',
                               bbox_valid_check=False)
@@ -246,7 +246,7 @@ def validate_tractogram(in_tractogram, reference, out_tractogram,
 
     if not isinstance(tractogram_obj, StatefulTractogram):
         sft = tractogram_obj.to_sft()
-        tractogram_obj.close()
+        # tractogram_obj.close()
     else:
         sft = tractogram_obj
 
@@ -401,7 +401,6 @@ def generate_trx_from_scratch(reference, out_tractogram, positions_csv=False,
                 curr_filename = os.path.join(tmp_dir_name, 'dps', '{}.{}{}'.format(
                     os.path.basename(os.path.splitext(arg[0])[0]), dim, arg[1]))
                 curr_arr.tofile(curr_filename)
-
         if groups:
             os.mkdir(os.path.join(tmp_dir_name, 'groups'))
             for arg in groups:

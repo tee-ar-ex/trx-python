@@ -95,7 +95,8 @@ def main():
         for group, name, dtype in args.dpg:
             dtype_dict['dpg'][group] = {name: np.dtype(dtype)}
 
-    manipulate_trx_datatype(args.in_tractogram, args.out_tractogram, dtype_dict)
+    manipulate_trx_datatype(
+        args.in_tractogram, args.out_tractogram, dtype_dict)
 
 
 if __name__ == "__main__":
