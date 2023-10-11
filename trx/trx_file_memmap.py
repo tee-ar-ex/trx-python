@@ -1721,11 +1721,11 @@ class TrxFile:
         if resize:
             self.resize()
         sft = StatefulTractogram(
-            self.streamlines,
+            deepcopy(self.streamlines),
             space_attributes,
             Space.RASMM,
-            data_per_point=self.data_per_vertex,
-            data_per_streamline=self.data_per_streamline,
+            data_per_point=deepcopy(self.data_per_vertex),
+            data_per_streamline=deepcopy(self.data_per_streamline),
         )
         tmp_dict = self.get_dtype_dict()
         if 'dpv' in tmp_dict:
