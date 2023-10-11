@@ -311,7 +311,7 @@ def generate_trx_from_scratch(reference, out_tractogram, positions_csv=False,
                               space_str='rasmm', origin_str='nifti',
                               verify_invalid=True, dpv=[], dps=[],
                               groups=[], dpg=[]):
-    with get_trx_tmp_dir() as tmpdirname:
+    with get_trx_tmp_dir() as tmp_dir_name:
         if positions_csv:
             with open(positions_csv, newline='') as f:
                 reader = csv.reader(f)
@@ -360,20 +360,20 @@ def generate_trx_from_scratch(reference, out_tractogram, positions_csv=False,
             raise IOError('To use this script, you need at least 2'
                           'streamlines.')
 
-        with open(os.path.join(tmpdirname, "header.json"), "w") as out_json:
+        with open(os.path.join(tmp_dir_name, "header.json"), "w") as out_json:
             json.dump(header, out_json)
 
-        curr_filename = os.path.join(tmpdirname, 'positions.3.{}'.format(
+        curr_filename = os.path.join(tmp_dir_name, 'positions.3.{}'.format(
             positions_dtype))
         streamlines._data.astype(positions_dtype).tofile(
             curr_filename)
-        curr_filename = os.path.join(tmpdirname, 'offsets.{}'.format(
+        curr_filename = os.path.join(tmp_dir_name, 'offsets.{}'.format(
             offsets_dtype))
         streamlines._offsets.astype(offsets_dtype).tofile(
             curr_filename)
 
         if dpv:
-            os.mkdir(os.path.join(tmpdirname, 'dpv'))
+            os.mkdir(os.path.join(tmp_dir_name, 'dpv'))
             for arg in dpv:
                 curr_arr = np.squeeze(load_matrix_in_any_format(arg[0]).astype(
                     arg[1]))
@@ -383,12 +383,12 @@ def generate_trx_from_scratch(reference, out_tractogram, positions_csv=False,
                     raise IOError('Maximum of 2 dimensions for dpv/dps/dpg.')
                 dim = '' if curr_arr.ndim == 1 else '{}.'.format(
                     curr_arr.shape[-1])
-                curr_filename = os.path.join(tmpdirname, 'dpv', '{}.{}{}'.format(
+                curr_filename = os.path.join(tmp_dir_name, 'dpv', '{}.{}{}'.format(
                     os.path.basename(os.path.splitext(arg[0])[0]), dim, arg[1]))
                 curr_arr.tofile(curr_filename)
 
         if dps:
-            os.mkdir(os.path.join(tmpdirname, 'dps'))
+            os.mkdir(os.path.join(tmp_dir_name, 'dps'))
             for arg in dps:
                 curr_arr = np.squeeze(load_matrix_in_any_format(arg[0]).astype(
                     arg[1]))
@@ -398,12 +398,12 @@ def generate_trx_from_scratch(reference, out_tractogram, positions_csv=False,
                     raise IOError('Maximum of 2 dimensions for dpv/dps/dpg.')
                 dim = '' if curr_arr.ndim == 1 else '{}.'.format(
                     curr_arr.shape[-1])
-                curr_filename = os.path.join(tmpdirname, 'dps', '{}.{}{}'.format(
+                curr_filename = os.path.join(tmp_dir_name, 'dps', '{}.{}{}'.format(
                     os.path.basename(os.path.splitext(arg[0])[0]), dim, arg[1]))
                 curr_arr.tofile(curr_filename)
 
         if groups:
-            os.mkdir(os.path.join(tmpdirname, 'groups'))
+            os.mkdir(os.path.join(tmp_dir_name, 'groups'))
             for arg in groups:
                 curr_arr = load_matrix_in_any_format(arg[0]).astype(arg[1])
                 if arg[1] == 'bool':
@@ -412,15 +412,15 @@ def generate_trx_from_scratch(reference, out_tractogram, positions_csv=False,
                     raise IOError('Maximum of 2 dimensions for dpv/dps/dpg.')
                 dim = '' if curr_arr.ndim == 1 else '{}.'.format(
                     curr_arr.shape[-1])
-                curr_filename = os.path.join(tmpdirname, 'groups', '{}.{}{}'.format(
+                curr_filename = os.path.join(tmp_dir_name, 'groups', '{}.{}{}'.format(
                     os.path.basename(os.path.splitext(arg[0])[0]), dim, arg[1]))
                 curr_arr.tofile(curr_filename)
 
         if dpg:
-            os.mkdir(os.path.join(tmpdirname, 'dpg'))
+            os.mkdir(os.path.join(tmp_dir_name, 'dpg'))
             for arg in dpg:
-                if not os.path.isdir(os.path.join(tmpdirname, 'dpg', arg[0])):
-                    os.mkdir(os.path.join(tmpdirname, 'dpg', arg[0]))
+                if not os.path.isdir(os.path.join(tmp_dir_name, 'dpg', arg[0])):
+                    os.mkdir(os.path.join(tmp_dir_name, 'dpg', arg[0]))
                 curr_arr = load_matrix_in_any_format(arg[1]).astype(arg[2])
                 if arg[1] == 'bool':
                     arg[1] = 'bit'
@@ -430,11 +430,11 @@ def generate_trx_from_scratch(reference, out_tractogram, positions_csv=False,
                     curr_arr = curr_arr.reshape((1,))
                 dim = '' if curr_arr.ndim == 1 else '{}.'.format(
                     curr_arr.shape[-1])
-                curr_filename = os.path.join(tmpdirname, 'dpg', arg[0], '{}.{}{}'.format(
+                curr_filename = os.path.join(tmp_dir_name, 'dpg', arg[0], '{}.{}{}'.format(
                     os.path.basename(os.path.splitext(arg[1])[0]), dim, arg[2]))
                 curr_arr.tofile(curr_filename)
 
-        trx = tmm.load(tmpdirname)
+        trx = tmm.load(tmp_dir_name)
         tmm.save(trx, out_tractogram)
         trx.close()
 
