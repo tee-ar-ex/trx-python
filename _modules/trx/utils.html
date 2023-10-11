@@ -378,7 +378,7 @@ document.write(`
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">memmap</span><span class="p">):</span>
         <span class="k">del</span> <span class="n">obj</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Object to be close or deleted must be np.memmap&#39;</span><span class="p">)</span></div>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Object to be close or deleted must be np.memmap&#39;</span><span class="p">)</span></div>
 
 
 
@@ -795,7 +795,7 @@ document.write(`
 <span class="sd">    trx : Tractogram</span>
 <span class="sd">        Tractogram to verify.</span>
 <span class="sd">    dict_dtype : dict</span>
-<span class="sd">        Dictionary containing the dtype to verify.</span>
+<span class="sd">        Dictionary containing all elements dtype to verify.</span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    output : bool</span>

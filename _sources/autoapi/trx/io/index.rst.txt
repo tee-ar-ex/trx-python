@@ -13,7 +13,7 @@ Functions
 
 .. autoapisummary::
 
-   trx.io.get_trx_tmpdir
+   trx.io.get_trx_tmp_dir
    trx.io.load_sft_with_reference
    trx.io.load
    trx.io.save
@@ -33,7 +33,7 @@ Attributes
 
    
 
-.. py:function:: get_trx_tmpdir()
+.. py:function:: get_trx_tmp_dir()
 
 
 .. py:function:: load_sft_with_reference(filepath, reference=None, bbox_check=True)

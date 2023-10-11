@@ -355,9 +355,9 @@ document.write(`
 <span class="kn">from</span> <span class="nn">trx.utils</span> <span class="kn">import</span> <span class="n">split_name_with_gz</span>
 
 
-<div class="viewcode-block" id="get_trx_tmpdir">
-<a class="viewcode-back" href="../../autoapi/trx/io/index.html#trx.io.get_trx_tmpdir">[docs]</a>
-<span class="k">def</span> <span class="nf">get_trx_tmpdir</span><span class="p">():</span>
+<div class="viewcode-block" id="get_trx_tmp_dir">
+<a class="viewcode-back" href="../../autoapi/trx/io/index.html#trx.io.get_trx_tmp_dir">[docs]</a>
+<span class="k">def</span> <span class="nf">get_trx_tmp_dir</span><span class="p">():</span>
     <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;TRX_TMPDIR&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;TRX_TMPDIR&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;use_working_dir&#39;</span><span class="p">:</span>
             <span class="n">trx_tmp_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>

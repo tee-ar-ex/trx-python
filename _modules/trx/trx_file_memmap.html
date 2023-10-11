@@ -355,7 +355,7 @@ document.write(`
 <span class="kn">from</span> <span class="nn">nibabel.streamlines.tractogram</span> <span class="kn">import</span> <span class="n">Tractogram</span><span class="p">,</span> <span class="n">LazyTractogram</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">trx.io</span> <span class="kn">import</span> <span class="n">get_trx_tmpdir</span>
+<span class="kn">from</span> <span class="nn">trx.io</span> <span class="kn">import</span> <span class="n">get_trx_tmp_dir</span>
 <span class="kn">from</span> <span class="nn">trx.utils</span> <span class="kn">import</span> <span class="p">(</span><span class="n">append_generator_to_dict</span><span class="p">,</span>
                        <span class="n">close_or_delete_mmap</span><span class="p">,</span>
                        <span class="n">convert_data_dict_to_tractogram</span><span class="p">,</span>
@@ -367,7 +367,7 @@ document.write(`
 <a class="viewcode-back" href="../../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap.dipy_available">[docs]</a>
     <span class="n">dipy_available</span> <span class="o">=</span> <span class="kc">True</span></div>
 
-<span class="k">except</span><span class="p">:</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">dipy_available</span> <span class="o">=</span> <span class="kc">False</span>
 
 
@@ -592,10 +592,10 @@ document.write(`
                     <span class="k">break</span>
         <span class="k">if</span> <span class="n">was_compressed</span><span class="p">:</span>
             <span class="k">with</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">input_obj</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">zf</span><span class="p">:</span>
-                <span class="n">tmpdir</span> <span class="o">=</span> <span class="n">get_trx_tmpdir</span><span class="p">()</span>
-                <span class="n">zf</span><span class="o">.</span><span class="n">extractall</span><span class="p">(</span><span class="n">tmpdir</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-                <span class="n">trx</span> <span class="o">=</span> <span class="n">load_from_directory</span><span class="p">(</span><span class="n">tmpdir</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-                <span class="n">trx</span><span class="o">.</span><span class="n">_uncompressed_folder_handle</span> <span class="o">=</span> <span class="n">tmpdir</span>
+                <span class="n">tmp_dir</span> <span class="o">=</span> <span class="n">get_trx_tmp_dir</span><span class="p">()</span>
+                <span class="n">zf</span><span class="o">.</span><span class="n">extractall</span><span class="p">(</span><span class="n">tmp_dir</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                <span class="n">trx</span> <span class="o">=</span> <span class="n">load_from_directory</span><span class="p">(</span><span class="n">tmp_dir</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                <span class="n">trx</span><span class="o">.</span><span class="n">_uncompressed_folder_handle</span> <span class="o">=</span> <span class="n">tmp_dir</span>
                 <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
                     <span class="s2">&quot;File was compressed, call the close() function before&quot;</span>
                     <span class="s2">&quot;exiting.&quot;</span>
@@ -917,20 +917,15 @@ document.write(`
 <span class="sd">        compression_standard -- The compression standard to use, as defined by</span>
 <span class="sd">            the ZipFile library</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">filename</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">filename</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span>
-        <span class="s2">&quot;.zip&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;.trx&quot;</span><span class="p">,</span>
-    <span class="p">]:</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">ext</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;.zip&quot;</span><span class="p">,</span> <span class="s2">&quot;.trx&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">]:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unsupported extension.&quot;</span><span class="p">)</span>
 
     <span class="n">copy_trx</span> <span class="o">=</span> <span class="n">trx</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">()</span>
     <span class="n">copy_trx</span><span class="o">.</span><span class="n">resize</span><span class="p">()</span>
 
     <span class="n">tmp_dir_name</span> <span class="o">=</span> <span class="n">copy_trx</span><span class="o">.</span><span class="n">_uncompressed_folder_handle</span><span class="o">.</span><span class="n">name</span>
-    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">filename</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">filename</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span>
-        <span class="s2">&quot;.zip&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;.trx&quot;</span><span class="p">,</span>
-    <span class="p">]:</span>
+    <span class="k">if</span> <span class="n">ext</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;.zip&quot;</span><span class="p">,</span> <span class="s2">&quot;.trx&quot;</span><span class="p">]:</span>
         <span class="n">zip_from_folder</span><span class="p">(</span><span class="n">tmp_dir_name</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">compression_standard</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
@@ -1153,7 +1148,7 @@ document.write(`
 <span class="sd">        Returns</span>
 <span class="sd">            A deepcopied TrxFile of the current TrxFile</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">tmp_dir</span> <span class="o">=</span> <span class="n">get_trx_tmpdir</span><span class="p">()</span>
+        <span class="n">tmp_dir</span> <span class="o">=</span> <span class="n">get_trx_tmp_dir</span><span class="p">()</span>
         <span class="n">out_json</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp_dir</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;header.json&quot;</span><span class="p">),</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
         <span class="n">tmp_header</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">)</span>
 
@@ -1339,7 +1334,7 @@ document.write(`
 <span class="sd">            An empty TrxFile preallocated with a certain size</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">trx</span> <span class="o">=</span> <span class="n">TrxFile</span><span class="p">()</span>
-        <span class="n">tmp_dir</span> <span class="o">=</span> <span class="n">get_trx_tmpdir</span><span class="p">()</span>
+        <span class="n">tmp_dir</span> <span class="o">=</span> <span class="n">get_trx_tmp_dir</span><span class="p">()</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Temporary folder for memmaps: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tmp_dir</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
 
         <span class="n">trx</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">&quot;NB_VERTICES&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nb_vertices</span>
@@ -2031,10 +2026,10 @@ document.write(`
                 <span class="n">dtype_to_use</span><span class="p">)</span>
 
         <span class="c1"># For safety and for RAM, convert the whole object to memmaps</span>
-        <span class="n">tmpdir</span> <span class="o">=</span> <span class="n">get_trx_tmpdir</span><span class="p">()</span>
-        <span class="n">save</span><span class="p">(</span><span class="n">trx</span><span class="p">,</span> <span class="n">tmpdir</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-        <span class="n">trx</span> <span class="o">=</span> <span class="n">load_from_directory</span><span class="p">(</span><span class="n">tmpdir</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-        <span class="n">trx</span><span class="o">.</span><span class="n">_uncompressed_folder_handle</span> <span class="o">=</span> <span class="n">tmpdir</span>
+        <span class="n">tmp_dir</span> <span class="o">=</span> <span class="n">get_trx_tmp_dir</span><span class="p">()</span>
+        <span class="n">save</span><span class="p">(</span><span class="n">trx</span><span class="p">,</span> <span class="n">tmp_dir</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">trx</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">trx</span> <span class="o">=</span> <span class="n">load_from_directory</span><span class="p">(</span><span class="n">tmp_dir</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
         <span class="n">sft</span><span class="o">.</span><span class="n">to_space</span><span class="p">(</span><span class="n">old_space</span><span class="p">)</span>
         <span class="n">sft</span><span class="o">.</span><span class="n">to_origin</span><span class="p">(</span><span class="n">old_origin</span><span class="p">)</span>
@@ -2103,10 +2098,11 @@ document.write(`
                 <span class="n">tractogram</span><span class="o">.</span><span class="n">data_per_streamline</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dtype_to_use</span><span class="p">)</span>
 
         <span class="c1"># For safety and for RAM, convert the whole object to memmaps</span>
-        <span class="n">tmpdir</span> <span class="o">=</span> <span class="n">get_trx_tmpdir</span><span class="p">()</span>
-        <span class="n">save</span><span class="p">(</span><span class="n">trx</span><span class="p">,</span> <span class="n">tmpdir</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-        <span class="n">trx</span> <span class="o">=</span> <span class="n">load_from_directory</span><span class="p">(</span><span class="n">tmpdir</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-        <span class="n">trx</span><span class="o">.</span><span class="n">_uncompressed_folder_handle</span> <span class="o">=</span> <span class="n">tmpdir</span>
+        <span class="n">tmp_dir</span> <span class="o">=</span> <span class="n">get_trx_tmp_dir</span><span class="p">()</span>
+        <span class="n">save</span><span class="p">(</span><span class="n">trx</span><span class="p">,</span> <span class="n">tmp_dir</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">trx</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="n">trx</span> <span class="o">=</span> <span class="n">load_from_directory</span><span class="p">(</span><span class="n">tmp_dir</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
         <span class="k">del</span> <span class="n">tmp_streamlines</span>
 
         <span class="k">return</span> <span class="n">trx</span></div>
@@ -2220,7 +2216,7 @@ document.write(`
             <span class="k">try</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_uncompressed_folder_handle</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span>
             <span class="k">except</span> <span class="ne">PermissionError</span><span class="p">:</span>
-                <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Windows PermissionError, temporary directory </span><span class="si">{}</span><span class="s2">&quot;</span> <span class="o">+</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Windows PermissionError, temporary directory </span><span class="si">{}</span><span class="s2">&quot;</span>
                               <span class="s2">&quot;was not deleted!&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_uncompressed_folder_handle</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Deleted memmaps and intialized empty TrxFile.&quot;</span><span class="p">)</span></div>
