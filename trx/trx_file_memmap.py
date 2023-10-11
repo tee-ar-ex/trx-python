@@ -18,7 +18,7 @@ from nibabel.streamlines.trk import TrkFile
 from nibabel.streamlines.tractogram import Tractogram, LazyTractogram
 import numpy as np
 
-from trx.io import get_trx_tmpdir
+from trx.io import get_trx_tmp_dir
 from trx.utils import (append_generator_to_dict,
                        close_or_delete_mmap,
                        convert_data_dict_to_tractogram,
@@ -229,7 +229,7 @@ def load(input_obj: str, check_dpg: bool = True) -> Type["TrxFile"]:
                     break
         if was_compressed:
             with zipfile.ZipFile(input_obj, "r") as zf:
-                tmpdir = get_trx_tmpdir()
+                tmpdir = get_trx_tmp_dir()
                 zf.extractall(tmpdir.name)
                 trx = load_from_directory(tmpdir.name)
                 trx._uncompressed_folder_handle = tmpdir
@@ -740,7 +740,7 @@ class TrxFile:
         Returns
             A deepcopied TrxFile of the current TrxFile
         """
-        tmp_dir = get_trx_tmpdir()
+        tmp_dir = get_trx_tmp_dir()
         out_json = open(os.path.join(tmp_dir.name, "header.json"), "w")
         tmp_header = deepcopy(self.header)
 
@@ -917,7 +917,7 @@ class TrxFile:
             An empty TrxFile preallocated with a certain size
         """
         trx = TrxFile()
-        tmp_dir = get_trx_tmpdir()
+        tmp_dir = get_trx_tmp_dir()
         logging.info("Temporary folder for memmaps: {}".format(tmp_dir.name))
 
         trx.header["NB_VERTICES"] = nb_vertices
@@ -1582,7 +1582,7 @@ class TrxFile:
                 dtype_to_use)
 
         # For safety and for RAM, convert the whole object to memmaps
-        tmpdir = get_trx_tmpdir()
+        tmpdir = get_trx_tmp_dir()
         save(trx, tmpdir.name)
         trx = load_from_directory(tmpdir.name)
         trx._uncompressed_folder_handle = tmpdir
@@ -1651,7 +1651,7 @@ class TrxFile:
                 tractogram.data_per_streamline[key].astype(dtype_to_use)
 
         # For safety and for RAM, convert the whole object to memmaps
-        tmpdir = get_trx_tmpdir()
+        tmpdir = get_trx_tmp_dir()
         save(trx, tmpdir.name)
         trx = load_from_directory(tmpdir.name)
         trx._uncompressed_folder_handle = tmpdir
