@@ -19,9 +19,10 @@ from nibabel.streamlines.tractogram import Tractogram, LazyTractogram
 import numpy as np
 
 from trx.io import get_trx_tmpdir
-from trx.utils import (get_reference_info_wrapper,
+from trx.utils import (append_generator_to_dict,
+                       close_or_delete_mmap,
                        convert_data_dict_to_tractogram,
-                       append_generator_to_dict)
+                       get_reference_info_wrapper)
 
 try:
     import dipy
@@ -1736,6 +1737,22 @@ class TrxFile:
     def close(self) -> None:
         """Cleanup on-disk temporary folder and initialize an empty TrxFile"""
         if self._uncompressed_folder_handle is not None:
+            close_or_delete_mmap(self.streamlines)
+
+            # # Close or delete attributes in dictionaries
+            for key in self.data_per_vertex:
+                close_or_delete_mmap(self.data_per_vertex[key])
+
+            for key in self.data_per_streamline:
+                close_or_delete_mmap(self.data_per_streamline[key])
+
+            for key in self.groups:
+                close_or_delete_mmap(self.groups[key])
+
+            for key in self.data_per_group:
+                for dpg in self.data_per_group[key]:
+                    close_or_delete_mmap(self.data_per_group[key][dpg])
+
             try:
                 self._uncompressed_folder_handle.cleanup()
             except PermissionError:
