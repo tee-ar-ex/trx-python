@@ -15,7 +15,7 @@ except ImportError:
 
 from trx.fetcher import (get_testing_files_dict,
                          fetch_data, get_home)
-from trx.io import get_trx_tmpdir
+from trx.io import get_trx_tmp_dir
 import trx.trx_file_memmap as tmm
 from trx.workflows import (convert_dsi_studio,
                            convert_tractogram,
@@ -26,7 +26,7 @@ from trx.workflows import (convert_dsi_studio,
 
 # If they already exist, this only takes 5 seconds (check md5sum)
 fetch_data(get_testing_files_dict(), keys=['DSI.zip', 'trx_from_scratch.zip'])
-tmp_dir = get_trx_tmpdir()
+tmp_dir = get_trx_tmp_dir()
 
 
 def test_help_option_convert_dsi(script_runner):

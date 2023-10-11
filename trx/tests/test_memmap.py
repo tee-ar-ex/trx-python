@@ -14,14 +14,14 @@ try:
 except ImportError:
     dipy_available = False
 
-from trx.io import get_trx_tmpdir
+from trx.io import get_trx_tmp_dir
 import trx.trx_file_memmap as tmm
 from trx.fetcher import (get_testing_files_dict,
                          fetch_data, get_home)
 
 
 fetch_data(get_testing_files_dict(), keys=['memmap_test_data.zip'])
-tmp_dir = get_trx_tmpdir()
+tmp_dir = get_trx_tmp_dir()
 
 
 @pytest.mark.parametrize(
@@ -129,7 +129,7 @@ def test__dichotomic_search(arr, l_bound, r_bound, expected):
 def test__create_memmap(basename, create, expected):
     if create:
         # Need to create array before evaluating
-        with get_trx_tmpdir() as dirname:
+        with get_trx_tmp_dir() as dirname:
             filename = os.path.join(dirname, basename)
             fp = np.memmap(filename, dtype=np.int16, mode="w+", shape=(3, 4))
             fp[:] = expected[:]
@@ -138,7 +138,7 @@ def test__create_memmap(basename, create, expected):
             assert np.array_equal(mmarr, expected)
 
     else:
-        with get_trx_tmpdir() as dirname:
+        with get_trx_tmp_dir() as dirname:
             filename = os.path.join(dirname, basename)
             mmarr = tmm._create_memmap(filename=filename, shape=(0,),
                                        dtype=np.int16)

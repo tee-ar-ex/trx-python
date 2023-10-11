@@ -18,7 +18,7 @@ from nibabel.streamlines.trk import TrkFile
 from nibabel.streamlines.tractogram import Tractogram, LazyTractogram
 import numpy as np
 
-from trx.io import get_trx_tmpdir
+from trx.io import get_trx_tmp_dir
 from trx.utils import (append_generator_to_dict,
                        close_or_delete_mmap,
                        convert_data_dict_to_tractogram,
@@ -27,7 +27,7 @@ from trx.utils import (append_generator_to_dict,
 try:
     import dipy
     dipy_available = True
-except:
+except ImportError:
     dipy_available = False
 
 
@@ -229,10 +229,10 @@ def load(input_obj: str, check_dpg: bool = True) -> Type["TrxFile"]:
                     break
         if was_compressed:
             with zipfile.ZipFile(input_obj, "r") as zf:
-                tmpdir = get_trx_tmpdir()
-                zf.extractall(tmpdir.name)
-                trx = load_from_directory(tmpdir.name)
-                trx._uncompressed_folder_handle = tmpdir
+                tmp_dir = get_trx_tmp_dir()
+                zf.extractall(tmp_dir.name)
+                trx = load_from_directory(tmp_dir.name)
+                trx._uncompressed_folder_handle = tmp_dir
                 logging.info(
                     "File was compressed, call the close() function before"
                     "exiting."
@@ -542,20 +542,15 @@ def save(
         compression_standard -- The compression standard to use, as defined by
             the ZipFile library
     """
-    if os.path.splitext(filename)[1] and not os.path.splitext(filename)[1] in [
-        ".zip",
-        ".trx",
-    ]:
+    _, ext = os.path.splitext(filename)
+    if ext not in [".zip", ".trx", ""]:
         raise ValueError("Unsupported extension.")
 
     copy_trx = trx.deepcopy()
     copy_trx.resize()
 
     tmp_dir_name = copy_trx._uncompressed_folder_handle.name
-    if os.path.splitext(filename)[1] and os.path.splitext(filename)[1] in [
-        ".zip",
-        ".trx",
-    ]:
+    if ext in [".zip", ".trx"]:
         zip_from_folder(tmp_dir_name, filename, compression_standard)
     else:
         if os.path.isdir(filename):
@@ -740,7 +735,7 @@ class TrxFile:
         Returns
             A deepcopied TrxFile of the current TrxFile
         """
-        tmp_dir = get_trx_tmpdir()
+        tmp_dir = get_trx_tmp_dir()
         out_json = open(os.path.join(tmp_dir.name, "header.json"), "w")
         tmp_header = deepcopy(self.header)
 
@@ -917,7 +912,7 @@ class TrxFile:
             An empty TrxFile preallocated with a certain size
         """
         trx = TrxFile()
-        tmp_dir = get_trx_tmpdir()
+        tmp_dir = get_trx_tmp_dir()
         logging.info("Temporary folder for memmaps: {}".format(tmp_dir.name))
 
         trx.header["NB_VERTICES"] = nb_vertices
@@ -1582,10 +1577,10 @@ class TrxFile:
                 dtype_to_use)
 
         # For safety and for RAM, convert the whole object to memmaps
-        tmpdir = get_trx_tmpdir()
-        save(trx, tmpdir.name)
-        trx = load_from_directory(tmpdir.name)
-        trx._uncompressed_folder_handle = tmpdir
+        tmp_dir = get_trx_tmp_dir()
+        save(trx, tmp_dir.name)
+        trx.close()
+        trx = load_from_directory(tmp_dir.name)
 
         sft.to_space(old_space)
         sft.to_origin(old_origin)
@@ -1651,10 +1646,11 @@ class TrxFile:
                 tractogram.data_per_streamline[key].astype(dtype_to_use)
 
         # For safety and for RAM, convert the whole object to memmaps
-        tmpdir = get_trx_tmpdir()
-        save(trx, tmpdir.name)
-        trx = load_from_directory(tmpdir.name)
-        trx._uncompressed_folder_handle = tmpdir
+        tmp_dir = get_trx_tmp_dir()
+        save(trx, tmp_dir.name)
+        trx.close()
+
+        trx = load_from_directory(tmp_dir.name)
         del tmp_streamlines
 
         return trx
@@ -1756,7 +1752,7 @@ class TrxFile:
             try:
                 self._uncompressed_folder_handle.cleanup()
             except PermissionError:
-                logging.error("Windows PermissionError, temporary directory {}" +
+                logging.error("Windows PermissionError, temporary directory {}"
                               "was not deleted!".format(self._uncompressed_folder_handle.name))
         self.__init__()
         logging.debug("Deleted memmaps and intialized empty TrxFile.")

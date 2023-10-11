@@ -4,37 +4,57 @@
 from copy import deepcopy
 import os
 import psutil
+from tempfile import TemporaryDirectory
+import zipfile
 
 import pytest
 import numpy as np
 from numpy.testing import assert_allclose
 
 try:
-    import dipy
+    from dipy.io.streamline import save_tractogram, load_tractogram
     dipy_available = True
 except ImportError:
     dipy_available = False
 
 import trx.trx_file_memmap as tmm
 from trx.trx_file_memmap import TrxFile
-from trx.io import load, save, get_trx_tmpdir
+from trx.io import load, save, get_trx_tmp_dir
 from trx.fetcher import (get_testing_files_dict,
                          fetch_data, get_home)
 
 
 fetch_data(get_testing_files_dict(), keys=['gold_standard.zip'])
-tmp_dir = get_trx_tmpdir()
+tmp_gs_dir = get_trx_tmp_dir()
+
+
+@pytest.mark.parametrize("path", [("gs.trk"), ("gs.tck"),
+                                  ("gs.vtk")])
+@pytest.mark.skipif(not dipy_available, reason='Dipy is not installed.')
+def test_seq_ops(path):
+    with TemporaryDirectory() as tmp_dir:
+        gs_dir = os.path.join(get_home(), 'gold_standard')
+        path = os.path.join(tmp_dir, path)
+
+        obj = load(os.path.join(gs_dir, 'gs.trx'),
+                   os.path.join(gs_dir, 'gs.nii'))
+        sft_1 = obj.to_sft()
+        save_tractogram(sft_1, path)
+        obj.close()
+        save_tractogram(sft_1, 'tmp.trx')
+
+        sft_2 = load_tractogram('tmp.trx', 'same')
 
 
 @pytest.mark.parametrize("path", [("gs.trx"), ("gs.trk"), ("gs.tck"),
                                   ("gs.vtk")])
 @pytest.mark.skipif(not dipy_available, reason='Dipy is not installed.')
 def test_load_vox(path):
-    dir = os.path.join(get_home(), 'gold_standard')
-    path = os.path.join(dir, path)
+    gs_dir = os.path.join(get_home(), 'gold_standard')
+    path = os.path.join(gs_dir, path)
     coord = np.loadtxt(os.path.join(get_home(), 'gold_standard',
                                     'gs_vox_space.txt'))
-    obj = load(path, os.path.join(dir, 'gs.nii'))
+    obj = load(path, os.path.join(gs_dir, 'gs.nii'))
 
     sft = obj.to_sft() if isinstance(obj, TrxFile) else obj
     sft.to_vox()
@@ -48,11 +68,11 @@ def test_load_vox(path):
                                   ("gs.vtk")])
 @pytest.mark.skipif(not dipy_available, reason='Dipy is not installed.')
 def test_load_voxmm(path):
-    dir = os.path.join(get_home(), 'gold_standard')
-    path = os.path.join(dir, path)
+    gs_dir = os.path.join(get_home(), 'gold_standard')
+    path = os.path.join(gs_dir, path)
     coord = np.loadtxt(os.path.join(get_home(), 'gold_standard',
                                     'gs_voxmm_space.txt'))
-    obj = load(path, os.path.join(dir, 'gs.nii'))
+    obj = load(path, os.path.join(gs_dir, 'gs.nii'))
 
     sft = obj.to_sft() if isinstance(obj, TrxFile) else obj
     sft.to_voxmm()
@@ -65,33 +85,33 @@ def test_load_voxmm(path):
 @pytest.mark.parametrize("path", [("gs.trk"), ("gs.trx"), ("gs_fldr.trx")])
 @pytest.mark.skipif(not dipy_available, reason='Dipy is not installed.')
 def test_multi_load_save_rasmm(path):
-    dir = os.path.join(get_home(), 'gold_standard')
+    gs_dir = os.path.join(get_home(), 'gold_standard')
     basename, ext = os.path.splitext(path)
-    out_path = os.path.join(tmp_dir.name, '{}_tmp{}'.format(basename, ext))
-    path = os.path.join(dir, path)
+    out_path = os.path.join(tmp_gs_dir.name, '{}_tmp{}'.format(basename, ext))
+    path = os.path.join(gs_dir, path)
     coord = np.loadtxt(os.path.join(get_home(), 'gold_standard',
                                     'gs_rasmm_space.txt'))
 
-    obj = load(path, os.path.join(dir, 'gs.nii'))
+    obj = load(path, os.path.join(gs_dir, 'gs.nii'))
     for _ in range(100):
         save(obj, out_path)
         if isinstance(obj, TrxFile):
             obj.close()
-        obj = load(out_path, os.path.join(dir, 'gs.nii'))
+        obj = load(out_path, os.path.join(gs_dir, 'gs.nii'))
 
     assert_allclose(obj.streamlines._data, coord, rtol=1e-04, atol=1e-06)
 
 
 @pytest.mark.parametrize("path", [("gs.trx"), ("gs_fldr.trx")])
 @pytest.mark.skipif(not dipy_available, reason='Dipy is not installed.')
-def test_delete_tmp_dir(path):
-    dir = os.path.join(get_home(), 'gold_standard')
-    path = os.path.join(dir, path)
+def test_delete_tmp_gs_dir(path):
+    gs_dir = os.path.join(get_home(), 'gold_standard')
+    path = os.path.join(gs_dir, path)
 
     trx1 = tmm.load(path)
     if os.path.isfile(path):
-        tmp_dir = deepcopy(trx1._uncompressed_folder_handle.name)
-        assert os.path.isdir(tmp_dir)
+        tmp_gs_dir = deepcopy(trx1._uncompressed_folder_handle.name)
+        assert os.path.isdir(tmp_gs_dir)
     sft = trx1.to_sft()
     trx1.close()
 
@@ -102,7 +122,7 @@ def test_delete_tmp_dir(path):
 
     # The folder trx representation does not need tmp files
     if os.path.isfile(path):
-        assert not os.path.isdir(tmp_dir)
+        assert not os.path.isdir(tmp_gs_dir)
 
     assert_allclose(sft.streamlines._data, coord_rasmm, rtol=1e-04, atol=1e-06)
 
@@ -124,8 +144,8 @@ def test_delete_tmp_dir(path):
 @pytest.mark.parametrize("path", [("gs.trx")])
 @pytest.mark.skipif(not dipy_available, reason='Dipy is not installed.')
 def test_close_tmp_files(path):
-    dir = os.path.join(get_home(), 'gold_standard')
-    path = os.path.join(dir, path)
+    gs_dir = os.path.join(get_home(), 'gold_standard')
+    path = os.path.join(gs_dir, path)
 
     trx = tmm.load(path)
     process = psutil.Process(os.getpid())
@@ -149,8 +169,8 @@ def test_close_tmp_files(path):
 
 @pytest.mark.parametrize("tmp_path", [("~"), ("use_working_dir")])
 def test_change_tmp_dir(tmp_path):
-    dir = os.path.join(get_home(), 'gold_standard')
-    path = os.path.join(dir, 'gs.trx')
+    gs_dir = os.path.join(get_home(), 'gold_standard')
+    path = os.path.join(gs_dir, 'gs.trx')
 
     if tmp_path == 'use_working_dir':
         os.environ['TRX_TMPDIR'] = 'use_working_dir'
@@ -158,12 +178,51 @@ def test_change_tmp_dir(tmp_path):
         os.environ['TRX_TMPDIR'] = os.path.expanduser(tmp_path)
 
     trx = tmm.load(path)
-    tmp_dir = deepcopy(trx._uncompressed_folder_handle.name)
+    tmp_gs_dir = deepcopy(trx._uncompressed_folder_handle.name)
 
     if tmp_path == 'use_working_dir':
-        assert os.path.dirname(tmp_dir) == os.getcwd()
+        assert os.path.dirname(tmp_gs_dir) == os.getcwd()
     else:
-        assert os.path.dirname(tmp_dir) == os.path.expanduser(tmp_path)
+        assert os.path.dirname(tmp_gs_dir) == os.path.expanduser(tmp_path)
 
     trx.close()
-    assert not os.path.isdir(tmp_dir)
+    assert not os.path.isdir(tmp_gs_dir)
+
+
+@pytest.mark.parametrize("path", [("gs.trx"), ("gs_fldr.trx")])
+def test_complete_dir_from_trx(path):
+    gs_dir = os.path.join(get_home(), 'gold_standard')
+    path = os.path.join(gs_dir, path)
+
+    trx = tmm.load(path)
+    if trx._uncompressed_folder_handle is None:
+        dir_to_check = path
+    else:
+        dir_to_check = trx._uncompressed_folder_handle.name
+
+    file_paths = []
+    for dirpath, _, filenames in os.walk(dir_to_check):
+        for filename in filenames:
+            full_path = os.path.join(dirpath, filename)
+            cut_path = full_path.split(dir_to_check)[1][1:]
+            file_paths.append(cut_path)
+
+    expected_content = ['offsets.uint32', 'positions.3.float32',
+                        'header.json', 'dps/random_coord.3.float32',
+                        'dpv/color_y.float32', 'dpv/color_x.float32',
+                        'dpv/color_z.float32']
+    assert set(file_paths) == set(expected_content)
+
+
+def test_complete_zip_from_trx():
+    gs_dir = os.path.join(get_home(), 'gold_standard')
+    path = os.path.join(gs_dir, 'gs.trx')
+
+    with zipfile.ZipFile(path, mode="r") as zf:
+        zip_file_list = zf.namelist()
+
+    expected_content = ['offsets.uint32', 'positions.3.float32',
+                        'header.json', 'dps/random_coord.3.float32',
+                        'dpv/color_y.float32', 'dpv/color_x.float32',
+                        'dpv/color_z.float32']
+    assert set(zip_file_list) == set(expected_content)

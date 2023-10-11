@@ -15,7 +15,7 @@ except ImportError:
 from trx.utils import split_name_with_gz
 
 
-def get_trx_tmpdir():
+def get_trx_tmp_dir():
     if os.getenv('TRX_TMPDIR') is not None:
         if os.getenv('TRX_TMPDIR') == 'use_working_dir':
             trx_tmp_dir = os.getcwd()
