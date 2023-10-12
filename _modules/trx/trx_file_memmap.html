@@ -916,13 +916,13 @@ document.write(`
 <span class="sd">            the ZipFile library</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">_</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">ext</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;.zip&quot;</span><span class="p">,</span> <span class="s2">&quot;.trx&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="n">ext</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;.zip&quot;</span><span class="p">,</span> <span class="s2">&quot;.trx&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">]:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unsupported extension.&quot;</span><span class="p">)</span>
 
     <span class="n">copy_trx</span> <span class="o">=</span> <span class="n">trx</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">()</span>
     <span class="n">copy_trx</span><span class="o">.</span><span class="n">resize</span><span class="p">()</span>
     <span class="n">tmp_dir_name</span> <span class="o">=</span> <span class="n">copy_trx</span><span class="o">.</span><span class="n">_uncompressed_folder_handle</span><span class="o">.</span><span class="n">name</span>
-    <span class="k">if</span> <span class="n">ext</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;.zip&quot;</span><span class="p">,</span> <span class="s2">&quot;.trx&quot;</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="n">ext</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;.zip&quot;</span><span class="p">,</span> <span class="s2">&quot;.trx&quot;</span><span class="p">]:</span>
         <span class="n">zip_from_folder</span><span class="p">(</span><span class="n">tmp_dir_name</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">compression_standard</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
