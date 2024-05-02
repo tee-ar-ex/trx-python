@@ -233,7 +233,7 @@ def load(input_obj: str, check_dpg: bool = True) -> Type["TrxFile"]:
                 trx = load_from_directory(tmp_dir.name)
                 trx._uncompressed_folder_handle = tmp_dir
                 logging.info(
-                    "File was compressed, call the close() function before"
+                    "File was compressed, call the close() function before "
                     "exiting."
                 )
         else:
@@ -293,7 +293,7 @@ def load_from_zip(filename: str) -> Type["TrxFile"]:
             size = zip_info.file_size / dtype_size
 
             if len(zip_info.extra):
-                mem_adress += 4
+                mem_adress -= len(zip_info.extra)
 
             if size.is_integer():
                 files_pointer_size[elem_filename] = mem_adress, int(size)
