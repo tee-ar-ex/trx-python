@@ -29,17 +29,17 @@ fetch_data(get_testing_files_dict(), keys=['DSI.zip', 'trx_from_scratch.zip'])
 
 
 def test_help_option_convert_dsi(script_runner):
-    ret = script_runner.run(['tff_convert_dsi_studio.py', '--help'])
+    ret = script_runner.run('tff_convert_dsi_studio.py', '--help')
     assert ret.success
 
 
 def test_help_option_convert(script_runner):
-    ret = script_runner.run(['tff_convert_tractogram.py', '--help'])
+    ret = script_runner.run('tff_convert_tractogram.py', '--help')
     assert ret.success
 
 
 def test_help_option_generate_trx_from_scratch(script_runner):
-    ret = script_runner.run(['tff_generate_trx_from_scratch.py', '--help'])
+    ret = script_runner.run('tff_generate_trx_from_scratch.py', '--help')
     assert ret.success
 
 
