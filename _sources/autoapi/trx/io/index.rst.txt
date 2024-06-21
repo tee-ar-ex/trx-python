@@ -1,15 +1,19 @@
-:py:mod:`trx.io`
-================
+trx.io
+======
 
 .. py:module:: trx.io
 
 
-Module Contents
----------------
+Attributes
+----------
+
+.. autoapisummary::
+
+   trx.io.dipy_available
 
 
 Functions
-~~~~~~~~~
+---------
 
 .. autoapisummary::
 
@@ -19,29 +23,18 @@ Functions
    trx.io.save
 
 
-
-Attributes
-~~~~~~~~~~
-
-.. autoapisummary::
-
-   trx.io.dipy_available
-
+Module Contents
+---------------
 
 .. py:data:: dipy_available
    :value: True
 
-   
 
 .. py:function:: get_trx_tmp_dir()
 
-
 .. py:function:: load_sft_with_reference(filepath, reference=None, bbox_check=True)
-
 
 .. py:function:: load(tractogram_filename, reference)
 
-
 .. py:function:: save(tractogram_obj, tractogram_filename, bbox_valid_check=False)
-
 

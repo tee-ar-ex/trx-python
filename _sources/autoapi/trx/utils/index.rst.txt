@@ -1,15 +1,19 @@
-:py:mod:`trx.utils`
-===================
+trx.utils
+=========
 
 .. py:module:: trx.utils
 
 
-Module Contents
----------------
+Attributes
+----------
+
+.. autoapisummary::
+
+   trx.utils.dipy_available
 
 
 Functions
-~~~~~~~~~
+---------
 
 .. autoapisummary::
 
@@ -28,19 +32,12 @@ Functions
    trx.utils.verify_trx_dtype
 
 
-
-Attributes
-~~~~~~~~~~
-
-.. autoapisummary::
-
-   trx.utils.dipy_available
-
+Module Contents
+---------------
 
 .. py:data:: dipy_available
    :value: True
 
-   
 
 .. py:function:: close_or_delete_mmap(obj)
 
@@ -440,7 +437,6 @@ Attributes
        !! processed by numpydoc !!
 
 .. py:function:: append_generator_to_dict(gen, data)
-
 
 .. py:function:: verify_trx_dtype(trx, dict_dtype)
 

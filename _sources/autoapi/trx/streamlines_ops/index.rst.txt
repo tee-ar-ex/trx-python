@@ -1,15 +1,20 @@
-:py:mod:`trx.streamlines_ops`
-=============================
+trx.streamlines_ops
+===================
 
 .. py:module:: trx.streamlines_ops
 
 
-Module Contents
----------------
+Attributes
+----------
+
+.. autoapisummary::
+
+   trx.streamlines_ops.MIN_NB_POINTS
+   trx.streamlines_ops.KEY_INDEX
 
 
 Functions
-~~~~~~~~~
+---------
 
 .. autoapisummary::
 
@@ -21,24 +26,14 @@ Functions
    trx.streamlines_ops.perform_streamlines_operation
 
 
-
-Attributes
-~~~~~~~~~~
-
-.. autoapisummary::
-
-   trx.streamlines_ops.MIN_NB_POINTS
-   trx.streamlines_ops.KEY_INDEX
-
+Module Contents
+---------------
 
 .. py:data:: MIN_NB_POINTS
    :value: 5
 
-   
 
 .. py:data:: KEY_INDEX
-
-   
 
 .. py:function:: intersection(left, right)
 

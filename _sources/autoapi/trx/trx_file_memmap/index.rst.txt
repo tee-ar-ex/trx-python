@@ -1,23 +1,27 @@
-:py:mod:`trx.trx_file_memmap`
-=============================
+trx.trx_file_memmap
+===================
 
 .. py:module:: trx.trx_file_memmap
 
 
-Module Contents
----------------
+Attributes
+----------
+
+.. autoapisummary::
+
+   trx.trx_file_memmap.dipy_available
+
 
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
    trx.trx_file_memmap.TrxFile
 
 
-
 Functions
-~~~~~~~~~
+---------
 
 .. autoapisummary::
 
@@ -36,19 +40,12 @@ Functions
    trx.trx_file_memmap.zip_from_folder
 
 
-
-Attributes
-~~~~~~~~~~
-
-.. autoapisummary::
-
-   trx.trx_file_memmap.dipy_available
-
+Module Contents
+---------------
 
 .. py:data:: dipy_available
    :value: True
 
-   
 
 .. py:function:: _append_last_offsets(nib_offsets: numpy.ndarray, nb_vertices: int) -> numpy.ndarray
 
@@ -441,7 +438,6 @@ Attributes
 
 .. py:class:: TrxFile(nb_vertices: Optional[int] = None, nb_streamlines: Optional[int] = None, init_as: Optional[Type[TrxFile]] = None, reference: Union[str, dict, Type[nibabel.nifti1.Nifti1Image], Type[nibabel.streamlines.trk.TrkFile], Type[nibabel.nifti1.Nifti1Header], None] = None)
 
-
    
    Core class of the TrxFile
 
@@ -462,35 +458,30 @@ Attributes
 
    ..
        !! processed by numpydoc !!
-   .. py:attribute:: header
-      :type: dict
 
-      
+   .. py:attribute:: header
+      :type:  dict
+
 
    .. py:attribute:: streamlines
-      :type: Type[nibabel.streamlines.array_sequence.ArraySequence]
+      :type:  Type[nibabel.streamlines.array_sequence.ArraySequence]
 
-      
 
    .. py:attribute:: groups
-      :type: dict
+      :type:  dict
 
-      
 
    .. py:attribute:: data_per_streamline
-      :type: dict
+      :type:  dict
 
-      
 
    .. py:attribute:: data_per_vertex
-      :type: dict
+      :type:  dict
 
-      
 
    .. py:attribute:: data_per_group
-      :type: dict
+      :type:  dict
 
-      
 
    .. py:method:: __str__() -> str
 
@@ -515,6 +506,7 @@ Attributes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: __len__() -> int
 
       
@@ -538,6 +530,7 @@ Attributes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: __getitem__(key) -> Any
 
       
@@ -560,6 +553,7 @@ Attributes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: __deepcopy__() -> Type[TrxFile]
 
@@ -589,6 +583,7 @@ Attributes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: _get_real_len() -> Tuple[int, int]
 
       
@@ -614,6 +609,7 @@ Attributes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: _copy_fixed_arrays_from(trx: Type[TrxFile], strs_start: int = 0, pts_start: int = 0, nb_strs_to_copy: Optional[int] = None) -> Tuple[int, int]
 
@@ -648,8 +644,10 @@ Attributes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: _initialize_empty_trx(nb_streamlines: int, nb_vertices: int, init_as: Optional[Type[TrxFile]] = None) -> Type[TrxFile]
       :staticmethod:
+
 
       
       Create on-disk memmaps of a certain size (preallocation)
@@ -680,6 +678,7 @@ Attributes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: _create_trx_from_pointer(dict_pointer_size: dict, root_zip: Optional[str] = None, root: Optional[str] = None) -> Type[TrxFile]
 
@@ -714,6 +713,7 @@ Attributes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: resize(nb_streamlines: Optional[int] = None, nb_vertices: Optional[int] = None, delete_dpg: bool = False) -> None
 
       
@@ -741,6 +741,7 @@ Attributes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: get_dtype_dict()
 
       
@@ -765,6 +766,7 @@ Attributes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: append(obj, extra_buffer: int = 0) -> None
 
@@ -794,6 +796,7 @@ Attributes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_group(key: str, keep_group: bool = True, copy_safe: bool = False) -> Type[TrxFile]
 
@@ -825,6 +828,7 @@ Attributes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: select(indices: numpy.ndarray, keep_group: bool = True, copy_safe: bool = False) -> Type[TrxFile]
 
       
@@ -855,8 +859,10 @@ Attributes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: from_lazy_tractogram(obj: [nibabel.streamlines.tractogram.LazyTractogram], reference, extra_buffer: int = 0, chunk_size: int = 10000, dtype_dict: dict = {'positions': np.float32, 'offsets': np.uint32, 'dpv': {}, 'dps': {}}) -> Type[TrxFile]
       :staticmethod:
+
 
       
       Append a TrxFile to another (support buffer)
@@ -885,8 +891,10 @@ Attributes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: from_sft(sft, dtype_dict={})
       :staticmethod:
+
 
       
       Generate a valid TrxFile from a StatefulTractogram
@@ -909,8 +917,10 @@ Attributes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: from_tractogram(tractogram, reference, dtype_dict={'positions': np.float32, 'offsets': np.uint32, 'dpv': {}, 'dps': {}})
       :staticmethod:
+
 
       
       Generate a valid TrxFile from a Nibabel Tractogram
@@ -932,6 +942,7 @@ Attributes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: to_tractogram(resize=False)
 
@@ -955,6 +966,7 @@ Attributes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: to_memory(resize: bool = False) -> Type[TrxFile]
 
@@ -984,6 +996,7 @@ Attributes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: to_sft(resize=False)
 
       
@@ -1006,6 +1019,7 @@ Attributes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: close() -> None
 

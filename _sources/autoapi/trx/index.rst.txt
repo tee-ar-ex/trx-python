@@ -1,21 +1,21 @@
-:py:mod:`trx`
-=============
+trx
+===
 
 .. py:module:: trx
 
 
 Submodules
 ----------
+
 .. toctree::
-   :titlesonly:
    :maxdepth: 1
 
-   fetcher/index.rst
-   io/index.rst
-   streamlines_ops/index.rst
-   trx_file_memmap/index.rst
-   utils/index.rst
-   viz/index.rst
-   workflows/index.rst
+   /autoapi/trx/fetcher/index
+   /autoapi/trx/io/index
+   /autoapi/trx/streamlines_ops/index
+   /autoapi/trx/trx_file_memmap/index
+   /autoapi/trx/utils/index
+   /autoapi/trx/viz/index
+   /autoapi/trx/workflows/index
 
 

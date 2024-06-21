@@ -1,15 +1,19 @@
-:py:mod:`trx.workflows`
-=======================
+trx.workflows
+=============
 
 .. py:module:: trx.workflows
 
 
-Module Contents
----------------
+Attributes
+----------
+
+.. autoapisummary::
+
+   trx.workflows.dipy_available
 
 
 Functions
-~~~~~~~~~
+---------
 
 .. autoapisummary::
 
@@ -23,41 +27,26 @@ Functions
    trx.workflows.manipulate_trx_datatype
 
 
-
-Attributes
-~~~~~~~~~~
-
-.. autoapisummary::
-
-   trx.workflows.dipy_available
-
+Module Contents
+---------------
 
 .. py:data:: dipy_available
    :value: True
 
-   
 
 .. py:function:: convert_dsi_studio(in_dsi_tractogram, in_dsi_fa, out_tractogram, remove_invalid=True, keep_invalid=False)
 
-
 .. py:function:: convert_tractogram(in_tractogram, out_tractogram, reference, pos_dtype='float32', offsets_dtype='uint32')
-
 
 .. py:function:: tractogram_simple_compare(in_tractograms, reference)
 
-
 .. py:function:: verify_header_compatibility(in_files)
-
 
 .. py:function:: tractogram_visualize_overlap(in_tractogram, reference, remove_invalid=True)
 
-
 .. py:function:: validate_tractogram(in_tractogram, reference, out_tractogram, remove_identical_streamlines=True, precision=1)
-
 
 .. py:function:: generate_trx_from_scratch(reference, out_tractogram, positions_csv=False, positions=False, offsets=False, positions_dtype='float32', offsets_dtype='uint64', space_str='rasmm', origin_str='nifti', verify_invalid=True, dpv=[], dps=[], groups=[], dpg=[])
 
-
 .. py:function:: manipulate_trx_datatype(in_filename, out_filename, dict_dtype)
-
 

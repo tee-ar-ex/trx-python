@@ -1,15 +1,11 @@
-:py:mod:`trx.fetcher`
-=====================
+trx.fetcher
+===========
 
 .. py:module:: trx.fetcher
 
 
-Module Contents
----------------
-
-
 Functions
-~~~~~~~~~
+---------
 
 .. autoapisummary::
 
@@ -19,6 +15,8 @@ Functions
    trx.fetcher.fetch_data
 
 
+Module Contents
+---------------
 
 .. py:function:: get_home()
 

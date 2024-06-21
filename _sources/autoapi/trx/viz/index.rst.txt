@@ -1,35 +1,31 @@
-:py:mod:`trx.viz`
-=================
+trx.viz
+=======
 
 .. py:module:: trx.viz
 
 
-Module Contents
----------------
-
-
-Functions
-~~~~~~~~~
-
-.. autoapisummary::
-
-   trx.viz.display
-
-
-
 Attributes
-~~~~~~~~~~
+----------
 
 .. autoapisummary::
 
    trx.viz.fury_available
 
 
+Functions
+---------
+
+.. autoapisummary::
+
+   trx.viz.display
+
+
+Module Contents
+---------------
+
 .. py:data:: fury_available
    :value: True
 
-   
 
 .. py:function:: display(volume, volume_affine=None, streamlines=None, title='FURY', display_bounds=True)
-
 
