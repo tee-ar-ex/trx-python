@@ -92,7 +92,8 @@ html_theme_options = {
             "name": "GitHub",
             # URL where the link will redirect
             "url": "https://github.com/tee-ar-ex",  # required
-            # Icon class (if "type": "fontawesome"), or path to local image (if "type": "local")
+            # Icon class (if "type": "fontawesome"), or path to local image
+            # (if "type": "local")
             "icon": "fab fa-github-square",
             # The type of image to be used (see below for details)
             "type": "fontawesome",

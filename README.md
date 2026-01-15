@@ -14,6 +14,30 @@ Or, to install from source:
     cd trx-python
     pip install .
 
+### Development
+
+For contributors, we use [spin](https://github.com/scientific-python/spin) to manage the development workflow. This ensures proper version detection when working with forks.
+
+**First-time setup (required for forks):**
+
+    git clone https://github.com/YOUR_USERNAME/trx-python.git
+    cd trx-python
+    pip install -e ".[dev]"
+    spin setup
+
+The `spin setup` command configures your fork by fetching version tags from the upstream repository. This is required for correct version detection with `setuptools_scm`.
+
+**Common development commands:**
+
+    spin setup      # Set up development environment (fetch upstream tags)
+    spin install    # Install package in development/editable mode
+    spin test       # Run all tests
+    spin test -m memmap  # Run tests matching 'memmap'
+    spin lint       # Run linting checks
+    spin docs       # Build documentation
+
+Run `spin` without arguments to see all available commands.
+
 ### Temporary Directory
 The TRX file format uses memmaps to limit RAM usage. When dealing with large files this means several gigabytes could be required on disk (instead of RAM). 
 

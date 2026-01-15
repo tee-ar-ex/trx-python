@@ -6,7 +6,7 @@ import tempfile
 import sys
 
 try:
-    import dipy
+    import dipy  # noqa: F401
     dipy_available = True
 except ImportError:
     dipy_available = False

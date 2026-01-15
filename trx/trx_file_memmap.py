@@ -24,7 +24,7 @@ from trx.utils import (append_generator_to_dict,
                        get_reference_info_wrapper)
 
 try:
-    import dipy
+    import dipy  # noqa: F401
     dipy_available = True
 except ImportError:
     dipy_available = False
@@ -350,6 +350,155 @@ def load_from_directory(directory: str) -> Type["TrxFile"]:
                                             root=directory)
 
 
+def _filter_empty_trx_files(trx_list: List["TrxFile"]) -> List["TrxFile"]:
+    """Remove empty TrxFiles from the list."""
+    return [curr_trx for curr_trx in trx_list if curr_trx.header["NB_STREAMLINES"] > 0]
+
+
+def _get_all_data_keys(trx_list: List["TrxFile"]) -> Tuple[set, set]:
+    """Get all dps and dpv keys from the TrxFile list."""
+    all_dps = []
+    all_dpv = []
+    for curr_trx in trx_list:
+        all_dps.extend(list(curr_trx.data_per_streamline.keys()))
+        all_dpv.extend(list(curr_trx.data_per_vertex.keys()))
+    return set(all_dps), set(all_dpv)
+
+
+def _check_space_attributes(trx_list: List["TrxFile"]) -> None:
+    """Verify that space attributes are consistent across TrxFiles."""
+    ref_trx = trx_list[0]
+    for curr_trx in trx_list[1:]:
+        if not np.allclose(
+            ref_trx.header["VOXEL_TO_RASMM"], curr_trx.header["VOXEL_TO_RASMM"]
+        ) or not np.array_equal(
+            ref_trx.header["DIMENSIONS"], curr_trx.header["DIMENSIONS"]
+        ):
+            raise ValueError("Wrong space attributes.")
+
+
+def _verify_dpv_coherence(trx_list: List["TrxFile"], all_dpv: set,
+                          ref_trx: "TrxFile", delete_dpv: bool) -> None:
+    """Verify dpv coherence across TrxFiles."""
+    for curr_trx in trx_list:
+        for key in all_dpv:
+            if (key not in ref_trx.data_per_vertex.keys() or
+                    key not in curr_trx.data_per_vertex.keys()):
+                if not delete_dpv:
+                    logging.debug(
+                        "{} dpv key does not exist in all TrxFile.".format(key)
+                    )
+                    raise ValueError(
+                        "TrxFile must be sharing identical dpv keys.")
+            elif (ref_trx.data_per_vertex[key]._data.dtype !=
+                  curr_trx.data_per_vertex[key]._data.dtype):
+                logging.debug(
+                    "{} dpv key is not declared with the same dtype "
+                    "in all TrxFile.".format(key)
+                )
+                raise ValueError("Shared dpv key, has different dtype.")
+
+
+def _verify_dps_coherence(trx_list: List["TrxFile"], all_dps: set,
+                          ref_trx: "TrxFile", delete_dps: bool) -> None:
+    """Verify dps coherence across TrxFiles."""
+    for curr_trx in trx_list:
+        for key in all_dps:
+            if (key not in ref_trx.data_per_streamline.keys() or
+                    key not in curr_trx.data_per_streamline.keys()):
+                if not delete_dps:
+                    logging.debug(
+                        "{} dps key does not exist in all TrxFile.".format(key)
+                    )
+                    raise ValueError(
+                        "TrxFile must be sharing identical dps keys.")
+            elif (ref_trx.data_per_streamline[key].dtype !=
+                  curr_trx.data_per_streamline[key].dtype):
+                logging.debug(
+                    "{} dps key is not declared with the same dtype "
+                    "in all TrxFile.".format(key)
+                )
+                raise ValueError("Shared dps key, has different dtype.")
+
+
+def _compute_groups_info(trx_list: List["TrxFile"]) -> Tuple[dict, dict]:
+    """Compute group length and dtype information."""
+    all_groups_len = {}
+    all_groups_dtype = {}
+
+    for trx_1 in trx_list:
+        for group_key in trx_1.groups.keys():
+            if group_key in all_groups_len:
+                all_groups_len[group_key] += len(trx_1.groups[group_key])
+            else:
+                all_groups_len[group_key] = len(trx_1.groups[group_key])
+
+            if (group_key in all_groups_dtype and
+                    trx_1.groups[group_key].dtype != all_groups_dtype[group_key]):
+                raise ValueError("Shared group key, has different dtype.")
+            else:
+                all_groups_dtype[group_key] = trx_1.groups[group_key].dtype
+
+    return all_groups_len, all_groups_dtype
+
+
+def _create_new_trx_for_concatenation(trx_list: List["TrxFile"], ref_trx: "TrxFile",
+                                      delete_dps: bool, delete_dpv: bool,
+                                      delete_groups: bool) -> "TrxFile":
+    """Create a new TrxFile for concatenation."""
+    nb_vertices = 0
+    nb_streamlines = 0
+    for curr_trx in trx_list:
+        curr_strs_len, curr_pts_len = curr_trx._get_real_len()
+        nb_streamlines += curr_strs_len
+        nb_vertices += curr_pts_len
+
+    new_trx = TrxFile(
+        nb_vertices=nb_vertices, nb_streamlines=nb_streamlines,
+        init_as=ref_trx
+    )
+    if delete_dps:
+        new_trx.data_per_streamline = {}
+    if delete_dpv:
+        new_trx.data_per_vertex = {}
+    if delete_groups:
+        new_trx.groups = {}
+
+    return new_trx
+
+
+def _setup_groups_for_concatenation(new_trx: "TrxFile", trx_list: List["TrxFile"],
+                                    all_groups_len: dict, all_groups_dtype: dict,
+                                    delete_groups: bool) -> None:
+    """Setup groups in the new TrxFile for concatenation."""
+    if delete_groups:
+        return
+
+    tmp_dir = new_trx._uncompressed_folder_handle.name
+
+    for group_key in all_groups_len.keys():
+        if not os.path.isdir(os.path.join(tmp_dir, "groups/")):
+            os.mkdir(os.path.join(tmp_dir, "groups/"))
+
+        dtype = all_groups_dtype[group_key]
+        group_filename = os.path.join(
+            tmp_dir, "groups/" "{}.{}".format(group_key, dtype.name)
+        )
+        group_len = all_groups_len[group_key]
+        new_trx.groups[group_key] = _create_memmap(
+            group_filename, mode="w+", shape=(group_len,), dtype=dtype
+        )
+
+        pos = 0
+        count = 0
+        for curr_trx in trx_list:
+            curr_len = len(curr_trx.groups[group_key])
+            new_trx.groups[group_key][pos: pos + curr_len] = \
+                curr_trx.groups[group_key] + count
+            pos += curr_len
+            count += curr_trx.header["NB_STREAMLINES"]
+
+
 def concatenate(
     trx_list: List["TrxFile"],
     delete_dpv: bool = False,
@@ -378,150 +527,41 @@ def concatenate(
         TrxFile representing the concatenated data
 
     """
-    trx_list = [
-        curr_trx for curr_trx in trx_list if curr_trx.header["NB_STREAMLINES"] > 0
-    ]
+    trx_list = _filter_empty_trx_files(trx_list)
     if len(trx_list) == 0:
         logging.warning("Inputs of concatenation were empty.")
         return TrxFile()
 
     ref_trx = trx_list[0]
-    all_dps = []
-    all_dpv = []
-    for curr_trx in trx_list:
-        all_dps.extend(list(curr_trx.data_per_streamline.keys()))
-        all_dpv.extend(list(curr_trx.data_per_vertex.keys()))
-    all_dps, all_dpv = set(all_dps), set(all_dpv)
+    all_dps, all_dpv = _get_all_data_keys(trx_list)
 
     if check_space_attributes:
-        for curr_trx in trx_list[1:]:
-            if not np.allclose(
-                ref_trx.header["VOXEL_TO_RASMM"], curr_trx.header["VOXEL_TO_RASMM"]
-            ) or not np.array_equal(
-                ref_trx.header["DIMENSIONS"], curr_trx.header["DIMENSIONS"]
-            ):
-                raise ValueError("Wrong space attributes.")
+        _check_space_attributes(trx_list)
 
     if preallocation and not delete_groups:
         raise ValueError(
-            "Groups are variables, cannot be handled with " "preallocation"
+            "Groups are variables, cannot be handled with preallocation"
         )
 
-    # Verifying the validity of fixed-size arrays, coherence between inputs
-    for curr_trx in trx_list:
-        for key in all_dpv:
-            if key not in ref_trx.data_per_vertex.keys() \
-                    or key not in curr_trx.data_per_vertex.keys():
-                if not delete_dpv:
-                    logging.debug(
-                        "{} dpv key does not exist in all TrxFile.".format(key)
-                    )
-                    raise ValueError(
-                        "TrxFile must be sharing identical dpv " "keys.")
-            elif (
-                ref_trx.data_per_vertex[key]._data.dtype
-                != curr_trx.data_per_vertex[key]._data.dtype
-            ):
-                logging.debug(
-                    "{} dpv key is not declared with the same dtype "
-                    "in all TrxFile.".format(key)
-                )
-                raise ValueError("Shared dpv key, has different dtype.")
+    _verify_dpv_coherence(trx_list, all_dpv, ref_trx, delete_dpv)
+    _verify_dps_coherence(trx_list, all_dps, ref_trx, delete_dps)
 
-    for curr_trx in trx_list:
-        for key in all_dps:
-            if key not in ref_trx.data_per_streamline.keys() \
-                    or key not in curr_trx.data_per_streamline.keys():
-                if not delete_dps:
-                    logging.debug(
-                        "{} dps key does not exist in all " "TrxFile.".format(
-                            key)
-                    )
-                    raise ValueError(
-                        "TrxFile must be sharing identical dps " "keys.")
-            elif (
-                ref_trx.data_per_streamline[key].dtype
-                != curr_trx.data_per_streamline[key].dtype
-            ):
-                logging.debug(
-                    "{} dps key is not declared with the same dtype "
-                    "in all TrxFile.".format(key)
-                )
-                raise ValueError("Shared dps key, has different dtype.")
+    all_groups_len, all_groups_dtype = _compute_groups_info(trx_list)
 
-    all_groups_len = {}
-    all_groups_dtype = {}
-    # Variable-size arrays do not have to exist in all TrxFile
-    if not delete_groups:
-        for trx_1 in trx_list:
-            for group_key in trx_1.groups.keys():
-                # Concatenating groups together
-                if group_key in all_groups_len:
-                    all_groups_len[group_key] += len(trx_1.groups[group_key])
-                else:
-                    all_groups_len[group_key] = len(trx_1.groups[group_key])
-                if (
-                    group_key in all_groups_dtype
-                    and trx_1.groups[group_key].dtype != all_groups_dtype[group_key]
-                ):
-                    raise ValueError("Shared group key, has different dtype.")
-                else:
-                    all_groups_dtype[group_key] = trx_1.groups[group_key].dtype
-
-    # Once the checks are done, actually concatenate
     to_concat_list = trx_list[1:] if preallocation else trx_list
     if not preallocation:
-        nb_vertices = 0
-        nb_streamlines = 0
-        for curr_trx in to_concat_list:
-            curr_strs_len, curr_pts_len = curr_trx._get_real_len()
-            nb_streamlines += curr_strs_len
-            nb_vertices += curr_pts_len
-
-        new_trx = TrxFile(
-            nb_vertices=nb_vertices, nb_streamlines=nb_streamlines,
-            init_as=ref_trx
+        new_trx = _create_new_trx_for_concatenation(
+            to_concat_list, ref_trx, delete_dps, delete_dpv, delete_groups
         )
-        if delete_dps:
-            new_trx.data_per_streamline = {}
-        if delete_dpv:
-            new_trx.data_per_vertex = {}
-        if delete_groups:
-            new_trx.groups = {}
-
-        tmp_dir = new_trx._uncompressed_folder_handle.name
-
-        # When memory is allocated on the spot, groups and data_per_group can
-        # be concatenated together
-        for group_key in all_groups_len.keys():
-            if not os.path.isdir(os.path.join(tmp_dir, "groups/")):
-                os.mkdir(os.path.join(tmp_dir, "groups/"))
-            dtype = all_groups_dtype[group_key]
-            group_filename = os.path.join(
-                tmp_dir, "groups/" "{}.{}".format(group_key, dtype.name)
-            )
-            group_len = all_groups_len[group_key]
-            new_trx.groups[group_key] = _create_memmap(
-                group_filename, mode="w+", shape=(group_len,), dtype=dtype
-            )
-            if delete_groups:
-                continue
-            pos = 0
-            count = 0
-            for curr_trx in trx_list:
-                curr_len = len(curr_trx.groups[group_key])
-                new_trx.groups[group_key][pos: pos + curr_len] = \
-                    curr_trx.groups[group_key] + count
-                pos += curr_len
-                count += curr_trx.header["NB_STREAMLINES"]
-
+        _setup_groups_for_concatenation(
+            new_trx, trx_list, all_groups_len, all_groups_dtype, delete_groups
+        )
         strs_end, pts_end = 0, 0
     else:
         new_trx = ref_trx
         strs_end, pts_end = new_trx._get_real_len()
 
     for curr_trx in to_concat_list:
-        # Copy the TrxFile fixed-size info (the right chunk)
         strs_end, pts_end = new_trx._copy_fixed_arrays_from(
             curr_trx, strs_start=strs_end, pts_start=pts_end
         )
@@ -725,7 +765,7 @@ class TrxFile:
     def __deepcopy__(self) -> Type["TrxFile"]:
         return self.deepcopy()
 
-    def deepcopy(self) -> Type["TrxFile"]:
+    def deepcopy(self) -> Type["TrxFile"]:  # noqa: C901
         """Create a deepcopy of the TrxFile
 
         Returns
@@ -892,9 +932,11 @@ class TrxFile:
         return strs_end, pts_end
 
     @staticmethod
-    def _initialize_empty_trx(
-            nb_streamlines: int, nb_vertices: int,
-            init_as: Optional[Type["TrxFile"]] = None) -> Type["TrxFile"]:
+    def _initialize_empty_trx(  # noqa: C901
+        nb_streamlines: int,
+        nb_vertices: int,
+        init_as: Optional[Type["TrxFile"]] = None,
+    ) -> Type["TrxFile"]:
         """Create on-disk memmaps of a certain size (preallocation)
 
         Keyword arguments:
@@ -1022,7 +1064,7 @@ class TrxFile:
 
         return trx
 
-    def _create_trx_from_pointer(
+    def _create_trx_from_pointer(  # noqa: C901
         header: dict,
         dict_pointer_size: dict,
         root_zip: Optional[str] = None,
@@ -1062,7 +1104,10 @@ class TrxFile:
                 if os.name != 'nt' and folder.startswith(root.rstrip("/")):
                     folder = folder.replace(root, "").lstrip("/")
                 # These three are for Windows
-                elif os.path.isdir(folder) and os.path.basename(folder) in ['dpv', 'dps', 'groups']:
+                elif (
+                    os.path.isdir(folder)
+                    and os.path.basename(folder) in ['dpv', 'dps', 'groups']
+                ):
                     folder = os.path.basename(folder)
                 elif os.path.basename(os.path.dirname(folder)) == 'dpg':
                     folder = os.path.join('dpg', os.path.basename(folder))
@@ -1164,7 +1209,7 @@ class TrxFile:
             trx.data_per_vertex[dpv_key]._lengths = lengths
         return trx
 
-    def resize(
+    def resize(  # noqa: C901
         self,
         nb_streamlines: Optional[int] = None,
         nb_vertices: Optional[int] = None,
@@ -1751,7 +1796,10 @@ class TrxFile:
             try:
                 self._uncompressed_folder_handle.cleanup()
             except PermissionError:
-                logging.error("Windows PermissionError, temporary directory {}"
-                              "was not deleted!".format(self._uncompressed_folder_handle.name))
+                logging.error(
+                    "Windows PermissionError, temporary directory %s was not "
+                    "deleted!",
+                    self._uncompressed_folder_handle.name,
+                )
         self.__init__()
         logging.debug("Deleted memmaps and intialized empty TrxFile.")

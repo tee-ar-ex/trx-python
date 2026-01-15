@@ -18,7 +18,7 @@ except ImportError:
 
 import trx.trx_file_memmap as tmm
 from trx.trx_file_memmap import TrxFile
-from trx.io import load, save, get_trx_tmp_dir
+from trx.io import load, save
 from trx.fetcher import (get_testing_files_dict,
                          fetch_data, get_home)
 
@@ -41,7 +41,7 @@ def test_seq_ops_sft(path):
         obj.close()
         save_tractogram(sft_1, os.path.join(tmp_dir, 'tmp.trk'))
 
-        sft_2 = load_tractogram(os.path.join(tmp_dir, 'tmp.trk'), 'same')
+        _ = load_tractogram(os.path.join(tmp_dir, 'tmp.trk'), 'same')
 
 
 def test_seq_ops_trx():

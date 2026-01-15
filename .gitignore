@@ -136,3 +136,5 @@ dmypy.json
 tmp/
 CLAUDE.md
 claude.md
+agents.md
+AGENTS.md

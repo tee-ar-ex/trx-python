@@ -66,7 +66,7 @@ def split_name_with_gz(filename):
     return base, ext
 
 
-def get_reference_info_wrapper(reference):
+def get_reference_info_wrapper(reference):  # noqa: C901
     """ Will compare the spatial attribute of 2 references.
 
     Parameters
@@ -407,7 +407,7 @@ def append_generator_to_dict(gen, data):
         data['strs'].append(gen.tolist())
 
 
-def verify_trx_dtype(trx, dict_dtype):
+def verify_trx_dtype(trx, dict_dtype):  # noqa: C901
     """ Verify if the dtype of the data in the trx is the same as the one in
     the dict.
 
@@ -447,13 +447,19 @@ def verify_trx_dtype(trx, dict_dtype):
         elif key == 'dpg':
             for key_group in dict_dtype[key]:
                 for key_dpg in dict_dtype[key][key_group]:
-                    if trx.data_per_point[key_group][key_dpg].dtype != dict_dtype[key][key_group][key_dpg]:
+                    if (
+                        trx.data_per_point[key_group][key_dpg].dtype
+                        != dict_dtype[key][key_group][key_dpg]
+                    ):
                         logging.warning(
                             'Data per group ({}) dtype is different'.format(key_dpg))
                         identical = False
         elif key == 'groups':
             for key_group in dict_dtype[key]:
-                if trx.data_per_point[key_group]._data.dtype != dict_dtype[key][key_group]:
+                if (
+                    trx.data_per_point[key_group]._data.dtype
+                    != dict_dtype[key][key_group]
+                ):
                     logging.warning(
                         'Data per group ({}) dtype is different'.format(key_group))
                     identical = False

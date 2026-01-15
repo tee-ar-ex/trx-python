@@ -12,7 +12,7 @@ import nibabel as nib
 from nibabel.streamlines.array_sequence import ArraySequence
 import numpy as np
 try:
-    import dipy
+    import dipy  # noqa: F401
     dipy_available = True
 except ImportError:
     dipy_available = False
@@ -76,8 +76,10 @@ def convert_dsi_studio(in_dsi_tractogram, in_dsi_fa, out_tractogram,
         tmm.save(trx, out_tractogram)
 
 
-def convert_tractogram(in_tractogram, out_tractogram, reference,
-                       pos_dtype='float32', offsets_dtype='uint32'):
+def convert_tractogram(  # noqa: C901
+    in_tractogram, out_tractogram, reference,
+    pos_dtype='float32', offsets_dtype='uint32',
+):
     if not dipy_available:
         logging.error('Dipy library is missing, scripts are not available.')
         return None
@@ -304,140 +306,171 @@ def validate_tractogram(in_tractogram, reference, out_tractogram,
         save(new_sft, out_tractogram)
 
 
-def generate_trx_from_scratch(reference, out_tractogram, positions_csv=False,
-                              positions=False, offsets=False,
-                              positions_dtype='float32', offsets_dtype='uint64',
-                              space_str='rasmm', origin_str='nifti',
-                              verify_invalid=True, dpv=[], dps=[],
-                              groups=[], dpg=[]):
+def _load_streamlines_from_csv(positions_csv):
+    """Load streamlines from CSV file."""
+    with open(positions_csv, newline='') as f:
+        reader = csv.reader(f)
+        data = list(reader)
+        data = [np.reshape(i, (len(i) // 3, 3)).astype(float)
+                for i in data]
+        return ArraySequence(data)
+
+
+def _load_streamlines_from_arrays(positions, offsets):
+    """Load streamlines from position and offset arrays."""
+    positions = load_matrix_in_any_format(positions)
+    offsets = load_matrix_in_any_format(offsets)
+    lengths = tmm._compute_lengths(offsets)
+    streamlines = ArraySequence()
+    streamlines._data = positions
+    streamlines._offsets = deepcopy(offsets)
+    streamlines._lengths = lengths
+    return streamlines, offsets
+
+
+def _apply_spatial_transforms(streamlines, reference, space_str, origin_str,
+                              verify_invalid, offsets):
+    """Apply spatial transforms and verify streamlines."""
+    if not dipy_available:
+        logging.error('Dipy library is missing, advanced options '
+                      'related to spatial transforms and invalid '
+                      'streamlines are not available.')
+        return None
+
+    from dipy.io.stateful_tractogram import StatefulTractogram
+
+    space, origin = get_reverse_enum(space_str, origin_str)
+    sft = StatefulTractogram(streamlines, reference, space, origin)
+    if verify_invalid:
+        rem, _ = sft.remove_invalid_streamlines()
+        print('{} streamlines were removed becaused they were '
+              'invalid.'.format(len(rem)))
+    sft.to_rasmm()
+    sft.to_center()
+    streamlines = sft.streamlines
+    streamlines._offsets = offsets
+    return streamlines
+
+
+def _write_header(tmp_dir_name, reference, streamlines):
+    """Write header file."""
+    affine, dimensions, _, _ = get_reference_info_wrapper(reference)
+    header = {
+        "DIMENSIONS": dimensions.tolist(),
+        "VOXEL_TO_RASMM": affine.tolist(),
+        "NB_VERTICES": len(streamlines._data),
+        "NB_STREAMLINES": len(streamlines)-1,
+    }
+
+    if header['NB_STREAMLINES'] <= 1:
+        raise IOError('To use this script, you need at least 2'
+                      'streamlines.')
+
+    with open(os.path.join(tmp_dir_name, "header.json"), "w") as out_json:
+        json.dump(header, out_json)
+
+
+def _write_streamline_data(tmp_dir_name, streamlines, positions_dtype,
+                           offsets_dtype):
+    """Write streamline position and offset data."""
+    curr_filename = os.path.join(tmp_dir_name, 'positions.3.{}'.format(
+        positions_dtype))
+    streamlines._data.astype(positions_dtype).tofile(curr_filename)
+
+    curr_filename = os.path.join(tmp_dir_name, 'offsets.{}'.format(
+        offsets_dtype))
+    streamlines._offsets.astype(offsets_dtype).tofile(curr_filename)
+
+
+def _normalize_dtype(dtype_str):
+    """Normalize dtype string format."""
+    return 'bit' if dtype_str == 'bool' else dtype_str
+
+
+def _write_data_array(tmp_dir_name, subdir_name, args, is_dpg=False):
+    """Write data array to file."""
+    if is_dpg:
+        os.makedirs(os.path.join(tmp_dir_name, 'dpg', args[0]), exist_ok=True)
+        curr_arr = load_matrix_in_any_format(args[1]).astype(args[2])
+        basename = os.path.basename(os.path.splitext(args[1])[0])
+        dtype_str = _normalize_dtype(args[1]) if args[1] != 'bool' else 'bit'
+        dtype = args[2]
+    else:
+        os.makedirs(os.path.join(tmp_dir_name, subdir_name), exist_ok=True)
+        curr_arr = np.squeeze(load_matrix_in_any_format(args[0]).astype(args[1]))
+        basename = os.path.basename(os.path.splitext(args[0])[0])
+        dtype_str = _normalize_dtype(args[1])
+        dtype = dtype_str
+
+    if curr_arr.ndim > 2:
+        raise IOError('Maximum of 2 dimensions for dpv/dps/dpg.')
+
+    if curr_arr.shape == (1, 1):
+        curr_arr = curr_arr.reshape((1,))
+
+    dim = '' if curr_arr.ndim == 1 else '{}.'.format(curr_arr.shape[-1])
+
+    if is_dpg:
+        curr_filename = os.path.join(tmp_dir_name, 'dpg', args[0],
+                                     '{}.{}{}'.format(basename, dim, dtype))
+    else:
+        curr_filename = os.path.join(tmp_dir_name, subdir_name,
+                                     '{}.{}{}'.format(basename, dim, dtype))
+
+    curr_arr.tofile(curr_filename)
+
+
+def generate_trx_from_scratch(  # noqa: C901
+    reference, out_tractogram, positions_csv=False,
+    positions=False, offsets=False,
+    positions_dtype='float32', offsets_dtype='uint64',
+    space_str='rasmm', origin_str='nifti',
+    verify_invalid=True, dpv=[], dps=[],
+    groups=[], dpg=[],
+):
+    """Generate TRX file from scratch using various input formats."""
     with get_trx_tmp_dir() as tmp_dir_name:
         if positions_csv:
-            with open(positions_csv, newline='') as f:
-                reader = csv.reader(f)
-                data = list(reader)
-                data = [np.reshape(i, (len(i) // 3, 3)).astype(float)
-                        for i in data]
-                streamlines = ArraySequence(data)
+            streamlines = _load_streamlines_from_csv(positions_csv)
+            offsets = None
         else:
-            positions = load_matrix_in_any_format(positions)
-            offsets = load_matrix_in_any_format(offsets)
-            lengths = tmm._compute_lengths(offsets)
-            streamlines = ArraySequence()
-            streamlines._data = positions
-            streamlines._offsets = deepcopy(offsets)
-            streamlines._lengths = lengths
+            streamlines, offsets = _load_streamlines_from_arrays(positions, offsets)
 
-        if space_str.lower() != 'rasmm' or origin_str.lower() != 'nifti' or \
-                verify_invalid:
-            if not dipy_available:
-                logging.error('Dipy library is missing, advanced options '
-                              'related to spatial transforms and invalid '
-                              'streamlines are not available.')
+        if (space_str.lower() != 'rasmm' or origin_str.lower() != 'nifti' or
+                verify_invalid):
+            streamlines = _apply_spatial_transforms(
+                streamlines, reference, space_str, origin_str,
+                verify_invalid, offsets
+            )
+            if streamlines is None:
                 return
-            from dipy.io.stateful_tractogram import StatefulTractogram
 
-            space, origin = get_reverse_enum(space_str, origin_str)
-            sft = StatefulTractogram(streamlines, reference, space, origin)
-            if verify_invalid:
-                rem, _ = sft.remove_invalid_streamlines()
-                print('{} streamlines were removed becaused they were '
-                      'invalid.'.format(len(rem)))
-            sft.to_rasmm()
-            sft.to_center()
-            streamlines = sft.streamlines
-            streamlines._offsets = offsets
-
-        affine, dimensions, _, _ = get_reference_info_wrapper(reference)
-        header = {
-            "DIMENSIONS": dimensions.tolist(),
-            "VOXEL_TO_RASMM": affine.tolist(),
-            "NB_VERTICES": len(streamlines._data),
-            "NB_STREAMLINES": len(streamlines)-1,
-        }
-
-        if header['NB_STREAMLINES'] <= 1:
-            raise IOError('To use this script, you need at least 2'
-                          'streamlines.')
-
-        with open(os.path.join(tmp_dir_name, "header.json"), "w") as out_json:
-            json.dump(header, out_json)
-
-        curr_filename = os.path.join(tmp_dir_name, 'positions.3.{}'.format(
-            positions_dtype))
-        streamlines._data.astype(positions_dtype).tofile(
-            curr_filename)
-        curr_filename = os.path.join(tmp_dir_name, 'offsets.{}'.format(
-            offsets_dtype))
-        streamlines._offsets.astype(offsets_dtype).tofile(
-            curr_filename)
+        _write_header(tmp_dir_name, reference, streamlines)
+        _write_streamline_data(tmp_dir_name, streamlines, positions_dtype,
+                               offsets_dtype)
 
         if dpv:
-            os.mkdir(os.path.join(tmp_dir_name, 'dpv'))
             for arg in dpv:
-                curr_arr = np.squeeze(load_matrix_in_any_format(arg[0]).astype(
-                    arg[1]))
-                if arg[1] == 'bool':
-                    arg[1] = 'bit'
-                if curr_arr.ndim > 2:
-                    raise IOError('Maximum of 2 dimensions for dpv/dps/dpg.')
-                dim = '' if curr_arr.ndim == 1 else '{}.'.format(
-                    curr_arr.shape[-1])
-                curr_filename = os.path.join(tmp_dir_name, 'dpv', '{}.{}{}'.format(
-                    os.path.basename(os.path.splitext(arg[0])[0]), dim, arg[1]))
-                curr_arr.tofile(curr_filename)
+                _write_data_array(tmp_dir_name, 'dpv', arg)
 
         if dps:
-            os.mkdir(os.path.join(tmp_dir_name, 'dps'))
             for arg in dps:
-                curr_arr = np.squeeze(load_matrix_in_any_format(arg[0]).astype(
-                    arg[1]))
-                if arg[1] == 'bool':
-                    arg[1] = 'bit'
-                if curr_arr.ndim > 2:
-                    raise IOError('Maximum of 2 dimensions for dpv/dps/dpg.')
-                dim = '' if curr_arr.ndim == 1 else '{}.'.format(
-                    curr_arr.shape[-1])
-                curr_filename = os.path.join(tmp_dir_name, 'dps', '{}.{}{}'.format(
-                    os.path.basename(os.path.splitext(arg[0])[0]), dim, arg[1]))
-                curr_arr.tofile(curr_filename)
+                _write_data_array(tmp_dir_name, 'dps', arg)
+
         if groups:
-            os.mkdir(os.path.join(tmp_dir_name, 'groups'))
             for arg in groups:
-                curr_arr = load_matrix_in_any_format(arg[0]).astype(arg[1])
-                if arg[1] == 'bool':
-                    arg[1] = 'bit'
-                if curr_arr.ndim > 2:
-                    raise IOError('Maximum of 2 dimensions for dpv/dps/dpg.')
-                dim = '' if curr_arr.ndim == 1 else '{}.'.format(
-                    curr_arr.shape[-1])
-                curr_filename = os.path.join(tmp_dir_name, 'groups', '{}.{}{}'.format(
-                    os.path.basename(os.path.splitext(arg[0])[0]), dim, arg[1]))
-                curr_arr.tofile(curr_filename)
+                _write_data_array(tmp_dir_name, 'groups', arg)
 
         if dpg:
-            os.mkdir(os.path.join(tmp_dir_name, 'dpg'))
             for arg in dpg:
-                if not os.path.isdir(os.path.join(tmp_dir_name, 'dpg', arg[0])):
-                    os.mkdir(os.path.join(tmp_dir_name, 'dpg', arg[0]))
-                curr_arr = load_matrix_in_any_format(arg[1]).astype(arg[2])
-                if arg[1] == 'bool':
-                    arg[1] = 'bit'
-                if curr_arr.ndim > 2:
-                    raise IOError('Maximum of 2 dimensions for dpv/dps/dpg.')
-                if curr_arr.shape == (1, 1):
-                    curr_arr = curr_arr.reshape((1,))
-                dim = '' if curr_arr.ndim == 1 else '{}.'.format(
-                    curr_arr.shape[-1])
-                curr_filename = os.path.join(tmp_dir_name, 'dpg', arg[0], '{}.{}{}'.format(
-                    os.path.basename(os.path.splitext(arg[1])[0]), dim, arg[2]))
-                curr_arr.tofile(curr_filename)
+                _write_data_array(tmp_dir_name, 'dpg', arg, is_dpg=True)
 
         trx = tmm.load(tmp_dir_name)
         tmm.save(trx, out_tractogram)
         trx.close()
 
 
-def manipulate_trx_datatype(in_filename, out_filename, dict_dtype):
+def manipulate_trx_datatype(in_filename, out_filename, dict_dtype):  # noqa: C901
     trx = tmm.load(in_filename)
 
     # For each key in dict_dtype, we create a new memmap with the new dtype
@@ -476,10 +509,12 @@ def manipulate_trx_datatype(in_filename, out_filename, dict_dtype):
         elif key == 'dpg':
             for key_group in dict_dtype[key]:
                 for key_dpg in dict_dtype[key][key_group]:
-                    tmp_mm = np.memmap(tempfile.NamedTemporaryFile(),
-                                       dtype=dict_dtype[key][key_group][key_dpg],
-                                       mode='w+',
-                                       shape=trx.data_per_group[key_group][key_dpg].shape)
+                    tmp_mm = np.memmap(
+                        tempfile.NamedTemporaryFile(),
+                        dtype=dict_dtype[key][key_group][key_dpg],
+                        mode='w+',
+                        shape=trx.data_per_group[key_group][key_dpg].shape,
+                    )
                     tmp_mm[:] = trx.data_per_group[key_group][key_dpg][:]
                     trx.data_per_group[key_group][key_dpg] = tmp_mm
         elif key == 'groups':
