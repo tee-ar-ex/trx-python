@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-import itertools
 from functools import reduce
+import itertools
 
 import numpy as np
 
@@ -89,7 +89,7 @@ def hash_streamlines(streamlines, start_index=0, precision=None):
 
 
 def perform_streamlines_operation(operation, streamlines, precision=0):
-    """Peforms an operation on a list of list of streamlines
+    """Performs an operation on a list of list of streamlines
 
     Given a list of list of streamlines, this function applies the operation
     to the first two lists of streamlines. The result in then used recursively
@@ -123,8 +123,7 @@ def perform_streamlines_operation(operation, streamlines, precision=0):
 
     # Hash the streamlines using the desired precision.
     indices = np.cumsum([0] + [len(s) for s in streamlines[:-1]])
-    hashes = [hash_streamlines(s, i, precision) for
-              s, i in zip(streamlines, indices)]
+    hashes = [hash_streamlines(s, i, precision) for s, i in zip(streamlines, indices)]
 
     # Perform the operation on the hashes and get the output streamlines.
     to_keep = reduce(operation, hashes)

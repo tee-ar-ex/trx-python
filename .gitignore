@@ -132,3 +132,9 @@ dmypy.json
 # Pyre type checker
 .pyre/
 .vscode/
+
+tmp/
+CLAUDE.md
+claude.md
+agents.md
+AGENTS.md
