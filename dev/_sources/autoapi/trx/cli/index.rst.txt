@@ -1,0 +1,408 @@
+trx.cli
+=======
+
+.. py:module:: trx.cli
+
+.. autoapi-nested-parse::
+
+   TRX Command Line Interface.
+
+   This module provides a unified CLI for all TRX file format operations using Typer.
+
+   ..
+       !! processed by numpydoc !!
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   trx.cli.app
+   trx.cli.concatenate_tractograms_cmd
+   trx.cli.convert_dsi_cmd
+   trx.cli.convert_cmd
+   trx.cli.generate_cmd
+   trx.cli.manipulate_dtype_cmd
+   trx.cli.compare_cmd
+   trx.cli.validate_cmd
+   trx.cli.verify_header_cmd
+   trx.cli.visualize_cmd
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   trx.cli._check_overwrite
+   trx.cli.concatenate_tractograms
+   trx.cli.convert
+   trx.cli.convert_dsi
+   trx.cli.generate
+   trx.cli.manipulate_dtype
+   trx.cli.compare
+   trx.cli.validate
+   trx.cli.verify_header
+   trx.cli.visualize
+   trx.cli.main
+   trx.cli._create_standalone_app
+
+
+Module Contents
+---------------
+
+.. py:data:: app
+
+.. py:function:: _check_overwrite(filepath: pathlib.Path, overwrite: bool) -> None
+
+   
+   Check if file exists and raise error if overwrite is not enabled.
+
+
+   :Parameters:
+
+       **filepath** : Path
+           Path to the output file.
+
+       **overwrite** : bool
+           If True, allow overwriting existing files.
+
+
+
+
+
+
+
+   :Raises:
+
+       typer.Exit
+           If file exists and overwrite is False.
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: concatenate_tractograms(in_tractograms: typing_extensions.Annotated[List[pathlib.Path], typer.Argument(help='Input tractogram files. Format: trk, tck, vtk, fib, dpy, trx.')], out_tractogram: typing_extensions.Annotated[pathlib.Path, typer.Argument(help='Output filename for the concatenated tractogram.')], delete_dpv: typing_extensions.Annotated[bool, typer.Option('--delete-dpv', help='Delete data_per_vertex if not all inputs have the same metadata.')] = False, delete_dps: typing_extensions.Annotated[bool, typer.Option('--delete-dps', help='Delete data_per_streamline if not all inputs have the same metadata.')] = False, delete_groups: typing_extensions.Annotated[bool, typer.Option('--delete-groups', help='Delete groups if not all inputs have the same metadata.')] = False, reference: typing_extensions.Annotated[Optional[pathlib.Path], typer.Option('--reference', '-r', help='Reference anatomy for tck/vtk/fib/dpy files (.nii or .nii.gz).')] = None, force: typing_extensions.Annotated[bool, typer.Option('--force', '-f', help='Force overwriting of output files.')] = False) -> None
+
+   
+   Concatenate multiple tractograms into one.
+
+   If the data_per_point or data_per_streamline is not the same for all
+   tractograms, the data must be deleted first using the appropriate flags.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: convert(in_tractogram: typing_extensions.Annotated[pathlib.Path, typer.Argument(help='Input tractogram. Format: trk, tck, vtk, fib, dpy, trx.')], out_tractogram: typing_extensions.Annotated[pathlib.Path, typer.Argument(help='Output tractogram. Format: trk, tck, vtk, fib, dpy, trx.')], reference: typing_extensions.Annotated[Optional[pathlib.Path], typer.Option('--reference', '-r', help='Reference anatomy for tck/vtk/fib/dpy files (.nii or .nii.gz).')] = None, positions_dtype: typing_extensions.Annotated[str, typer.Option('--positions-dtype', help='Datatype for positions in TRX output.')] = 'float32', offsets_dtype: typing_extensions.Annotated[str, typer.Option('--offsets-dtype', help='Datatype for offsets in TRX output.')] = 'uint64', force: typing_extensions.Annotated[bool, typer.Option('--force', '-f', help='Force overwriting of output files.')] = False) -> None
+
+   
+   Convert tractograms between formats.
+
+   Supports conversion of .tck, .trk, .fib, .vtk, .trx and .dpy files.
+   TCK files always need a reference NIFTI file for conversion.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: convert_dsi(in_dsi_tractogram: typing_extensions.Annotated[pathlib.Path, typer.Argument(help='Input tractogram from DSI Studio (.trk).')], in_dsi_fa: typing_extensions.Annotated[pathlib.Path, typer.Argument(help='Input FA from DSI Studio (.nii.gz).')], out_tractogram: typing_extensions.Annotated[pathlib.Path, typer.Argument(help='Output tractogram file.')], remove_invalid: typing_extensions.Annotated[bool, typer.Option('--remove-invalid', help='Remove streamlines landing out of the bounding box.')] = False, keep_invalid: typing_extensions.Annotated[bool, typer.Option('--keep-invalid', help='Keep streamlines landing out of the bounding box.')] = False, force: typing_extensions.Annotated[bool, typer.Option('--force', '-f', help='Force overwriting of output files.')] = False) -> None
+
+   
+   Fix DSI-Studio TRK files for compatibility.
+
+   This script fixes DSI-Studio TRK files (unknown space/convention) to make
+   them compatible with TrackVis, MI-Brain, and Dipy Horizon.
+
+   [bold yellow]WARNING:[/bold yellow] This script is experimental. DSI-Studio evolves
+   quickly and results may vary depending on the data and DSI-Studio version.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: generate(reference: typing_extensions.Annotated[pathlib.Path, typer.Argument(help='Reference anatomy (.nii or .nii.gz).')], out_tractogram: typing_extensions.Annotated[pathlib.Path, typer.Argument(help='Output tractogram. Format: trk, tck, vtk, fib, dpy, trx.')], positions: typing_extensions.Annotated[Optional[pathlib.Path], typer.Option('--positions', help='Binary file with streamline coordinates (Nx3 .npy).')] = None, offsets: typing_extensions.Annotated[Optional[pathlib.Path], typer.Option('--offsets', help='Binary file with streamline offsets (.npy).')] = None, positions_csv: typing_extensions.Annotated[Optional[pathlib.Path], typer.Option('--positions-csv', help='CSV file with streamline coordinates (x1,y1,z1,x2,y2,z2,...).')] = None, space: typing_extensions.Annotated[str, typer.Option('--space', help='Coordinate space. Non-default requires Dipy.')] = 'RASMM', origin: typing_extensions.Annotated[str, typer.Option('--origin', help='Coordinate origin. Non-default requires Dipy.')] = 'NIFTI', positions_dtype: typing_extensions.Annotated[str, typer.Option('--positions-dtype', help='Datatype for positions.')] = 'float32', offsets_dtype: typing_extensions.Annotated[str, typer.Option('--offsets-dtype', help='Datatype for offsets.')] = 'uint64', dpv: typing_extensions.Annotated[Optional[List[str]], typer.Option('--dpv', help='Data per vertex: FILE,DTYPE (e.g., color.npy,uint8).')] = None, dps: typing_extensions.Annotated[Optional[List[str]], typer.Option('--dps', help='Data per streamline: FILE,DTYPE (e.g., algo.npy,uint8).')] = None, groups: typing_extensions.Annotated[Optional[List[str]], typer.Option('--groups', help='Groups: FILE,DTYPE (e.g., AF_L.npy,int32).')] = None, dpg: typing_extensions.Annotated[Optional[List[str]], typer.Option('--dpg', help='Data per group: GROUP,FILE,DTYPE (e.g., AF_L,mean_fa.npy,float32).')] = None, verify_invalid: typing_extensions.Annotated[bool, typer.Option('--verify-invalid', help='Verify positions are valid (within bounding box). Requires Dipy.')] = False, force: typing_extensions.Annotated[bool, typer.Option('--force', '-f', help='Force overwriting of output files.')] = False) -> None
+
+   
+   Generate TRX file from raw data files.
+
+   Create a TRX file from CSV, TXT, or NPY files by specifying positions,
+   offsets, data_per_vertex, data_per_streamlines, groups, and data_per_group.
+
+   Each --dpv, --dps, --groups option requires FILE,DTYPE format.
+   Each --dpg option requires GROUP,FILE,DTYPE format.
+
+   Valid DTYPEs: (u)int8, (u)int16, (u)int32, (u)int64, float16, float32, float64, bool
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: manipulate_dtype(in_tractogram: typing_extensions.Annotated[pathlib.Path, typer.Argument(help='Input TRX file.')], out_tractogram: typing_extensions.Annotated[pathlib.Path, typer.Argument(help='Output tractogram file.')], positions_dtype: typing_extensions.Annotated[Optional[str], typer.Option('--positions-dtype', help='Datatype for positions (float16, float32, float64).')] = None, offsets_dtype: typing_extensions.Annotated[Optional[str], typer.Option('--offsets-dtype', help='Datatype for offsets (uint32, uint64).')] = None, dpv: typing_extensions.Annotated[Optional[List[str]], typer.Option('--dpv', help='Data per vertex dtype: NAME,DTYPE (e.g., color_x,uint8).')] = None, dps: typing_extensions.Annotated[Optional[List[str]], typer.Option('--dps', help='Data per streamline dtype: NAME,DTYPE (e.g., algo,uint8).')] = None, groups: typing_extensions.Annotated[Optional[List[str]], typer.Option('--groups', help='Groups dtype: NAME,DTYPE (e.g., CC,uint64).')] = None, dpg: typing_extensions.Annotated[Optional[List[str]], typer.Option('--dpg', help='Data per group dtype: GROUP,NAME,DTYPE (e.g., CC,mean_fa,float64).')] = None, force: typing_extensions.Annotated[bool, typer.Option('--force', '-f', help='Force overwriting of output files.')] = False) -> None
+
+   
+   Manipulate TRX file internal array data types.
+
+   Change the data types of positions, offsets, data_per_vertex,
+   data_per_streamline, groups, and data_per_group arrays.
+
+   Valid DTYPEs: (u)int8, (u)int16, (u)int32, (u)int64, float16, float32, float64, bool
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: compare(in_tractogram1: typing_extensions.Annotated[pathlib.Path, typer.Argument(help='First tractogram file.')], in_tractogram2: typing_extensions.Annotated[pathlib.Path, typer.Argument(help='Second tractogram file.')], reference: typing_extensions.Annotated[Optional[pathlib.Path], typer.Option('--reference', '-r', help='Reference anatomy for tck/vtk/fib/dpy files (.nii or .nii.gz).')] = None) -> None
+
+   
+   Simple comparison of tractograms by subtracting coordinates.
+
+   Does not account for shuffling of streamlines. Simple A-B operations.
+
+   Differences below 1e-3 are expected for affines with large rotation/scaling.
+   Differences below 1e-6 are expected for isotropic data with small rotation.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: validate(in_tractogram: typing_extensions.Annotated[pathlib.Path, typer.Argument(help='Input tractogram. Format: trk, tck, vtk, fib, dpy, trx.')], out_tractogram: typing_extensions.Annotated[Optional[pathlib.Path], typer.Option('--out', '-o', help='Output tractogram after removing invalid streamlines.')] = None, remove_identical: typing_extensions.Annotated[bool, typer.Option('--remove-identical', help='Remove identical streamlines from the set.')] = False, precision: typing_extensions.Annotated[int, typer.Option('--precision', '-p', help='Number of decimals when hashing streamline points.')] = 1, reference: typing_extensions.Annotated[Optional[pathlib.Path], typer.Option('--reference', '-r', help='Reference anatomy for tck/vtk/fib/dpy files (.nii or .nii.gz).')] = None, force: typing_extensions.Annotated[bool, typer.Option('--force', '-f', help='Force overwriting of output files.')] = False) -> None
+
+   
+   Validate TRX file and remove invalid streamlines.
+
+   Removes streamlines that are out of the volume bounding box (in voxel space,
+   no negative coordinates or coordinates above volume dimensions).
+
+   Also removes streamlines with single or no points.
+   Use --remove-identical to remove duplicate streamlines based on precision.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: verify_header(in_files: typing_extensions.Annotated[List[pathlib.Path], typer.Argument(help='Files to compare (trk, trx, and nii).')]) -> None
+
+   
+   Compare spatial attributes of input files.
+
+   Compares all input files against the first one for compatibility of
+   spatial attributes: affine, dimensions, voxel sizes, and voxel order.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: visualize(in_tractogram: typing_extensions.Annotated[pathlib.Path, typer.Argument(help='Input tractogram. Format: trk, tck, vtk, fib, dpy, trx.')], reference: typing_extensions.Annotated[pathlib.Path, typer.Argument(help='Reference anatomy (.nii or .nii.gz).')], remove_invalid: typing_extensions.Annotated[bool, typer.Option('--remove-invalid', help='Remove invalid streamlines to avoid density_map crash.')] = False) -> None
+
+   
+   Display tractogram and density map with bounding box.
+
+   Shows the tractogram and its density map (computed from Dipy) in
+   rasmm, voxmm, and vox space with its bounding box.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: main()
+
+   
+   Entry point for the TRX CLI.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: _create_standalone_app(command_func, name: str, help_text: str)
+
+   
+   Create a standalone Typer app for a single command.
+
+
+   :Parameters:
+
+       **command_func** : callable
+           The command function to wrap.
+
+       **name** : str
+           Name of the command.
+
+       **help_text** : str
+           Help text for the command.
+
+
+
+   :Returns:
+
+       callable
+           Entry point function.
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:data:: concatenate_tractograms_cmd
+
+.. py:data:: convert_dsi_cmd
+
+.. py:data:: convert_cmd
+
+.. py:data:: generate_cmd
+
+.. py:data:: manipulate_dtype_cmd
+
+.. py:data:: compare_cmd
+
+.. py:data:: validate_cmd
+
+.. py:data:: verify_header_cmd
+
+.. py:data:: visualize_cmd
+

@@ -1,0 +1,1244 @@
+trx.trx_file_memmap
+===================
+
+.. py:module:: trx.trx_file_memmap
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   trx.trx_file_memmap.dipy_available
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   trx.trx_file_memmap.TrxFile
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   trx.trx_file_memmap._append_last_offsets
+   trx.trx_file_memmap._generate_filename_from_data
+   trx.trx_file_memmap._split_ext_with_dimensionality
+   trx.trx_file_memmap._compute_lengths
+   trx.trx_file_memmap._is_dtype_valid
+   trx.trx_file_memmap._dichotomic_search
+   trx.trx_file_memmap._create_memmap
+   trx.trx_file_memmap.load
+   trx.trx_file_memmap.load_from_zip
+   trx.trx_file_memmap.load_from_directory
+   trx.trx_file_memmap._filter_empty_trx_files
+   trx.trx_file_memmap._get_all_data_keys
+   trx.trx_file_memmap._check_space_attributes
+   trx.trx_file_memmap._verify_dpv_coherence
+   trx.trx_file_memmap._verify_dps_coherence
+   trx.trx_file_memmap._compute_groups_info
+   trx.trx_file_memmap._create_new_trx_for_concatenation
+   trx.trx_file_memmap._setup_groups_for_concatenation
+   trx.trx_file_memmap.concatenate
+   trx.trx_file_memmap.save
+   trx.trx_file_memmap.zip_from_folder
+
+
+Module Contents
+---------------
+
+.. py:data:: dipy_available
+   :value: True
+
+
+.. py:function:: _append_last_offsets(nib_offsets: numpy.ndarray, nb_vertices: int) -> numpy.ndarray
+
+   
+   Appends the last element of offsets from header information
+
+   Keyword arguments:
+       nib_offsets -- np.ndarray
+           Array of offsets with the last element being the start of the last
+           streamline (nibabel convention)
+       nb_vertices -- int
+           Total number of vertices in the streamlines
+   Returns:
+       Offsets -- np.ndarray (VTK convention)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: _generate_filename_from_data(arr: numpy.ndarray, filename: str) -> str
+
+   
+   Determines the data type from array data and generates the appropriate
+   filename
+
+   Keyword arguments:
+       arr -- a NumPy array (1-2D, otherwise ValueError raised)
+       filename -- the original filename
+
+   Returns:
+       An updated filename
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: _split_ext_with_dimensionality(filename: str) -> Tuple[str, int, str]
+
+   
+   Takes a filename and splits it into its components
+
+   Keyword arguments:
+       filename -- Input filename
+
+   Returns:
+       tuple of strings (basename, dimension, extension)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: _compute_lengths(offsets: numpy.ndarray) -> numpy.ndarray
+
+   
+   Compute lengths from offsets
+
+   Keyword arguments:
+       offsets -- An np.ndarray of offsets
+
+   Returns:
+       lengths -- An np.ndarray of lengths
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: _is_dtype_valid(ext: str) -> bool
+
+   
+   Verifies that filename extension is a valid datatype
+
+   Keyword arguments:
+       ext -- filename extension
+
+   Returns:
+       boolean representing if provided datatype is valid
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: _dichotomic_search(x: numpy.ndarray, l_bound: Optional[int] = None, r_bound: Optional[int] = None) -> int
+
+   
+   Find where data of a contiguous array is actually ending
+
+   Keyword arguments:
+       x -- np.ndarray of values
+       l_bound -- lower bound index for search
+       r_bound -- upper bound index for search
+   Returns:
+       index at which array value is 0 (if possible), otherwise returns -1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: _create_memmap(filename: str, mode: str = 'r', shape: Tuple = (1, ), dtype: numpy.dtype = np.float32, offset: int = 0, order: str = 'C') -> numpy.ndarray
+
+   
+   Wrapper to support empty array as memmaps
+
+   Keyword arguments:
+       filename -- filename where the empty memmap should be created
+       mode -- file open mode (see: np.memmap for options)
+       shape -- shape of memmapped np.ndarray
+       dtype -- datatype of memmapped np.ndarray
+       offset -- offset of the data within the file
+       order -- data representation on disk (C or Fortran)
+
+   Returns:
+       mmapped np.ndarray or a zero-filled Numpy array if array has a shape of 0
+           in the first dimension
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: load(input_obj: str, check_dpg: bool = True) -> Type[TrxFile]
+
+   
+   Load a TrxFile (compressed or not)
+
+   Keyword arguments:
+   input_obj -- A directory name or filepath to the trx data
+   check_dpg -- Boolean denoting if group metadata should be checked
+
+   Returns:
+       TrxFile object representing the read data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: load_from_zip(filename: str) -> Type[TrxFile]
+
+   
+   Load a TrxFile from a single zipfile. Note: does not work with
+   compressed zipfiles
+
+   Keyword arguments:
+   filename -- path of the zipped TrxFile
+
+   Returns:
+       TrxFile representing the read data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: load_from_directory(directory: str) -> Type[TrxFile]
+
+   
+   Load a TrxFile from a folder containing memmaps
+
+   Keyword arguments:
+   filename -- path of the zipped TrxFile
+
+   Returns:
+       TrxFile representing the read data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: _filter_empty_trx_files(trx_list: List[TrxFile]) -> List[TrxFile]
+
+   
+   Remove empty TrxFiles from the list.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: _get_all_data_keys(trx_list: List[TrxFile]) -> Tuple[set, set]
+
+   
+   Get all dps and dpv keys from the TrxFile list.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: _check_space_attributes(trx_list: List[TrxFile]) -> None
+
+   
+   Verify that space attributes are consistent across TrxFiles.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: _verify_dpv_coherence(trx_list: List[TrxFile], all_dpv: set, ref_trx: TrxFile, delete_dpv: bool) -> None
+
+   
+   Verify dpv coherence across TrxFiles.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: _verify_dps_coherence(trx_list: List[TrxFile], all_dps: set, ref_trx: TrxFile, delete_dps: bool) -> None
+
+   
+   Verify dps coherence across TrxFiles.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: _compute_groups_info(trx_list: List[TrxFile]) -> Tuple[dict, dict]
+
+   
+   Compute group length and dtype information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: _create_new_trx_for_concatenation(trx_list: List[TrxFile], ref_trx: TrxFile, delete_dps: bool, delete_dpv: bool, delete_groups: bool) -> TrxFile
+
+   
+   Create a new TrxFile for concatenation.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: _setup_groups_for_concatenation(new_trx: TrxFile, trx_list: List[TrxFile], all_groups_len: dict, all_groups_dtype: dict, delete_groups: bool) -> None
+
+   
+   Setup groups in the new TrxFile for concatenation.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: concatenate(trx_list: List[TrxFile], delete_dpv: bool = False, delete_dps: bool = False, delete_groups: bool = False, check_space_attributes: bool = True, preallocation: bool = False) -> TrxFile
+
+   
+   Concatenate multiple TrxFile together, support preallocation
+
+   Keyword arguments:
+       trx_list -- A list containing TrxFiles to concatenate
+       delete_dpv -- Delete dpv keys that do not exist in all the provided
+           TrxFiles
+       delete_dps -- Delete dps keys that do not exist in all the provided
+           TrxFile
+       delete_groups -- Delete all the groups that currently exist in the
+           TrxFiles
+       check_space_attributes -- Verify that dimensions and size of data are
+           similar between all the TrxFiles
+       preallocation -- Preallocated TrxFile has already been generated and
+           is the first element in trx_list
+           (Note: delete_groups must be set to True as well)
+
+   Returns:
+       TrxFile representing the concatenated data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: save(trx: TrxFile, filename: str, compression_standard: Any = zipfile.ZIP_STORED) -> None
+
+   
+   Save a TrxFile (compressed or not)
+
+   Keyword arguments:
+       trx -- The TrxFile to save
+       filename -- The path to save the TrxFile to
+       compression_standard -- The compression standard to use, as defined by
+           the ZipFile library
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: zip_from_folder(directory: str, filename: str, compression_standard: Any = zipfile.ZIP_STORED) -> None
+
+   
+   Utils function to zip on-disk memmaps
+
+   Keyword arguments
+       directory -- The path to the on-disk memmap
+       filename -- The path where the zip file should be created
+       compression_standard -- The compression standard to use, as defined by
+           the ZipFile library
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:class:: TrxFile(nb_vertices: Optional[int] = None, nb_streamlines: Optional[int] = None, init_as: Optional[Type[TrxFile]] = None, reference: Union[str, dict, Type[nibabel.nifti1.Nifti1Image], Type[nibabel.streamlines.trk.TrkFile], Type[nibabel.nifti1.Nifti1Header], None] = None)
+
+   
+   Core class of the TrxFile
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+   .. py:attribute:: header
+      :type:  dict
+
+
+   .. py:attribute:: streamlines
+      :type:  Type[nibabel.streamlines.array_sequence.ArraySequence]
+
+
+   .. py:attribute:: groups
+      :type:  dict
+
+
+   .. py:attribute:: data_per_streamline
+      :type:  dict
+
+
+   .. py:attribute:: data_per_vertex
+      :type:  dict
+
+
+   .. py:attribute:: data_per_group
+      :type:  dict
+
+
+   .. py:attribute:: _copy_safe
+      :value: True
+
+
+
+   .. py:method:: __str__() -> str
+
+      
+      Generate the string for printing
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: __len__() -> int
+
+      
+      Define the length of the object
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: __getitem__(key) -> Any
+
+      
+      Slice all data in a consistent way
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: __deepcopy__() -> Type[TrxFile]
+
+
+   .. py:method:: deepcopy() -> Type[TrxFile]
+
+      
+      Create a deepcopy of the TrxFile
+
+      Returns
+          A deepcopied TrxFile of the current TrxFile
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: _get_real_len() -> Tuple[int, int]
+
+      
+      Get the real size of data (ignoring zeros of preallocation)
+
+      Returns
+          A tuple representing the index of the last streamline and the total
+              length of all the streamlines
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: _copy_fixed_arrays_from(trx: Type[TrxFile], strs_start: int = 0, pts_start: int = 0, nb_strs_to_copy: Optional[int] = None) -> Tuple[int, int]
+
+      
+      Fill a TrxFile using another and start indexes (preallocation)
+
+      Keyword arguments:
+          trx -- TrxFile to copy data from
+          strs_start -- The start index of the streamline
+          pts_start -- The start index of the point
+          nb_strs_to_copy -- The number of streamlines to copy. If not set
+                              will copy all
+
+      Returns
+          A tuple representing the end of the copied streamlines and end of
+              copied points
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: _initialize_empty_trx(nb_streamlines: int, nb_vertices: int, init_as: Optional[Type[TrxFile]] = None) -> Type[TrxFile]
+      :staticmethod:
+
+
+      
+      Create on-disk memmaps of a certain size (preallocation)
+
+      Keyword arguments:
+          nb_streamlines -- The number of streamlines that the empty TrxFile
+              will be initialized with
+          nb_vertices -- The number of vertices that the empty TrxFile will
+              be initialized with
+          init_as -- A TrxFile to initialize the empty TrxFile with
+
+      Returns:
+          An empty TrxFile preallocated with a certain size
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: _create_trx_from_pointer(dict_pointer_size: dict, root_zip: Optional[str] = None, root: Optional[str] = None) -> Type[TrxFile]
+
+      
+      After reading the structure of a zip/folder, create a TrxFile
+
+      Keyword arguments:
+          header -- A TrxFile header dictionary which will be used for the
+              new TrxFile
+          dict_pointer_size -- A dictionary containing the filenames of all
+              the files within the TrxFile disk file/folder
+          root_zip -- The path of the ZipFile pointer
+          root -- The dirname of the ZipFile pointer
+
+      Returns:
+          A TrxFile constructor from the pointer provided
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: resize(nb_streamlines: Optional[int] = None, nb_vertices: Optional[int] = None, delete_dpg: bool = False) -> None
+
+      
+      Remove the unused portion of preallocated memmaps
+
+      Keyword arguments:
+          nb_streamlines -- The number of streamlines to keep
+          nb_vertices -- The number of vertices to keep
+          delete_dpg -- Remove data_per_group when resizing
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: get_dtype_dict()
+
+      
+      Get the dtype dictionary for the TrxFile
+
+      Returns
+          A dictionary containing the dtype for each data element
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: append(obj, extra_buffer: int = 0) -> None
+
+
+   .. py:method:: _append_trx(trx: Type[TrxFile], extra_buffer: int = 0) -> None
+
+      
+      Append a TrxFile to another (support buffer)
+
+      Keyword arguments:
+          trx -- The TrxFile to append to the current TrxFile
+          extra_buffer -- The additional buffer space required to append data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: get_group(key: str, keep_group: bool = True, copy_safe: bool = False) -> Type[TrxFile]
+
+      
+      Get a particular group from the TrxFile
+
+      Keyword arguments:
+          key -- The group name to select
+          keep_group -- Make sure group exists in returned TrxFile
+          copy_safe -- Perform a deepcopy
+
+      Returns
+          A TrxFile exclusively containing data from said group
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: select(indices: numpy.ndarray, keep_group: bool = True, copy_safe: bool = False) -> Type[TrxFile]
+
+      
+      Get a subset of items, always vertices to the same memmaps
+
+      Keyword arguments:
+          indices -- The list of indices of elements to return
+          keep_group -- Ensure group is returned in output TrxFile
+          copy_safe -- Perform a deep-copy
+
+      Returns:
+          A TrxFile containing data originating from the selected indices
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: from_lazy_tractogram(obj: [nibabel.streamlines.tractogram.LazyTractogram], reference, extra_buffer: int = 0, chunk_size: int = 10000, dtype_dict: dict = None) -> Type[TrxFile]
+      :staticmethod:
+
+
+      
+      Append a TrxFile to another (support buffer)
+
+      Keyword arguments:
+          trx -- The TrxFile to append to the current TrxFile
+          extra_buffer -- The buffer space between reallocation.
+                          This number should be a number of streamlines.
+                          Use 0 for no buffer.
+          chunk_size -- The number of streamlines to save at a time.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: from_sft(sft, dtype_dict=None)
+      :staticmethod:
+
+
+      
+      Generate a valid TrxFile from a StatefulTractogram
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: from_tractogram(tractogram, reference, dtype_dict=None)
+      :staticmethod:
+
+
+      
+      Generate a valid TrxFile from a Nibabel Tractogram
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: to_tractogram(resize=False)
+
+      
+      Convert a TrxFile to a nibabel Tractogram (in RAM)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: to_memory(resize: bool = False) -> Type[TrxFile]
+
+      
+      Convert a TrxFile to a RAM representation
+
+      Keyword arguments:
+          resize -- Resize TrxFile when converting to RAM representation
+
+      Returns:
+          A non memory mapped TrxFile
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: to_sft(resize=False)
+
+      
+      Convert a TrxFile to a valid StatefulTractogram (in RAM)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: close() -> None
+
+      
+      Cleanup on-disk temporary folder and initialize an empty TrxFile
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
