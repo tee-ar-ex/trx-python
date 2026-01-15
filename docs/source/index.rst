@@ -42,8 +42,19 @@ Development of TRX is supported by `NIMH grant 1R01MH126699 <https://reporter.ni
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: User Guide:
 
-    autoapi/index
-    contributing
-    developing/index
+   scripts
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Development:
+
+   contributing
+   dev
+
+.. toctree::
+   :maxdepth: 2
+   :caption: API Reference:
+
+   autoapi/index

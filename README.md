@@ -1,53 +1,162 @@
 # trx-python
 
-This is a Python implementation of the trx file-format for tractography data.
+[![Tests](https://github.com/tee-ar-ex/trx-python/actions/workflows/test.yml/badge.svg)](https://github.com/tee-ar-ex/trx-python/actions/workflows/test.yml)
+[![Code Format](https://github.com/tee-ar-ex/trx-python/actions/workflows/codeformat.yml/badge.svg)](https://github.com/tee-ar-ex/trx-python/actions/workflows/codeformat.yml)
+[![codecov](https://codecov.io/gh/tee-ar-ex/trx-python/branch/master/graph/badge.svg)](https://codecov.io/gh/tee-ar-ex/trx-python)
+[![PyPI version](https://badge.fury.io/py/trx-python.svg)](https://badge.fury.io/py/trx-python)
 
-For details, please visit the documentation web-page at https://tee-ar-ex.github.io/trx-python/.
+A Python implementation of the TRX file format for tractography data.
 
-To install this, you can run:
+For details, please visit the [documentation](https://tee-ar-ex.github.io/trx-python/).
 
-    pip install trx-python
+## Installation
 
-Or, to install from source:
+### From PyPI
 
-    git clone https://github.com/tee-ar-ex/trx-python.git
-    cd trx-python
-    pip install .
+```bash
+pip install trx-python
+```
 
-### Development
+### From Source
 
-For contributors, we use [spin](https://github.com/scientific-python/spin) to manage the development workflow. This ensures proper version detection when working with forks.
+```bash
+git clone https://github.com/tee-ar-ex/trx-python.git
+cd trx-python
+pip install .
+```
 
-**First-time setup (required for forks):**
+## Quick Start
 
-    git clone https://github.com/YOUR_USERNAME/trx-python.git
-    cd trx-python
-    pip install -e ".[dev]"
-    spin setup
+### Loading and Saving Tractograms
 
-The `spin setup` command configures your fork by fetching version tags from the upstream repository. This is required for correct version detection with `setuptools_scm`.
+```python
+from trx.io import load, save
 
-**Common development commands:**
+# Load a tractogram (supports .trx, .trk, .tck, .vtk, .fib, .dpy)
+trx = load("tractogram.trx")
 
-    spin setup      # Set up development environment (fetch upstream tags)
-    spin install    # Install package in development/editable mode
-    spin test       # Run all tests
-    spin test -m memmap  # Run tests matching 'memmap'
-    spin lint       # Run linting checks
-    spin docs       # Build documentation
+# Save to a different format
+save(trx, "output.trk")
+```
+
+### Command-Line Interface
+
+TRX-Python provides a unified CLI (`tff`) for common operations:
+
+```bash
+# Show all available commands
+tff --help
+
+# Convert between formats
+tff convert input.trk output.trx
+
+# Concatenate tractograms
+tff concatenate tract1.trx tract2.trx merged.trx
+
+# Validate a TRX file
+tff validate data.trx
+```
+
+Individual commands are also available for backward compatibility:
+
+```bash
+tff_convert_tractogram input.trk output.trx
+tff_concatenate_tractograms tract1.trx tract2.trx merged.trx
+tff_validate_trx data.trx
+```
+
+## Development
+
+We use [spin](https://github.com/scientific-python/spin) for development workflow.
+
+### First-Time Setup
+
+```bash
+# Clone the repository (or your fork)
+git clone https://github.com/tee-ar-ex/trx-python.git
+cd trx-python
+
+# Install with all dependencies
+pip install -e ".[all]"
+
+# Set up development environment (fetches upstream tags)
+spin setup
+```
+
+### Common Commands
+
+```bash
+spin setup      # Set up development environment
+spin install    # Install in editable mode
+spin test       # Run all tests
+spin test -m memmap  # Run tests matching pattern
+spin lint       # Run linting (ruff)
+spin lint --fix # Auto-fix linting issues
+spin docs       # Build documentation
+spin clean      # Clean temporary files
+```
 
 Run `spin` without arguments to see all available commands.
 
-### Temporary Directory
-The TRX file format uses memmaps to limit RAM usage. When dealing with large files this means several gigabytes could be required on disk (instead of RAM). 
+### Code Quality
 
-By default, the temporary directory on Linux and MacOS is `/tmp` and on Windows it should be `C:\WINDOWS\Temp`.
+We use [ruff](https://docs.astral.sh/ruff/) for linting and formatting:
 
-If you wish to change the directory add the following variable to your script or to your .bashrc or .bash_profile:
-`export TRX_TMPDIR=/WHERE/I/WANT/MY/TMP/DATA` (a)
-OR
-`export TRX_TMPDIR=use_working_dir` (b)
+```bash
+# Check for issues
+spin lint
 
-The provided folder must already exists (a). `use_working_dir` will be the directory where the code is being executed from (b).
+# Auto-fix issues
+spin lint --fix
 
-The temporary folders should be automatically cleaned. But, if the code crash unexpectedly, make sure the folders are deleted.
+# Format code
+ruff format .
+```
+
+### Pre-commit Hooks
+
+```bash
+# Install hooks
+pre-commit install
+
+# Run on all files
+pre-commit run --all-files
+```
+
+## Temporary Directory
+
+The TRX file format uses memory-mapped files to limit RAM usage. When dealing with large files, several gigabytes may be required on disk.
+
+By default, temporary files are stored in:
+- Linux/macOS: `/tmp`
+- Windows: `C:\WINDOWS\Temp`
+
+To change the directory:
+
+```bash
+# Use a specific directory (must exist)
+export TRX_TMPDIR=/path/to/tmp
+
+# Use current working directory
+export TRX_TMPDIR=use_working_dir
+```
+
+Temporary folders are automatically cleaned, but if the code crashes unexpectedly, ensure folders are deleted manually.
+
+## Documentation
+
+Full documentation is available at https://tee-ar-ex.github.io/trx-python/
+
+To build locally:
+
+```bash
+spin docs --open
+```
+
+## Contributing
+
+We welcome contributions! Please see our [Contributing Guide](https://tee-ar-ex.github.io/trx-python/contributing.html) for details.
+
+## License
+
+BSD License - see [LICENSE](LICENSE) for details.

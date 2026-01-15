@@ -5,10 +5,11 @@
 This script maintains the version switcher JSON file used by pydata-sphinx-theme
 to enable users to switch between different documentation versions.
 """
+
 import argparse
 import json
-import sys
 from pathlib import Path
+import sys
 
 BASE_URL = "https://tee-ar-ex.github.io/trx-python"
 
@@ -16,7 +17,7 @@ BASE_URL = "https://tee-ar-ex.github.io/trx-python"
 def load_switcher(path):
     """Load existing switcher.json or return empty list."""
     try:
-        with open(path, 'r') as f:
+        with open(path, "r") as f:
             return json.load(f)
     except (FileNotFoundError, json.JSONDecodeError):
         return []
@@ -24,38 +25,35 @@ def load_switcher(path):
 
 def save_switcher(path, versions):
     """Save switcher.json with proper formatting."""
-    with open(path, 'w') as f:
+    with open(path, "w") as f:
         json.dump(versions, f, indent=4)
-        f.write('\n')
+        f.write("\n")
 
 
 def ensure_dev_entry(versions):
     """Ensure dev entry exists in versions list."""
-    dev_exists = any(v.get('version') == 'dev' for v in versions)
+    dev_exists = any(v.get("version") == "dev" for v in versions)
     if not dev_exists:
-        versions.insert(0, {
-            "name": "dev",
-            "version": "dev",
-            "url": f"{BASE_URL}/dev/"
-        })
+        versions.insert(0, {"name": "dev", "version": "dev", "url": f"{BASE_URL}/dev/"})
     return versions
 
 
 def ensure_stable_entry(versions):
     """Ensure stable entry exists with preferred flag."""
     stable_idx = next(
-        (i for i, v in enumerate(versions) if v.get('version') == 'stable'),
-        None
+        (i for i, v in enumerate(versions) if v.get("version") == "stable"), None
     )
     if stable_idx is not None:
-        versions[stable_idx]['preferred'] = True
+        versions[stable_idx]["preferred"] = True
     else:
-        versions.append({
-            "name": "stable",
-            "version": "stable",
-            "url": f"{BASE_URL}/stable/",
-            "preferred": True
-        })
+        versions.append(
+            {
+                "name": "stable",
+                "version": "stable",
+                "url": f"{BASE_URL}/stable/",
+                "preferred": True,
+            }
+        )
     return versions
 
 
@@ -76,21 +74,20 @@ def add_version(versions, version):
     """
     # Remove 'preferred' from all existing entries
     for v in versions:
-        v.pop('preferred', None)
+        v.pop("preferred", None)
 
     # Check if this version already exists
-    version_exists = any(v.get('version') == version for v in versions)
+    version_exists = any(v.get("version") == version for v in versions)
 
     if not version_exists:
         new_entry = {
             "name": version,
             "version": version,
-            "url": f"{BASE_URL}/{version}/"
+            "url": f"{BASE_URL}/{version}/",
         }
         # Find dev entry index to insert after it
         dev_idx = next(
-            (i for i, v in enumerate(versions) if v.get('version') == 'dev'),
-            -1
+            (i for i, v in enumerate(versions) if v.get("version") == "dev"), -1
         )
         if dev_idx >= 0:
             versions.insert(dev_idx + 1, new_entry)
@@ -103,18 +100,10 @@ def add_version(versions, version):
 def main():
     """Main entry point."""
     parser = argparse.ArgumentParser(
-        description='Update switcher.json for documentation version switching'
+        description="Update switcher.json for documentation version switching"
     )
-    parser.add_argument(
-        'switcher_path',
-        type=Path,
-        help='Path to switcher.json file'
-    )
-    parser.add_argument(
-        '--version',
-        type=str,
-        help='New version to add (e.g., 0.5.0)'
-    )
+    parser.add_argument("switcher_path", type=Path, help="Path to switcher.json file")
+    parser.add_argument("--version", type=str, help="New version to add (e.g., 0.5.0)")
 
     args = parser.parse_args()
 
@@ -139,5 +128,5 @@ def main():
     return 0
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sys.exit(main())

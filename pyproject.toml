@@ -8,7 +8,7 @@ dynamic = ["version"]
 description = "Experiments with new file format for tractography"
 readme = "README.md"
 license = {text = "BSD License"}
-requires-python = ">=3.9"
+requires-python = ">=3.11"
 authors = [
     {name = "The TRX developers"}
 ]
@@ -20,8 +20,6 @@ classifiers = [
     "Operating System :: OS Independent",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
@@ -31,6 +29,7 @@ dependencies = [
     "deepdiff",
     "nibabel >= 5",
     "numpy >= 1.22",
+    "typer >= 0.9",
 ]
 
 [project.optional-dependencies]
@@ -45,15 +44,21 @@ doc = [
     "sphinx-autoapi >= 3.0.0",
     "numpydoc",
 ]
+style = [
+    "codespell",
+    "pre-commit",
+    "ruff",
+]
 test = [
-    "flake8",
     "psutil",
     "pytest >= 7",
     "pytest-console-scripts >= 0",
+    "pytest-cov",
 ]
 all = [
     "trx-python[dev]",
     "trx-python[doc]",
+    "trx-python[style]",
     "trx-python[test]",
 ]
 
@@ -62,20 +67,21 @@ Homepage = "https://github.com/tee-ar-ex/trx-python"
 Documentation = "https://tee-ar-ex.github.io/trx-python/"
 Repository = "https://github.com/tee-ar-ex/trx-python"
 
+[project.scripts]
+tff = "trx.cli:main"
+tff_concatenate_tractograms = "trx.cli:concatenate_tractograms_cmd"
+tff_convert_dsi_studio = "trx.cli:convert_dsi_cmd"
+tff_convert_tractogram = "trx.cli:convert_cmd"
+tff_generate_trx_from_scratch = "trx.cli:generate_cmd"
+tff_manipulate_datatype = "trx.cli:manipulate_dtype_cmd"
+tff_simple_compare = "trx.cli:compare_cmd"
+tff_validate_trx = "trx.cli:validate_cmd"
+tff_verify_header_compatibility = "trx.cli:verify_header_cmd"
+tff_visualize_overlap = "trx.cli:visualize_cmd"
+
 [tool.setuptools]
 packages = ["trx"]
 include-package-data = true
-script-files = [
-    "scripts/tff_concatenate_tractograms.py",
-    "scripts/tff_convert_dsi_studio.py",
-    "scripts/tff_convert_tractogram.py",
-    "scripts/tff_generate_trx_from_scratch.py",
-    "scripts/tff_manipulate_datatype.py",
-    "scripts/tff_simple_compare.py",
-    "scripts/tff_validate_trx.py",
-    "scripts/tff_verify_header_compatibility.py",
-    "scripts/tff_visualize_overlap.py",
-]
 
 [tool.setuptools.dynamic]
 version = {attr = "trx._version.__version__"}

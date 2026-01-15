@@ -3,11 +3,17 @@
 import numpy as np
 import pytest
 
-from trx.streamlines_ops import (perform_streamlines_operation,
-                                 intersection, union, difference)
+from trx.streamlines_ops import (
+    difference,
+    intersection,
+    perform_streamlines_operation,
+    union,
+)
 
-streamlines_ori = [np.ones(90).reshape((30, 3)),
-                   np.arange(90).reshape((30, 3)) + 0.3333]
+streamlines_ori = [
+    np.ones(90).reshape((30, 3)),
+    np.arange(90).reshape((30, 3)) + 0.3333,
+]
 
 
 @pytest.mark.parametrize(
@@ -27,16 +33,15 @@ def test_intersection(precision, noise, expected):
     streamlines_new = []
     for i in range(5):
         if i < 4:
-            streamlines_new.append(streamlines_ori[1] +
-                                   np.random.random((30, 3)))
+            streamlines_new.append(streamlines_ori[1] + np.random.random((30, 3)))
         else:
-            streamlines_new.append(streamlines_ori[1] +
-                                   noise * np.random.random((30, 3)))
+            streamlines_new.append(
+                streamlines_ori[1] + noise * np.random.random((30, 3))
+            )
     # print(streamlines_new)
-    _, indices_uniq = perform_streamlines_operation(intersection,
-                                                    [streamlines_new,
-                                                     streamlines_ori],
-                                                    precision=precision)
+    _, indices_uniq = perform_streamlines_operation(
+        intersection, [streamlines_new, streamlines_ori], precision=precision
+    )
     indices_uniq = indices_uniq.tolist()
     assert indices_uniq == expected
 
@@ -58,16 +63,15 @@ def test_union(precision, noise, expected):
     streamlines_new = []
     for i in range(5):
         if i < 4:
-            streamlines_new.append(streamlines_ori[1] +
-                                   np.random.random((30, 3)))
+            streamlines_new.append(streamlines_ori[1] + np.random.random((30, 3)))
         else:
-            streamlines_new.append(streamlines_ori[1] +
-                                   noise * np.random.random((30, 3)))
+            streamlines_new.append(
+                streamlines_ori[1] + noise * np.random.random((30, 3))
+            )
 
-    unique_streamlines, _ = perform_streamlines_operation(union,
-                                                          [streamlines_new,
-                                                           streamlines_ori],
-                                                          precision=precision)
+    unique_streamlines, _ = perform_streamlines_operation(
+        union, [streamlines_new, streamlines_ori], precision=precision
+    )
     assert len(unique_streamlines) == expected
 
 
@@ -88,14 +92,13 @@ def test_difference(precision, noise, expected):
     streamlines_new = []
     for i in range(5):
         if i < 4:
-            streamlines_new.append(streamlines_ori[1] +
-                                   np.random.random((30, 3)))
+            streamlines_new.append(streamlines_ori[1] + np.random.random((30, 3)))
         else:
-            streamlines_new.append(streamlines_ori[1] +
-                                   noise * np.random.random((30, 3)))
+            streamlines_new.append(
+                streamlines_ori[1] + noise * np.random.random((30, 3))
+            )
 
-    unique_streamlines, _ = perform_streamlines_operation(difference,
-                                                          [streamlines_new,
-                                                           streamlines_ori],
-                                                          precision=precision)
+    unique_streamlines, _ = perform_streamlines_operation(
+        difference, [streamlines_new, streamlines_ori], precision=precision
+    )
     assert len(unique_streamlines) == expected

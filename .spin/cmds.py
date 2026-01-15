@@ -1,13 +1,13 @@
 """Custom spin commands for trx-python development."""
+
+import glob
 import os
+import shutil
 import subprocess
 import sys
 import tempfile
-import glob
-import shutil
 
 import click
-
 
 UPSTREAM_URL = "https://github.com/tee-ar-ex/trx-python.git"
 UPSTREAM_NAME = "upstream"
@@ -15,12 +15,7 @@ UPSTREAM_NAME = "upstream"
 
 def run(cmd, check=True, capture=True):
     """Run a shell command."""
-    result = subprocess.run(
-        cmd,
-        capture_output=capture,
-        text=True,
-        check=False
-    )
+    result = subprocess.run(cmd, capture_output=capture, text=True, check=False)
     if check and result.returncode != 0:
         if capture:
             click.echo(f"Error: {result.stderr}", err=True)
@@ -81,6 +76,7 @@ def setup():
     click.echo("\nVerifying version detection...")
     try:
         from setuptools_scm import get_version
+
         version = get_version()
         click.echo(f"Detected version: {version}")
 
@@ -88,7 +84,7 @@ def setup():
         if version.startswith("0.0"):
             click.echo(
                 "\nWarning: Version starts with 0.0 - tags may not be fetched.",
-                err=True
+                err=True,
             )
             sys.exit(1)
     except ImportError:
@@ -101,13 +97,13 @@ def setup():
 
 @click.command()
 @click.option(
-    "-m", "--match", "pattern", default=None,
-    help="Only run tests matching this pattern (passed to pytest -k)"
+    "-m",
+    "--match",
+    "pattern",
+    default=None,
+    help="Only run tests matching this pattern (passed to pytest -k)",
 )
-@click.option(
-    "-v", "--verbose", is_flag=True, default=False,
-    help="Verbose output"
-)
+@click.option("-v", "--verbose", is_flag=True, default=False, help="Verbose output")
 @click.argument("pytest_args", nargs=-1)
 def test(pattern, verbose, pytest_args):
     """Run tests using pytest.
@@ -120,7 +116,7 @@ def test(pattern, verbose, pytest_args):
         spin test -v                 # Verbose output
         spin test -- -x --tb=short   # Pass args to pytest
     """
-    cmd = ["pytest", "trx/tests", "scripts/tests"]
+    cmd = ["pytest", "trx/tests"]
 
     if pattern:
         cmd.extend(["-k", pattern])
@@ -137,46 +133,60 @@ def test(pattern, verbose, pytest_args):
 
 @click.command()
 @click.option(
-    "--fix", is_flag=True, default=False,
-    help="Currently unused (for future auto-fix support)"
+    "--fix", is_flag=True, default=False, help="Automatically fix issues where possible"
 )
 def lint(fix):
-    """Run linting checks using flake8.
+    """Run linting checks using ruff and codespell.
 
     Examples:
-        spin lint        # Run flake8 checks
+        spin lint        # Run ruff and codespell checks
+        spin lint --fix  # Run ruff and auto-fix issues
     """
-    # Strict check for syntax errors
-    click.echo("Checking for syntax errors...")
-    cmd_strict = [
-        "flake8", ".", "--count",
-        "--select=E9,F63,F7,F82",
-        "--show-source", "--statistics"
-    ]
-    result = run(cmd_strict, capture=False, check=False)
+    click.echo("Running ruff linter...")
+    cmd = ["ruff", "check", "."]
+
+    if fix:
+        cmd.append("--fix")
+
+    result = run(cmd, capture=False, check=False)
     if result != 0:
-        click.echo("Syntax errors found!", err=True)
+        click.echo("\nLinting issues found!", err=True)
         sys.exit(1)
 
-    # Full lint check
-    click.echo("\nRunning full lint check...")
-    cmd_full = [
-        "flake8", ".", "--count",
-        "--max-line-length=88",
-        "--max-complexity=10",
-        "--statistics"
+    click.echo("\nRunning ruff formatter check...")
+    cmd_format = ["ruff", "format", "--check", "."]
+    result = run(cmd_format, capture=False, check=False)
+    if result != 0:
+        click.echo("\nFormatting issues found!", err=True)
+        sys.exit(1)
+
+    click.echo("\nRunning codespell...")
+    cmd_spell = [
+        "codespell",
+        "--skip",
+        "*.pyc,.git,pyproject.toml,./docs/_build/*,*.egg-info,./build/*,./dist/*,./tmp/*",
+        "trx",
+        "docs/source",
+        ".spin",
     ]
-    sys.exit(run(cmd_full, capture=False, check=False))
+    result = run(cmd_spell, capture=False, check=False)
+    if result != 0:
+        click.echo("\nSpelling issues found!", err=True)
+        sys.exit(1)
+
+    click.echo("\nAll checks passed!")
 
 
 @click.command()
 @click.option(
-    "--clean", is_flag=True, default=False,
-    help="Clean build directory before building"
+    "--clean", is_flag=True, default=False, help="Clean build directory before building"
 )
 @click.option(
-    "--open", "open_browser", is_flag=True, default=False,
-    help="Open documentation in browser after building"
+    "--open",
+    "open_browser",
+    is_flag=True,
+    default=False,
+    help="Open documentation in browser after building",
 )
 def docs(clean, open_browser):
     """Build documentation using Sphinx.
@@ -187,6 +197,7 @@ def docs(clean, open_browser):
         spin docs --open   # Build and open in browser
     """
     import os
+
     docs_dir = "docs"
 
     if clean:
@@ -194,6 +205,7 @@ def docs(clean, open_browser):
         build_dir = os.path.join(docs_dir, "_build")
         if os.path.exists(build_dir):
             import shutil
+
             shutil.rmtree(build_dir)
 
     click.echo("Building documentation...")
@@ -209,6 +221,7 @@ def docs(clean, open_browser):
 
         if open_browser:
             import webbrowser
+
             webbrowser.open(f"file://{index_path}")
 
     sys.exit(result)
@@ -220,16 +233,16 @@ def clean():  # noqa: C901
     click.echo("Cleaning up temporary files...")
 
     # Clean TRX temp directory
-    trx_tmp_dir = os.getenv('TRX_TMPDIR', tempfile.gettempdir())
+    trx_tmp_dir = os.getenv("TRX_TMPDIR", tempfile.gettempdir())
     if os.path.exists(trx_tmp_dir):
-        temp_files = glob.glob(os.path.join(trx_tmp_dir, 'trx_*'))
+        temp_files = glob.glob(os.path.join(trx_tmp_dir, "trx_*"))
         for temp_dir in temp_files:
             if os.path.isdir(temp_dir):
                 click.echo(f"Removing temporary directory: {temp_dir}")
                 shutil.rmtree(temp_dir)
 
     # Clean build artifacts
-    for build_pattern in ['build', 'dist', '*.egg-info']:
+    for build_pattern in ["build", "dist", "*.egg-info"]:
         for path in glob.glob(build_pattern):
             if os.path.isdir(path):
                 click.echo(f"Removing build directory: {path}")
@@ -239,7 +252,7 @@ def clean():  # noqa: C901
                 os.remove(path)
 
     # Clean Python cache
-    for cache_dir in ['**/__pycache__', '**/.pytest_cache']:
+    for cache_dir in ["**/__pycache__", "**/.pytest_cache"]:
         for path in glob.glob(cache_dir, recursive=True):
             if os.path.isdir(path):
                 click.echo(f"Removing cache directory: {path}")
