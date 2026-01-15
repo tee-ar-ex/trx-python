@@ -1,6 +1,10 @@
 """Custom spin commands for trx-python development."""
+import os
 import subprocess
 import sys
+import tempfile
+import glob
+import shutil
 
 import click
 
@@ -208,3 +212,37 @@ def docs(clean, open_browser):
             webbrowser.open(f"file://{index_path}")
 
     sys.exit(result)
+
+
+@click.command()
+def clean():  # noqa: C901
+    """Clean up temporary files and build artifacts."""
+    click.echo("Cleaning up temporary files...")
+
+    # Clean TRX temp directory
+    trx_tmp_dir = os.getenv('TRX_TMPDIR', tempfile.gettempdir())
+    if os.path.exists(trx_tmp_dir):
+        temp_files = glob.glob(os.path.join(trx_tmp_dir, 'trx_*'))
+        for temp_dir in temp_files:
+            if os.path.isdir(temp_dir):
+                click.echo(f"Removing temporary directory: {temp_dir}")
+                shutil.rmtree(temp_dir)
+
+    # Clean build artifacts
+    for build_pattern in ['build', 'dist', '*.egg-info']:
+        for path in glob.glob(build_pattern):
+            if os.path.isdir(path):
+                click.echo(f"Removing build directory: {path}")
+                shutil.rmtree(path)
+            elif os.path.isfile(path):
+                click.echo(f"Removing build file: {path}")
+                os.remove(path)
+
+    # Clean Python cache
+    for cache_dir in ['**/__pycache__', '**/.pytest_cache']:
+        for path in glob.glob(cache_dir, recursive=True):
+            if os.path.isdir(path):
+                click.echo(f"Removing cache directory: {path}")
+                shutil.rmtree(path)
+
+    click.echo("Cleanup complete!")

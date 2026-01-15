@@ -97,3 +97,4 @@ package = "trx"
 "Build" = ["spin.cmds.pip.install"]
 "Test" = [".spin/cmds.py:test", ".spin/cmds.py:lint"]
 "Docs" = [".spin/cmds.py:docs"]
+"Clean" = [".spin/cmds.py:clean"]
