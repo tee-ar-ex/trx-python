@@ -33,6 +33,63 @@ except ImportError:
     dipy_available = False
 
 
+def _get_dtype_little_endian(dtype: Union[np.dtype, str, type]) -> np.dtype:
+    """Convert a dtype to its little-endian equivalent.
+
+    The TRX file format uses little-endian byte order for cross-platform
+    compatibility. This function ensures that dtypes are always interpreted
+    as little-endian when reading/writing TRX files.
+
+    Parameters
+    ----------
+    dtype : np.dtype, str, or type
+        Input dtype specification (e.g., np.float32, 'float32', '>f4')
+
+    Returns
+    -------
+    np.dtype
+        Little-endian dtype. For single-byte types (uint8, int8, bool),
+        returns the original dtype as endianness is not applicable.
+    """
+    dt = np.dtype(dtype)
+    # Single-byte types don't have endianness
+    if dt.byteorder == "|" or dt.itemsize == 1:
+        return dt
+    # Already little-endian
+    if dt.byteorder == "<":
+        return dt
+    # Convert to little-endian
+    return dt.newbyteorder("<")
+
+
+def _ensure_little_endian(arr: np.ndarray) -> np.ndarray:
+    """Ensure array data is in little-endian byte order for writing.
+
+    Parameters
+    ----------
+    arr : np.ndarray
+        Input array
+
+    Returns
+    -------
+    np.ndarray
+        Array with little-endian byte order. Returns a copy if conversion
+        was needed, otherwise returns the original array.
+    """
+    dt = arr.dtype
+    # Single-byte types don't have endianness
+    if dt.byteorder == "|" or dt.itemsize == 1:
+        return arr
+    # Already little-endian
+    if dt.byteorder == "<":
+        return arr
+    # Native byte order on little-endian system
+    if dt.byteorder == "=" and np.little_endian:
+        return arr
+    # Convert to little-endian
+    return arr.astype(dt.newbyteorder("<"))
+
+
 def _append_last_offsets(nib_offsets: np.ndarray, nb_vertices: int) -> np.ndarray:
     """Appends the last element of offsets from header information
 
@@ -199,6 +256,9 @@ def _create_memmap(
     """
     if np.dtype(dtype) == bool:
         filename = filename.replace(".bool", ".bit")
+
+    # TRX format uses little-endian byte order for cross-platform compatibility
+    dtype = _get_dtype_little_endian(dtype)
 
     if shape[0]:
         return np.memmap(
@@ -794,6 +854,7 @@ class TrxFile:
             tmp_header["DIMENSIONS"] = tmp_header["DIMENSIONS"].tolist()
 
         # tofile() always write in C-order
+        # Ensure little-endian byte order for cross-platform compatibility
         if not self._copy_safe:
             to_dump = self.streamlines.copy()._data
             tmp_header["NB_STREAMLINES"] = len(self.streamlines)
@@ -806,7 +867,7 @@ class TrxFile:
         positions_filename = _generate_filename_from_data(
             to_dump, os.path.join(tmp_dir.name, "positions")
         )
-        to_dump.tofile(positions_filename)
+        _ensure_little_endian(to_dump).tofile(positions_filename)
 
         if not self._copy_safe:
             to_dump = _append_last_offsets(
@@ -819,7 +880,7 @@ class TrxFile:
         offsets_filename = _generate_filename_from_data(
             self.streamlines._offsets, os.path.join(tmp_dir.name, "offsets")
         )
-        to_dump.tofile(offsets_filename)
+        _ensure_little_endian(to_dump).tofile(offsets_filename)
 
         if len(self.data_per_vertex.keys()) > 0:
             os.mkdir(os.path.join(tmp_dir.name, "dpv/"))
@@ -832,7 +893,7 @@ class TrxFile:
             dpv_filename = _generate_filename_from_data(
                 to_dump, os.path.join(tmp_dir.name, "dpv/", dpv_key)
             )
-            to_dump.tofile(dpv_filename)
+            _ensure_little_endian(to_dump).tofile(dpv_filename)
 
         if len(self.data_per_streamline.keys()) > 0:
             os.mkdir(os.path.join(tmp_dir.name, "dps/"))
@@ -841,7 +902,7 @@ class TrxFile:
             dps_filename = _generate_filename_from_data(
                 to_dump, os.path.join(tmp_dir.name, "dps/", dps_key)
             )
-            to_dump.tofile(dps_filename)
+            _ensure_little_endian(to_dump).tofile(dps_filename)
 
         if len(self.groups.keys()) > 0:
             os.mkdir(os.path.join(tmp_dir.name, "groups/"))
@@ -850,7 +911,7 @@ class TrxFile:
             group_filename = _generate_filename_from_data(
                 to_dump, os.path.join(tmp_dir.name, "groups/", group_key)
             )
-            to_dump.tofile(group_filename)
+            _ensure_little_endian(to_dump).tofile(group_filename)
 
             if group_key not in self.data_per_group:
                 continue
@@ -864,7 +925,7 @@ class TrxFile:
                 dpg_filename = _generate_filename_from_data(
                     to_dump, os.path.join(tmp_dir.name, "dpg/", group_key, dpg_key)
                 )
-                to_dump.tofile(dpg_filename)
+                _ensure_little_endian(to_dump).tofile(dpg_filename)
 
         copy_trx = load_from_directory(tmp_dir.name)
         copy_trx._uncompressed_folder_handle = tmp_dir
