@@ -38,11 +38,13 @@ dev = [
     "setuptools_scm",
 ]
 doc = [
-    "astroid >= 4.0.0",
-    "sphinx >= 9.0.0",
-    "pydata-sphinx-theme >= 0.16.1",
-    "sphinx-autoapi >= 3.0.0",
+    "matplotlib",
     "numpydoc",
+    "pydata-sphinx-theme >= 0.16.1",
+    "sphinx >= 8.2.0",
+    "sphinx-autoapi >= 3.4.0",
+    "sphinx-design",
+    "sphinx-gallery",
 ]
 style = [
     "codespell",
@@ -94,6 +96,9 @@ __version__ = "{version}"
 """
 fallback_version = "0.0"
 local_scheme = "no-local-version"
+
+[tool.codespell]
+ignore-words-list = "astroid"
 
 [tool.spin]
 package = "trx"

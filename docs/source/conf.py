@@ -60,7 +60,18 @@ extensions = [
     'sphinx.ext.autosummary',
     'autoapi.extension',
     'numpydoc',
+    'sphinx_gallery.gen_gallery',
+    'sphinx_design',
 ]
+
+# Suppress known deprecation warnings from dependencies
+# astroid 4.x deprecation - will be fixed when sphinx-autoapi updates for astroid 5.x
+import warnings
+warnings.filterwarnings(
+    'ignore',
+    message="importing .* from 'astroid' is deprecated",
+    category=DeprecationWarning
+)
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -84,6 +95,10 @@ html_theme = "pydata_sphinx_theme"
 html_static_path = ['../_static']
 html_logo = "../_static/trx_logo.png"
 
+html_sidebars = {
+    "scripts": [],
+    "trx_specifications": [],
+}
 
 html_theme_options = {
     "icon_links": [
@@ -106,9 +121,24 @@ html_theme_options = {
     },
     "navbar_start": ["navbar-logo", "version-switcher"],
     "show_version_warning_banner": True,
+    # Show table of contents on each page (section navigation)
+    "secondary_sidebar_items": ["page-toc", "edit-this-page", "sourcelink"],
+    "show_toc_level": 2,
 }
 
 
 autoapi_type = 'python'
 autoapi_dirs = ['../../trx']
 autoapi_ignore = ['*test*', '*version*']
+
+# Sphinx gallery configuration
+sphinx_gallery_conf = {
+     'examples_dirs': '../../examples',
+     'gallery_dirs': 'auto_examples',
+     'within_subsection_order': 'NumberOfCodeLinesSortKey',
+     'reference_url': {
+         'numpy': 'https://numpy.org/doc/stable/',
+         'nibabel': 'https://nipy.org/nibabel/',
+     },
+     'default_thumb_file': os.path.join(os.path.dirname(__file__), '..', '_static', 'trx_logo.png'),
+}

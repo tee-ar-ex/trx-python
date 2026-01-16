@@ -35,7 +35,7 @@ jobs:
     - name: Build docs
       run: |
         cd docs
-        make html
+        SPHINXOPTS="-W" make html
     - name: Upload docs
       uses: actions/upload-artifact@v4
       with:

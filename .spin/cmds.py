@@ -204,9 +204,18 @@ def docs(clean, open_browser):
         click.echo("Cleaning build directory...")
         build_dir = os.path.join(docs_dir, "_build")
         if os.path.exists(build_dir):
-            import shutil
-
             shutil.rmtree(build_dir)
+
+        # Clean sphinx-gallery generated files
+        gallery_dir = os.path.join(docs_dir, "source", "auto_examples")
+        if os.path.exists(gallery_dir):
+            click.echo("Cleaning sphinx-gallery generated files...")
+            shutil.rmtree(gallery_dir)
+
+        # Clean sphinx-gallery execution times file
+        sg_times = os.path.join(docs_dir, "source", "sg_execution_times.rst")
+        if os.path.exists(sg_times):
+            os.remove(sg_times)
 
     click.echo("Building documentation...")
     cmd = ["make", "-C", docs_dir, "html"]
