@@ -1,0 +1,382 @@
+{
+ "fetch_data": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "trx.fetcher",
+   "module_short": "trx.fetcher",
+   "name": "fetch_data"
+  }
+ ],
+ "first_streamline": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy",
+   "module_short": "numpy",
+   "name": "memmap"
+  }
+ ],
+ "get_home": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "trx.fetcher",
+   "module_short": "trx.fetcher",
+   "name": "get_home"
+  }
+ ],
+ "get_testing_files_dict": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "trx.fetcher",
+   "module_short": "trx.fetcher",
+   "name": "get_testing_files_dict"
+  }
+ ],
+ "indices": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "list"
+  }
+ ],
+ "load": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "trx.trx_file_memmap",
+   "module_short": "trx.trx_file_memmap",
+   "name": "load"
+  }
+ ],
+ "max_idx": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ],
+ "os.path.getsize": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "os.path",
+   "module_short": "os.path",
+   "name": "getsize"
+  }
+ ],
+ "os.path.join": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "os.path",
+   "module_short": "os.path",
+   "name": "join"
+  }
+ ],
+ "output_path": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "str"
+  }
+ ],
+ "reloaded": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "trx.trx_file_memmap",
+   "module_short": "trx.trx_file_memmap",
+   "name": "TrxFile"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "trx",
+   "module_short": "trx",
+   "name": "TrxFile"
+  }
+ ],
+ "save": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "trx.trx_file_memmap",
+   "module_short": "trx.trx_file_memmap",
+   "name": "save"
+  }
+ ],
+ "selected": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "trx.trx_file_memmap",
+   "module_short": "trx.trx_file_memmap",
+   "name": "TrxFile"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "trx",
+   "module_short": "trx",
+   "name": "TrxFile"
+  }
+ ],
+ "subset": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "trx.trx_file_memmap",
+   "module_short": "trx.trx_file_memmap",
+   "name": "TrxFile"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "trx",
+   "module_short": "trx",
+   "name": "TrxFile"
+  }
+ ],
+ "tempfile.TemporaryDirectory": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "tempfile",
+   "module_short": "tempfile",
+   "name": "TemporaryDirectory"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "tempfile",
+   "module_short": "tempfile",
+   "name": "TemporaryDirectory"
+  }
+ ],
+ "tmpdir": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "str"
+  }
+ ],
+ "trx": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "trx.trx_file_memmap",
+   "module_short": "trx.trx_file_memmap",
+   "name": "TrxFile"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "trx",
+   "module_short": "trx",
+   "name": "TrxFile"
+  }
+ ],
+ "trx.data_per_streamline.keys": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "builtin_function_or_method"
+  }
+ ],
+ "trx.data_per_vertex.keys": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "builtin_function_or_method"
+  }
+ ],
+ "trx.deepcopy": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "trx.trx_file_memmap",
+   "module_short": "trx.trx_file_memmap",
+   "name": "TrxFile.deepcopy"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "trx",
+   "module_short": "trx",
+   "name": "TrxFile.deepcopy"
+  }
+ ],
+ "trx.groups.keys": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "builtin_function_or_method"
+  }
+ ],
+ "trx.header": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "dict"
+  }
+ ],
+ "trx.select": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "trx.trx_file_memmap",
+   "module_short": "trx.trx_file_memmap",
+   "name": "TrxFile.select"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "trx",
+   "module_short": "trx",
+   "name": "TrxFile.select"
+  }
+ ],
+ "trx.streamlines": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nibabel.streamlines.array_sequence",
+   "module_short": "nibabel.streamlines",
+   "name": "ArraySequence"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nibabel.streamlines",
+   "module_short": "nibabel.streamlines",
+   "name": "ArraySequence"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nibabel",
+   "module_short": "nibabel",
+   "name": "ArraySequence"
+  }
+ ],
+ "trx.streamlines._data": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy",
+   "module_short": "numpy",
+   "name": "memmap"
+  }
+ ],
+ "trx_copy": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "trx.trx_file_memmap",
+   "module_short": "trx.trx_file_memmap",
+   "name": "TrxFile"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "trx",
+   "module_short": "trx",
+   "name": "TrxFile"
+  }
+ ],
+ "trx_copy.header": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "dict"
+  }
+ ],
+ "trx_home": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "str"
+  }
+ ],
+ "trx_path": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "str"
+  }
+ ]
+}

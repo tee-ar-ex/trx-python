@@ -1,0 +1,487 @@
+trx.utils
+=========
+
+.. py:module:: trx.utils
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   trx.utils.dipy_available
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   trx.utils.close_or_delete_mmap
+   trx.utils.split_name_with_gz
+   trx.utils.get_reference_info_wrapper
+   trx.utils.is_header_compatible
+   trx.utils.get_axis_shift_vector
+   trx.utils.get_axis_flip_vector
+   trx.utils.get_shift_vector
+   trx.utils.flip_sft
+   trx.utils.load_matrix_in_any_format
+   trx.utils.get_reverse_enum
+   trx.utils.convert_data_dict_to_tractogram
+   trx.utils.append_generator_to_dict
+   trx.utils.verify_trx_dtype
+
+
+Module Contents
+---------------
+
+.. py:data:: dipy_available
+   :value: True
+
+
+.. py:function:: close_or_delete_mmap(obj)
+
+   
+   Close the memory-mapped file if it exists, otherwise set the object to None.
+
+
+   :Parameters:
+
+       **obj** : object
+           The object that potentially has a memory-mapped file to be closed.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: split_name_with_gz(filename)
+
+   
+   Returns the clean basename and extension of a file.
+   Means that this correctly manages the ".nii.gz" extensions.
+
+
+   :Parameters:
+
+       **filename: str**
+           The filename to clean
+
+
+
+   :Returns:
+
+       **base, ext** : tuple(str, str)
+           ..
+
+       Clean basename and the full extension
+           ..
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: get_reference_info_wrapper(reference)
+
+   
+   Will compare the spatial attribute of 2 references.
+
+
+   :Parameters:
+
+       **reference** : Nifti or Trk filename, Nifti1Image or TrkFile, Nifti1Header or
+           trk.header (dict), TrxFile or trx.header (dict)
+           Reference that provides the spatial attribute.
+
+       **Returns**
+           ..
+
+       **-------**
+           ..
+
+       **output** : tuple
+           - affine ndarray (4,4), np.float32, transformation of VOX to RASMM
+           - dimensions ndarray (3,), int16, volume shape for each axis
+           - voxel_sizes  ndarray (3,), float32, size of voxel for each axis
+           - voxel_order, string, Typically 'RAS' or 'LPS'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: is_header_compatible(reference_1, reference_2)
+
+   
+   Will compare the spatial attribute of 2 references.
+
+
+   :Parameters:
+
+       **reference_1** : Nifti or Trk filename, Nifti1Image or TrkFile,
+           Nifti1Header or trk.header (dict)
+           Reference that provides the spatial attribute.
+
+       **reference_2** : Nifti or Trk filename, Nifti1Image or TrkFile,
+           Nifti1Header or trk.header (dict)
+           Reference that provides the spatial attribute.
+
+       **Returns**
+           ..
+
+       **-------**
+           ..
+
+       **output** : bool
+           Does all the spatial attribute match
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: get_axis_shift_vector(flip_axes)
+
+   
+
+
+
+   :Parameters:
+
+       **flip_axes** : list of str
+           String containing the axis to flip.
+           Possible values are 'x', 'y', 'z'
+
+       **Returns**
+           ..
+
+       **-------**
+           ..
+
+       **flip_vector** : np.ndarray (3,)
+           Vector containing the axis to flip.
+           Possible values are -1, 1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: get_axis_flip_vector(flip_axes)
+
+   
+
+
+
+   :Parameters:
+
+       **flip_axes** : list of str
+           String containing the axis to flip.
+           Possible values are 'x', 'y', 'z'
+
+       **Returns**
+           ..
+
+       **-------**
+           ..
+
+       **flip_vector** : np.ndarray (3,)
+           Vector containing the axis to flip.
+           Possible values are -1, 1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: get_shift_vector(sft)
+
+   
+   When flipping a tractogram the shift vector is used to change the origin
+   of the grid from the corner to the center of the grid.
+
+
+   :Parameters:
+
+       **sft** : StatefulTractogram
+           StatefulTractogram object
+
+       **Returns**
+           ..
+
+       **-------**
+           ..
+
+       **shift_vector** : ndarray
+           Shift vector to apply to the streamlines
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: flip_sft(sft, flip_axes)
+
+   
+   Flip the streamlines in the StatefulTractogram according to the
+   flip_axes. Uses the spatial information to flip according to the center
+   of the grid.
+
+
+   :Parameters:
+
+       **sft** : StatefulTractogram
+           StatefulTractogram to flip
+
+       **flip_axes** : list of str
+           Axes to flip.
+           Possible values are 'x', 'y', 'z'
+
+       **Returns**
+           ..
+
+       **-------**
+           ..
+
+       **sft** : StatefulTractogram
+           StatefulTractogram with flipped axes
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: load_matrix_in_any_format(filepath)
+
+   
+   Load a matrix from a txt file OR a npy file.
+
+
+   :Parameters:
+
+       **filepath** : str
+           Path to the matrix file.
+
+       **Returns**
+           ..
+
+       **-------**
+           ..
+
+       **matrix** : numpy.ndarray
+           The matrix.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: get_reverse_enum(space_str, origin_str)
+
+   
+   Convert string representation to enums for the StatefulTractogram.
+
+
+   :Parameters:
+
+       **space_str** : str
+           String representing the space.
+
+       **origin_str** : str
+           String representing the origin.
+
+       **Returns**
+           ..
+
+       **-------**
+           ..
+
+       **output** : str
+           Space and Origin as Enums.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: convert_data_dict_to_tractogram(data)
+
+   
+   Convert data from a lazy tractogram to a tractogram.
+
+
+   :Parameters:
+
+       **data** : dict
+           The data dictionary to convert into a nibabel tractogram.
+
+
+
+   :Returns:
+
+       Tractogram
+           A Tractogram object.
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: append_generator_to_dict(gen, data)
+
+.. py:function:: verify_trx_dtype(trx, dict_dtype)
+
+   
+   Verify if the dtype of the data in the trx is the same as the one in
+   the dict.
+
+
+   :Parameters:
+
+       **trx** : Tractogram
+           Tractogram to verify.
+
+       **dict_dtype** : dict
+           Dictionary containing all elements dtype to verify.
+
+       **Returns**
+           ..
+
+       **-------**
+           ..
+
+       **output** : bool
+           True if the dtype is the same, False otherwise.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+

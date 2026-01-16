@@ -1,0 +1,859 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>trx.cli &#8212; trx-python dev documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=3ce10a4d"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'autoapi/trx/cli/index';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.16.1';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://tee-ar-ex.github.io/trx-python/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'dev';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
+        </script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="trx.fetcher" href="../fetcher/index.html" />
+    <link rel="prev" title="trx" href="../index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="dev" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/trx_logo.png" class="logo__image only-light" alt="trx-python dev documentation - Home"/>
+    <img src="../../../_static/trx_logo.png" class="logo__image only-dark pst-js-only" alt="trx-python dev documentation - Home"/>
+  
+  
+</a></div>
+    
+      <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../trx_specifications.html">
+    TRX File Format Specifications
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../scripts.html">
+    Command-line Interface
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../auto_examples/index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../dev.html">
+    Developer Guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../index.html">
+    API Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/tee-ar-ex" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-github-square fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../trx_specifications.html">
+    TRX File Format Specifications
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../scripts.html">
+    Command-line Interface
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../auto_examples/index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../dev.html">
+    Developer Guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../index.html">
+    API Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/tee-ar-ex" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-github-square fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../index.html">trx</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">trx.cli</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fetcher/index.html">trx.fetcher</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../io/index.html">trx.io</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../streamlines_ops/index.html">trx.streamlines_ops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../trx_file_memmap/index.html">trx.trx_file_memmap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../utils/index.html">trx.utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../viz/index.html">trx.viz</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../workflows/index.html">trx.workflows</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">API Reference</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">trx</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">trx.cli</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="module-trx.cli">
+<span id="trx-cli"></span><h1>trx.cli<a class="headerlink" href="#module-trx.cli" title="Link to this heading">#</a></h1>
+<p>TRX Command Line Interface.</p>
+<p>This module provides a unified CLI for all TRX file format operations using Typer.</p>
+<section id="attributes">
+<h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.cli.app" title="trx.cli.app"><code class="xref py py-obj docutils literal notranslate"><span class="pre">app</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#trx.cli.concatenate_tractograms_cmd" title="trx.cli.concatenate_tractograms_cmd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">concatenate_tractograms_cmd</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.cli.convert_dsi_cmd" title="trx.cli.convert_dsi_cmd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">convert_dsi_cmd</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#trx.cli.convert_cmd" title="trx.cli.convert_cmd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">convert_cmd</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.cli.generate_cmd" title="trx.cli.generate_cmd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_cmd</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#trx.cli.manipulate_dtype_cmd" title="trx.cli.manipulate_dtype_cmd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">manipulate_dtype_cmd</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.cli.compare_cmd" title="trx.cli.compare_cmd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compare_cmd</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#trx.cli.validate_cmd" title="trx.cli.validate_cmd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate_cmd</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.cli.verify_header_cmd" title="trx.cli.verify_header_cmd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">verify_header_cmd</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#trx.cli.visualize_cmd" title="trx.cli.visualize_cmd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">visualize_cmd</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.cli._check_overwrite" title="trx.cli._check_overwrite"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_check_overwrite</span></code></a>(→ None)</p></td>
+<td><p>Check if file exists and raise error if overwrite is not enabled.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#trx.cli.concatenate_tractograms" title="trx.cli.concatenate_tractograms"><code class="xref py py-obj docutils literal notranslate"><span class="pre">concatenate_tractograms</span></code></a>(], out_tractogram, ...)</p></td>
+<td><p>Concatenate multiple tractograms into one.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.cli.convert" title="trx.cli.convert"><code class="xref py py-obj docutils literal notranslate"><span class="pre">convert</span></code></a>(], out_tractogram, typer.Argument], reference, ...)</p></td>
+<td><p>Convert tractograms between formats.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#trx.cli.convert_dsi" title="trx.cli.convert_dsi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">convert_dsi</span></code></a>(], in_dsi_fa, typer.Argument], ...)</p></td>
+<td><p>Fix DSI-Studio TRK files for compatibility.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.cli.generate" title="trx.cli.generate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate</span></code></a>(], out_tractogram, typer.Argument], ...)</p></td>
+<td><p>Generate TRX file from raw data files.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#trx.cli.manipulate_dtype" title="trx.cli.manipulate_dtype"><code class="xref py py-obj docutils literal notranslate"><span class="pre">manipulate_dtype</span></code></a>(], out_tractogram, typer.Argument], ...)</p></td>
+<td><p>Manipulate TRX file internal array data types.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.cli.compare" title="trx.cli.compare"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compare</span></code></a>(], in_tractogram2, typer.Argument], reference, ...)</p></td>
+<td><p>Simple comparison of tractograms by subtracting coordinates.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#trx.cli.validate" title="trx.cli.validate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate</span></code></a>(], out_tractogram, typer.Option] = None, ...)</p></td>
+<td><p>Validate TRX file and remove invalid streamlines.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.cli.verify_header" title="trx.cli.verify_header"><code class="xref py py-obj docutils literal notranslate"><span class="pre">verify_header</span></code></a>(]) → None)</p></td>
+<td><p>Compare spatial attributes of input files.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#trx.cli.visualize" title="trx.cli.visualize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">visualize</span></code></a>(], reference, typer.Argument], ...)</p></td>
+<td><p>Display tractogram and density map with bounding box.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.cli.main" title="trx.cli.main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">main</span></code></a>()</p></td>
+<td><p>Entry point for the TRX CLI.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#trx.cli._create_standalone_app" title="trx.cli._create_standalone_app"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_create_standalone_app</span></code></a>(command_func, name, help_text)</p></td>
+<td><p>Create a standalone Typer app for a single command.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">#</a></h2>
+<dl class="py data">
+<dt class="sig sig-object py" id="trx.cli.app">
+<span class="sig-prename descclassname"><span class="pre">trx.cli.</span></span><span class="sig-name descname"><span class="pre">app</span></span><a class="reference internal" href="../../../_modules/trx/cli.html#app"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.cli.app" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trx.cli._check_overwrite">
+<span class="sig-prename descclassname"><span class="pre">trx.cli.</span></span><span class="sig-name descname"><span class="pre">_check_overwrite</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pathlib.Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/trx/cli.html#_check_overwrite"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.cli._check_overwrite" title="Link to this definition">#</a></dt>
+<dd><p>Check if file exists and raise error if overwrite is not enabled.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>filepath</strong><span class="classifier">Path</span></dt><dd><p>Path to the output file.</p>
+</dd>
+<dt><strong>overwrite</strong><span class="classifier">bool</span></dt><dd><p>If True, allow overwriting existing files.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>typer.Exit</dt><dd><p>If file exists and overwrite is False.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trx.cli.concatenate_tractograms">
+<span class="sig-prename descclassname"><span class="pre">trx.cli.</span></span><span class="sig-name descname"><span class="pre">concatenate_tractograms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_tractograms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Argument</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Input</span> <span class="pre">tractogram</span> <span class="pre">files.</span> <span class="pre">Format:</span> <span class="pre">trk,</span> <span class="pre">tck,</span> <span class="pre">vtk,</span> <span class="pre">fib,</span> <span class="pre">dpy,</span> <span class="pre">trx.'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_tractogram</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Argument</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Output</span> <span class="pre">filename</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">concatenated</span> <span class="pre">tractogram.'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delete_dpv</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Option</span><span class="p"><span class="pre">(</span></span><span class="s"><span class="pre">'--delete-dpv'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Delete</span> <span class="pre">data_per_vertex</span> <span class="pre">if</span> <span class="pre">not</span> <span class="pre">all</span> <span class="pre">inputs</span> <span class="pre">have</span> <span class="pre">the</span> <span class="pre">same</span> <span class="pre">metadata.'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delete_dps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Option</span><span class="p"><span class="pre">(</span></span><span class="s"><span class="pre">'--delete-dps'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Delete</span> <span class="pre">data_per_streamline</span> <span class="pre">if</span> <span class="pre">not</span> <span class="pre">all</span> <span class="pre">inputs</span> <span class="pre">have</span> <span class="pre">the</span> <span class="pre">same</span> <span class="pre">metadata.'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delete_groups</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Option</span><span class="p"><span class="pre">(</span></span><span class="s"><span class="pre">'--delete-groups'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Delete</span> <span class="pre">groups</span> <span class="pre">if</span> <span class="pre">not</span> <span class="pre">all</span> <span class="pre">inputs</span> <span class="pre">have</span> <span class="pre">the</span> <span class="pre">same</span> <span class="pre">metadata.'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">pathlib.Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Option</span><span class="p"><span class="pre">(</span></span><span class="s"><span class="pre">'--reference'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'-r'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Reference</span> <span class="pre">anatomy</span> <span class="pre">for</span> <span class="pre">tck/vtk/fib/dpy</span> <span class="pre">files</span> <span class="pre">(.nii</span> <span class="pre">or</span> <span class="pre">.nii.gz).'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Option</span><span class="p"><span class="pre">(</span></span><span class="s"><span class="pre">'--force'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'-f'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Force</span> <span class="pre">overwriting</span> <span class="pre">of</span> <span class="pre">output</span> <span class="pre">files.'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/trx/cli.html#concatenate_tractograms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.cli.concatenate_tractograms" title="Link to this definition">#</a></dt>
+<dd><p>Concatenate multiple tractograms into one.</p>
+<p>If the data_per_point or data_per_streamline is not the same for all
+tractograms, the data must be deleted first using the appropriate flags.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trx.cli.convert">
+<span class="sig-prename descclassname"><span class="pre">trx.cli.</span></span><span class="sig-name descname"><span class="pre">convert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_tractogram</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Argument</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Input</span> <span class="pre">tractogram.</span> <span class="pre">Format:</span> <span class="pre">trk,</span> <span class="pre">tck,</span> <span class="pre">vtk,</span> <span class="pre">fib,</span> <span class="pre">dpy,</span> <span class="pre">trx.'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_tractogram</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Argument</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Output</span> <span class="pre">tractogram.</span> <span class="pre">Format:</span> <span class="pre">trk,</span> <span class="pre">tck,</span> <span class="pre">vtk,</span> <span class="pre">fib,</span> <span class="pre">dpy,</span> <span class="pre">trx.'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">pathlib.Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Option</span><span class="p"><span class="pre">(</span></span><span class="s"><span class="pre">'--reference'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'-r'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Reference</span> <span class="pre">anatomy</span> <span class="pre">for</span> <span class="pre">tck/vtk/fib/dpy</span> <span class="pre">files</span> <span class="pre">(.nii</span> <span class="pre">or</span> <span class="pre">.nii.gz).'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">positions_dtype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Option</span><span class="p"><span class="pre">(</span></span><span class="s"><span class="pre">'--positions-dtype'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Datatype</span> <span class="pre">for</span> <span class="pre">positions</span> <span class="pre">in</span> <span class="pre">TRX</span> <span class="pre">output.'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'float32'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offsets_dtype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Option</span><span class="p"><span class="pre">(</span></span><span class="s"><span class="pre">'--offsets-dtype'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Datatype</span> <span class="pre">for</span> <span class="pre">offsets</span> <span class="pre">in</span> <span class="pre">TRX</span> <span class="pre">output.'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'uint64'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Option</span><span class="p"><span class="pre">(</span></span><span class="s"><span class="pre">'--force'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'-f'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Force</span> <span class="pre">overwriting</span> <span class="pre">of</span> <span class="pre">output</span> <span class="pre">files.'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/trx/cli.html#convert"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.cli.convert" title="Link to this definition">#</a></dt>
+<dd><p>Convert tractograms between formats.</p>
+<p>Supports conversion of .tck, .trk, .fib, .vtk, .trx and .dpy files.
+TCK files always need a reference NIFTI file for conversion.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trx.cli.convert_dsi">
+<span class="sig-prename descclassname"><span class="pre">trx.cli.</span></span><span class="sig-name descname"><span class="pre">convert_dsi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_dsi_tractogram</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Argument</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Input</span> <span class="pre">tractogram</span> <span class="pre">from</span> <span class="pre">DSI</span> <span class="pre">Studio</span> <span class="pre">(.trk).'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_dsi_fa</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Argument</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Input</span> <span class="pre">FA</span> <span class="pre">from</span> <span class="pre">DSI</span> <span class="pre">Studio</span> <span class="pre">(.nii.gz).'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_tractogram</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Argument</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Output</span> <span class="pre">tractogram</span> <span class="pre">file.'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove_invalid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Option</span><span class="p"><span class="pre">(</span></span><span class="s"><span class="pre">'--remove-invalid'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Remove</span> <span class="pre">streamlines</span> <span class="pre">landing</span> <span class="pre">out</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">bounding</span> <span class="pre">box.'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_invalid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Option</span><span class="p"><span class="pre">(</span></span><span class="s"><span class="pre">'--keep-invalid'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Keep</span> <span class="pre">streamlines</span> <span class="pre">landing</span> <span class="pre">out</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">bounding</span> <span class="pre">box.'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Option</span><span class="p"><span class="pre">(</span></span><span class="s"><span class="pre">'--force'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'-f'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Force</span> <span class="pre">overwriting</span> <span class="pre">of</span> <span class="pre">output</span> <span class="pre">files.'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/trx/cli.html#convert_dsi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.cli.convert_dsi" title="Link to this definition">#</a></dt>
+<dd><p>Fix DSI-Studio TRK files for compatibility.</p>
+<p>This script fixes DSI-Studio TRK files (unknown space/convention) to make
+them compatible with TrackVis, MI-Brain, and Dipy Horizon.</p>
+<p>[bold yellow]WARNING:[/bold yellow] This script is experimental. DSI-Studio evolves
+quickly and results may vary depending on the data and DSI-Studio version.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trx.cli.generate">
+<span class="sig-prename descclassname"><span class="pre">trx.cli.</span></span><span class="sig-name descname"><span class="pre">generate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reference</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Argument</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Reference</span> <span class="pre">anatomy</span> <span class="pre">(.nii</span> <span class="pre">or</span> <span class="pre">.nii.gz).'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_tractogram</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Argument</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Output</span> <span class="pre">tractogram.</span> <span class="pre">Format:</span> <span class="pre">trk,</span> <span class="pre">tck,</span> <span class="pre">vtk,</span> <span class="pre">fib,</span> <span class="pre">dpy,</span> <span class="pre">trx.'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">positions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">pathlib.Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Option</span><span class="p"><span class="pre">(</span></span><span class="s"><span class="pre">'--positions'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Binary</span> <span class="pre">file</span> <span class="pre">with</span> <span class="pre">streamline</span> <span class="pre">coordinates</span> <span class="pre">(Nx3</span> <span class="pre">.npy).'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offsets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">pathlib.Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Option</span><span class="p"><span class="pre">(</span></span><span class="s"><span class="pre">'--offsets'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Binary</span> <span class="pre">file</span> <span class="pre">with</span> <span class="pre">streamline</span> <span class="pre">offsets</span> <span class="pre">(.npy).'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">positions_csv</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">pathlib.Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Option</span><span class="p"><span class="pre">(</span></span><span class="s"><span class="pre">'--positions-csv'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'CSV</span> <span class="pre">file</span> <span class="pre">with</span> <span class="pre">streamline</span> <span class="pre">coordinates</span> <span class="pre">(x1,y1,z1,x2,y2,z2,...).'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">space</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Option</span><span class="p"><span class="pre">(</span></span><span class="s"><span class="pre">'--space'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Coordinate</span> <span class="pre">space.</span> <span class="pre">Non-default</span> <span class="pre">requires</span> <span class="pre">Dipy.'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'RASMM'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">origin</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Option</span><span class="p"><span class="pre">(</span></span><span class="s"><span class="pre">'--origin'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Coordinate</span> <span class="pre">origin.</span> <span class="pre">Non-default</span> <span class="pre">requires</span> <span class="pre">Dipy.'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'NIFTI'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">positions_dtype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Option</span><span class="p"><span class="pre">(</span></span><span class="s"><span class="pre">'--positions-dtype'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Datatype</span> <span class="pre">for</span> <span class="pre">positions.'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'float32'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offsets_dtype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Option</span><span class="p"><span class="pre">(</span></span><span class="s"><span class="pre">'--offsets-dtype'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Datatype</span> <span class="pre">for</span> <span class="pre">offsets.'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'uint64'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpv</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Option</span><span class="p"><span class="pre">(</span></span><span class="s"><span class="pre">'--dpv'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Data</span> <span class="pre">per</span> <span class="pre">vertex:</span> <span class="pre">FILE,DTYPE</span> <span class="pre">(e.g.,</span> <span class="pre">color.npy,uint8).'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Option</span><span class="p"><span class="pre">(</span></span><span class="s"><span class="pre">'--dps'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Data</span> <span class="pre">per</span> <span class="pre">streamline:</span> <span class="pre">FILE,DTYPE</span> <span class="pre">(e.g.,</span> <span class="pre">algo.npy,uint8).'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Option</span><span class="p"><span class="pre">(</span></span><span class="s"><span class="pre">'--groups'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Groups:</span> <span class="pre">FILE,DTYPE</span> <span class="pre">(e.g.,</span> <span class="pre">AF_L.npy,int32).'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Option</span><span class="p"><span class="pre">(</span></span><span class="s"><span class="pre">'--dpg'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Data</span> <span class="pre">per</span> <span class="pre">group:</span> <span class="pre">GROUP,FILE,DTYPE</span> <span class="pre">(e.g.,</span> <span class="pre">AF_L,mean_fa.npy,float32).'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verify_invalid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Option</span><span class="p"><span class="pre">(</span></span><span class="s"><span class="pre">'--verify-invalid'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Verify</span> <span class="pre">positions</span> <span class="pre">are</span> <span class="pre">valid</span> <span class="pre">(within</span> <span class="pre">bounding</span> <span class="pre">box).</span> <span class="pre">Requires</span> <span class="pre">Dipy.'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Option</span><span class="p"><span class="pre">(</span></span><span class="s"><span class="pre">'--force'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'-f'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Force</span> <span class="pre">overwriting</span> <span class="pre">of</span> <span class="pre">output</span> <span class="pre">files.'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/trx/cli.html#generate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.cli.generate" title="Link to this definition">#</a></dt>
+<dd><p>Generate TRX file from raw data files.</p>
+<p>Create a TRX file from CSV, TXT, or NPY files by specifying positions,
+offsets, data_per_vertex, data_per_streamlines, groups, and data_per_group.</p>
+<p>Each –dpv, –dps, –groups option requires FILE,DTYPE format.
+Each –dpg option requires GROUP,FILE,DTYPE format.</p>
+<p>Valid DTYPEs: (u)int8, (u)int16, (u)int32, (u)int64, float16, float32, float64, bool</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trx.cli.manipulate_dtype">
+<span class="sig-prename descclassname"><span class="pre">trx.cli.</span></span><span class="sig-name descname"><span class="pre">manipulate_dtype</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_tractogram</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Argument</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Input</span> <span class="pre">TRX</span> <span class="pre">file.'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_tractogram</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Argument</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Output</span> <span class="pre">tractogram</span> <span class="pre">file.'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">positions_dtype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Option</span><span class="p"><span class="pre">(</span></span><span class="s"><span class="pre">'--positions-dtype'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Datatype</span> <span class="pre">for</span> <span class="pre">positions</span> <span class="pre">(float16,</span> <span class="pre">float32,</span> <span class="pre">float64).'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offsets_dtype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Option</span><span class="p"><span class="pre">(</span></span><span class="s"><span class="pre">'--offsets-dtype'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Datatype</span> <span class="pre">for</span> <span class="pre">offsets</span> <span class="pre">(uint32,</span> <span class="pre">uint64).'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpv</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Option</span><span class="p"><span class="pre">(</span></span><span class="s"><span class="pre">'--dpv'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Data</span> <span class="pre">per</span> <span class="pre">vertex</span> <span class="pre">dtype:</span> <span class="pre">NAME,DTYPE</span> <span class="pre">(e.g.,</span> <span class="pre">color_x,uint8).'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Option</span><span class="p"><span class="pre">(</span></span><span class="s"><span class="pre">'--dps'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Data</span> <span class="pre">per</span> <span class="pre">streamline</span> <span class="pre">dtype:</span> <span class="pre">NAME,DTYPE</span> <span class="pre">(e.g.,</span> <span class="pre">algo,uint8).'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Option</span><span class="p"><span class="pre">(</span></span><span class="s"><span class="pre">'--groups'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Groups</span> <span class="pre">dtype:</span> <span class="pre">NAME,DTYPE</span> <span class="pre">(e.g.,</span> <span class="pre">CC,uint64).'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Option</span><span class="p"><span class="pre">(</span></span><span class="s"><span class="pre">'--dpg'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Data</span> <span class="pre">per</span> <span class="pre">group</span> <span class="pre">dtype:</span> <span class="pre">GROUP,NAME,DTYPE</span> <span class="pre">(e.g.,</span> <span class="pre">CC,mean_fa,float64).'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Option</span><span class="p"><span class="pre">(</span></span><span class="s"><span class="pre">'--force'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'-f'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Force</span> <span class="pre">overwriting</span> <span class="pre">of</span> <span class="pre">output</span> <span class="pre">files.'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/trx/cli.html#manipulate_dtype"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.cli.manipulate_dtype" title="Link to this definition">#</a></dt>
+<dd><p>Manipulate TRX file internal array data types.</p>
+<p>Change the data types of positions, offsets, data_per_vertex,
+data_per_streamline, groups, and data_per_group arrays.</p>
+<p>Valid DTYPEs: (u)int8, (u)int16, (u)int32, (u)int64, float16, float32, float64, bool</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trx.cli.compare">
+<span class="sig-prename descclassname"><span class="pre">trx.cli.</span></span><span class="sig-name descname"><span class="pre">compare</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_tractogram1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Argument</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'First</span> <span class="pre">tractogram</span> <span class="pre">file.'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_tractogram2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Argument</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Second</span> <span class="pre">tractogram</span> <span class="pre">file.'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">pathlib.Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Option</span><span class="p"><span class="pre">(</span></span><span class="s"><span class="pre">'--reference'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'-r'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Reference</span> <span class="pre">anatomy</span> <span class="pre">for</span> <span class="pre">tck/vtk/fib/dpy</span> <span class="pre">files</span> <span class="pre">(.nii</span> <span class="pre">or</span> <span class="pre">.nii.gz).'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/trx/cli.html#compare"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.cli.compare" title="Link to this definition">#</a></dt>
+<dd><p>Simple comparison of tractograms by subtracting coordinates.</p>
+<p>Does not account for shuffling of streamlines. Simple A-B operations.</p>
+<p>Differences below 1e-3 are expected for affines with large rotation/scaling.
+Differences below 1e-6 are expected for isotropic data with small rotation.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trx.cli.validate">
+<span class="sig-prename descclassname"><span class="pre">trx.cli.</span></span><span class="sig-name descname"><span class="pre">validate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_tractogram</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Argument</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Input</span> <span class="pre">tractogram.</span> <span class="pre">Format:</span> <span class="pre">trk,</span> <span class="pre">tck,</span> <span class="pre">vtk,</span> <span class="pre">fib,</span> <span class="pre">dpy,</span> <span class="pre">trx.'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_tractogram</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">pathlib.Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Option</span><span class="p"><span class="pre">(</span></span><span class="s"><span class="pre">'--out'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'-o'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Output</span> <span class="pre">tractogram</span> <span class="pre">after</span> <span class="pre">removing</span> <span class="pre">invalid</span> <span class="pre">streamlines.'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove_identical</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Option</span><span class="p"><span class="pre">(</span></span><span class="s"><span class="pre">'--remove-identical'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Remove</span> <span class="pre">identical</span> <span class="pre">streamlines</span> <span class="pre">from</span> <span class="pre">the</span> <span class="pre">set.'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precision</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Option</span><span class="p"><span class="pre">(</span></span><span class="s"><span class="pre">'--precision'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'-p'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Number</span> <span class="pre">of</span> <span class="pre">decimals</span> <span class="pre">when</span> <span class="pre">hashing</span> <span class="pre">streamline</span> <span class="pre">points.'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">pathlib.Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Option</span><span class="p"><span class="pre">(</span></span><span class="s"><span class="pre">'--reference'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'-r'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Reference</span> <span class="pre">anatomy</span> <span class="pre">for</span> <span class="pre">tck/vtk/fib/dpy</span> <span class="pre">files</span> <span class="pre">(.nii</span> <span class="pre">or</span> <span class="pre">.nii.gz).'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Option</span><span class="p"><span class="pre">(</span></span><span class="s"><span class="pre">'--force'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'-f'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Force</span> <span class="pre">overwriting</span> <span class="pre">of</span> <span class="pre">output</span> <span class="pre">files.'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/trx/cli.html#validate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.cli.validate" title="Link to this definition">#</a></dt>
+<dd><p>Validate TRX file and remove invalid streamlines.</p>
+<p>Removes streamlines that are out of the volume bounding box (in voxel space,
+no negative coordinates or coordinates above volume dimensions).</p>
+<p>Also removes streamlines with single or no points.
+Use –remove-identical to remove duplicate streamlines based on precision.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trx.cli.verify_header">
+<span class="sig-prename descclassname"><span class="pre">trx.cli.</span></span><span class="sig-name descname"><span class="pre">verify_header</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_files</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Argument</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Files</span> <span class="pre">to</span> <span class="pre">compare</span> <span class="pre">(trk,</span> <span class="pre">trx,</span> <span class="pre">and</span> <span class="pre">nii).'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/trx/cli.html#verify_header"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.cli.verify_header" title="Link to this definition">#</a></dt>
+<dd><p>Compare spatial attributes of input files.</p>
+<p>Compares all input files against the first one for compatibility of
+spatial attributes: affine, dimensions, voxel sizes, and voxel order.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trx.cli.visualize">
+<span class="sig-prename descclassname"><span class="pre">trx.cli.</span></span><span class="sig-name descname"><span class="pre">visualize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_tractogram</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Argument</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Input</span> <span class="pre">tractogram.</span> <span class="pre">Format:</span> <span class="pre">trk,</span> <span class="pre">tck,</span> <span class="pre">vtk,</span> <span class="pre">fib,</span> <span class="pre">dpy,</span> <span class="pre">trx.'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Argument</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Reference</span> <span class="pre">anatomy</span> <span class="pre">(.nii</span> <span class="pre">or</span> <span class="pre">.nii.gz).'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove_invalid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Option</span><span class="p"><span class="pre">(</span></span><span class="s"><span class="pre">'--remove-invalid'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Remove</span> <span class="pre">invalid</span> <span class="pre">streamlines</span> <span class="pre">to</span> <span class="pre">avoid</span> <span class="pre">density_map</span> <span class="pre">crash.'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/trx/cli.html#visualize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.cli.visualize" title="Link to this definition">#</a></dt>
+<dd><p>Display tractogram and density map with bounding box.</p>
+<p>Shows the tractogram and its density map (computed from Dipy) in
+rasmm, voxmm, and vox space with its bounding box.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trx.cli.main">
+<span class="sig-prename descclassname"><span class="pre">trx.cli.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/cli.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.cli.main" title="Link to this definition">#</a></dt>
+<dd><p>Entry point for the TRX CLI.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trx.cli._create_standalone_app">
+<span class="sig-prename descclassname"><span class="pre">trx.cli.</span></span><span class="sig-name descname"><span class="pre">_create_standalone_app</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">command_func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">help_text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/cli.html#_create_standalone_app"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.cli._create_standalone_app" title="Link to this definition">#</a></dt>
+<dd><p>Create a standalone Typer app for a single command.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>command_func</strong><span class="classifier">callable</span></dt><dd><p>The command function to wrap.</p>
+</dd>
+<dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>Name of the command.</p>
+</dd>
+<dt><strong>help_text</strong><span class="classifier">str</span></dt><dd><p>Help text for the command.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>callable</dt><dd><p>Entry point function.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="trx.cli.concatenate_tractograms_cmd">
+<span class="sig-prename descclassname"><span class="pre">trx.cli.</span></span><span class="sig-name descname"><span class="pre">concatenate_tractograms_cmd</span></span><a class="reference internal" href="../../../_modules/trx/cli.html#concatenate_tractograms_cmd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.cli.concatenate_tractograms_cmd" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="trx.cli.convert_dsi_cmd">
+<span class="sig-prename descclassname"><span class="pre">trx.cli.</span></span><span class="sig-name descname"><span class="pre">convert_dsi_cmd</span></span><a class="reference internal" href="../../../_modules/trx/cli.html#convert_dsi_cmd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.cli.convert_dsi_cmd" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="trx.cli.convert_cmd">
+<span class="sig-prename descclassname"><span class="pre">trx.cli.</span></span><span class="sig-name descname"><span class="pre">convert_cmd</span></span><a class="reference internal" href="../../../_modules/trx/cli.html#convert_cmd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.cli.convert_cmd" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="trx.cli.generate_cmd">
+<span class="sig-prename descclassname"><span class="pre">trx.cli.</span></span><span class="sig-name descname"><span class="pre">generate_cmd</span></span><a class="reference internal" href="../../../_modules/trx/cli.html#generate_cmd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.cli.generate_cmd" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="trx.cli.manipulate_dtype_cmd">
+<span class="sig-prename descclassname"><span class="pre">trx.cli.</span></span><span class="sig-name descname"><span class="pre">manipulate_dtype_cmd</span></span><a class="reference internal" href="../../../_modules/trx/cli.html#manipulate_dtype_cmd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.cli.manipulate_dtype_cmd" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="trx.cli.compare_cmd">
+<span class="sig-prename descclassname"><span class="pre">trx.cli.</span></span><span class="sig-name descname"><span class="pre">compare_cmd</span></span><a class="reference internal" href="../../../_modules/trx/cli.html#compare_cmd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.cli.compare_cmd" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="trx.cli.validate_cmd">
+<span class="sig-prename descclassname"><span class="pre">trx.cli.</span></span><span class="sig-name descname"><span class="pre">validate_cmd</span></span><a class="reference internal" href="../../../_modules/trx/cli.html#validate_cmd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.cli.validate_cmd" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="trx.cli.verify_header_cmd">
+<span class="sig-prename descclassname"><span class="pre">trx.cli.</span></span><span class="sig-name descname"><span class="pre">verify_header_cmd</span></span><a class="reference internal" href="../../../_modules/trx/cli.html#verify_header_cmd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.cli.verify_header_cmd" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="trx.cli.visualize_cmd">
+<span class="sig-prename descclassname"><span class="pre">trx.cli.</span></span><span class="sig-name descname"><span class="pre">visualize_cmd</span></span><a class="reference internal" href="../../../_modules/trx/cli.html#visualize_cmd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.cli.visualize_cmd" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">trx</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../fetcher/index.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">trx.fetcher</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#attributes">Attributes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#functions">Functions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-contents">Module Contents</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.cli.app"><code class="docutils literal notranslate"><span class="pre">app</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.cli._check_overwrite"><code class="docutils literal notranslate"><span class="pre">_check_overwrite()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.cli.concatenate_tractograms"><code class="docutils literal notranslate"><span class="pre">concatenate_tractograms()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.cli.convert"><code class="docutils literal notranslate"><span class="pre">convert()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.cli.convert_dsi"><code class="docutils literal notranslate"><span class="pre">convert_dsi()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.cli.generate"><code class="docutils literal notranslate"><span class="pre">generate()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.cli.manipulate_dtype"><code class="docutils literal notranslate"><span class="pre">manipulate_dtype()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.cli.compare"><code class="docutils literal notranslate"><span class="pre">compare()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.cli.validate"><code class="docutils literal notranslate"><span class="pre">validate()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.cli.verify_header"><code class="docutils literal notranslate"><span class="pre">verify_header()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.cli.visualize"><code class="docutils literal notranslate"><span class="pre">visualize()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.cli.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.cli._create_standalone_app"><code class="docutils literal notranslate"><span class="pre">_create_standalone_app()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.cli.concatenate_tractograms_cmd"><code class="docutils literal notranslate"><span class="pre">concatenate_tractograms_cmd</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.cli.convert_dsi_cmd"><code class="docutils literal notranslate"><span class="pre">convert_dsi_cmd</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.cli.convert_cmd"><code class="docutils literal notranslate"><span class="pre">convert_cmd</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.cli.generate_cmd"><code class="docutils literal notranslate"><span class="pre">generate_cmd</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.cli.manipulate_dtype_cmd"><code class="docutils literal notranslate"><span class="pre">manipulate_dtype_cmd</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.cli.compare_cmd"><code class="docutils literal notranslate"><span class="pre">compare_cmd</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.cli.validate_cmd"><code class="docutils literal notranslate"><span class="pre">validate_cmd</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.cli.verify_header_cmd"><code class="docutils literal notranslate"><span class="pre">verify_header_cmd</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.cli.visualize_cmd"><code class="docutils literal notranslate"><span class="pre">visualize_cmd</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/autoapi/trx/cli/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2021-2026, The TRX developers.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
