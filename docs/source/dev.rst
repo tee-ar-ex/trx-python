@@ -3,6 +3,11 @@ Developer Guide
 
 This guide provides detailed information for developers working on TRX-Python.
 
+.. toctree::
+   :maxdepth: 1
+
+   contributing
+
 Installation for Development
 ----------------------------
 

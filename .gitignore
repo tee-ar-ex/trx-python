@@ -134,7 +134,10 @@ dmypy.json
 .vscode/
 
 tmp/
+auto_examples/
 CLAUDE.md
 claude.md
 agents.md
 AGENTS.md
+sg_execution_times.rst
+

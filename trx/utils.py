@@ -17,14 +17,12 @@ except ImportError:
 
 
 def close_or_delete_mmap(obj):
-    """
-    Close the memory-mapped file if it exists, otherwise set the object to None.
+    """Close the memory-mapped file if it exists, otherwise set the object to None.
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
     obj : object
         The object that potentially has a memory-mapped file to be closed.
-
     """
     if hasattr(obj, "_mmap") and obj._mmap is not None:
         obj._mmap.close()
@@ -373,13 +371,17 @@ def get_reverse_enum(space_str, origin_str):
 
 
 def convert_data_dict_to_tractogram(data):
-    """Convert a data from a lazy tractogram to a tractogram
+    """Convert data from a lazy tractogram to a tractogram.
 
-    Keyword arguments:
-        data -- The data dictionary to convert into a nibabel tractogram
+    Parameters
+    ----------
+    data : dict
+        The data dictionary to convert into a nibabel tractogram.
 
-    Returns:
-        A Tractogram object
+    Returns
+    -------
+    Tractogram
+        A Tractogram object.
     """
     streamlines = ArraySequence(data["strs"])
     streamlines._data = streamlines._data

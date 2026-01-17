@@ -34,16 +34,20 @@ except ImportError:
 
 
 def _append_last_offsets(nib_offsets: np.ndarray, nb_vertices: int) -> np.ndarray:
-    """Appends the last element of offsets from header information
+    """Append the last element of offsets from header information.
 
-    Keyword arguments:
-        nib_offsets -- np.ndarray
-            Array of offsets with the last element being the start of the last
-            streamline (nibabel convention)
-        nb_vertices -- int
-            Total number of vertices in the streamlines
-    Returns:
-        Offsets -- np.ndarray (VTK convention)
+    Parameters
+    ----------
+    nib_offsets : np.ndarray
+        Array of offsets with the last element being the start of the last
+        streamline (nibabel convention).
+    nb_vertices : int
+        Total number of vertices in the streamlines.
+
+    Returns
+    -------
+    np.ndarray
+        Offsets array (VTK convention).
     """
 
     def is_sorted(a):
@@ -55,15 +59,19 @@ def _append_last_offsets(nib_offsets: np.ndarray, nb_vertices: int) -> np.ndarra
 
 
 def _generate_filename_from_data(arr: np.ndarray, filename: str) -> str:
-    """Determines the data type from array data and generates the appropriate
-    filename
+    """Determine the data type from array data and generate the appropriate filename.
 
-    Keyword arguments:
-        arr -- a NumPy array (1-2D, otherwise ValueError raised)
-        filename -- the original filename
+    Parameters
+    ----------
+    arr : np.ndarray
+        A NumPy array (1-2D, otherwise ValueError raised).
+    filename : str
+        The original filename.
 
-    Returns:
-        An updated filename
+    Returns
+    -------
+    str
+        An updated filename with appropriate extension.
     """
     base, ext = os.path.splitext(filename)
     if ext:
@@ -87,14 +95,17 @@ def _generate_filename_from_data(arr: np.ndarray, filename: str) -> str:
 
 
 def _split_ext_with_dimensionality(filename: str) -> Tuple[str, int, str]:
-    """Takes a filename and splits it into its components
+    """Take a filename and split it into its components.
 
-    Keyword arguments:
-        filename -- Input filename
+    Parameters
+    ----------
+    filename : str
+        Input filename.
 
-    Returns:
-        tuple of strings (basename, dimension, extension)
-
+    Returns
+    -------
+    tuple
+        A tuple of (basename, dimension, extension).
     """
     basename = os.path.basename(filename)
     split = basename.split(".")
@@ -111,13 +122,17 @@ def _split_ext_with_dimensionality(filename: str) -> Tuple[str, int, str]:
 
 
 def _compute_lengths(offsets: np.ndarray) -> np.ndarray:
-    """Compute lengths from offsets
+    """Compute lengths from offsets.
 
-    Keyword arguments:
-        offsets -- An np.ndarray of offsets
+    Parameters
+    ----------
+    offsets : np.ndarray
+        An array of offsets.
 
-    Returns:
-        lengths -- An np.ndarray of lengths
+    Returns
+    -------
+    np.ndarray
+        An array of lengths.
     """
     if len(offsets) > 0:
         last_elem_pos = _dichotomic_search(offsets)
@@ -131,13 +146,17 @@ def _compute_lengths(offsets: np.ndarray) -> np.ndarray:
 
 
 def _is_dtype_valid(ext: str) -> bool:
-    """Verifies that filename extension is a valid datatype
+    """Verify that filename extension is a valid datatype.
 
-    Keyword arguments:
-        ext -- filename extension
+    Parameters
+    ----------
+    ext : str
+        Filename extension.
 
-    Returns:
-        boolean representing if provided datatype is valid
+    Returns
+    -------
+    bool
+        True if the provided datatype is valid, False otherwise.
     """
     if ext.replace(".", "") == "bit":
         return True
@@ -151,14 +170,22 @@ def _is_dtype_valid(ext: str) -> bool:
 def _dichotomic_search(
     x: np.ndarray, l_bound: Optional[int] = None, r_bound: Optional[int] = None
 ) -> int:
-    """Find where data of a contiguous array is actually ending
+    """Find where data of a contiguous array is actually ending.
 
-    Keyword arguments:
-        x -- np.ndarray of values
-        l_bound -- lower bound index for search
-        r_bound -- upper bound index for search
-    Returns:
-        index at which array value is 0 (if possible), otherwise returns -1"""
+    Parameters
+    ----------
+    x : np.ndarray
+        Array of values.
+    l_bound : int, optional
+        Lower bound index for search.
+    r_bound : int, optional
+        Upper bound index for search.
+
+    Returns
+    -------
+    int
+        Index at which array value is 0 (if possible), otherwise returns -1.
+    """
     if l_bound is None and r_bound is None:
         l_bound = 0
         r_bound = len(x) - 1
@@ -183,19 +210,27 @@ def _create_memmap(
     offset: int = 0,
     order: str = "C",
 ) -> np.ndarray:
-    """Wrapper to support empty array as memmaps
+    """Wrap memmap creation to support empty arrays.
 
-    Keyword arguments:
-        filename -- filename where the empty memmap should be created
-        mode -- file open mode (see: np.memmap for options)
-        shape -- shape of memmapped np.ndarray
-        dtype -- datatype of memmapped np.ndarray
-        offset -- offset of the data within the file
-        order -- data representation on disk (C or Fortran)
+    Parameters
+    ----------
+    filename : str
+        Filename where the empty memmap should be created.
+    mode : str, optional
+        File open mode (see np.memmap for options). Default is 'r'.
+    shape : tuple, optional
+        Shape of memmapped array. Default is (1,).
+    dtype : np.dtype, optional
+        Datatype of memmapped array. Default is np.float32.
+    offset : int, optional
+        Offset of the data within the file. Default is 0.
+    order : str, optional
+        Data representation on disk ('C' or 'F'). Default is 'C'.
 
-    Returns:
-        mmapped np.ndarray or a zero-filled Numpy array if array has a shape of 0
-            in the first dimension
+    Returns
+    -------
+    np.ndarray
+        Memory-mapped array or a zero-filled array if shape[0] is 0.
     """
     if np.dtype(dtype) == bool:
         filename = filename.replace(".bool", ".bit")
@@ -212,14 +247,19 @@ def _create_memmap(
 
 
 def load(input_obj: str, check_dpg: bool = True) -> Type["TrxFile"]:
-    """Load a TrxFile (compressed or not)
+    """Load a TrxFile (compressed or not).
 
-    Keyword arguments:
-    input_obj -- A directory name or filepath to the trx data
-    check_dpg -- Boolean denoting if group metadata should be checked
+    Parameters
+    ----------
+    input_obj : str
+        A directory name or filepath to the TRX data.
+    check_dpg : bool, optional
+        Whether to check group metadata. Default is True.
 
-    Returns:
-        TrxFile object representing the read data
+    Returns
+    -------
+    TrxFile
+        TrxFile object representing the read data.
     """
     # TODO Check if 0 streamlines, then 0 vertices is expected (vice-versa)
     # TODO 4x4 affine matrices should contains values (no all-zeros)
@@ -258,14 +298,19 @@ def load(input_obj: str, check_dpg: bool = True) -> Type["TrxFile"]:
 
 
 def load_from_zip(filename: str) -> Type["TrxFile"]:
-    """Load a TrxFile from a single zipfile. Note: does not work with
-    compressed zipfiles
+    """Load a TrxFile from a single zipfile.
 
-    Keyword arguments:
-    filename -- path of the zipped TrxFile
+    Note: Does not work with compressed zipfiles.
 
-    Returns:
-        TrxFile representing the read data
+    Parameters
+    ----------
+    filename : str
+        Path of the zipped TrxFile.
+
+    Returns
+    -------
+    TrxFile
+        TrxFile representing the read data.
     """
     with zipfile.ZipFile(filename, mode="r") as zf:
         with zf.open("header.json") as zf_header:
@@ -307,13 +352,17 @@ def load_from_zip(filename: str) -> Type["TrxFile"]:
 
 
 def load_from_directory(directory: str) -> Type["TrxFile"]:
-    """Load a TrxFile from a folder containing memmaps
+    """Load a TrxFile from a folder containing memmaps.
 
-    Keyword arguments:
-    filename -- path of the zipped TrxFile
+    Parameters
+    ----------
+    directory : str
+        Path of the directory containing TRX data.
 
-    Returns:
-        TrxFile representing the read data
+    Returns
+    -------
+    TrxFile
+        TrxFile representing the read data.
     """
 
     directory = os.path.abspath(directory)
@@ -526,25 +575,33 @@ def concatenate(
     check_space_attributes: bool = True,
     preallocation: bool = False,
 ) -> "TrxFile":
-    """Concatenate multiple TrxFile together, support preallocation
+    """Concatenate multiple TrxFile together, with support for preallocation.
 
-    Keyword arguments:
-        trx_list -- A list containing TrxFiles to concatenate
-        delete_dpv -- Delete dpv keys that do not exist in all the provided
-            TrxFiles
-        delete_dps -- Delete dps keys that do not exist in all the provided
-            TrxFile
-        delete_groups -- Delete all the groups that currently exist in the
-            TrxFiles
-        check_space_attributes -- Verify that dimensions and size of data are
-            similar between all the TrxFiles
-        preallocation -- Preallocated TrxFile has already been generated and
-            is the first element in trx_list
-            (Note: delete_groups must be set to True as well)
+    Parameters
+    ----------
+    trx_list : list of TrxFile
+        A list containing TrxFiles to concatenate.
+    delete_dpv : bool, optional
+        Delete dpv keys that do not exist in all the provided TrxFiles.
+        Default is False.
+    delete_dps : bool, optional
+        Delete dps keys that do not exist in all the provided TrxFiles.
+        Default is False.
+    delete_groups : bool, optional
+        Delete all the groups that currently exist in the TrxFiles.
+        Default is False.
+    check_space_attributes : bool, optional
+        Verify that dimensions and size of data are similar between all
+        the TrxFiles. Default is True.
+    preallocation : bool, optional
+        Preallocated TrxFile has already been generated and is the first
+        element in trx_list. Note: delete_groups must be set to True as well.
+        Default is False.
 
-    Returns:
-        TrxFile representing the concatenated data
-
+    Returns
+    -------
+    TrxFile
+        TrxFile representing the concatenated data.
     """
     trx_list = _filter_empty_trx_files(trx_list)
     if len(trx_list) == 0:
@@ -588,13 +645,17 @@ def concatenate(
 def save(
     trx: "TrxFile", filename: str, compression_standard: Any = zipfile.ZIP_STORED
 ) -> None:
-    """Save a TrxFile (compressed or not)
+    """Save a TrxFile (compressed or not).
 
-    Keyword arguments:
-        trx -- The TrxFile to save
-        filename -- The path to save the TrxFile to
-        compression_standard -- The compression standard to use, as defined by
-            the ZipFile library
+    Parameters
+    ----------
+    trx : TrxFile
+        The TrxFile to save.
+    filename : str
+        The path to save the TrxFile to.
+    compression_standard : int, optional
+        The compression standard to use, as defined by the ZipFile library.
+        Default is zipfile.ZIP_STORED.
     """
     _, ext = os.path.splitext(filename)
     if ext not in [".zip", ".trx", ""]:
@@ -615,14 +676,17 @@ def save(
 def zip_from_folder(
     directory: str, filename: str, compression_standard: Any = zipfile.ZIP_STORED
 ) -> None:
-    """Utils function to zip on-disk memmaps
+    """Zip on-disk memmaps into a single file.
 
-    Keyword arguments
-        directory -- The path to the on-disk memmap
-        filename -- The path where the zip file should be created
-        compression_standard -- The compression standard to use, as defined by
-            the ZipFile library
-
+    Parameters
+    ----------
+    directory : str
+        The path to the on-disk memmap directory.
+    filename : str
+        The path where the zip file should be created.
+    compression_standard : int, optional
+        The compression standard to use, as defined by the ZipFile library.
+        Default is zipfile.ZIP_STORED.
     """
     with zipfile.ZipFile(filename, mode="w", compression=compression_standard) as zf:
         for root, _, files in os.walk(directory):
@@ -656,13 +720,18 @@ class TrxFile:
             None,
         ] = None,
     ) -> None:
-        """Initialize an empty TrxFile, support preallocation
+        """Initialize an empty TrxFile with support for preallocation.
 
-        Keyword Arguments:
-            nb_vertices -- The number of vertices to use in the new TrxFile
-            nb_streamlines -- The number of streamlines in the new TrxFile
-            init_as -- A TrxFile to use as reference
-            reference -- A Nifti or Trk file/obj to use as reference
+        Parameters
+        ----------
+        nb_vertices : int, optional
+            The number of vertices to use in the new TrxFile.
+        nb_streamlines : int, optional
+            The number of streamlines in the new TrxFile.
+        init_as : TrxFile, optional
+            A TrxFile to use as reference.
+        reference : str, dict, Nifti1Image, TrkFile, Nifti1Header, optional
+            A Nifti or Trk file/obj to use as reference.
         """
         if init_as is not None:
             affine = init_as.header["VOXEL_TO_RASMM"]
@@ -779,10 +848,12 @@ class TrxFile:
         return self.deepcopy()
 
     def deepcopy(self) -> Type["TrxFile"]:  # noqa: C901
-        """Create a deepcopy of the TrxFile
+        """Create a deepcopy of the TrxFile.
 
         Returns
-            A deepcopied TrxFile of the current TrxFile
+        -------
+        TrxFile
+            A deepcopied TrxFile of the current TrxFile.
         """
         tmp_dir = get_trx_tmp_dir()
         out_json = open(os.path.join(tmp_dir.name, "header.json"), "w")
@@ -872,11 +943,13 @@ class TrxFile:
         return copy_trx
 
     def _get_real_len(self) -> Tuple[int, int]:
-        """Get the real size of data (ignoring zeros of preallocation)
+        """Get the real size of data (ignoring zeros of preallocation).
 
         Returns
-            A tuple representing the index of the last streamline and the total
-                length of all the streamlines
+        -------
+        tuple of int
+            A tuple (strs_end, pts_end) representing the index of the last
+            streamline and the total length of all the streamlines.
         """
         if len(self.streamlines._lengths) == 0:
             return 0, 0
@@ -896,18 +969,24 @@ class TrxFile:
         pts_start: int = 0,
         nb_strs_to_copy: Optional[int] = None,
     ) -> Tuple[int, int]:
-        """Fill a TrxFile using another and start indexes (preallocation)
+        """Fill a TrxFile using another and start indexes (preallocation).
 
-        Keyword arguments:
-            trx -- TrxFile to copy data from
-            strs_start -- The start index of the streamline
-            pts_start -- The start index of the point
-            nb_strs_to_copy -- The number of streamlines to copy. If not set
-                                will copy all
+        Parameters
+        ----------
+        trx : TrxFile
+            TrxFile to copy data from.
+        strs_start : int, optional
+            The start index of the streamline. Default is 0.
+        pts_start : int, optional
+            The start index of the point. Default is 0.
+        nb_strs_to_copy : int, optional
+            The number of streamlines to copy. If not set, will copy all.
 
         Returns
-            A tuple representing the end of the copied streamlines and end of
-                copied points
+        -------
+        tuple of int
+            A tuple (strs_end, pts_end) representing the end of the copied
+            streamlines and end of copied points.
         """
         if nb_strs_to_copy is None:
             curr_strs_len, curr_pts_len = trx._get_real_len()
@@ -954,17 +1033,23 @@ class TrxFile:
         nb_vertices: int,
         init_as: Optional[Type["TrxFile"]] = None,
     ) -> Type["TrxFile"]:
-        """Create on-disk memmaps of a certain size (preallocation)
+        """Create on-disk memmaps of a certain size (preallocation).
 
-        Keyword arguments:
-            nb_streamlines -- The number of streamlines that the empty TrxFile
-                will be initialized with
-            nb_vertices -- The number of vertices that the empty TrxFile will
-                be initialized with
-            init_as -- A TrxFile to initialize the empty TrxFile with
+        Parameters
+        ----------
+        nb_streamlines : int
+            The number of streamlines that the empty TrxFile will be
+            initialized with.
+        nb_vertices : int
+            The number of vertices that the empty TrxFile will be
+            initialized with.
+        init_as : TrxFile, optional
+            A TrxFile to initialize the empty TrxFile with.
 
-        Returns:
-            An empty TrxFile preallocated with a certain size
+        Returns
+        -------
+        TrxFile
+            An empty TrxFile preallocated with a certain size.
         """
         trx = TrxFile()
         tmp_dir = get_trx_tmp_dir()
@@ -1078,18 +1163,24 @@ class TrxFile:
         root_zip: Optional[str] = None,
         root: Optional[str] = None,
     ) -> Type["TrxFile"]:
-        """After reading the structure of a zip/folder, create a TrxFile
+        """Create a TrxFile after reading the structure of a zip/folder.
 
-        Keyword arguments:
-            header -- A TrxFile header dictionary which will be used for the
-                new TrxFile
-            dict_pointer_size -- A dictionary containing the filenames of all
-                the files within the TrxFile disk file/folder
-            root_zip -- The path of the ZipFile pointer
-            root -- The dirname of the ZipFile pointer
+        Parameters
+        ----------
+        header : dict
+            A TrxFile header dictionary which will be used for the new TrxFile.
+        dict_pointer_size : dict
+            A dictionary containing the filenames of all the files within the
+            TrxFile disk file/folder.
+        root_zip : str, optional
+            The path of the ZipFile pointer.
+        root : str, optional
+            The dirname of the ZipFile pointer.
 
-        Returns:
-            A TrxFile constructor from the pointer provided
+        Returns
+        -------
+        TrxFile
+            A TrxFile constructed from the pointer provided.
         """
         # TODO support empty positions, using optional tag?
         trx = TrxFile()
@@ -1219,12 +1310,16 @@ class TrxFile:
         nb_vertices: Optional[int] = None,
         delete_dpg: bool = False,
     ) -> None:
-        """Remove the unused portion of preallocated memmaps
+        """Remove the unused portion of preallocated memmaps.
 
-        Keyword arguments:
-            nb_streamlines -- The number of streamlines to keep
-            nb_vertices -- The number of vertices to keep
-            delete_dpg -- Remove data_per_group when resizing
+        Parameters
+        ----------
+        nb_streamlines : int, optional
+            The number of streamlines to keep.
+        nb_vertices : int, optional
+            The number of vertices to keep.
+        delete_dpg : bool, optional
+            Remove data_per_group when resizing. Default is False.
         """
         if not self._copy_safe:
             raise ValueError("Cannot resize a sliced datasets.")
@@ -1331,10 +1426,12 @@ class TrxFile:
         self.__dict__ = trx.__dict__
 
     def get_dtype_dict(self):
-        """Get the dtype dictionary for the TrxFile
+        """Get the dtype dictionary for the TrxFile.
 
         Returns
-            A dictionary containing the dtype for each data element
+        -------
+        dict
+            A dictionary containing the dtype for each data element.
         """
         dtype_dict = {
             "positions": self.streamlines._data.dtype,
@@ -1383,11 +1480,14 @@ class TrxFile:
         self._append_trx(obj, extra_buffer=extra_buffer)
 
     def _append_trx(self, trx: Type["TrxFile"], extra_buffer: int = 0) -> None:
-        """Append a TrxFile to another (support buffer)
+        """Append a TrxFile to another (with buffer support).
 
-        Keyword arguments:
-            trx -- The TrxFile to append to the current TrxFile
-            extra_buffer -- The additional buffer space required to append data
+        Parameters
+        ----------
+        trx : TrxFile
+            The TrxFile to append to the current TrxFile.
+        extra_buffer : int, optional
+            The additional buffer space required to append data. Default is 0.
         """
         strs_end, pts_end = self._get_real_len()
 
@@ -1407,30 +1507,42 @@ class TrxFile:
     def get_group(
         self, key: str, keep_group: bool = True, copy_safe: bool = False
     ) -> Type["TrxFile"]:
-        """Get a particular group from the TrxFile
+        """Get a particular group from the TrxFile.
 
-        Keyword arguments:
-            key -- The group name to select
-            keep_group -- Make sure group exists in returned TrxFile
-            copy_safe -- Perform a deepcopy
+        Parameters
+        ----------
+        key : str
+            The group name to select.
+        keep_group : bool, optional
+            Make sure group exists in returned TrxFile. Default is True.
+        copy_safe : bool, optional
+            Perform a deepcopy. Default is False.
 
         Returns
-            A TrxFile exclusively containing data from said group
+        -------
+        TrxFile
+            A TrxFile exclusively containing data from said group.
         """
         return self.select(self.groups[key], keep_group=keep_group, copy_safe=copy_safe)
 
     def select(
         self, indices: np.ndarray, keep_group: bool = True, copy_safe: bool = False
     ) -> Type["TrxFile"]:
-        """Get a subset of items, always vertices to the same memmaps
+        """Get a subset of items, always pointing to the same memmaps.
 
-        Keyword arguments:
-            indices -- The list of indices of elements to return
-            keep_group -- Ensure group is returned in output TrxFile
-            copy_safe -- Perform a deep-copy
+        Parameters
+        ----------
+        indices : np.ndarray
+            The list of indices of elements to return.
+        keep_group : bool, optional
+            Ensure group is returned in output TrxFile. Default is True.
+        copy_safe : bool, optional
+            Perform a deep-copy. Default is False.
 
-        Returns:
-            A TrxFile containing data originating from the selected indices
+        Returns
+        -------
+        TrxFile
+            A TrxFile containing data originating from the selected indices.
         """
         indices = np.array(indices, dtype=np.uint32)
 
@@ -1510,14 +1622,26 @@ class TrxFile:
         chunk_size: int = 10000,
         dtype_dict: dict = None,
     ) -> Type["TrxFile"]:
-        """Append a TrxFile to another (support buffer)
+        """Create a TrxFile from a LazyTractogram with buffer support.
 
-        Keyword arguments:
-            trx -- The TrxFile to append to the current TrxFile
-            extra_buffer -- The buffer space between reallocation.
-                            This number should be a number of streamlines.
-                            Use 0 for no buffer.
-            chunk_size -- The number of streamlines to save at a time.
+        Parameters
+        ----------
+        obj : LazyTractogram
+            The LazyTractogram to convert.
+        reference : object
+            Reference for spatial information.
+        extra_buffer : int, optional
+            The buffer space between reallocation. This number should be a
+            number of streamlines. Use 0 for no buffer. Default is 0.
+        chunk_size : int, optional
+            The number of streamlines to save at a time. Default is 10000.
+        dtype_dict : dict, optional
+            Dictionary specifying dtypes for positions, offsets, dpv, and dps.
+
+        Returns
+        -------
+        TrxFile
+            A TrxFile created from the LazyTractogram.
         """
         if dtype_dict is None:
             dtype_dict = {
@@ -1751,13 +1875,18 @@ class TrxFile:
         return tractogram
 
     def to_memory(self, resize: bool = False) -> Type["TrxFile"]:
-        """Convert a TrxFile to a RAM representation
+        """Convert a TrxFile to a RAM representation.
 
-        Keyword arguments:
-            resize -- Resize TrxFile when converting to RAM representation
+        Parameters
+        ----------
+        resize : bool, optional
+            Resize TrxFile when converting to RAM representation.
+            Default is False.
 
-        Returns:
-            A non memory mapped TrxFile
+        Returns
+        -------
+        TrxFile
+            A non memory-mapped TrxFile.
         """
         if resize:
             self.resize()
