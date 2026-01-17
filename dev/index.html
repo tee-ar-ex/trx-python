@@ -32,6 +32,11 @@
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
   
   <!-- So that users can add custom icons -->
   <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -40,8 +45,9 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="_static/documentation_options.js?v=3ce10a4d"></script>
-    <script src="_static/doctools.js?v=fd6eb6e6"></script>
-    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'index';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.16.1';
@@ -52,7 +58,7 @@
         </script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Command-line Interface" href="scripts.html" />
+    <link rel="next" title="TRX File Format Specifications" href="trx_specifications.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
@@ -158,6 +164,13 @@
   <ul class="bd-navbar-elements navbar-nav">
     
 <li class="nav-item ">
+  <a class="nav-link nav-internal" href="trx_specifications.html">
+    TRX File Format Specifications
+  </a>
+</li>
+
+
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="scripts.html">
     Command-line Interface
   </a>
@@ -165,8 +178,8 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="contributing.html">
-    Contributing to TRX-Python
+  <a class="nav-link nav-internal" href="auto_examples/index.html">
+    Tutorials
   </a>
 </li>
 
@@ -276,6 +289,13 @@
   <ul class="bd-navbar-elements navbar-nav">
     
 <li class="nav-item ">
+  <a class="nav-link nav-internal" href="trx_specifications.html">
+    TRX File Format Specifications
+  </a>
+</li>
+
+
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="scripts.html">
     Command-line Interface
   </a>
@@ -283,8 +303,8 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="contributing.html">
-    Contributing to TRX-Python
+  <a class="nav-link nav-internal" href="auto_examples/index.html">
+    Tutorials
   </a>
 </li>
 
@@ -373,6 +393,39 @@
 <p>We propose <strong>TRX</strong>, a tractography file format designed to facilitate dataset
 exchange, interoperability, and state-of-the-art analyses, acting as a
 community-driven replacement for the myriad existing file formats.</p>
+<section id="getting-started">
+<h2>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading">#</a></h2>
+<p>New to TRX? Start here:</p>
+<ol class="arabic simple">
+<li><p><strong>Understand the format</strong>: Read the <a class="reference internal" href="trx_specifications.html"><span class="doc">TRX File Format Specifications</span></a> to understand the TRX file structure</p></li>
+<li><p><strong>Learn by example</strong>: Follow our <a class="reference internal" href="auto_examples/index.html"><span class="doc">Tutorials</span></a> to learn how to read, write, and manipulate TRX files</p></li>
+<li><p><strong>Use the CLI tools</strong>: Check out the <a class="reference internal" href="scripts.html"><span class="doc">Command-line Interface</span></a> documentation for command-line operations</p></li>
+</ol>
+<div class="sd-container-fluid sd-sphinx-override sd-mb-4 docutils">
+<div class="sd-row sd-row-cols-2 sd-row-cols-xs-2 sd-row-cols-sm-2 sd-row-cols-md-2 sd-row-cols-lg-2 docutils">
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm sd-card-hover docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+Tutorials</div>
+<p class="sd-card-text">Learn how to work with TRX files through hands-on tutorials covering
+reading/writing files, working with groups, and using metadata.</p>
+</div>
+<a class="sd-stretched-link sd-hide-link-text reference internal" href="auto_examples/index.html"><span class="doc">Tutorials</span></a></div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm sd-card-hover docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+TRX Specifications</div>
+<p class="sd-card-text">Complete technical specifications of the TRX file format including
+header fields, array structures, and naming conventions.</p>
+</div>
+<a class="sd-stretched-link sd-hide-link-text reference internal" href="trx_specifications.html"><span class="doc">TRX File Format Specifications</span></a></div>
+</div>
+</div>
+</div>
+</section>
 <section id="why-trx">
 <h2>Why TRX?<a class="headerlink" href="#why-trx" title="Link to this heading">#</a></h2>
 <p>File formats that store the results of computational tractography were typically
@@ -401,6 +454,18 @@ is to integrate TRX within the <a class="reference external" href="https://bids.
 <div class="toctree-wrapper compound">
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">User Guide:</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="trx_specifications.html">TRX File Format Specifications</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="trx_specifications.html#general-properties">General Properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="trx_specifications.html#header">Header</a></li>
+<li class="toctree-l2"><a class="reference internal" href="trx_specifications.html#arrays">Arrays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="trx_specifications.html#groups">Groups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="trx_specifications.html#supported-data-types">Supported Data Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="trx_specifications.html#example-file-structure">Example File Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="trx_specifications.html#naming-conventions">Naming Conventions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="trx_specifications.html#memory-and-performance-considerations">Memory and Performance Considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="trx_specifications.html#compatibility-and-integration">Compatibility and Integration</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="scripts.html">Command-line Interface</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="scripts.html#unified-cli-tff">Unified CLI: <code class="docutils literal notranslate"><span class="pre">tff</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="scripts.html#standalone-commands">Standalone Commands</a></li>
@@ -410,20 +475,20 @@ is to integrate TRX within the <a class="reference external" href="https://bids.
 </ul>
 </div>
 <div class="toctree-wrapper compound">
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Development:</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing to TRX-Python</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="contributing.html#ways-to-contribute">Ways to Contribute</a></li>
-<li class="toctree-l2"><a class="reference internal" href="contributing.html#getting-started">Getting Started</a></li>
-<li class="toctree-l2"><a class="reference internal" href="contributing.html#making-changes">Making Changes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="contributing.html#submitting-a-pull-request">Submitting a Pull Request</a></li>
-<li class="toctree-l2"><a class="reference internal" href="contributing.html#code-style">Code Style</a></li>
-<li class="toctree-l2"><a class="reference internal" href="contributing.html#testing">Testing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="contributing.html#documentation">Documentation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="contributing.html#getting-help">Getting Help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">Tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="auto_examples/index.html#getting-started">Getting Started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auto_examples/index.html#prerequisites">Prerequisites</a></li>
 </ul>
 </li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Development:</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="dev.html">Developer Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html">Contributing to TRX-Python</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dev.html#installation-for-development">Installation for Development</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dev.html#using-spin">Using Spin</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dev.html#code-quality">Code Quality</a></li>
@@ -460,11 +525,11 @@ is to integrate TRX within the <a class="reference external" href="https://bids.
                   
 <div class="prev-next-area">
     <a class="right-next"
-       href="scripts.html"
+       href="trx_specifications.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Command-line Interface</p>
+        <p class="prev-next-title">TRX File Format Specifications</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -487,8 +552,9 @@ is to integrate TRX within the <a class="reference external" href="https://bids.
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-started">Getting Started</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-trx">Why TRX?</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#acknowledgments">Acknowledgments</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#acknowledgments">Acknowledgments</a><ul class="visible nav section-nav flex-column">
 </ul>
 </li>
 </ul>
@@ -537,7 +603,7 @@ is to integrate TRX within the <a class="reference external" href="https://bids.
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
     <br/>
   </p>
 </div>

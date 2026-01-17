@@ -31,6 +31,11 @@
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
   
   <!-- So that users can add custom icons -->
   <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -39,8 +44,9 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="../../_static/documentation_options.js?v=3ce10a4d"></script>
-    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
-    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/trx/trx_file_memmap';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.16.1';
@@ -156,6 +162,13 @@
   <ul class="bd-navbar-elements navbar-nav">
     
 <li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../trx_specifications.html">
+    TRX File Format Specifications
+  </a>
+</li>
+
+
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../../scripts.html">
     Command-line Interface
   </a>
@@ -163,8 +176,8 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../contributing.html">
-    Contributing to TRX-Python
+  <a class="nav-link nav-internal" href="../../auto_examples/index.html">
+    Tutorials
   </a>
 </li>
 
@@ -270,6 +283,13 @@
   <ul class="bd-navbar-elements navbar-nav">
     
 <li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../trx_specifications.html">
+    TRX File Format Specifications
+  </a>
+</li>
+
+
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../../scripts.html">
     Command-line Interface
   </a>
@@ -277,8 +297,8 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../contributing.html">
-    Contributing to TRX-Python
+  <a class="nav-link nav-internal" href="../../auto_examples/index.html">
+    Tutorials
   </a>
 </li>
 
@@ -431,16 +451,20 @@
 <div class="viewcode-block" id="_append_last_offsets">
 <a class="viewcode-back" href="../../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap._append_last_offsets">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">_append_last_offsets</span><span class="p">(</span><span class="n">nib_offsets</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">nb_vertices</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Appends the last element of offsets from header information</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Append the last element of offsets from header information.</span>
 
-<span class="sd">    Keyword arguments:</span>
-<span class="sd">        nib_offsets -- np.ndarray</span>
-<span class="sd">            Array of offsets with the last element being the start of the last</span>
-<span class="sd">            streamline (nibabel convention)</span>
-<span class="sd">        nb_vertices -- int</span>
-<span class="sd">            Total number of vertices in the streamlines</span>
-<span class="sd">    Returns:</span>
-<span class="sd">        Offsets -- np.ndarray (VTK convention)</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    nib_offsets : np.ndarray</span>
+<span class="sd">        Array of offsets with the last element being the start of the last</span>
+<span class="sd">        streamline (nibabel convention).</span>
+<span class="sd">    nb_vertices : int</span>
+<span class="sd">        Total number of vertices in the streamlines.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    np.ndarray</span>
+<span class="sd">        Offsets array (VTK convention).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">is_sorted</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
@@ -455,15 +479,19 @@
 <div class="viewcode-block" id="_generate_filename_from_data">
 <a class="viewcode-back" href="../../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap._generate_filename_from_data">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">_generate_filename_from_data</span><span class="p">(</span><span class="n">arr</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Determines the data type from array data and generates the appropriate</span>
-<span class="sd">    filename</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Determine the data type from array data and generate the appropriate filename.</span>
 
-<span class="sd">    Keyword arguments:</span>
-<span class="sd">        arr -- a NumPy array (1-2D, otherwise ValueError raised)</span>
-<span class="sd">        filename -- the original filename</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    arr : np.ndarray</span>
+<span class="sd">        A NumPy array (1-2D, otherwise ValueError raised).</span>
+<span class="sd">    filename : str</span>
+<span class="sd">        The original filename.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        An updated filename</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">        An updated filename with appropriate extension.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">base</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">ext</span><span class="p">:</span>
@@ -490,14 +518,17 @@
 <div class="viewcode-block" id="_split_ext_with_dimensionality">
 <a class="viewcode-back" href="../../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap._split_ext_with_dimensionality">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">_split_ext_with_dimensionality</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Takes a filename and splits it into its components</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Take a filename and split it into its components.</span>
 
-<span class="sd">    Keyword arguments:</span>
-<span class="sd">        filename -- Input filename</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filename : str</span>
+<span class="sd">        Input filename.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        tuple of strings (basename, dimension, extension)</span>
-
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    tuple</span>
+<span class="sd">        A tuple of (basename, dimension, extension).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">basename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
     <span class="n">split</span> <span class="o">=</span> <span class="n">basename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
@@ -517,13 +548,17 @@
 <div class="viewcode-block" id="_compute_lengths">
 <a class="viewcode-back" href="../../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap._compute_lengths">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">_compute_lengths</span><span class="p">(</span><span class="n">offsets</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute lengths from offsets</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute lengths from offsets.</span>
 
-<span class="sd">    Keyword arguments:</span>
-<span class="sd">        offsets -- An np.ndarray of offsets</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    offsets : np.ndarray</span>
+<span class="sd">        An array of offsets.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        lengths -- An np.ndarray of lengths</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    np.ndarray</span>
+<span class="sd">        An array of lengths.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">offsets</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">last_elem_pos</span> <span class="o">=</span> <span class="n">_dichotomic_search</span><span class="p">(</span><span class="n">offsets</span><span class="p">)</span>
@@ -540,13 +575,17 @@
 <div class="viewcode-block" id="_is_dtype_valid">
 <a class="viewcode-back" href="../../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap._is_dtype_valid">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">_is_dtype_valid</span><span class="p">(</span><span class="n">ext</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Verifies that filename extension is a valid datatype</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Verify that filename extension is a valid datatype.</span>
 
-<span class="sd">    Keyword arguments:</span>
-<span class="sd">        ext -- filename extension</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ext : str</span>
+<span class="sd">        Filename extension.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        boolean representing if provided datatype is valid</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    bool</span>
+<span class="sd">        True if the provided datatype is valid, False otherwise.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">ext</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;bit&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">True</span>
@@ -563,14 +602,22 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">_dichotomic_search</span><span class="p">(</span>
     <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">l_bound</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">r_bound</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Find where data of a contiguous array is actually ending</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Find where data of a contiguous array is actually ending.</span>
 
-<span class="sd">    Keyword arguments:</span>
-<span class="sd">        x -- np.ndarray of values</span>
-<span class="sd">        l_bound -- lower bound index for search</span>
-<span class="sd">        r_bound -- upper bound index for search</span>
-<span class="sd">    Returns:</span>
-<span class="sd">        index at which array value is 0 (if possible), otherwise returns -1&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : np.ndarray</span>
+<span class="sd">        Array of values.</span>
+<span class="sd">    l_bound : int, optional</span>
+<span class="sd">        Lower bound index for search.</span>
+<span class="sd">    r_bound : int, optional</span>
+<span class="sd">        Upper bound index for search.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    int</span>
+<span class="sd">        Index at which array value is 0 (if possible), otherwise returns -1.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">l_bound</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">r_bound</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">l_bound</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">r_bound</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
@@ -598,19 +645,27 @@
     <span class="n">offset</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
     <span class="n">order</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;C&quot;</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Wrapper to support empty array as memmaps</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Wrap memmap creation to support empty arrays.</span>
 
-<span class="sd">    Keyword arguments:</span>
-<span class="sd">        filename -- filename where the empty memmap should be created</span>
-<span class="sd">        mode -- file open mode (see: np.memmap for options)</span>
-<span class="sd">        shape -- shape of memmapped np.ndarray</span>
-<span class="sd">        dtype -- datatype of memmapped np.ndarray</span>
-<span class="sd">        offset -- offset of the data within the file</span>
-<span class="sd">        order -- data representation on disk (C or Fortran)</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filename : str</span>
+<span class="sd">        Filename where the empty memmap should be created.</span>
+<span class="sd">    mode : str, optional</span>
+<span class="sd">        File open mode (see np.memmap for options). Default is &#39;r&#39;.</span>
+<span class="sd">    shape : tuple, optional</span>
+<span class="sd">        Shape of memmapped array. Default is (1,).</span>
+<span class="sd">    dtype : np.dtype, optional</span>
+<span class="sd">        Datatype of memmapped array. Default is np.float32.</span>
+<span class="sd">    offset : int, optional</span>
+<span class="sd">        Offset of the data within the file. Default is 0.</span>
+<span class="sd">    order : str, optional</span>
+<span class="sd">        Data representation on disk (&#39;C&#39; or &#39;F&#39;). Default is &#39;C&#39;.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        mmapped np.ndarray or a zero-filled Numpy array if array has a shape of 0</span>
-<span class="sd">            in the first dimension</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    np.ndarray</span>
+<span class="sd">        Memory-mapped array or a zero-filled array if shape[0] is 0.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span> <span class="o">==</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.bool&quot;</span><span class="p">,</span> <span class="s2">&quot;.bit&quot;</span><span class="p">)</span>
@@ -630,14 +685,19 @@
 <div class="viewcode-block" id="load">
 <a class="viewcode-back" href="../../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap.load">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">load</span><span class="p">(</span><span class="n">input_obj</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">check_dpg</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Type</span><span class="p">[</span><span class="s2">&quot;TrxFile&quot;</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load a TrxFile (compressed or not)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load a TrxFile (compressed or not).</span>
 
-<span class="sd">    Keyword arguments:</span>
-<span class="sd">    input_obj -- A directory name or filepath to the trx data</span>
-<span class="sd">    check_dpg -- Boolean denoting if group metadata should be checked</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    input_obj : str</span>
+<span class="sd">        A directory name or filepath to the TRX data.</span>
+<span class="sd">    check_dpg : bool, optional</span>
+<span class="sd">        Whether to check group metadata. Default is True.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        TrxFile object representing the read data</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    TrxFile</span>
+<span class="sd">        TrxFile object representing the read data.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># TODO Check if 0 streamlines, then 0 vertices is expected (vice-versa)</span>
     <span class="c1"># TODO 4x4 affine matrices should contains values (no all-zeros)</span>
@@ -679,14 +739,19 @@
 <div class="viewcode-block" id="load_from_zip">
 <a class="viewcode-back" href="../../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap.load_from_zip">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">load_from_zip</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Type</span><span class="p">[</span><span class="s2">&quot;TrxFile&quot;</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load a TrxFile from a single zipfile. Note: does not work with</span>
-<span class="sd">    compressed zipfiles</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load a TrxFile from a single zipfile.</span>
 
-<span class="sd">    Keyword arguments:</span>
-<span class="sd">    filename -- path of the zipped TrxFile</span>
+<span class="sd">    Note: Does not work with compressed zipfiles.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        TrxFile representing the read data</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filename : str</span>
+<span class="sd">        Path of the zipped TrxFile.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    TrxFile</span>
+<span class="sd">        TrxFile representing the read data.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">with</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">zf</span><span class="p">:</span>
         <span class="k">with</span> <span class="n">zf</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;header.json&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">zf_header</span><span class="p">:</span>
@@ -731,13 +796,17 @@
 <div class="viewcode-block" id="load_from_directory">
 <a class="viewcode-back" href="../../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap.load_from_directory">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">load_from_directory</span><span class="p">(</span><span class="n">directory</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Type</span><span class="p">[</span><span class="s2">&quot;TrxFile&quot;</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load a TrxFile from a folder containing memmaps</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load a TrxFile from a folder containing memmaps.</span>
 
-<span class="sd">    Keyword arguments:</span>
-<span class="sd">    filename -- path of the zipped TrxFile</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    directory : str</span>
+<span class="sd">        Path of the directory containing TRX data.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        TrxFile representing the read data</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    TrxFile</span>
+<span class="sd">        TrxFile representing the read data.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span>
@@ -977,25 +1046,33 @@
     <span class="n">check_space_attributes</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">preallocation</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;TrxFile&quot;</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Concatenate multiple TrxFile together, support preallocation</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Concatenate multiple TrxFile together, with support for preallocation.</span>
 
-<span class="sd">    Keyword arguments:</span>
-<span class="sd">        trx_list -- A list containing TrxFiles to concatenate</span>
-<span class="sd">        delete_dpv -- Delete dpv keys that do not exist in all the provided</span>
-<span class="sd">            TrxFiles</span>
-<span class="sd">        delete_dps -- Delete dps keys that do not exist in all the provided</span>
-<span class="sd">            TrxFile</span>
-<span class="sd">        delete_groups -- Delete all the groups that currently exist in the</span>
-<span class="sd">            TrxFiles</span>
-<span class="sd">        check_space_attributes -- Verify that dimensions and size of data are</span>
-<span class="sd">            similar between all the TrxFiles</span>
-<span class="sd">        preallocation -- Preallocated TrxFile has already been generated and</span>
-<span class="sd">            is the first element in trx_list</span>
-<span class="sd">            (Note: delete_groups must be set to True as well)</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    trx_list : list of TrxFile</span>
+<span class="sd">        A list containing TrxFiles to concatenate.</span>
+<span class="sd">    delete_dpv : bool, optional</span>
+<span class="sd">        Delete dpv keys that do not exist in all the provided TrxFiles.</span>
+<span class="sd">        Default is False.</span>
+<span class="sd">    delete_dps : bool, optional</span>
+<span class="sd">        Delete dps keys that do not exist in all the provided TrxFiles.</span>
+<span class="sd">        Default is False.</span>
+<span class="sd">    delete_groups : bool, optional</span>
+<span class="sd">        Delete all the groups that currently exist in the TrxFiles.</span>
+<span class="sd">        Default is False.</span>
+<span class="sd">    check_space_attributes : bool, optional</span>
+<span class="sd">        Verify that dimensions and size of data are similar between all</span>
+<span class="sd">        the TrxFiles. Default is True.</span>
+<span class="sd">    preallocation : bool, optional</span>
+<span class="sd">        Preallocated TrxFile has already been generated and is the first</span>
+<span class="sd">        element in trx_list. Note: delete_groups must be set to True as well.</span>
+<span class="sd">        Default is False.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        TrxFile representing the concatenated data</span>
-
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    TrxFile</span>
+<span class="sd">        TrxFile representing the concatenated data.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">trx_list</span> <span class="o">=</span> <span class="n">_filter_empty_trx_files</span><span class="p">(</span><span class="n">trx_list</span><span class="p">)</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">trx_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -1042,13 +1119,17 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span>
     <span class="n">trx</span><span class="p">:</span> <span class="s2">&quot;TrxFile&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">compression_standard</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZIP_STORED</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Save a TrxFile (compressed or not)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Save a TrxFile (compressed or not).</span>
 
-<span class="sd">    Keyword arguments:</span>
-<span class="sd">        trx -- The TrxFile to save</span>
-<span class="sd">        filename -- The path to save the TrxFile to</span>
-<span class="sd">        compression_standard -- The compression standard to use, as defined by</span>
-<span class="sd">            the ZipFile library</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    trx : TrxFile</span>
+<span class="sd">        The TrxFile to save.</span>
+<span class="sd">    filename : str</span>
+<span class="sd">        The path to save the TrxFile to.</span>
+<span class="sd">    compression_standard : int, optional</span>
+<span class="sd">        The compression standard to use, as defined by the ZipFile library.</span>
+<span class="sd">        Default is zipfile.ZIP_STORED.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">_</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">ext</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;.zip&quot;</span><span class="p">,</span> <span class="s2">&quot;.trx&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">]:</span>
@@ -1072,14 +1153,17 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">zip_from_folder</span><span class="p">(</span>
     <span class="n">directory</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">compression_standard</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZIP_STORED</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Utils function to zip on-disk memmaps</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Zip on-disk memmaps into a single file.</span>
 
-<span class="sd">    Keyword arguments</span>
-<span class="sd">        directory -- The path to the on-disk memmap</span>
-<span class="sd">        filename -- The path where the zip file should be created</span>
-<span class="sd">        compression_standard -- The compression standard to use, as defined by</span>
-<span class="sd">            the ZipFile library</span>
-
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    directory : str</span>
+<span class="sd">        The path to the on-disk memmap directory.</span>
+<span class="sd">    filename : str</span>
+<span class="sd">        The path where the zip file should be created.</span>
+<span class="sd">    compression_standard : int, optional</span>
+<span class="sd">        The compression standard to use, as defined by the ZipFile library.</span>
+<span class="sd">        Default is zipfile.ZIP_STORED.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">with</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">compression</span><span class="o">=</span><span class="n">compression_standard</span><span class="p">)</span> <span class="k">as</span> <span class="n">zf</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">root</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">directory</span><span class="p">):</span>
@@ -1134,13 +1218,18 @@
             <span class="kc">None</span><span class="p">,</span>
         <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize an empty TrxFile, support preallocation</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize an empty TrxFile with support for preallocation.</span>
 
-<span class="sd">        Keyword Arguments:</span>
-<span class="sd">            nb_vertices -- The number of vertices to use in the new TrxFile</span>
-<span class="sd">            nb_streamlines -- The number of streamlines in the new TrxFile</span>
-<span class="sd">            init_as -- A TrxFile to use as reference</span>
-<span class="sd">            reference -- A Nifti or Trk file/obj to use as reference</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        nb_vertices : int, optional</span>
+<span class="sd">            The number of vertices to use in the new TrxFile.</span>
+<span class="sd">        nb_streamlines : int, optional</span>
+<span class="sd">            The number of streamlines in the new TrxFile.</span>
+<span class="sd">        init_as : TrxFile, optional</span>
+<span class="sd">            A TrxFile to use as reference.</span>
+<span class="sd">        reference : str, dict, Nifti1Image, TrkFile, Nifti1Header, optional</span>
+<span class="sd">            A Nifti or Trk file/obj to use as reference.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">init_as</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">affine</span> <span class="o">=</span> <span class="n">init_as</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">&quot;VOXEL_TO_RASMM&quot;</span><span class="p">]</span>
@@ -1274,10 +1363,12 @@
 <div class="viewcode-block" id="TrxFile.deepcopy">
 <a class="viewcode-back" href="../../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap.TrxFile.deepcopy">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Type</span><span class="p">[</span><span class="s2">&quot;TrxFile&quot;</span><span class="p">]:</span>  <span class="c1"># noqa: C901</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a deepcopy of the TrxFile</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a deepcopy of the TrxFile.</span>
 
 <span class="sd">        Returns</span>
-<span class="sd">            A deepcopied TrxFile of the current TrxFile</span>
+<span class="sd">        -------</span>
+<span class="sd">        TrxFile</span>
+<span class="sd">            A deepcopied TrxFile of the current TrxFile.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">tmp_dir</span> <span class="o">=</span> <span class="n">get_trx_tmp_dir</span><span class="p">()</span>
         <span class="n">out_json</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp_dir</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;header.json&quot;</span><span class="p">),</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
@@ -1370,11 +1461,13 @@
 <div class="viewcode-block" id="TrxFile._get_real_len">
 <a class="viewcode-back" href="../../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap.TrxFile._get_real_len">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">_get_real_len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the real size of data (ignoring zeros of preallocation)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the real size of data (ignoring zeros of preallocation).</span>
 
 <span class="sd">        Returns</span>
-<span class="sd">            A tuple representing the index of the last streamline and the total</span>
-<span class="sd">                length of all the streamlines</span>
+<span class="sd">        -------</span>
+<span class="sd">        tuple of int</span>
+<span class="sd">            A tuple (strs_end, pts_end) representing the index of the last</span>
+<span class="sd">            streamline and the total length of all the streamlines.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_lengths</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
@@ -1397,18 +1490,24 @@
         <span class="n">pts_start</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
         <span class="n">nb_strs_to_copy</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fill a TrxFile using another and start indexes (preallocation)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fill a TrxFile using another and start indexes (preallocation).</span>
 
-<span class="sd">        Keyword arguments:</span>
-<span class="sd">            trx -- TrxFile to copy data from</span>
-<span class="sd">            strs_start -- The start index of the streamline</span>
-<span class="sd">            pts_start -- The start index of the point</span>
-<span class="sd">            nb_strs_to_copy -- The number of streamlines to copy. If not set</span>
-<span class="sd">                                will copy all</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        trx : TrxFile</span>
+<span class="sd">            TrxFile to copy data from.</span>
+<span class="sd">        strs_start : int, optional</span>
+<span class="sd">            The start index of the streamline. Default is 0.</span>
+<span class="sd">        pts_start : int, optional</span>
+<span class="sd">            The start index of the point. Default is 0.</span>
+<span class="sd">        nb_strs_to_copy : int, optional</span>
+<span class="sd">            The number of streamlines to copy. If not set, will copy all.</span>
 
 <span class="sd">        Returns</span>
-<span class="sd">            A tuple representing the end of the copied streamlines and end of</span>
-<span class="sd">                copied points</span>
+<span class="sd">        -------</span>
+<span class="sd">        tuple of int</span>
+<span class="sd">            A tuple (strs_end, pts_end) representing the end of the copied</span>
+<span class="sd">            streamlines and end of copied points.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">nb_strs_to_copy</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">curr_strs_len</span><span class="p">,</span> <span class="n">curr_pts_len</span> <span class="o">=</span> <span class="n">trx</span><span class="o">.</span><span class="n">_get_real_len</span><span class="p">()</span>
@@ -1458,17 +1557,23 @@
         <span class="n">nb_vertices</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">init_as</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="s2">&quot;TrxFile&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Type</span><span class="p">[</span><span class="s2">&quot;TrxFile&quot;</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create on-disk memmaps of a certain size (preallocation)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create on-disk memmaps of a certain size (preallocation).</span>
 
-<span class="sd">        Keyword arguments:</span>
-<span class="sd">            nb_streamlines -- The number of streamlines that the empty TrxFile</span>
-<span class="sd">                will be initialized with</span>
-<span class="sd">            nb_vertices -- The number of vertices that the empty TrxFile will</span>
-<span class="sd">                be initialized with</span>
-<span class="sd">            init_as -- A TrxFile to initialize the empty TrxFile with</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        nb_streamlines : int</span>
+<span class="sd">            The number of streamlines that the empty TrxFile will be</span>
+<span class="sd">            initialized with.</span>
+<span class="sd">        nb_vertices : int</span>
+<span class="sd">            The number of vertices that the empty TrxFile will be</span>
+<span class="sd">            initialized with.</span>
+<span class="sd">        init_as : TrxFile, optional</span>
+<span class="sd">            A TrxFile to initialize the empty TrxFile with.</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            An empty TrxFile preallocated with a certain size</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        TrxFile</span>
+<span class="sd">            An empty TrxFile preallocated with a certain size.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">trx</span> <span class="o">=</span> <span class="n">TrxFile</span><span class="p">()</span>
         <span class="n">tmp_dir</span> <span class="o">=</span> <span class="n">get_trx_tmp_dir</span><span class="p">()</span>
@@ -1585,18 +1690,24 @@
         <span class="n">root_zip</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">root</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Type</span><span class="p">[</span><span class="s2">&quot;TrxFile&quot;</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;After reading the structure of a zip/folder, create a TrxFile</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a TrxFile after reading the structure of a zip/folder.</span>
 
-<span class="sd">        Keyword arguments:</span>
-<span class="sd">            header -- A TrxFile header dictionary which will be used for the</span>
-<span class="sd">                new TrxFile</span>
-<span class="sd">            dict_pointer_size -- A dictionary containing the filenames of all</span>
-<span class="sd">                the files within the TrxFile disk file/folder</span>
-<span class="sd">            root_zip -- The path of the ZipFile pointer</span>
-<span class="sd">            root -- The dirname of the ZipFile pointer</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        header : dict</span>
+<span class="sd">            A TrxFile header dictionary which will be used for the new TrxFile.</span>
+<span class="sd">        dict_pointer_size : dict</span>
+<span class="sd">            A dictionary containing the filenames of all the files within the</span>
+<span class="sd">            TrxFile disk file/folder.</span>
+<span class="sd">        root_zip : str, optional</span>
+<span class="sd">            The path of the ZipFile pointer.</span>
+<span class="sd">        root : str, optional</span>
+<span class="sd">            The dirname of the ZipFile pointer.</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            A TrxFile constructor from the pointer provided</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        TrxFile</span>
+<span class="sd">            A TrxFile constructed from the pointer provided.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># TODO support empty positions, using optional tag?</span>
         <span class="n">trx</span> <span class="o">=</span> <span class="n">TrxFile</span><span class="p">()</span>
@@ -1729,12 +1840,16 @@
         <span class="n">nb_vertices</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">delete_dpg</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Remove the unused portion of preallocated memmaps</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Remove the unused portion of preallocated memmaps.</span>
 
-<span class="sd">        Keyword arguments:</span>
-<span class="sd">            nb_streamlines -- The number of streamlines to keep</span>
-<span class="sd">            nb_vertices -- The number of vertices to keep</span>
-<span class="sd">            delete_dpg -- Remove data_per_group when resizing</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        nb_streamlines : int, optional</span>
+<span class="sd">            The number of streamlines to keep.</span>
+<span class="sd">        nb_vertices : int, optional</span>
+<span class="sd">            The number of vertices to keep.</span>
+<span class="sd">        delete_dpg : bool, optional</span>
+<span class="sd">            Remove data_per_group when resizing. Default is False.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_copy_safe</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot resize a sliced datasets.&quot;</span><span class="p">)</span>
@@ -1844,10 +1959,12 @@
 <div class="viewcode-block" id="TrxFile.get_dtype_dict">
 <a class="viewcode-back" href="../../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap.TrxFile.get_dtype_dict">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_dtype_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the dtype dictionary for the TrxFile</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the dtype dictionary for the TrxFile.</span>
 
 <span class="sd">        Returns</span>
-<span class="sd">            A dictionary containing the dtype for each data element</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict</span>
+<span class="sd">            A dictionary containing the dtype for each data element.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">dtype_dict</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;positions&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
@@ -1902,11 +2019,14 @@
 <div class="viewcode-block" id="TrxFile._append_trx">
 <a class="viewcode-back" href="../../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap.TrxFile._append_trx">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">_append_trx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trx</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="s2">&quot;TrxFile&quot;</span><span class="p">],</span> <span class="n">extra_buffer</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Append a TrxFile to another (support buffer)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Append a TrxFile to another (with buffer support).</span>
 
-<span class="sd">        Keyword arguments:</span>
-<span class="sd">            trx -- The TrxFile to append to the current TrxFile</span>
-<span class="sd">            extra_buffer -- The additional buffer space required to append data</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        trx : TrxFile</span>
+<span class="sd">            The TrxFile to append to the current TrxFile.</span>
+<span class="sd">        extra_buffer : int, optional</span>
+<span class="sd">            The additional buffer space required to append data. Default is 0.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">strs_end</span><span class="p">,</span> <span class="n">pts_end</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_real_len</span><span class="p">()</span>
 
@@ -1929,15 +2049,21 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">get_group</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">keep_group</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">copy_safe</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Type</span><span class="p">[</span><span class="s2">&quot;TrxFile&quot;</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get a particular group from the TrxFile</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get a particular group from the TrxFile.</span>
 
-<span class="sd">        Keyword arguments:</span>
-<span class="sd">            key -- The group name to select</span>
-<span class="sd">            keep_group -- Make sure group exists in returned TrxFile</span>
-<span class="sd">            copy_safe -- Perform a deepcopy</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        key : str</span>
+<span class="sd">            The group name to select.</span>
+<span class="sd">        keep_group : bool, optional</span>
+<span class="sd">            Make sure group exists in returned TrxFile. Default is True.</span>
+<span class="sd">        copy_safe : bool, optional</span>
+<span class="sd">            Perform a deepcopy. Default is False.</span>
 
 <span class="sd">        Returns</span>
-<span class="sd">            A TrxFile exclusively containing data from said group</span>
+<span class="sd">        -------</span>
+<span class="sd">        TrxFile</span>
+<span class="sd">            A TrxFile exclusively containing data from said group.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">groups</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">keep_group</span><span class="o">=</span><span class="n">keep_group</span><span class="p">,</span> <span class="n">copy_safe</span><span class="o">=</span><span class="n">copy_safe</span><span class="p">)</span></div>
 
@@ -1947,15 +2073,21 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">select</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">indices</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">keep_group</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">copy_safe</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Type</span><span class="p">[</span><span class="s2">&quot;TrxFile&quot;</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get a subset of items, always vertices to the same memmaps</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get a subset of items, always pointing to the same memmaps.</span>
 
-<span class="sd">        Keyword arguments:</span>
-<span class="sd">            indices -- The list of indices of elements to return</span>
-<span class="sd">            keep_group -- Ensure group is returned in output TrxFile</span>
-<span class="sd">            copy_safe -- Perform a deep-copy</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        indices : np.ndarray</span>
+<span class="sd">            The list of indices of elements to return.</span>
+<span class="sd">        keep_group : bool, optional</span>
+<span class="sd">            Ensure group is returned in output TrxFile. Default is True.</span>
+<span class="sd">        copy_safe : bool, optional</span>
+<span class="sd">            Perform a deep-copy. Default is False.</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            A TrxFile containing data originating from the selected indices</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        TrxFile</span>
+<span class="sd">            A TrxFile containing data originating from the selected indices.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">indices</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">)</span>
 
@@ -2038,14 +2170,26 @@
         <span class="n">chunk_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10000</span><span class="p">,</span>
         <span class="n">dtype_dict</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Type</span><span class="p">[</span><span class="s2">&quot;TrxFile&quot;</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Append a TrxFile to another (support buffer)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a TrxFile from a LazyTractogram with buffer support.</span>
 
-<span class="sd">        Keyword arguments:</span>
-<span class="sd">            trx -- The TrxFile to append to the current TrxFile</span>
-<span class="sd">            extra_buffer -- The buffer space between reallocation.</span>
-<span class="sd">                            This number should be a number of streamlines.</span>
-<span class="sd">                            Use 0 for no buffer.</span>
-<span class="sd">            chunk_size -- The number of streamlines to save at a time.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        obj : LazyTractogram</span>
+<span class="sd">            The LazyTractogram to convert.</span>
+<span class="sd">        reference : object</span>
+<span class="sd">            Reference for spatial information.</span>
+<span class="sd">        extra_buffer : int, optional</span>
+<span class="sd">            The buffer space between reallocation. This number should be a</span>
+<span class="sd">            number of streamlines. Use 0 for no buffer. Default is 0.</span>
+<span class="sd">        chunk_size : int, optional</span>
+<span class="sd">            The number of streamlines to save at a time. Default is 10000.</span>
+<span class="sd">        dtype_dict : dict, optional</span>
+<span class="sd">            Dictionary specifying dtypes for positions, offsets, dpv, and dps.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        TrxFile</span>
+<span class="sd">            A TrxFile created from the LazyTractogram.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">dtype_dict</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">dtype_dict</span> <span class="o">=</span> <span class="p">{</span>
@@ -2291,13 +2435,18 @@
 <div class="viewcode-block" id="TrxFile.to_memory">
 <a class="viewcode-back" href="../../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap.TrxFile.to_memory">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">to_memory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">resize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Type</span><span class="p">[</span><span class="s2">&quot;TrxFile&quot;</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert a TrxFile to a RAM representation</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert a TrxFile to a RAM representation.</span>
 
-<span class="sd">        Keyword arguments:</span>
-<span class="sd">            resize -- Resize TrxFile when converting to RAM representation</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        resize : bool, optional</span>
+<span class="sd">            Resize TrxFile when converting to RAM representation.</span>
+<span class="sd">            Default is False.</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            A non memory mapped TrxFile</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        TrxFile</span>
+<span class="sd">            A non memory-mapped TrxFile.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">resize</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">resize</span><span class="p">()</span>
@@ -2438,7 +2587,7 @@
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
     <br/>
   </p>
 </div>

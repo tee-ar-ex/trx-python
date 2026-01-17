@@ -45,6 +45,10 @@ Module Contents
    Close the memory-mapped file if it exists, otherwise set the object to None.
 
 
+   :Parameters:
+
+       **obj** : object
+           The object that potentially has a memory-mapped file to be closed.
 
 
 
@@ -411,17 +415,20 @@ Module Contents
 .. py:function:: convert_data_dict_to_tractogram(data)
 
    
-   Convert a data from a lazy tractogram to a tractogram
-
-   Keyword arguments:
-       data -- The data dictionary to convert into a nibabel tractogram
-
-   Returns:
-       A Tractogram object
+   Convert data from a lazy tractogram to a tractogram.
 
 
+   :Parameters:
+
+       **data** : dict
+           The data dictionary to convert into a nibabel tractogram.
 
 
+
+   :Returns:
+
+       Tractogram
+           A Tractogram object.
 
 
 

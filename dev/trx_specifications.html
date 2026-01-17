@@ -1,0 +1,733 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>TRX File Format Specifications &#8212; trx-python dev documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=3ce10a4d"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'trx_specifications';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.16.1';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://tee-ar-ex.github.io/trx-python/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'dev';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
+        </script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Command-line Interface" href="scripts.html" />
+    <link rel="prev" title="TRX: A community-oriented tractography file format" href="index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="dev" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/trx_logo.png" class="logo__image only-light" alt="trx-python dev documentation - Home"/>
+    <img src="_static/trx_logo.png" class="logo__image only-dark pst-js-only" alt="trx-python dev documentation - Home"/>
+  
+  
+</a></div>
+    
+      <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="#">
+    TRX File Format Specifications
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="scripts.html">
+    Command-line Interface
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="auto_examples/index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="dev.html">
+    Developer Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="autoapi/index.html">
+    API Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/tee-ar-ex" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-github-square fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="#">
+    TRX File Format Specifications
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="scripts.html">
+    Command-line Interface
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="auto_examples/index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="dev.html">
+    Developer Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="autoapi/index.html">
+    API Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/tee-ar-ex" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-github-square fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">TRX File Format Specifications</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="trx-file-format-specifications">
+<h1>TRX File Format Specifications<a class="headerlink" href="#trx-file-format-specifications" title="Link to this heading">#</a></h1>
+<p>This document contains the complete specifications for the TRX (Tractography File Format)
+as defined by the TRX specification. TRX is a community-oriented tractography file format
+designed to facilitate dataset exchange, interoperability, and state-of-the-art analyses.</p>
+<section id="general-properties">
+<h2>General Properties<a class="headerlink" href="#general-properties" title="Link to this heading">#</a></h2>
+<p><strong>File Structure</strong></p>
+<ul class="simple">
+<li><p>(Un)-Compressed Zip File or simple folder architecture</p></li>
+<li><p>File architecture describes the data</p></li>
+<li><p>Each file basename is the metadata’s name</p></li>
+<li><p>Each file extension is the metadata’s dtype</p></li>
+<li><p>Each file dimension is in the value between basename and metadata (1-dimension arrays do not have to follow this convention for readability)</p></li>
+</ul>
+<p><strong>Data Organization</strong></p>
+<ul class="simple">
+<li><p>All arrays have a C-style memory layout (row-major)</p></li>
+<li><p>All arrays have a little-endian byte order</p></li>
+<li><p>Compression is optional:</p>
+<ul>
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">ZIP_STORE</span></code> for uncompressed storage</p></li>
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">ZIP_DEFLATE</span></code> if compression is desired</p></li>
+<li><p>Compressed TRX files will have to be decompressed before being loaded</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="header">
+<h2>Header<a class="headerlink" href="#header" title="Link to this heading">#</a></h2>
+<p>The header contains metadata for readability, run-time checks, and broader compatibility.
+It is stored as a dictionary in JSON format with the following fields:</p>
+<p><strong>Required Fields:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>VOXEL_TO_RASMM : 4x4 transformation matrix (list of 4 lists, each containing 4 floats)
+DIMENSIONS     : Image dimensions (list of 3 uint16)
+NB_STREAMLINES : Number of streamlines (uint32)
+NB_VERTICES    : Total number of vertices (uint64)
+</pre></div>
+</div>
+</section>
+<section id="arrays">
+<h2>Arrays<a class="headerlink" href="#arrays" title="Link to this heading">#</a></h2>
+<section id="positions-n-float-16-32-64">
+<h3>positions.{N}.float{16,32,64}<a class="headerlink" href="#positions-n-float-16-32-64" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Written in world space (RASMM), similar to TCK files</p></li>
+<li><p>Should always be float16/32/64 (default recommended: float16)</p></li>
+<li><p>Stored as contiguous 3D array with shape (NB_VERTICES, 3)</p></li>
+<li><p>The {N} dimension specifier can be omitted for 1D arrays for readability</p></li>
+</ul>
+</section>
+<section id="offsets-uint-32-64">
+<h3>offsets.uint{32,64}<a class="headerlink" href="#offsets-uint-32-64" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Should always be uint32 or uint64</p></li>
+<li><p>Indicates the starting vertex index for each streamline (starts at 0)</p></li>
+<li><p>Streamline lengths can be calculated by:</p>
+<ol class="arabic simple">
+<li><p>Checking the header for total vertices count</p></li>
+<li><p>Using positions array size: <code class="docutils literal notranslate"><span class="pre">positions.shape[0]</span> <span class="pre">/</span> <span class="pre">3</span></code></p></li>
+<li><p>Calculating differences between consecutive elements: append total_vertices to offsets array and compute ediff1d</p></li>
+</ol>
+</li>
+</ul>
+</section>
+<section id="dpv-data-per-vertex">
+<h3>dpv (data_per_vertex)<a class="headerlink" href="#dpv-data-per-vertex" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Always of size (NB_VERTICES, 1) or (NB_VERTICES, N)</p></li>
+<li><p>Contains data associated with each vertex/point along streamlines</p></li>
+<li><p>Common uses: FA values, colors, curvature, local coordinate systems</p></li>
+</ul>
+</section>
+<section id="dps-data-per-streamline">
+<h3>dps (data_per_streamline)<a class="headerlink" href="#dps-data-per-streamline" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Always of size (NB_STREAMLINES, 1) or (NB_STREAMLINES, N)</p></li>
+<li><p>Contains data associated with entire streamlines</p></li>
+<li><p>Common uses: bundle IDs, mean metrics, algorithm information</p></li>
+</ul>
+</section>
+</section>
+<section id="groups">
+<h2>Groups<a class="headerlink" href="#groups" title="Link to this heading">#</a></h2>
+<p>Groups are tables of indices that allow sparse &amp; overlapping representation
+(clusters, connectomics, bundles).</p>
+<p><strong>Properties:</strong></p>
+<ul class="simple">
+<li><p>All indices must be <code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;=</span> <span class="pre">id</span> <span class="pre">&lt;</span> <span class="pre">NB_STREAMLINES</span></code></p></li>
+<li><p>Datatype should be uint32</p></li>
+<li><p>Allows efficient retrieval of predefined streamline subsets from memmaps</p></li>
+<li><p>Variables can have different sizes</p></li>
+</ul>
+<section id="dpg-data-per-group">
+<h3>dpg (data_per_group)<a class="headerlink" href="#dpg-data-per-group" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Each folder corresponds to name of a group</p></li>
+<li><p>Not all metadata have to be present in all groups</p></li>
+<li><p>Always of size (1,) or (N,) per group</p></li>
+<li><p>Contains group-specific metadata like volumes, mean values, color codes</p></li>
+</ul>
+</section>
+</section>
+<section id="supported-data-types">
+<h2>Supported Data Types<a class="headerlink" href="#supported-data-types" title="Link to this heading">#</a></h2>
+<p>The TRX format supports the following data types:</p>
+<p><strong>Integer Types:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">int8</span></code>, <code class="docutils literal notranslate"><span class="pre">int16</span></code>, <code class="docutils literal notranslate"><span class="pre">int32</span></code>, <code class="docutils literal notranslate"><span class="pre">int64</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">uint8</span></code>, <code class="docutils literal notranslate"><span class="pre">uint16</span></code>, <code class="docutils literal notranslate"><span class="pre">uint32</span></code>, <code class="docutils literal notranslate"><span class="pre">uint64</span></code></p></li>
+</ul>
+<p><strong>Floating Point Types:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">float16</span></code>, <code class="docutils literal notranslate"><span class="pre">float32</span></code>, <code class="docutils literal notranslate"><span class="pre">float64</span></code></p></li>
+</ul>
+<p><strong>Boolean Type:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">bit</span></code> (for boolean data)</p></li>
+</ul>
+</section>
+<section id="example-file-structure">
+<h2>Example File Structure<a class="headerlink" href="#example-file-structure" title="Link to this heading">#</a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>OHBM_demo.trx
+|-- dpg
+|   |-- AF_L
+|   |   |-- mean_fa.float16
+|   |   |-- shuffle_colors.3.uint8
+|   |   +-- volume.uint32
+|   |-- AF_R
+|   |   |-- mean_fa.float16
+|   |   |-- shuffle_colors.3.uint8
+|   |   +-- volume.uint32
+|   |-- CC
+|   |   |-- mean_fa.float16
+|   |   |-- shuffle_colors.3.uint8
+|   |   +-- volume.uint32
+|   |-- CST_L
+|   |   +-- shuffle_colors.3.uint8
+|   |-- CST_R
+|   |   +-- shuffle_colors.3.uint8
+|   |-- SLF_L
+|   |   |-- mean_fa.float16
+|   |   |-- shuffle_colors.3.uint8
+|   |   +-- volume.uint32
+|   +-- SLF_R
+|       |-- mean_fa.float16
+|       |-- shuffle_colors.3.uint8
+|       +-- volume.uint32
+|-- dpv
+|   |-- color_x.uint8
+|   |-- color_y.uint8
+|   |-- color_z.uint8
+|   +-- fa.float16
+|-- dps
+|   |-- algo.uint8
+|   |-- algo.json
+|   |-- clusters_QB.uint16
+|   |-- commit_colors.3.uint8
+|   +-- commit_weights.float32
+|-- groups
+|   |-- AF_L.uint32
+|   |-- AF_R.uint32
+|   |-- CC.uint32
+|   |-- CST_L.uint32
+|   |-- CST_R.uint32
+|   |-- SLF_L.uint32
+|   +-- SLF_R.uint32
+|-- header.json
+|-- offsets.uint64
++-- positions.3.float16
+</pre></div>
+</div>
+</section>
+<section id="naming-conventions">
+<h2>Naming Conventions<a class="headerlink" href="#naming-conventions" title="Link to this heading">#</a></h2>
+<p><strong>Files:</strong></p>
+<ul class="simple">
+<li><p>Basename = metadata name</p></li>
+<li><p>Extension = data type</p></li>
+<li><p>Dimension specifiers between basename and extension (optional for 1D)</p></li>
+</ul>
+<p><strong>Examples:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">positions.3.float16</span></code> - 3D position data as float16</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fa.float16</span></code> - 1D fractional anisotropy values as float16</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">colors.3.uint8</span></code> - RGB color values as 8-bit unsigned integers</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bundle_id.uint8</span></code> - Bundle identifiers as 8-bit unsigned integers</p></li>
+</ul>
+</section>
+<section id="memory-and-performance-considerations">
+<h2>Memory and Performance Considerations<a class="headerlink" href="#memory-and-performance-considerations" title="Link to this heading">#</a></h2>
+<p><strong>Memory Efficiency:</strong></p>
+<ul class="simple">
+<li><p>Use float16 for positional data when precision allows</p></li>
+<li><p>Choose appropriate integer sizes for indices (uint32 for streamline indices)</p></li>
+<li><p>Consider compression for disk storage but expect decompression overhead</p></li>
+</ul>
+<p><strong>Performance:</strong></p>
+<ul class="simple">
+<li><p>C-style memory layout enables efficient numpy operations</p></li>
+<li><p>Little-endian byte order ensures consistency across platforms</p></li>
+<li><p>Memory-mapped access for large datasets without full loading</p></li>
+</ul>
+<p><strong>Scalability:</strong></p>
+<ul class="simple">
+<li><p>Support for arbitrarily large numbers of streamlines and vertices</p></li>
+<li><p>Group-based organization enables efficient subset operations</p></li>
+<li><p>Flexible metadata structure accommodates various analysis workflows</p></li>
+</ul>
+</section>
+<section id="compatibility-and-integration">
+<h2>Compatibility and Integration<a class="headerlink" href="#compatibility-and-integration" title="Link to this heading">#</a></h2>
+<p>TRX is designed for integration with existing neuroimaging ecosystems:</p>
+<p><strong>Current Support:</strong></p>
+<ul class="simple">
+<li><p>Native support in trx-python library</p></li>
+<li><p>Conversion tools for common tractography formats (TCK, TRK, etc.)</p></li>
+<li><p>Integration with DIPY for advanced processing</p></li>
+</ul>
+<p><strong>Future Goals:</strong></p>
+<ul class="simple">
+<li><p>Integration with Brain Imaging Data Structure (BIDS) ecosystem</p></li>
+<li><p>Support in major neuroimaging software packages</p></li>
+<li><p>Standardization across the tractography community</p></li>
+</ul>
+<p>For latest updates and community discussions, see:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/tee-ar-ex/trx-spec">TRX Specification Repository</a></p></li>
+<li><p><a class="reference external" href="https://github.com/tee-ar-ex/trx-python">TRX Python Implementation</a></p></li>
+</ul>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">TRX: A community-oriented tractography file format</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="scripts.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Command-line Interface</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2021-2026, The TRX developers.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

@@ -11,8 +11,34 @@ exchange, interoperability, and state-of-the-art analyses, acting as a
 community-driven replacement for the myriad existing file formats.
 
 
-Why TRX?
+Getting Started
 ~~~~~~~~~~~~~~~
+
+New to TRX? Start here:
+
+1. **Understand the format**: Read the :doc:`trx_specifications` to understand the TRX file structure
+2. **Learn by example**: Follow our :doc:`auto_examples/index` to learn how to read, write, and manipulate TRX files
+3. **Use the CLI tools**: Check out the :doc:`scripts` documentation for command-line operations
+
+.. grid:: 2
+
+   .. grid-item-card:: Tutorials
+      :link: auto_examples/index
+      :link-type: doc
+
+      Learn how to work with TRX files through hands-on tutorials covering
+      reading/writing files, working with groups, and using metadata.
+
+   .. grid-item-card:: TRX Specifications
+      :link: trx_specifications
+      :link-type: doc
+
+      Complete technical specifications of the TRX file format including
+      header fields, array structures, and naming conventions.
+
+
+Why TRX?
+~~~~~~~~
 File formats that store the results of computational tractography were typically
 developed within specific software packages. This approach has facilitated a
 myriad of applications, but this development approach has also generated
@@ -44,13 +70,19 @@ Development of TRX is supported by `NIMH grant 1R01MH126699 <https://reporter.ni
    :maxdepth: 2
    :caption: User Guide:
 
+   trx_specifications
    scripts
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Tutorials:
+
+   auto_examples/index
 
 .. toctree::
    :maxdepth: 2
    :caption: Development:
 
-   contributing
    dev
 
 .. toctree::
