@@ -1,0 +1,41 @@
+target-version = "py312"
+
+line-length = 88
+force-exclude = true
+extend-exclude = [
+  "__pycache__",
+  "build",
+  "_version.py",
+  "docs/**",
+]
+
+[lint]
+select = [
+  "F",      # Pyflakes
+  "E",      # pycodestyle errors
+  "W",      # pycodestyle warnings
+  "C",      # mccabe complexity
+  "B",      # flake8-bugbear
+  "I",      # isort
+]
+ignore = [
+  "B905",   # zip without explicit strict parameter
+  "C901",   # too complex
+  "E203",   # whitespace before ':'
+]
+
+[lint.extend-per-file-ignores]
+"trx/tests/**" = ["B011"]
+
+[lint.isort]
+case-sensitive = true
+combine-as-imports = true
+force-sort-within-sections = true
+known-first-party = ["trx"]
+no-sections = false
+order-by-type = true
+relative-imports-order = "closest-to-furthest"
+section-order = ["future", "standard-library", "third-party", "first-party", "local-folder"]
+
+[format]
+quote-style = "double"

@@ -1,4 +1,3 @@
-#! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 from copy import deepcopy
@@ -6,7 +5,7 @@ import json
 import logging
 import os
 import shutil
-from typing import Any, List, Tuple, Type, Union, Optional
+from typing import Any, List, Optional, Tuple, Type, Union
 import zipfile
 
 import nibabel as nib
@@ -14,58 +13,129 @@ from nibabel.affines import voxel_sizes
 from nibabel.nifti1 import Nifti1Header, Nifti1Image
 from nibabel.orientations import aff2axcodes
 from nibabel.streamlines.array_sequence import ArraySequence
+from nibabel.streamlines.tractogram import LazyTractogram, Tractogram
 from nibabel.streamlines.trk import TrkFile
-from nibabel.streamlines.tractogram import Tractogram, LazyTractogram
 import numpy as np
 
 from trx.io import get_trx_tmp_dir
-from trx.utils import (append_generator_to_dict,
-                       close_or_delete_mmap,
-                       convert_data_dict_to_tractogram,
-                       get_reference_info_wrapper)
+from trx.utils import (
+    append_generator_to_dict,
+    close_or_delete_mmap,
+    convert_data_dict_to_tractogram,
+    get_reference_info_wrapper,
+)
 
 try:
-    import dipy
+    import dipy  # noqa: F401
+
     dipy_available = True
 except ImportError:
     dipy_available = False
 
 
-def _append_last_offsets(nib_offsets: np.ndarray, nb_vertices: int) -> np.ndarray:
-    """Appends the last element of offsets from header information
+def _get_dtype_little_endian(dtype: Union[np.dtype, str, type]) -> np.dtype:
+    """Convert a dtype to its little-endian equivalent.
 
-    Keyword arguments:
-        nib_offsets -- np.ndarray
-            Array of offsets with the last element being the start of the last
-            streamline (nibabel convention)
-        nb_vertices -- int
-            Total number of vertices in the streamlines
-    Returns:
-        Offsets -- np.ndarray (VTK convention)
+    The TRX file format uses little-endian byte order for cross-platform
+    compatibility. This function ensures that dtypes are always interpreted
+    as little-endian when reading/writing TRX files.
+
+    Parameters
+    ----------
+    dtype : np.dtype, str, or type
+        Input dtype specification (e.g., np.float32, 'float32', '>f4')
+
+    Returns
+    -------
+    np.dtype
+        Little-endian dtype. For single-byte types (uint8, int8, bool),
+        returns the original dtype as endianness is not applicable.
     """
-    def is_sorted(a): return np.all(a[:-1] <= a[1:])
+    dt = np.dtype(dtype)
+    # Single-byte types don't have endianness
+    if dt.byteorder == "|" or dt.itemsize == 1:
+        return dt
+    # Already little-endian
+    if dt.byteorder == "<":
+        return dt
+    # Convert to little-endian
+    return dt.newbyteorder("<")
+
+
+def _ensure_little_endian(arr: np.ndarray) -> np.ndarray:
+    """Ensure array data is in little-endian byte order for writing.
+
+    Parameters
+    ----------
+    arr : np.ndarray
+        Input array
+
+    Returns
+    -------
+    np.ndarray
+        Array with little-endian byte order. Returns a copy if conversion
+        was needed, otherwise returns the original array.
+    """
+    dt = arr.dtype
+    # Single-byte types don't have endianness
+    if dt.byteorder == "|" or dt.itemsize == 1:
+        return arr
+    # Already little-endian
+    if dt.byteorder == "<":
+        return arr
+    # Native byte order on little-endian system
+    if dt.byteorder == "=" and np.little_endian:
+        return arr
+    # Convert to little-endian
+    return arr.astype(dt.newbyteorder("<"))
+
+
+def _append_last_offsets(nib_offsets: np.ndarray, nb_vertices: int) -> np.ndarray:
+    """Append the last element of offsets from header information.
+
+    Parameters
+    ----------
+    nib_offsets : np.ndarray
+        Array of offsets with the last element being the start of the last
+        streamline (nibabel convention).
+    nb_vertices : int
+        Total number of vertices in the streamlines.
+
+    Returns
+    -------
+    np.ndarray
+        Offsets array (VTK convention).
+    """
+
+    def is_sorted(a):
+        return np.all(a[:-1] <= a[1:])
+
     if not is_sorted(nib_offsets):
-        raise ValueError('Offsets must be sorted values.')
+        raise ValueError("Offsets must be sorted values.")
     return np.append(nib_offsets, nb_vertices).astype(nib_offsets.dtype)
 
 
 def _generate_filename_from_data(arr: np.ndarray, filename: str) -> str:
-    """Determines the data type from array data and generates the appropriate
-    filename
+    """Determine the data type from array data and generate the appropriate filename.
 
-    Keyword arguments:
-        arr -- a NumPy array (1-2D, otherwise ValueError raised)
-        filename -- the original filename
+    Parameters
+    ----------
+    arr : np.ndarray
+        A NumPy array (1-2D, otherwise ValueError raised).
+    filename : str
+        The original filename.
 
-    Returns:
-        An updated filename
+    Returns
+    -------
+    str
+        An updated filename with appropriate extension.
     """
     base, ext = os.path.splitext(filename)
     if ext:
         logging.warning("Will overwrite provided extension if needed.")
 
     dtype = arr.dtype
-    dtype = "bit" if dtype == bool else dtype.name
+    dtype = "bit" if dtype is np.dtype(bool) else dtype.name
 
     if arr.ndim == 1:
         new_filename = "{}.{}".format(base, dtype)
@@ -82,14 +152,17 @@ def _generate_filename_from_data(arr: np.ndarray, filename: str) -> str:
 
 
 def _split_ext_with_dimensionality(filename: str) -> Tuple[str, int, str]:
-    """Takes a filename and splits it into its components
+    """Take a filename and split it into its components.
 
-    Keyword arguments:
-        filename -- Input filename
+    Parameters
+    ----------
+    filename : str
+        Input filename.
 
-    Returns:
-        tuple of strings (basename, dimension, extension)
-
+    Returns
+    -------
+    tuple
+        A tuple of (basename, dimension, extension).
     """
     basename = os.path.basename(filename)
     split = basename.split(".")
@@ -106,13 +179,17 @@ def _split_ext_with_dimensionality(filename: str) -> Tuple[str, int, str]:
 
 
 def _compute_lengths(offsets: np.ndarray) -> np.ndarray:
-    """Compute lengths from offsets
+    """Compute lengths from offsets.
 
-    Keyword arguments:
-        offsets -- An np.ndarray of offsets
+    Parameters
+    ----------
+    offsets : np.ndarray
+        An array of offsets.
 
-    Returns:
-        lengths -- An np.ndarray of lengths
+    Returns
+    -------
+    np.ndarray
+        An array of lengths.
     """
     if len(offsets) > 0:
         last_elem_pos = _dichotomic_search(offsets)
@@ -126,13 +203,17 @@ def _compute_lengths(offsets: np.ndarray) -> np.ndarray:
 
 
 def _is_dtype_valid(ext: str) -> bool:
-    """Verifies that filename extension is a valid datatype
+    """Verify that filename extension is a valid datatype.
 
-    Keyword arguments:
-        ext -- filename extension
+    Parameters
+    ----------
+    ext : str
+        Filename extension.
 
-    Returns:
-        boolean representing if provided datatype is valid
+    Returns
+    -------
+    bool
+        True if the provided datatype is valid, False otherwise.
     """
     if ext.replace(".", "") == "bit":
         return True
@@ -146,14 +227,22 @@ def _is_dtype_valid(ext: str) -> bool:
 def _dichotomic_search(
     x: np.ndarray, l_bound: Optional[int] = None, r_bound: Optional[int] = None
 ) -> int:
-    """Find where data of a contiguous array is actually ending
+    """Find where data of a contiguous array is actually ending.
 
-    Keyword arguments:
-        x -- np.ndarray of values
-        l_bound -- lower bound index for search
-        r_bound -- upper bound index for search
-    Returns:
-        index at which array value is 0 (if possible), otherwise returns -1"""
+    Parameters
+    ----------
+    x : np.ndarray
+        Array of values.
+    l_bound : int, optional
+        Lower bound index for search.
+    r_bound : int, optional
+        Upper bound index for search.
+
+    Returns
+    -------
+    int
+        Index at which array value is 0 (if possible), otherwise returns -1.
+    """
     if l_bound is None and r_bound is None:
         l_bound = 0
         r_bound = len(x) - 1
@@ -178,27 +267,37 @@ def _create_memmap(
     offset: int = 0,
     order: str = "C",
 ) -> np.ndarray:
-    """Wrapper to support empty array as memmaps
+    """Wrap memmap creation to support empty arrays.
 
-    Keyword arguments:
-        filename -- filename where the empty memmap should be created
-        mode -- file open mode (see: np.memmap for options)
-        shape -- shape of memmapped np.ndarray
-        dtype -- datatype of memmapped np.ndarray
-        offset -- offset of the data within the file
-        order -- data representation on disk (C or Fortran)
+    Parameters
+    ----------
+    filename : str
+        Filename where the empty memmap should be created.
+    mode : str, optional
+        File open mode (see np.memmap for options). Default is 'r'.
+    shape : tuple, optional
+        Shape of memmapped array. Default is (1,).
+    dtype : np.dtype, optional
+        Datatype of memmapped array. Default is np.float32.
+    offset : int, optional
+        Offset of the data within the file. Default is 0.
+    order : str, optional
+        Data representation on disk ('C' or 'F'). Default is 'C'.
 
-    Returns:
-        mmapped np.ndarray or a zero-filled Numpy array if array has a shape of 0
-            in the first dimension
+    Returns
+    -------
+    np.ndarray
+        Memory-mapped array or a zero-filled array if shape[0] is 0.
     """
     if np.dtype(dtype) == bool:
         filename = filename.replace(".bool", ".bit")
 
+    # TRX format uses little-endian byte order for cross-platform compatibility
+    dtype = _get_dtype_little_endian(dtype)
+
     if shape[0]:
         return np.memmap(
-            filename, mode=mode, offset=offset, shape=shape, dtype=dtype,
-            order=order
+            filename, mode=mode, offset=offset, shape=shape, dtype=dtype, order=order
         )
     else:
         if not os.path.isfile(filename):
@@ -208,14 +307,19 @@ def _create_memmap(
 
 
 def load(input_obj: str, check_dpg: bool = True) -> Type["TrxFile"]:
-    """Load a TrxFile (compressed or not)
+    """Load a TrxFile (compressed or not).
 
-    Keyword arguments:
-    input_obj -- A directory name or filepath to the trx data
-    check_dpg -- Boolean denoting if group metadata should be checked
+    Parameters
+    ----------
+    input_obj : str
+        A directory name or filepath to the TRX data.
+    check_dpg : bool, optional
+        Whether to check group metadata. Default is True.
 
-    Returns:
-        TrxFile object representing the read data
+    Returns
+    -------
+    TrxFile
+        TrxFile object representing the read data.
     """
     # TODO Check if 0 streamlines, then 0 vertices is expected (vice-versa)
     # TODO 4x4 affine matrices should contains values (no all-zeros)
@@ -234,8 +338,7 @@ def load(input_obj: str, check_dpg: bool = True) -> Type["TrxFile"]:
                 trx = load_from_directory(tmp_dir.name)
                 trx._uncompressed_folder_handle = tmp_dir
                 logging.info(
-                    "File was compressed, call the close() function before"
-                    "exiting."
+                    "File was compressed, call the close() function before exiting."
                 )
         else:
             trx = load_from_zip(input_obj)
@@ -249,21 +352,25 @@ def load(input_obj: str, check_dpg: bool = True) -> Type["TrxFile"]:
         for dpg in trx.data_per_group.keys():
             if dpg not in trx.groups.keys():
                 raise ValueError(
-                    "An undeclared group ({}) has " "data_per_group.".format(
-                        dpg)
+                    "An undeclared group ({}) has data_per_group.".format(dpg)
                 )
     return trx
 
 
 def load_from_zip(filename: str) -> Type["TrxFile"]:
-    """Load a TrxFile from a single zipfile. Note: does not work with
-    compressed zipfiles
+    """Load a TrxFile from a single zipfile.
 
-    Keyword arguments:
-    filename -- path of the zipped TrxFile
+    Note: Does not work with compressed zipfiles.
 
-    Returns:
-        TrxFile representing the read data
+    Parameters
+    ----------
+    filename : str
+        Path of the zipped TrxFile.
+
+    Returns
+    -------
+    TrxFile
+        TrxFile representing the read data.
     """
     with zipfile.ZipFile(filename, mode="r") as zf:
         with zf.open("header.json") as zf_header:
@@ -271,8 +378,7 @@ def load_from_zip(filename: str) -> Type["TrxFile"]:
             header["VOXEL_TO_RASMM"] = np.reshape(
                 header["VOXEL_TO_RASMM"], (4, 4)
             ).astype(np.float32)
-            header["DIMENSIONS"] = np.array(
-                header["DIMENSIONS"], dtype=np.uint16)
+            header["DIMENSIONS"] = np.array(header["DIMENSIONS"], dtype=np.uint16)
 
         files_pointer_size = {}
         for zip_info in zf.filelist:
@@ -283,8 +389,7 @@ def load_from_zip(filename: str) -> Type["TrxFile"]:
 
             if not _is_dtype_valid(ext):
                 continue
-                raise ValueError(
-                    "The dtype {} is not supported".format(elem_filename))
+                raise ValueError("The dtype {} is not supported".format(elem_filename))
 
             if ext == ".bit":
                 ext = ".bool"
@@ -294,7 +399,7 @@ def load_from_zip(filename: str) -> Type["TrxFile"]:
             size = zip_info.file_size / dtype_size
 
             if len(zip_info.extra):
-                mem_adress += 4
+                mem_adress -= len(zip_info.extra)
 
             if size.is_integer():
                 files_pointer_size[elem_filename] = mem_adress, int(size)
@@ -307,23 +412,28 @@ def load_from_zip(filename: str) -> Type["TrxFile"]:
 
 
 def load_from_directory(directory: str) -> Type["TrxFile"]:
-    """Load a TrxFile from a folder containing memmaps
+    """Load a TrxFile from a folder containing memmaps.
 
-    Keyword arguments:
-    filename -- path of the zipped TrxFile
+    Parameters
+    ----------
+    directory : str
+        Path of the directory containing TRX data.
 
-    Returns:
-        TrxFile representing the read data
+    Returns
+    -------
+    TrxFile
+        TrxFile representing the read data.
     """
 
     directory = os.path.abspath(directory)
     with open(os.path.join(directory, "header.json")) as header:
         header = json.load(header)
-        header["VOXEL_TO_RASMM"] = np.reshape(header["VOXEL_TO_RASMM"],
-                                              (4, 4)).astype(np.float32)
+        header["VOXEL_TO_RASMM"] = np.reshape(header["VOXEL_TO_RASMM"], (4, 4)).astype(
+            np.float32
+        )
         header["DIMENSIONS"] = np.array(header["DIMENSIONS"], dtype=np.uint16)
     files_pointer_size = {}
-    for root, dirs, files in os.walk(directory):
+    for root, _dirs, files in os.walk(directory):
         for name in files:
             elem_filename = os.path.join(root, name)
             _, ext = os.path.splitext(elem_filename)
@@ -347,78 +457,51 @@ def load_from_directory(directory: str) -> Type["TrxFile"]:
             else:
                 raise ValueError("Wrong size or datatype")
 
-    return TrxFile._create_trx_from_pointer(header, files_pointer_size,
-                                            root=directory)
+    return TrxFile._create_trx_from_pointer(header, files_pointer_size, root=directory)
 
 
-def concatenate(
-    trx_list: List["TrxFile"],
-    delete_dpv: bool = False,
-    delete_dps: bool = False,
-    delete_groups: bool = False,
-    check_space_attributes: bool = True,
-    preallocation: bool = False,
-) -> "TrxFile":
-    """Concatenate multiple TrxFile together, support preallocation
+def _filter_empty_trx_files(trx_list: List["TrxFile"]) -> List["TrxFile"]:
+    """Remove empty TrxFiles from the list."""
+    return [curr_trx for curr_trx in trx_list if curr_trx.header["NB_STREAMLINES"] > 0]
 
-    Keyword arguments:
-        trx_list -- A list containing TrxFiles to concatenate
-        delete_dpv -- Delete dpv keys that do not exist in all the provided
-            TrxFiles
-        delete_dps -- Delete dps keys that do not exist in all the provided
-            TrxFile
-        delete_groups -- Delete all the groups that currently exist in the
-            TrxFiles
-        check_space_attributes -- Verify that dimensions and size of data are
-            similar between all the TrxFiles
-        preallocation -- Preallocated TrxFile has already been generated and
-            is the first element in trx_list
-            (Note: delete_groups must be set to True as well)
 
-    Returns:
-        TrxFile representing the concatenated data
-
-    """
-    trx_list = [
-        curr_trx for curr_trx in trx_list if curr_trx.header["NB_STREAMLINES"] > 0
-    ]
-    if len(trx_list) == 0:
-        logging.warning("Inputs of concatenation were empty.")
-        return TrxFile()
-
-    ref_trx = trx_list[0]
+def _get_all_data_keys(trx_list: List["TrxFile"]) -> Tuple[set, set]:
+    """Get all dps and dpv keys from the TrxFile list."""
     all_dps = []
     all_dpv = []
     for curr_trx in trx_list:
         all_dps.extend(list(curr_trx.data_per_streamline.keys()))
         all_dpv.extend(list(curr_trx.data_per_vertex.keys()))
-    all_dps, all_dpv = set(all_dps), set(all_dpv)
+    return set(all_dps), set(all_dpv)
 
-    if check_space_attributes:
-        for curr_trx in trx_list[1:]:
-            if not np.allclose(
-                ref_trx.header["VOXEL_TO_RASMM"], curr_trx.header["VOXEL_TO_RASMM"]
-            ) or not np.array_equal(
-                ref_trx.header["DIMENSIONS"], curr_trx.header["DIMENSIONS"]
-            ):
-                raise ValueError("Wrong space attributes.")
 
-    if preallocation and not delete_groups:
-        raise ValueError(
-            "Groups are variables, cannot be handled with " "preallocation"
-        )
+def _check_space_attributes(trx_list: List["TrxFile"]) -> None:
+    """Verify that space attributes are consistent across TrxFiles."""
+    ref_trx = trx_list[0]
+    for curr_trx in trx_list[1:]:
+        if not np.allclose(
+            ref_trx.header["VOXEL_TO_RASMM"], curr_trx.header["VOXEL_TO_RASMM"]
+        ) or not np.array_equal(
+            ref_trx.header["DIMENSIONS"], curr_trx.header["DIMENSIONS"]
+        ):
+            raise ValueError("Wrong space attributes.")
 
-    # Verifying the validity of fixed-size arrays, coherence between inputs
+
+def _verify_dpv_coherence(
+    trx_list: List["TrxFile"], all_dpv: set, ref_trx: "TrxFile", delete_dpv: bool
+) -> None:
+    """Verify dpv coherence across TrxFiles."""
     for curr_trx in trx_list:
         for key in all_dpv:
-            if key not in ref_trx.data_per_vertex.keys() \
-                    or key not in curr_trx.data_per_vertex.keys():
+            if (
+                key not in ref_trx.data_per_vertex.keys()
+                or key not in curr_trx.data_per_vertex.keys()
+            ):
                 if not delete_dpv:
                     logging.debug(
                         "{} dpv key does not exist in all TrxFile.".format(key)
                     )
-                    raise ValueError(
-                        "TrxFile must be sharing identical dpv " "keys.")
+                    raise ValueError("TrxFile must be sharing identical dpv keys.")
             elif (
                 ref_trx.data_per_vertex[key]._data.dtype
                 != curr_trx.data_per_vertex[key]._data.dtype
@@ -429,17 +512,22 @@ def concatenate(
                 )
                 raise ValueError("Shared dpv key, has different dtype.")
 
+
+def _verify_dps_coherence(
+    trx_list: List["TrxFile"], all_dps: set, ref_trx: "TrxFile", delete_dps: bool
+) -> None:
+    """Verify dps coherence across TrxFiles."""
     for curr_trx in trx_list:
         for key in all_dps:
-            if key not in ref_trx.data_per_streamline.keys() \
-                    or key not in curr_trx.data_per_streamline.keys():
+            if (
+                key not in ref_trx.data_per_streamline.keys()
+                or key not in curr_trx.data_per_streamline.keys()
+            ):
                 if not delete_dps:
                     logging.debug(
-                        "{} dps key does not exist in all " "TrxFile.".format(
-                            key)
+                        "{} dps key does not exist in all TrxFile.".format(key)
                     )
-                    raise ValueError(
-                        "TrxFile must be sharing identical dps " "keys.")
+                    raise ValueError("TrxFile must be sharing identical dps keys.")
             elif (
                 ref_trx.data_per_streamline[key].dtype
                 != curr_trx.data_per_streamline[key].dtype
@@ -450,79 +538,164 @@ def concatenate(
                 )
                 raise ValueError("Shared dps key, has different dtype.")
 
+
+def _compute_groups_info(trx_list: List["TrxFile"]) -> Tuple[dict, dict]:
+    """Compute group length and dtype information."""
     all_groups_len = {}
     all_groups_dtype = {}
-    # Variable-size arrays do not have to exist in all TrxFile
-    if not delete_groups:
-        for trx_1 in trx_list:
-            for group_key in trx_1.groups.keys():
-                # Concatenating groups together
-                if group_key in all_groups_len:
-                    all_groups_len[group_key] += len(trx_1.groups[group_key])
-                else:
-                    all_groups_len[group_key] = len(trx_1.groups[group_key])
-                if (
-                    group_key in all_groups_dtype
-                    and trx_1.groups[group_key].dtype != all_groups_dtype[group_key]
-                ):
-                    raise ValueError("Shared group key, has different dtype.")
-                else:
-                    all_groups_dtype[group_key] = trx_1.groups[group_key].dtype
 
-    # Once the checks are done, actually concatenate
+    for trx_1 in trx_list:
+        for group_key in trx_1.groups.keys():
+            if group_key in all_groups_len:
+                all_groups_len[group_key] += len(trx_1.groups[group_key])
+            else:
+                all_groups_len[group_key] = len(trx_1.groups[group_key])
+
+            if (
+                group_key in all_groups_dtype
+                and trx_1.groups[group_key].dtype != all_groups_dtype[group_key]
+            ):
+                raise ValueError("Shared group key, has different dtype.")
+            else:
+                all_groups_dtype[group_key] = trx_1.groups[group_key].dtype
+
+    return all_groups_len, all_groups_dtype
+
+
+def _create_new_trx_for_concatenation(
+    trx_list: List["TrxFile"],
+    ref_trx: "TrxFile",
+    delete_dps: bool,
+    delete_dpv: bool,
+    delete_groups: bool,
+) -> "TrxFile":
+    """Create a new TrxFile for concatenation."""
+    nb_vertices = 0
+    nb_streamlines = 0
+    for curr_trx in trx_list:
+        curr_strs_len, curr_pts_len = curr_trx._get_real_len()
+        nb_streamlines += curr_strs_len
+        nb_vertices += curr_pts_len
+
+    new_trx = TrxFile(
+        nb_vertices=nb_vertices, nb_streamlines=nb_streamlines, init_as=ref_trx
+    )
+    if delete_dps:
+        new_trx.data_per_streamline = {}
+    if delete_dpv:
+        new_trx.data_per_vertex = {}
+    if delete_groups:
+        new_trx.groups = {}
+
+    return new_trx
+
+
+def _setup_groups_for_concatenation(
+    new_trx: "TrxFile",
+    trx_list: List["TrxFile"],
+    all_groups_len: dict,
+    all_groups_dtype: dict,
+    delete_groups: bool,
+) -> None:
+    """Setup groups in the new TrxFile for concatenation."""
+    if delete_groups:
+        return
+
+    tmp_dir = new_trx._uncompressed_folder_handle.name
+
+    for group_key in all_groups_len.keys():
+        if not os.path.isdir(os.path.join(tmp_dir, "groups/")):
+            os.mkdir(os.path.join(tmp_dir, "groups/"))
+
+        dtype = all_groups_dtype[group_key]
+        group_filename = os.path.join(
+            tmp_dir, "groups/{}.{}".format(group_key, dtype.name)
+        )
+        group_len = all_groups_len[group_key]
+        new_trx.groups[group_key] = _create_memmap(
+            group_filename, mode="w+", shape=(group_len,), dtype=dtype
+        )
+
+        pos = 0
+        count = 0
+        for curr_trx in trx_list:
+            curr_len = len(curr_trx.groups[group_key])
+            new_trx.groups[group_key][pos : pos + curr_len] = (
+                curr_trx.groups[group_key] + count
+            )
+            pos += curr_len
+            count += curr_trx.header["NB_STREAMLINES"]
+
+
+def concatenate(
+    trx_list: List["TrxFile"],
+    delete_dpv: bool = False,
+    delete_dps: bool = False,
+    delete_groups: bool = False,
+    check_space_attributes: bool = True,
+    preallocation: bool = False,
+) -> "TrxFile":
+    """Concatenate multiple TrxFile together, with support for preallocation.
+
+    Parameters
+    ----------
+    trx_list : list of TrxFile
+        A list containing TrxFiles to concatenate.
+    delete_dpv : bool, optional
+        Delete dpv keys that do not exist in all the provided TrxFiles.
+        Default is False.
+    delete_dps : bool, optional
+        Delete dps keys that do not exist in all the provided TrxFiles.
+        Default is False.
+    delete_groups : bool, optional
+        Delete all the groups that currently exist in the TrxFiles.
+        Default is False.
+    check_space_attributes : bool, optional
+        Verify that dimensions and size of data are similar between all
+        the TrxFiles. Default is True.
+    preallocation : bool, optional
+        Preallocated TrxFile has already been generated and is the first
+        element in trx_list. Note: delete_groups must be set to True as well.
+        Default is False.
+
+    Returns
+    -------
+    TrxFile
+        TrxFile representing the concatenated data.
+    """
+    trx_list = _filter_empty_trx_files(trx_list)
+    if len(trx_list) == 0:
+        logging.warning("Inputs of concatenation were empty.")
+        return TrxFile()
+
+    ref_trx = trx_list[0]
+    all_dps, all_dpv = _get_all_data_keys(trx_list)
+
+    if check_space_attributes:
+        _check_space_attributes(trx_list)
+
+    if preallocation and not delete_groups:
+        raise ValueError("Groups are variables, cannot be handled with preallocation")
+
+    _verify_dpv_coherence(trx_list, all_dpv, ref_trx, delete_dpv)
+    _verify_dps_coherence(trx_list, all_dps, ref_trx, delete_dps)
+
+    all_groups_len, all_groups_dtype = _compute_groups_info(trx_list)
+
     to_concat_list = trx_list[1:] if preallocation else trx_list
     if not preallocation:
-        nb_vertices = 0
-        nb_streamlines = 0
-        for curr_trx in to_concat_list:
-            curr_strs_len, curr_pts_len = curr_trx._get_real_len()
-            nb_streamlines += curr_strs_len
-            nb_vertices += curr_pts_len
-
-        new_trx = TrxFile(
-            nb_vertices=nb_vertices, nb_streamlines=nb_streamlines,
-            init_as=ref_trx
+        new_trx = _create_new_trx_for_concatenation(
+            to_concat_list, ref_trx, delete_dps, delete_dpv, delete_groups
         )
-        if delete_dps:
-            new_trx.data_per_streamline = {}
-        if delete_dpv:
-            new_trx.data_per_vertex = {}
-        if delete_groups:
-            new_trx.groups = {}
-
-        tmp_dir = new_trx._uncompressed_folder_handle.name
-
-        # When memory is allocated on the spot, groups and data_per_group can
-        # be concatenated together
-        for group_key in all_groups_len.keys():
-            if not os.path.isdir(os.path.join(tmp_dir, "groups/")):
-                os.mkdir(os.path.join(tmp_dir, "groups/"))
-            dtype = all_groups_dtype[group_key]
-            group_filename = os.path.join(
-                tmp_dir, "groups/" "{}.{}".format(group_key, dtype.name)
-            )
-            group_len = all_groups_len[group_key]
-            new_trx.groups[group_key] = _create_memmap(
-                group_filename, mode="w+", shape=(group_len,), dtype=dtype
-            )
-            if delete_groups:
-                continue
-            pos = 0
-            count = 0
-            for curr_trx in trx_list:
-                curr_len = len(curr_trx.groups[group_key])
-                new_trx.groups[group_key][pos: pos + curr_len] = \
-                    curr_trx.groups[group_key] + count
-                pos += curr_len
-                count += curr_trx.header["NB_STREAMLINES"]
-
+        _setup_groups_for_concatenation(
+            new_trx, trx_list, all_groups_len, all_groups_dtype, delete_groups
+        )
         strs_end, pts_end = 0, 0
     else:
         new_trx = ref_trx
         strs_end, pts_end = new_trx._get_real_len()
 
     for curr_trx in to_concat_list:
-        # Copy the TrxFile fixed-size info (the right chunk)
         strs_end, pts_end = new_trx._copy_fixed_arrays_from(
             curr_trx, strs_start=strs_end, pts_start=pts_end
         )
@@ -532,13 +705,17 @@ def concatenate(
 def save(
     trx: "TrxFile", filename: str, compression_standard: Any = zipfile.ZIP_STORED
 ) -> None:
-    """Save a TrxFile (compressed or not)
+    """Save a TrxFile (compressed or not).
 
-    Keyword arguments:
-        trx -- The TrxFile to save
-        filename -- The path to save the TrxFile to
-        compression_standard -- The compression standard to use, as defined by
-            the ZipFile library
+    Parameters
+    ----------
+    trx : TrxFile
+        The TrxFile to save.
+    filename : str
+        The path to save the TrxFile to.
+    compression_standard : int, optional
+        The compression standard to use, as defined by the ZipFile library.
+        Default is zipfile.ZIP_STORED.
     """
     _, ext = os.path.splitext(filename)
     if ext.lower() not in [".zip", ".trx", ""]:
@@ -559,14 +736,17 @@ def save(
 def zip_from_folder(
     directory: str, filename: str, compression_standard: Any = zipfile.ZIP_STORED
 ) -> None:
-    """Utils function to zip on-disk memmaps
+    """Zip on-disk memmaps into a single file.
 
-    Keyword arguments
-        directory -- The path to the on-disk memmap
-        filename -- The path where the zip file should be created
-        compression_standard -- The compression standard to use, as defined by
-            the ZipFile library
-
+    Parameters
+    ----------
+    directory : str
+        The path to the on-disk memmap directory.
+    filename : str
+        The path where the zip file should be created.
+    compression_standard : int, optional
+        The compression standard to use, as defined by the ZipFile library.
+        Default is zipfile.ZIP_STORED.
     """
     with zipfile.ZipFile(filename, mode="w", compression=compression_standard) as zf:
         for root, _, files in os.walk(directory):
@@ -600,13 +780,18 @@ class TrxFile:
             None,
         ] = None,
     ) -> None:
-        """Initialize an empty TrxFile, support preallocation
+        """Initialize an empty TrxFile with support for preallocation.
 
-        Keyword Arguments:
-            nb_vertices -- The number of vertices to use in the new TrxFile
-            nb_streamlines -- The number of streamlines in the new TrxFile
-            init_as -- A TrxFile to use as reference
-            reference -- A Nifti or Trk file/obj to use as reference
+        Parameters
+        ----------
+        nb_vertices : int, optional
+            The number of vertices to use in the new TrxFile.
+        nb_streamlines : int, optional
+            The number of streamlines in the new TrxFile.
+        init_as : TrxFile, optional
+            A TrxFile to use as reference.
+        reference : str, dict, Nifti1Image, TrkFile, Nifti1Header, optional
+            A Nifti or Trk file/obj to use as reference.
         """
         if init_as is not None:
             affine = init_as.header["VOXEL_TO_RASMM"]
@@ -624,10 +809,9 @@ class TrxFile:
         if nb_vertices is None and nb_streamlines is None:
             if init_as is not None:
                 raise ValueError(
-                    "Cant use init_as without declaring "
-                    "nb_vertices AND nb_streamlines"
+                    "Can't use init_as without declaring nb_vertices AND nb_streamlines"
                 )
-            logging.debug("Intializing empty TrxFile.")
+            logging.debug("Initializing empty TrxFile.")
             self.header = {}
             # Using the new format default type
             tmp_strs = ArraySequence()
@@ -646,16 +830,16 @@ class TrxFile:
 
         elif nb_vertices is not None and nb_streamlines is not None:
             logging.debug(
-                "Preallocating TrxFile with size {} streamlines"
-                "and {} vertices.".format(nb_streamlines, nb_vertices)
+                "Preallocating TrxFile with size {} streamlinesand {} vertices.".format(
+                    nb_streamlines, nb_vertices
+                )
             )
             trx = self._initialize_empty_trx(
                 nb_streamlines, nb_vertices, init_as=init_as
             )
             self.__dict__ = trx.__dict__
         else:
-            raise ValueError(
-                "You must declare both nb_vertices AND " "NB_STREAMLINES")
+            raise ValueError("You must declare both nb_vertices AND NB_STREAMLINES")
 
         self.header["VOXEL_TO_RASMM"] = affine
         self.header["DIMENSIONS"] = dimensions
@@ -671,13 +855,11 @@ class TrxFile:
         vox_order = "".join(aff2axcodes(affine))
 
         text = "VOXEL_TO_RASMM: \n{}".format(
-            np.array2string(affine, formatter={
-                            "float_kind": lambda x: "%.6f" % x})
+            np.array2string(affine, formatter={"float_kind": lambda x: "%.6f" % x})
         )
         text += "\nDIMENSIONS: {}".format(np.array2string(dimensions))
         text += "\nVOX_SIZES: {}".format(
-            np.array2string(vox_sizes, formatter={
-                            "float_kind": lambda x: "%.2f" % x})
+            np.array2string(vox_sizes, formatter={"float_kind": lambda x: "%.2f" % x})
         )
         text += "\nVOX_ORDER: {}".format(vox_order)
 
@@ -691,8 +873,7 @@ class TrxFile:
 
         text += "\nstreamline_count: {}".format(strs_len)
         text += "\nvertex_count: {}".format(pts_len)
-        text += "\ndata_per_vertex keys: {}".format(
-            list(self.data_per_vertex.keys()))
+        text += "\ndata_per_vertex keys: {}".format(list(self.data_per_vertex.keys()))
         text += "\ndata_per_streamline keys: {}".format(
             list(self.data_per_streamline.keys())
         )
@@ -719,18 +900,20 @@ class TrxFile:
                 key += len(self)
             key = [key]
         elif isinstance(key, slice):
-            key = [ii for ii in range(*key.indices(len(self)))]
+            key = list(range(*key.indices(len(self))))
 
         return self.select(key, keep_group=False)
 
     def __deepcopy__(self) -> Type["TrxFile"]:
         return self.deepcopy()
 
-    def deepcopy(self) -> Type["TrxFile"]:
-        """Create a deepcopy of the TrxFile
+    def deepcopy(self) -> Type["TrxFile"]:  # noqa: C901
+        """Create a deepcopy of the TrxFile.
 
         Returns
-            A deepcopied TrxFile of the current TrxFile
+        -------
+        TrxFile
+            A deepcopied TrxFile of the current TrxFile.
         """
         tmp_dir = get_trx_tmp_dir()
         out_json = open(os.path.join(tmp_dir.name, "header.json"), "w")
@@ -741,7 +924,8 @@ class TrxFile:
         if not isinstance(tmp_header["DIMENSIONS"], list):
             tmp_header["DIMENSIONS"] = tmp_header["DIMENSIONS"].tolist()
 
-        # tofile() alway write in C-order
+        # tofile() always write in C-order
+        # Ensure little-endian byte order for cross-platform compatibility
         if not self._copy_safe:
             to_dump = self.streamlines.copy()._data
             tmp_header["NB_STREAMLINES"] = len(self.streamlines)
@@ -754,18 +938,20 @@ class TrxFile:
         positions_filename = _generate_filename_from_data(
             to_dump, os.path.join(tmp_dir.name, "positions")
         )
-        to_dump.tofile(positions_filename)
+        _ensure_little_endian(to_dump).tofile(positions_filename)
 
         if not self._copy_safe:
-            to_dump = _append_last_offsets(self.streamlines.copy()._offsets,
-                                           self.header["NB_VERTICES"])
+            to_dump = _append_last_offsets(
+                self.streamlines.copy()._offsets, self.header["NB_VERTICES"]
+            )
         else:
-            to_dump = _append_last_offsets(self.streamlines._offsets,
-                                           self.header["NB_VERTICES"])
+            to_dump = _append_last_offsets(
+                self.streamlines._offsets, self.header["NB_VERTICES"]
+            )
         offsets_filename = _generate_filename_from_data(
             self.streamlines._offsets, os.path.join(tmp_dir.name, "offsets")
         )
-        to_dump.tofile(offsets_filename)
+        _ensure_little_endian(to_dump).tofile(offsets_filename)
 
         if len(self.data_per_vertex.keys()) > 0:
             os.mkdir(os.path.join(tmp_dir.name, "dpv/"))
@@ -778,7 +964,7 @@ class TrxFile:
             dpv_filename = _generate_filename_from_data(
                 to_dump, os.path.join(tmp_dir.name, "dpv/", dpv_key)
             )
-            to_dump.tofile(dpv_filename)
+            _ensure_little_endian(to_dump).tofile(dpv_filename)
 
         if len(self.data_per_streamline.keys()) > 0:
             os.mkdir(os.path.join(tmp_dir.name, "dps/"))
@@ -787,7 +973,7 @@ class TrxFile:
             dps_filename = _generate_filename_from_data(
                 to_dump, os.path.join(tmp_dir.name, "dps/", dps_key)
             )
-            to_dump.tofile(dps_filename)
+            _ensure_little_endian(to_dump).tofile(dps_filename)
 
         if len(self.groups.keys()) > 0:
             os.mkdir(os.path.join(tmp_dir.name, "groups/"))
@@ -796,7 +982,7 @@ class TrxFile:
             group_filename = _generate_filename_from_data(
                 to_dump, os.path.join(tmp_dir.name, "groups/", group_key)
             )
-            to_dump.tofile(group_filename)
+            _ensure_little_endian(to_dump).tofile(group_filename)
 
             if group_key not in self.data_per_group:
                 continue
@@ -808,10 +994,9 @@ class TrxFile:
                     os.mkdir(os.path.join(tmp_dir.name, "dpg/", group_key))
                 to_dump = self.data_per_group[group_key][dpg_key]
                 dpg_filename = _generate_filename_from_data(
-                    to_dump, os.path.join(
-                        tmp_dir.name, "dpg/", group_key, dpg_key)
+                    to_dump, os.path.join(tmp_dir.name, "dpg/", group_key, dpg_key)
                 )
-                to_dump.tofile(dpg_filename)
+                _ensure_little_endian(to_dump).tofile(dpg_filename)
 
         copy_trx = load_from_directory(tmp_dir.name)
         copy_trx._uncompressed_folder_handle = tmp_dir
@@ -819,11 +1004,13 @@ class TrxFile:
         return copy_trx
 
     def _get_real_len(self) -> Tuple[int, int]:
-        """Get the real size of data (ignoring zeros of preallocation)
+        """Get the real size of data (ignoring zeros of preallocation).
 
         Returns
-            A tuple representing the index of the last streamline and the total
-                length of all the streamlines
+        -------
+        tuple of int
+            A tuple (strs_end, pts_end) representing the index of the last
+            streamline and the total length of all the streamlines.
         """
         if len(self.streamlines._lengths) == 0:
             return 0, 0
@@ -843,18 +1030,24 @@ class TrxFile:
         pts_start: int = 0,
         nb_strs_to_copy: Optional[int] = None,
     ) -> Tuple[int, int]:
-        """Fill a TrxFile using another and start indexes (preallocation)
+        """Fill a TrxFile using another and start indexes (preallocation).
 
-        Keyword arguments:
-            trx -- TrxFile to copy data from
-            strs_start -- The start index of the streamline
-            pts_start -- The start index of the point
-            nb_strs_to_copy -- The number of streamlines to copy. If not set
-                                will copy all
+        Parameters
+        ----------
+        trx : TrxFile
+            TrxFile to copy data from.
+        strs_start : int, optional
+            The start index of the streamline. Default is 0.
+        pts_start : int, optional
+            The start index of the point. Default is 0.
+        nb_strs_to_copy : int, optional
+            The number of streamlines to copy. If not set, will copy all.
 
         Returns
-            A tuple representing the end of the copied streamlines and end of
-                copied points
+        -------
+        tuple of int
+            A tuple (strs_end, pts_end) representing the end of the copied
+            streamlines and end of copied points.
         """
         if nb_strs_to_copy is None:
             curr_strs_len, curr_pts_len = trx._get_real_len()
@@ -870,43 +1063,54 @@ class TrxFile:
             return strs_start, pts_start
 
         # Mandatory arrays
-        self.streamlines._data[pts_start:pts_end] = \
-            trx.streamlines._data[0:curr_pts_len]
-        self.streamlines._offsets[strs_start:strs_end] = \
-            (trx.streamlines._offsets[0:curr_strs_len] + pts_start)
-        self.streamlines._lengths[strs_start:strs_end] = \
-            trx.streamlines._lengths[0:curr_strs_len]
+        self.streamlines._data[pts_start:pts_end] = trx.streamlines._data[
+            0:curr_pts_len
+        ]
+        self.streamlines._offsets[strs_start:strs_end] = (
+            trx.streamlines._offsets[0:curr_strs_len] + pts_start
+        )
+        self.streamlines._lengths[strs_start:strs_end] = trx.streamlines._lengths[
+            0:curr_strs_len
+        ]
 
         # Optional fixed-sized arrays
         for dpv_key in self.data_per_vertex.keys():
-            self.data_per_vertex[dpv_key]._data[
-                pts_start:pts_end
-            ] = trx.data_per_vertex[dpv_key]._data[0:curr_pts_len]
+            self.data_per_vertex[dpv_key]._data[pts_start:pts_end] = (
+                trx.data_per_vertex[dpv_key]._data[0:curr_pts_len]
+            )
             self.data_per_vertex[dpv_key]._offsets = self.streamlines._offsets
             self.data_per_vertex[dpv_key]._lengths = self.streamlines._lengths
 
         for dps_key in self.data_per_streamline.keys():
-            self.data_per_streamline[dps_key][
-                strs_start:strs_end
-            ] = trx.data_per_streamline[dps_key][0:curr_strs_len]
+            self.data_per_streamline[dps_key][strs_start:strs_end] = (
+                trx.data_per_streamline[dps_key][0:curr_strs_len]
+            )
 
         return strs_end, pts_end
 
     @staticmethod
-    def _initialize_empty_trx(
-            nb_streamlines: int, nb_vertices: int,
-            init_as: Optional[Type["TrxFile"]] = None) -> Type["TrxFile"]:
-        """Create on-disk memmaps of a certain size (preallocation)
+    def _initialize_empty_trx(  # noqa: C901
+        nb_streamlines: int,
+        nb_vertices: int,
+        init_as: Optional[Type["TrxFile"]] = None,
+    ) -> Type["TrxFile"]:
+        """Create on-disk memmaps of a certain size (preallocation).
 
-        Keyword arguments:
-            nb_streamlines -- The number of streamlines that the empty TrxFile
-                will be initialized with
-            nb_vertices -- The number of vertices that the empty TrxFile will
-                be initialized with
-            init_as -- A TrxFile to initialize the empty TrxFile with
+        Parameters
+        ----------
+        nb_streamlines : int
+            The number of streamlines that the empty TrxFile will be
+            initialized with.
+        nb_vertices : int
+            The number of vertices that the empty TrxFile will be
+            initialized with.
+        init_as : TrxFile, optional
+            A TrxFile to initialize the empty TrxFile with.
 
-        Returns:
-            An empty TrxFile preallocated with a certain size
+        Returns
+        -------
+        TrxFile
+            An empty TrxFile preallocated with a certain size.
         """
         trx = TrxFile()
         tmp_dir = get_trx_tmp_dir()
@@ -927,29 +1131,24 @@ class TrxFile:
             lengths_dtype = np.dtype(np.uint32)
 
         logging.debug(
-            "Initializing positions with dtype:    {}".format(
-                positions_dtype.name)
+            "Initializing positions with dtype:    {}".format(positions_dtype.name)
         )
-        logging.debug(
-            "Initializing offsets with dtype: {}".format(offsets_dtype.name))
-        logging.debug(
-            "Initializing lengths with dtype: {}".format(lengths_dtype.name))
+        logging.debug("Initializing offsets with dtype: {}".format(offsets_dtype.name))
+        logging.debug("Initializing lengths with dtype: {}".format(lengths_dtype.name))
 
         # A TrxFile without init_as only contain the essential arrays
         positions_filename = os.path.join(
             tmp_dir.name, "positions.3.{}".format(positions_dtype.name)
         )
         trx.streamlines._data = _create_memmap(
-            positions_filename, mode="w+", shape=(nb_vertices, 3),
-            dtype=positions_dtype
+            positions_filename, mode="w+", shape=(nb_vertices, 3), dtype=positions_dtype
         )
 
         offsets_filename = os.path.join(
             tmp_dir.name, "offsets.{}".format(offsets_dtype.name)
         )
         trx.streamlines._offsets = _create_memmap(
-            offsets_filename, mode="w+", shape=(nb_streamlines,),
-            dtype=offsets_dtype
+            offsets_filename, mode="w+", shape=(nb_streamlines,), dtype=offsets_dtype
         )
         trx.streamlines._lengths = np.zeros(
             shape=(nb_streamlines,), dtype=lengths_dtype
@@ -967,23 +1166,20 @@ class TrxFile:
                 tmp_as = init_as.data_per_vertex[dpv_key]._data
                 if tmp_as.ndim == 1:
                     dpv_filename = os.path.join(
-                        tmp_dir.name, "dpv/" "{}.{}".format(
-                            dpv_key, dtype.name)
+                        tmp_dir.name, "dpv/{}.{}".format(dpv_key, dtype.name)
                     )
                     shape = (nb_vertices, 1)
                 elif tmp_as.ndim == 2:
                     dim = tmp_as.shape[-1]
                     shape = (nb_vertices, dim)
                     dpv_filename = os.path.join(
-                        tmp_dir.name, "dpv/" "{}.{}.{}".format(
-                            dpv_key, dim, dtype.name)
+                        tmp_dir.name, "dpv/{}.{}.{}".format(dpv_key, dim, dtype.name)
                     )
                 else:
                     raise ValueError("Invalid dimensionality.")
 
                 logging.debug(
-                    "Initializing {} (dpv) with dtype: "
-                    "{}".format(dpv_key, dtype.name)
+                    "Initializing {} (dpv) with dtype: {}".format(dpv_key, dtype.name)
                 )
                 trx.data_per_vertex[dpv_key] = ArraySequence()
                 trx.data_per_vertex[dpv_key]._data = _create_memmap(
@@ -997,23 +1193,22 @@ class TrxFile:
                 tmp_as = init_as.data_per_streamline[dps_key]
                 if tmp_as.ndim == 1:
                     dps_filename = os.path.join(
-                        tmp_dir.name, "dps/" "{}.{}".format(
-                            dps_key, dtype.name)
+                        tmp_dir.name, "dps/{}.{}".format(dps_key, dtype.name)
                     )
                     shape = (nb_streamlines,)
                 elif tmp_as.ndim == 2:
                     dim = tmp_as.shape[-1]
                     shape = (nb_streamlines, dim)
                     dps_filename = os.path.join(
-                        tmp_dir.name, "dps/" "{}.{}.{}".format(
-                            dps_key, dim, dtype.name)
+                        tmp_dir.name, "dps/{}.{}.{}".format(dps_key, dim, dtype.name)
                     )
                 else:
                     raise ValueError("Invalid dimensionality.")
 
                 logging.debug(
-                    "Initializing {} (dps) with and dtype: "
-                    "{}".format(dps_key, dtype.name)
+                    "Initializing {} (dps) with and dtype: {}".format(
+                        dps_key, dtype.name
+                    )
                 )
                 trx.data_per_streamline[dps_key] = _create_memmap(
                     dps_filename, mode="w+", shape=shape, dtype=dtype
@@ -1023,24 +1218,30 @@ class TrxFile:
 
         return trx
 
-    def _create_trx_from_pointer(
+    def _create_trx_from_pointer(  # noqa: C901
         header: dict,
         dict_pointer_size: dict,
         root_zip: Optional[str] = None,
         root: Optional[str] = None,
     ) -> Type["TrxFile"]:
-        """After reading the structure of a zip/folder, create a TrxFile
+        """Create a TrxFile after reading the structure of a zip/folder.
 
-        Keyword arguments:
-            header -- A TrxFile header dictionary which will be used for the
-                new TrxFile
-            dict_pointer_size -- A dictionary containing the filenames of all
-                the files within the TrxFile disk file/folder
-            root_zip -- The path of the ZipFile pointer
-            root -- The dirname of the ZipFile pointer
+        Parameters
+        ----------
+        header : dict
+            A TrxFile header dictionary which will be used for the new TrxFile.
+        dict_pointer_size : dict
+            A dictionary containing the filenames of all the files within the
+            TrxFile disk file/folder.
+        root_zip : str, optional
+            The path of the ZipFile pointer.
+        root : str, optional
+            The dirname of the ZipFile pointer.
 
-        Returns:
-            A TrxFile constructer from the pointer provided
+        Returns
+        -------
+        TrxFile
+            A TrxFile constructed from the pointer provided.
         """
         # TODO support empty positions, using optional tag?
         trx = TrxFile()
@@ -1060,15 +1261,19 @@ class TrxFile:
 
             if root is not None:
                 # This is for Unix
-                if os.name != 'nt' and folder.startswith(root.rstrip("/")):
+                if os.name != "nt" and folder.startswith(root.rstrip("/")):
                     folder = folder.replace(root, "").lstrip("/")
                 # These three are for Windows
-                elif os.path.isdir(folder) and os.path.basename(folder) in ['dpv', 'dps', 'groups']:
+                elif os.path.isdir(folder) and os.path.basename(folder) in [
+                    "dpv",
+                    "dps",
+                    "groups",
+                ]:
                     folder = os.path.basename(folder)
-                elif os.path.basename(os.path.dirname(folder)) == 'dpg':
-                    folder = os.path.join('dpg', os.path.basename(folder))
+                elif os.path.basename(os.path.dirname(folder)) == "dpg":
+                    folder = os.path.join("dpg", os.path.basename(folder))
                 else:
-                    folder = ''
+                    folder = ""
 
             # Parse/walk the directory tree
             if base == "positions" and folder == "":
@@ -1082,13 +1287,13 @@ class TrxFile:
                     dtype=ext[1:],
                 )
             elif base == "offsets" and folder == "":
-                if size != trx.header["NB_STREAMLINES"]+1 or dim != 1:
+                if size != trx.header["NB_STREAMLINES"] + 1 or dim != 1:
                     raise ValueError("Wrong offsets size/dimensionality.")
                 offsets = _create_memmap(
                     filename,
                     mode="r+",
                     offset=mem_adress,
-                    shape=(trx.header["NB_STREAMLINES"]+1,),
+                    shape=(trx.header["NB_STREAMLINES"] + 1,),
                     dtype=ext[1:],
                 )
                 if offsets[-1] != 0:
@@ -1103,8 +1308,7 @@ class TrxFile:
                     shape = (trx.header["NB_STREAMLINES"], int(nb_scalar))
 
                 trx.data_per_streamline[base] = _create_memmap(
-                    filename, mode="r+", offset=mem_adress, shape=shape,
-                    dtype=ext[1:]
+                    filename, mode="r+", offset=mem_adress, shape=shape, dtype=ext[1:]
                 )
             elif folder == "dpv":
                 nb_scalar = size / trx.header["NB_VERTICES"]
@@ -1114,8 +1318,7 @@ class TrxFile:
                     shape = (trx.header["NB_VERTICES"], int(nb_scalar))
 
                 trx.data_per_vertex[base] = _create_memmap(
-                    filename, mode="r+", offset=mem_adress, shape=shape,
-                    dtype=ext[1:]
+                    filename, mode="r+", offset=mem_adress, shape=shape, dtype=ext[1:]
                 )
             elif folder.startswith("dpg"):
                 if int(size) != dim:
@@ -1129,8 +1332,7 @@ class TrxFile:
                 if sub_folder not in trx.data_per_group:
                     trx.data_per_group[sub_folder] = {}
                 trx.data_per_group[sub_folder][data_name] = _create_memmap(
-                    filename, mode="r+", offset=mem_adress, shape=shape,
-                    dtype=ext[1:]
+                    filename, mode="r+", offset=mem_adress, shape=shape, dtype=ext[1:]
                 )
             elif folder == "groups":
                 # Groups are simply indices, nothing else
@@ -1140,13 +1342,11 @@ class TrxFile:
                 else:
                     shape = (int(size),)
                 trx.groups[base] = _create_memmap(
-                    filename, mode="r+", offset=mem_adress, shape=shape,
-                    dtype=ext[1:]
+                    filename, mode="r+", offset=mem_adress, shape=shape, dtype=ext[1:]
                 )
             else:
                 logging.error(
-                    "{} is not part of a valid structure.".format(
-                        elem_filename)
+                    "{} is not part of a valid structure.".format(elem_filename)
                 )
 
         # All essential array must be declared
@@ -1165,18 +1365,22 @@ class TrxFile:
             trx.data_per_vertex[dpv_key]._lengths = lengths
         return trx
 
-    def resize(
+    def resize(  # noqa: C901
         self,
         nb_streamlines: Optional[int] = None,
         nb_vertices: Optional[int] = None,
         delete_dpg: bool = False,
     ) -> None:
-        """Remove the ununsed portion of preallocated memmaps
+        """Remove the unused portion of preallocated memmaps.
 
-        Keyword arguments:
-            nb_streamlines -- The number of streamlines to keep
-            nb_vertices -- The number of vertices to keep
-            delete_dpg -- Remove data_per_group when resizing
+        Parameters
+        ----------
+        nb_streamlines : int, optional
+            The number of streamlines to keep.
+        nb_vertices : int, optional
+            The number of vertices to keep.
+        delete_dpg : bool, optional
+            Remove data_per_group when resizing. Default is False.
         """
         if not self._copy_safe:
             raise ValueError("Cannot resize a sliced datasets.")
@@ -1186,8 +1390,7 @@ class TrxFile:
         if nb_streamlines is not None and nb_streamlines < strs_end:
             strs_end = nb_streamlines
             logging.info(
-                "Resizing (down) memmaps, less streamlines than it "
-                "actually contains."
+                "Resizing (down) memmaps, less streamlines than it actually contains."
             )
 
         if nb_vertices is None:
@@ -1208,8 +1411,7 @@ class TrxFile:
             logging.debug("TrxFile of the right size, no resizing.")
             return
 
-        trx = self._initialize_empty_trx(
-            nb_streamlines, nb_vertices, init_as=self)
+        trx = self._initialize_empty_trx(nb_streamlines, nb_vertices, init_as=self)
 
         logging.info(
             "Resizing streamlines from size {} to {}".format(
@@ -1246,8 +1448,7 @@ class TrxFile:
                 group_name, mode="w+", shape=(len(tmp),), dtype=group_dtype
             )
             logging.debug(
-                "{} group went from {} items to {}".format(
-                    group_key, ori_len, len(tmp))
+                "{} group went from {} items to {}".format(group_key, ori_len, len(tmp))
             )
             trx.groups[group_key][:] = tmp
 
@@ -1278,35 +1479,44 @@ class TrxFile:
                     dpg_filename, mode="w+", shape=shape, dtype=dpg_dtype
                 )
 
-                trx.data_per_group[group_key][dpg_key][:] = \
-                    self.data_per_group[group_key][dpg_key]
+                trx.data_per_group[group_key][dpg_key][:] = self.data_per_group[
+                    group_key
+                ][dpg_key]
 
         self.close()
         self.__dict__ = trx.__dict__
 
     def get_dtype_dict(self):
-        """Get the dtype dictionary for the TrxFile
+        """Get the dtype dictionary for the TrxFile.
 
         Returns
-            A dictionary containing the dtype for each data element
+        -------
+        dict
+            A dictionary containing the dtype for each data element.
         """
-        dtype_dict = {"positions": self.streamlines._data.dtype,
-                      "offsets": self.streamlines._offsets.dtype,
-                      "dpv": {}, "dps": {}, "dpg": {}, "groups": {}}
+        dtype_dict = {
+            "positions": self.streamlines._data.dtype,
+            "offsets": self.streamlines._offsets.dtype,
+            "dpv": {},
+            "dps": {},
+            "dpg": {},
+            "groups": {},
+        }
 
         for key in self.data_per_vertex.keys():
-            dtype_dict['dpv'][key] = self.data_per_vertex[key]._data.dtype
+            dtype_dict["dpv"][key] = self.data_per_vertex[key]._data.dtype
         for key in self.data_per_streamline.keys():
-            dtype_dict['dps'][key] = self.data_per_streamline[key].dtype
+            dtype_dict["dps"][key] = self.data_per_streamline[key].dtype
 
         for group_key in self.data_per_group.keys():
-            dtype_dict['groups'][group_key] = self.groups[group_key].dtype
+            dtype_dict["groups"][group_key] = self.groups[group_key].dtype
 
         for group_key in self.data_per_group.keys():
-            dtype_dict['dpg'][group_key] = {}
+            dtype_dict["dpg"][group_key] = {}
             for dpg_key in self.data_per_group[group_key].keys():
-                dtype_dict['dpg'][group_key][dpg_key] = \
-                    self.data_per_group[group_key][dpg_key].dtype
+                dtype_dict["dpg"][group_key][dpg_key] = self.data_per_group[group_key][
+                    dpg_key
+                ].dtype
 
         return dtype_dict
 
@@ -1315,25 +1525,30 @@ class TrxFile:
         if dipy_available:
             from dipy.io.stateful_tractogram import StatefulTractogram
 
-        if not isinstance(obj, (TrxFile, Tractogram)) \
-                and (dipy_available and not isinstance(obj, StatefulTractogram)):
+        if not isinstance(obj, (TrxFile, Tractogram)) and (
+            dipy_available and not isinstance(obj, StatefulTractogram)
+        ):
             raise TypeError(
-                "{} is not a supported object type for appending.".format(type(obj)))
+                "{} is not a supported object type for appending.".format(type(obj))
+            )
         elif isinstance(obj, Tractogram):
-            obj = self.from_tractogram(obj, reference=self.header,
-                                       dtype_dict=curr_dtype_dict)
+            obj = self.from_tractogram(
+                obj, reference=self.header, dtype_dict=curr_dtype_dict
+            )
         elif dipy_available and isinstance(obj, StatefulTractogram):
             obj = self.from_sft(obj, dtype_dict=curr_dtype_dict)
 
         self._append_trx(obj, extra_buffer=extra_buffer)
 
-    def _append_trx(self, trx: Type["TrxFile"],
-                    extra_buffer: int = 0) -> None:
-        """Append a TrxFile to another (support buffer)
+    def _append_trx(self, trx: Type["TrxFile"], extra_buffer: int = 0) -> None:
+        """Append a TrxFile to another (with buffer support).
 
-        Keyword arguments:
-            trx -- The TrxFile to append to the current TrxFile
-            extra_buffer -- The additional buffer space required to append data
+        Parameters
+        ----------
+        trx : TrxFile
+            The TrxFile to append to the current TrxFile.
+        extra_buffer : int, optional
+            The additional buffer space required to append data. Default is 0.
         """
         strs_end, pts_end = self._get_real_len()
 
@@ -1353,30 +1568,42 @@ class TrxFile:
     def get_group(
         self, key: str, keep_group: bool = True, copy_safe: bool = False
     ) -> Type["TrxFile"]:
-        """Get a particular group from the TrxFile
+        """Get a particular group from the TrxFile.
 
-        Keyword arguments:
-            key -- The group name to select
-            keep_group -- Make sure group exists in returned TrxFile
-            copy_safe -- Perform a deepcopy
+        Parameters
+        ----------
+        key : str
+            The group name to select.
+        keep_group : bool, optional
+            Make sure group exists in returned TrxFile. Default is True.
+        copy_safe : bool, optional
+            Perform a deepcopy. Default is False.
 
         Returns
-            A TrxFile exclusively containing data from said group
+        -------
+        TrxFile
+            A TrxFile exclusively containing data from said group.
         """
         return self.select(self.groups[key], keep_group=keep_group, copy_safe=copy_safe)
 
     def select(
         self, indices: np.ndarray, keep_group: bool = True, copy_safe: bool = False
     ) -> Type["TrxFile"]:
-        """Get a subset of items, always vertices to the same memmaps
+        """Get a subset of items, always pointing to the same memmaps.
 
-        Keyword arguments:
-            indices -- The list of indices of elements to return
-            keep_group -- Ensure group is returned in output TrxFile
-            copy_safe -- Perform a deep-copy
+        Parameters
+        ----------
+        indices : np.ndarray
+            The list of indices of elements to return.
+        keep_group : bool, optional
+            Ensure group is returned in output TrxFile. Default is True.
+        copy_safe : bool, optional
+            Perform a deep-copy. Default is False.
 
-        Returns:
-            A TrxFile containing data originating from the selected indices
+        Returns
+        -------
+        TrxFile
+            A TrxFile containing data originating from the selected indices.
         """
         indices = np.array(indices, dtype=np.uint32)
 
@@ -1399,14 +1626,12 @@ class TrxFile:
                 lengths_dtype
             )
             new_trx.header["NB_VERTICES"] = len(new_trx.streamlines._data)
-            new_trx.header["NB_STREAMLINES"] = len(
-                new_trx.streamlines._lengths)
+            new_trx.header["NB_STREAMLINES"] = len(new_trx.streamlines._lengths)
 
             return new_trx.deepcopy() if copy_safe else new_trx
 
         new_trx.streamlines = (
-            self.streamlines[indices].copy(
-            ) if copy_safe else self.streamlines[indices]
+            self.streamlines[indices].copy() if copy_safe else self.streamlines[indices]
         )
         for dpv_key in self.data_per_vertex.keys():
             new_trx.data_per_vertex[dpv_key] = (
@@ -1424,14 +1649,12 @@ class TrxFile:
 
         # Not keeping group is equivalent to the [] operator
         if keep_group:
-            logging.warning(
-                "Keeping dpg despite affecting the group " "items.")
+            logging.warning("Keeping dpg despite affecting the group items.")
             for group_key in self.groups.keys():
                 # Keep the group indices even when fancy slicing
                 index = np.argsort(indices)
                 sorted_x = indices[index]
-                sorted_index = np.searchsorted(
-                    sorted_x, self.groups[group_key])
+                sorted_index = np.searchsorted(sorted_x, self.groups[group_key])
                 yindex = np.take(index, sorted_index, mode="clip")
                 mask = indices[yindex] != self.groups[group_key]
                 intersect = yindex[~mask]
@@ -1444,33 +1667,52 @@ class TrxFile:
                     for dpg_key in self.data_per_group[group_key].keys():
                         if group_key not in new_trx.data_per_group:
                             new_trx.data_per_group[group_key] = {}
-                        new_trx.data_per_group[group_key][
-                            dpg_key
-                        ] = self.data_per_group[group_key][dpg_key]
+                        new_trx.data_per_group[group_key][dpg_key] = (
+                            self.data_per_group[group_key][dpg_key]
+                        )
 
         new_trx.header["NB_VERTICES"] = len(new_trx.streamlines._data)
         new_trx.header["NB_STREAMLINES"] = len(new_trx.streamlines._lengths)
         return new_trx.deepcopy() if copy_safe else new_trx
 
     @staticmethod
-    def from_lazy_tractogram(obj: ["LazyTractogram"], reference,
-                             extra_buffer: int = 0,
-                             chunk_size: int = 10000,
-                             dtype_dict: dict = {'positions': np.float32,
-                                                 'offsets': np.uint32,
-                                                 'dpv': {}, 'dps': {}}) \
-            -> Type["TrxFile"]:
-        """Append a TrxFile to another (support buffer)
+    def from_lazy_tractogram(
+        obj: ["LazyTractogram"],
+        reference,
+        extra_buffer: int = 0,
+        chunk_size: int = 10000,
+        dtype_dict: dict = None,
+    ) -> Type["TrxFile"]:
+        """Create a TrxFile from a LazyTractogram with buffer support.
 
-        Keyword arguments:
-            trx -- The TrxFile to append to the current TrxFile
-            extra_buffer -- The buffer space between reallocation.
-                            This number should be a number of streamlines.
-                            Use 0 for no buffer.
-            chunk_size -- The number of streamlines to save at a time.
+        Parameters
+        ----------
+        obj : LazyTractogram
+            The LazyTractogram to convert.
+        reference : object
+            Reference for spatial information.
+        extra_buffer : int, optional
+            The buffer space between reallocation. This number should be a
+            number of streamlines. Use 0 for no buffer. Default is 0.
+        chunk_size : int, optional
+            The number of streamlines to save at a time. Default is 10000.
+        dtype_dict : dict, optional
+            Dictionary specifying dtypes for positions, offsets, dpv, and dps.
+
+        Returns
+        -------
+        TrxFile
+            A TrxFile created from the LazyTractogram.
         """
+        if dtype_dict is None:
+            dtype_dict = {
+                "positions": np.float32,
+                "offsets": np.uint32,
+                "dpv": {},
+                "dps": {},
+            }
 
-        data = {'strs': [], 'dpv': {}, 'dps': {}}
+        data = {"strs": [], "dpv": {}, "dps": {}}
         concat = None
         count = 0
         iterator = iter(obj)
@@ -1485,60 +1727,70 @@ class TrxFile:
                         if len(obj.streamlines) == 0:
                             concat = TrxFile()
                         else:
-                            concat = TrxFile.from_tractogram(obj,
-                                                             reference=reference,
-                                                             dtype_dict=dtype_dict)
+                            concat = TrxFile.from_tractogram(
+                                obj, reference=reference, dtype_dict=dtype_dict
+                            )
                     elif len(obj.streamlines) > 0:
-                        curr_obj = TrxFile.from_tractogram(obj,
-                                                           reference=reference,
-                                                           dtype_dict=dtype_dict)
+                        curr_obj = TrxFile.from_tractogram(
+                            obj, reference=reference, dtype_dict=dtype_dict
+                        )
                         concat.append(curr_obj)
                     break
                 append_generator_to_dict(i, data)
             else:
                 obj = convert_data_dict_to_tractogram(data)
                 if concat is None:
-                    concat = TrxFile.from_tractogram(obj,
-                                                     reference=reference,
-                                                     dtype_dict=dtype_dict)
+                    concat = TrxFile.from_tractogram(
+                        obj, reference=reference, dtype_dict=dtype_dict
+                    )
                 else:
-                    curr_obj = TrxFile.from_tractogram(obj,
-                                                       reference=reference,
-                                                       dtype_dict=dtype_dict)
+                    curr_obj = TrxFile.from_tractogram(
+                        obj, reference=reference, dtype_dict=dtype_dict
+                    )
                     concat.append(curr_obj, extra_buffer=extra_buffer)
-                data = {'strs': [], 'dpv': {}, 'dps': {}}
+                data = {"strs": [], "dpv": {}, "dps": {}}
                 count = 0
 
         concat.resize()
         return concat
 
     @staticmethod
-    def from_sft(sft, dtype_dict={}):
+    def from_sft(sft, dtype_dict=None):
         """Generate a valid TrxFile from a StatefulTractogram"""
+        if dtype_dict is None:
+            dtype_dict = {}
 
         if len(sft.dtype_dict) > 0:
             dtype_dict = sft.dtype_dict
-        if 'dpp' in dtype_dict:
-            dtype_dict['dpv'] = dtype_dict.pop('dpp')
+        if "dpp" in dtype_dict:
+            dtype_dict["dpv"] = dtype_dict.pop("dpp")
         elif len(dtype_dict) == 0:
-            dtype_dict = {'positions': np.float32, 'offsets': np.uint32,
-                          'dpv': {}, 'dps': {}}
+            dtype_dict = {
+                "positions": np.float32,
+                "offsets": np.uint32,
+                "dpv": {},
+                "dps": {},
+            }
 
-        positions_dtype = dtype_dict['positions']
-        offsets_dtype = dtype_dict['offsets']
+        positions_dtype = dtype_dict["positions"]
+        offsets_dtype = dtype_dict["offsets"]
 
         if not np.issubdtype(positions_dtype, np.floating):
             logging.warning(
                 "Casting positions as {}, considering using a floating point "
-                "dtype.".format(positions_dtype))
+                "dtype.".format(positions_dtype)
+            )
 
         if not np.issubdtype(offsets_dtype, np.integer):
             logging.warning(
-                "Casting offsets as {}, considering using a integer "
-                "dtype.".format(offsets_dtype))
+                "Casting offsets as {}, considering using a integer dtype.".format(
+                    offsets_dtype
+                )
+            )
 
-        trx = TrxFile(nb_vertices=len(sft.streamlines._data),
-                      nb_streamlines=len(sft.streamlines))
+        trx = TrxFile(
+            nb_vertices=len(sft.streamlines._data), nb_streamlines=len(sft.streamlines)
+        )
         trx.header = {
             "DIMENSIONS": sft.dimensions.tolist(),
             "VOXEL_TO_RASMM": sft.affine.tolist(),
@@ -1556,24 +1808,26 @@ class TrxFile:
         tmp_streamlines = deepcopy(sft.streamlines)
 
         # Cast the int64 of Nibabel to uint32
-        tmp_streamlines._offsets = tmp_streamlines._offsets.astype(
-            offsets_dtype)
+        tmp_streamlines._offsets = tmp_streamlines._offsets.astype(offsets_dtype)
         tmp_streamlines._data = tmp_streamlines._data.astype(positions_dtype)
 
         trx.streamlines = tmp_streamlines
         for key in sft.data_per_point:
-            dtype_to_use = dtype_dict['dpv'][key] if key in dtype_dict['dpv'] \
-                else np.float32
-            trx.data_per_vertex[key] = \
-                sft.data_per_point[key]
-            trx.data_per_vertex[key]._data = \
-                sft.data_per_point[key]._data.astype(dtype_to_use)
+            dtype_to_use = (
+                dtype_dict["dpv"][key] if key in dtype_dict["dpv"] else np.float32
+            )
+            trx.data_per_vertex[key] = sft.data_per_point[key]
+            trx.data_per_vertex[key]._data = sft.data_per_point[key]._data.astype(
+                dtype_to_use
+            )
 
         for key in sft.data_per_streamline:
-            dtype_to_use = dtype_dict['dps'][key] if key in dtype_dict['dps'] \
-                else np.float32
+            dtype_to_use = (
+                dtype_dict["dps"][key] if key in dtype_dict["dps"] else np.float32
+            )
             trx.data_per_streamline[key] = sft.data_per_streamline[key].astype(
-                dtype_to_use)
+                dtype_to_use
+            )
 
         # For safety and for RAM, convert the whole object to memmaps
         tmp_dir = get_trx_tmp_dir()
@@ -1589,26 +1843,37 @@ class TrxFile:
         return trx
 
     @staticmethod
-    def from_tractogram(tractogram, reference,
-                        dtype_dict={'positions': np.float32,
-                                    'offsets': np.uint32,
-                                    'dpv': {}, 'dps': {}}):
+    def from_tractogram(
+        tractogram,
+        reference,
+        dtype_dict=None,
+    ):
         """Generate a valid TrxFile from a Nibabel Tractogram"""
+        if dtype_dict is None:
+            dtype_dict = {
+                "positions": np.float32,
+                "offsets": np.uint32,
+                "dpv": {},
+                "dps": {},
+            }
 
-        positions_dtype = dtype_dict['positions'] if 'positions' in dtype_dict \
-            else np.float32
-        offsets_dtype = dtype_dict['offsets'] if 'offsets' in dtype_dict \
-            else np.uint32
+        positions_dtype = (
+            dtype_dict["positions"] if "positions" in dtype_dict else np.float32
+        )
+        offsets_dtype = dtype_dict["offsets"] if "offsets" in dtype_dict else np.uint32
 
         if not np.issubdtype(positions_dtype, np.floating):
             logging.warning(
                 "Casting positions as {}, considering using a floating point "
-                "dtype.".format(positions_dtype))
+                "dtype.".format(positions_dtype)
+            )
 
         if not np.issubdtype(offsets_dtype, np.integer):
             logging.warning(
-                "Casting offsets as {}, considering using a integer "
-                "dtype.".format(offsets_dtype))
+                "Casting offsets as {}, considering using a integer dtype.".format(
+                    offsets_dtype
+                )
+            )
 
         trx = TrxFile(
             nb_vertices=len(tractogram.streamlines._data),
@@ -1626,24 +1891,26 @@ class TrxFile:
         tmp_streamlines = deepcopy(tractogram.streamlines)
 
         # Cast the int64 of Nibabel to uint32
-        tmp_streamlines._offsets = tmp_streamlines._offsets.astype(
-            offsets_dtype)
+        tmp_streamlines._offsets = tmp_streamlines._offsets.astype(offsets_dtype)
         tmp_streamlines._data = tmp_streamlines._data.astype(positions_dtype)
 
         trx.streamlines = tmp_streamlines
         for key in tractogram.data_per_point:
-            dtype_to_use = dtype_dict['dpv'][key] if key in dtype_dict['dpv'] \
-                else np.float32
-            trx.data_per_vertex[key] = \
-                tractogram.data_per_point[key]
-            trx.data_per_vertex[key]._data = \
-                tractogram.data_per_point[key]._data.astype(dtype_to_use)
+            dtype_to_use = (
+                dtype_dict["dpv"][key] if key in dtype_dict["dpv"] else np.float32
+            )
+            trx.data_per_vertex[key] = tractogram.data_per_point[key]
+            trx.data_per_vertex[key]._data = tractogram.data_per_point[
+                key
+            ]._data.astype(dtype_to_use)
 
         for key in tractogram.data_per_streamline:
-            dtype_to_use = dtype_dict['dps'][key] if key in dtype_dict['dps'] \
-                else np.float32
-            trx.data_per_streamline[key] = \
-                tractogram.data_per_streamline[key].astype(dtype_to_use)
+            dtype_to_use = (
+                dtype_dict["dps"][key] if key in dtype_dict["dps"] else np.float32
+            )
+            trx.data_per_streamline[key] = tractogram.data_per_streamline[key].astype(
+                dtype_to_use
+            )
 
         # For safety and for RAM, convert the whole object to memmaps
         tmp_dir = get_trx_tmp_dir()
@@ -1669,13 +1936,18 @@ class TrxFile:
         return tractogram
 
     def to_memory(self, resize: bool = False) -> Type["TrxFile"]:
-        """Convert a TrxFile to a RAM representation
+        """Convert a TrxFile to a RAM representation.
 
-        Keyword arguments:
-            resize -- Resize TrxFile when converting to RAM representation
+        Parameters
+        ----------
+        resize : bool, optional
+            Resize TrxFile when converting to RAM representation.
+            Default is False.
 
-        Returns:
-            A non memory mapped TrxFile
+        Returns
+        -------
+        TrxFile
+            A non memory-mapped TrxFile.
         """
         if resize:
             self.resize()
@@ -1688,8 +1960,7 @@ class TrxFile:
             trx_obj.data_per_vertex[key] = deepcopy(self.data_per_vertex[key])
 
         for key in self.data_per_streamline:
-            trx_obj.data_per_streamline[key] = deepcopy(
-                self.data_per_streamline[key])
+            trx_obj.data_per_streamline[key] = deepcopy(self.data_per_streamline[key])
 
         for key in self.groups:
             trx_obj.groups[key] = deepcopy(self.groups[key])
@@ -1702,10 +1973,11 @@ class TrxFile:
     def to_sft(self, resize=False):
         """Convert a TrxFile to a valid StatefulTractogram (in RAM)"""
         try:
-            from dipy.io.stateful_tractogram import StatefulTractogram, Space
+            from dipy.io.stateful_tractogram import Space, StatefulTractogram
         except ImportError:
-            logging.error('Dipy library is missing, cannot convert to '
-                          'StatefulTractogram.')
+            logging.error(
+                "Dipy library is missing, cannot convert to StatefulTractogram."
+            )
             return None
 
         affine = np.array(self.header["VOXEL_TO_RASMM"], dtype=np.float32)
@@ -1724,8 +1996,8 @@ class TrxFile:
             data_per_streamline=deepcopy(self.data_per_streamline),
         )
         tmp_dict = self.get_dtype_dict()
-        if 'dpv' in tmp_dict:
-            tmp_dict['dpp'] = tmp_dict.pop('dpv')
+        if "dpv" in tmp_dict:
+            tmp_dict["dpp"] = tmp_dict.pop("dpv")
         sft.dtype_dict = self.get_dtype_dict()
 
         return sft
@@ -1752,7 +2024,9 @@ class TrxFile:
             try:
                 self._uncompressed_folder_handle.cleanup()
             except PermissionError:
-                logging.error("Windows PermissionError, temporary directory {}"
-                              "was not deleted!".format(self._uncompressed_folder_handle.name))
+                logging.error(
+                    "Windows PermissionError, temporary directory %s was not deleted!",
+                    self._uncompressed_folder_handle.name,
+                )
         self.__init__()
-        logging.debug("Deleted memmaps and intialized empty TrxFile.")
+        logging.debug("Deleted memmaps and initialized empty TrxFile.")
