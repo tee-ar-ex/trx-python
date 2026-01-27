@@ -1,95 +1,94 @@
-name: Publish Python 🐍 distributions 📦 to PyPI and TestPyPI
+name: Publish to TestPyPI and PyPI
 
 on:
   push:
     branches:
-      - master
+      - main
     tags:
-      - '*'
+      - "*"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  build:
-    name: Build distribution 📦
+  build-sdist:
+    name: Build sdist
     runs-on: ubuntu-latest
-    if: github.repository == 'tee-ar-ex/trx-python'
     steps:
-    - uses: actions/checkout@v4
-      with:
-        fetch-depth: 0  # Fetch all history and tags for setuptools_scm
-    - name: Set up Python 3.11
-      uses: actions/setup-python@v5
-      with:
-        python-version: "3.11"
-    - name: Install pypa/build
-      run: python -m pip install build --user
-    - name: Build a binary wheel and a source tarball
-      run: python -m build --sdist --wheel --outdir dist/ .
-    - name: Upload distribution artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: python-package-distributions
-        path: dist/
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Build sdist
+        run: pipx run build
+      - uses: actions/upload-artifact@v6
+        with:
+          name: source-dist
+          path: ./dist/*
+  test-sdist:
+    name: Test sdist
+    needs: [build-sdist]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v7
+        with:
+          name: source-dist
+          path: ./dist
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+      - name: Display Python version
+        run: python -c "import sys; print(sys.version)"
+      - name: Install sdist without optional dependencies
+        run: pip install dist/*.tar.gz
+      - run: python -c 'import trx; print(trx.__version__)'
+      - name: Install pytest
+        run: pip install pytest
+      - name: Run tests
+        run: pytest -v --pyargs trx
 
-  publish-to-testpypi:
-    name: Publish to TestPyPI
-    needs: build
+  pre-publish:
     runs-on: ubuntu-latest
-    environment:
-      name: testpypi
-      url: https://test.pypi.org/p/trx-python
-    permissions:
-      id-token: write
+    needs: [test-sdist]
     steps:
-    - name: Download distribution artifacts
-      uses: actions/download-artifact@v4
-      with:
-        name: python-package-distributions
-        path: dist/
-    - name: Publish distribution 📦 to Test PyPI
-      uses: pypa/gh-action-pypi-publish@release/v1
-      with:
-        repository-url: https://test.pypi.org/legacy/
+      - uses: actions/download-artifact@v7
+        with:
+          path: dist/
+          pattern: '*-dist'
+          merge-multiple: true
+      - run: ls -lR dist/
+      - run: pipx run twine check dist/*
 
-  publish-to-pypi:
-    name: Publish to PyPI
-    needs: build
+  test-pypi-publish:
     runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/')
-    environment:
-      name: pypi
-      url: https://pypi.org/p/trx-python
-    permissions:
-      id-token: write
+    needs: [pre-publish]
     steps:
-    - name: Download distribution artifacts
-      uses: actions/download-artifact@v4
-      with:
-        name: python-package-distributions
-        path: dist/
-    - name: Publish distribution 📦 to PyPI
-      uses: pypa/gh-action-pypi-publish@release/v1
+      - uses: actions/download-artifact@v7
+        with:
+          path: dist/
+          pattern: '*-dist'
+          merge-multiple: true
+      - run: ls -lR dist/
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          user: __token__
+          password: ${{ secrets.TEST_PYPI_API_TOKEN }}
+          repository-url: https://test.pypi.org/legacy/
+          verbose: true
 
-  github-release:
-    name: Create GitHub Release
-    needs: publish-to-pypi
+  pypi-publish:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
+    environment: "Package deployment"
+    needs: [pre-publish]
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
     steps:
-    - uses: actions/checkout@v4
-    - name: Download distribution artifacts
-      uses: actions/download-artifact@v4
-      with:
-        name: python-package-distributions
-        path: dist/
-    - name: Get version from tag
-      id: get_version
-      run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
-    - name: Create GitHub Release
-      env:
-        GH_TOKEN: ${{ github.token }}
-      run: |
-        gh release create "${{ steps.get_version.outputs.VERSION }}" \
-          --title "Release ${{ steps.get_version.outputs.VERSION }}" \
-          --generate-notes \
-          dist/*
+      - uses: actions/download-artifact@v7
+        with:
+          path: dist/
+          pattern: '*-dist'
+          merge-multiple: true
+      - run: ls -lR dist/
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_API_TOKEN }}
