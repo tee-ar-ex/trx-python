@@ -25,6 +25,8 @@ Functions
 
 .. autoapisummary::
 
+   trx.trx_file_memmap._get_dtype_little_endian
+   trx.trx_file_memmap._ensure_little_endian
    trx.trx_file_memmap._append_last_offsets
    trx.trx_file_memmap._generate_filename_from_data
    trx.trx_file_memmap._split_ext_with_dimensionality
@@ -54,6 +56,73 @@ Module Contents
 .. py:data:: dipy_available
    :value: True
 
+
+.. py:function:: _get_dtype_little_endian(dtype: Union[numpy.dtype, str, type]) -> numpy.dtype
+
+   
+   Convert a dtype to its little-endian equivalent.
+
+   The TRX file format uses little-endian byte order for cross-platform
+   compatibility. This function ensures that dtypes are always interpreted
+   as little-endian when reading/writing TRX files.
+
+   :Parameters:
+
+       **dtype** : np.dtype, str, or type
+           Input dtype specification (e.g., np.float32, 'float32', '>f4')
+
+
+
+   :Returns:
+
+       np.dtype
+           Little-endian dtype. For single-byte types (uint8, int8, bool),
+           returns the original dtype as endianness is not applicable.
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: _ensure_little_endian(arr: numpy.ndarray) -> numpy.ndarray
+
+   
+   Ensure array data is in little-endian byte order for writing.
+
+
+   :Parameters:
+
+       **arr** : np.ndarray
+           Input array
+
+
+
+   :Returns:
+
+       np.ndarray
+           Array with little-endian byte order. Returns a copy if conversion
+           was needed, otherwise returns the original array.
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 
 .. py:function:: _append_last_offsets(nib_offsets: numpy.ndarray, nb_vertices: int) -> numpy.ndarray
 

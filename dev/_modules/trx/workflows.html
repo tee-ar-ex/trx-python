@@ -44,8 +44,8 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="../../_static/documentation_options.js?v=3ce10a4d"></script>
-    <script src="../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/trx/workflows';</script>
     <script>
@@ -864,10 +864,12 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">_write_streamline_data</span><span class="p">(</span><span class="n">tmp_dir_name</span><span class="p">,</span> <span class="n">streamlines</span><span class="p">,</span> <span class="n">positions_dtype</span><span class="p">,</span> <span class="n">offsets_dtype</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Write streamline position and offset data.&quot;&quot;&quot;</span>
     <span class="n">curr_filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp_dir_name</span><span class="p">,</span> <span class="s2">&quot;positions.3.</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">positions_dtype</span><span class="p">))</span>
-    <span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">positions_dtype</span><span class="p">)</span><span class="o">.</span><span class="n">tofile</span><span class="p">(</span><span class="n">curr_filename</span><span class="p">)</span>
+    <span class="n">positions</span> <span class="o">=</span> <span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">positions_dtype</span><span class="p">)</span>
+    <span class="n">tmm</span><span class="o">.</span><span class="n">_ensure_little_endian</span><span class="p">(</span><span class="n">positions</span><span class="p">)</span><span class="o">.</span><span class="n">tofile</span><span class="p">(</span><span class="n">curr_filename</span><span class="p">)</span>
 
     <span class="n">curr_filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp_dir_name</span><span class="p">,</span> <span class="s2">&quot;offsets.</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">offsets_dtype</span><span class="p">))</span>
-    <span class="n">streamlines</span><span class="o">.</span><span class="n">_offsets</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">offsets_dtype</span><span class="p">)</span><span class="o">.</span><span class="n">tofile</span><span class="p">(</span><span class="n">curr_filename</span><span class="p">)</span></div>
+    <span class="n">offsets</span> <span class="o">=</span> <span class="n">streamlines</span><span class="o">.</span><span class="n">_offsets</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">offsets_dtype</span><span class="p">)</span>
+    <span class="n">tmm</span><span class="o">.</span><span class="n">_ensure_little_endian</span><span class="p">(</span><span class="n">offsets</span><span class="p">)</span><span class="o">.</span><span class="n">tofile</span><span class="p">(</span><span class="n">curr_filename</span><span class="p">)</span></div>
 
 
 
@@ -913,7 +915,7 @@
             <span class="n">tmp_dir_name</span><span class="p">,</span> <span class="n">subdir_name</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">.</span><span class="si">{}{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span> <span class="n">dim</span><span class="p">,</span> <span class="n">dtype</span><span class="p">)</span>
         <span class="p">)</span>
 
-    <span class="n">curr_arr</span><span class="o">.</span><span class="n">tofile</span><span class="p">(</span><span class="n">curr_filename</span><span class="p">)</span></div>
+    <span class="n">tmm</span><span class="o">.</span><span class="n">_ensure_little_endian</span><span class="p">(</span><span class="n">curr_arr</span><span class="p">)</span><span class="o">.</span><span class="n">tofile</span><span class="p">(</span><span class="n">curr_filename</span><span class="p">)</span></div>
 
 
 
@@ -1111,7 +1113,7 @@
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
     <br/>
   </p>
 </div>

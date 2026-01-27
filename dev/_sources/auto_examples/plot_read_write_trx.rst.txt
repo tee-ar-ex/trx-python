@@ -294,7 +294,7 @@ or uncompressed zip archive, or as a directory.
 
  .. code-block:: none
 
-    Saved TRX file to: /tmp/tmpr42m1tuf/output.trx
+    Saved TRX file to: /tmp/tmp3sdc9pev/output.trx
     File size: 3881 bytes
     Reloaded TRX has 13 streamlines
 
@@ -354,7 +354,7 @@ making it suitable for large tractography datasets.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.143 seconds)
+   **Total running time of the script:** (0 minutes 0.213 seconds)
 
 
 .. _sphx_glr_download_auto_examples_plot_read_write_trx.py:
