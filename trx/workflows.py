@@ -417,10 +417,12 @@ def _write_header(tmp_dir_name, reference, streamlines):
 def _write_streamline_data(tmp_dir_name, streamlines, positions_dtype, offsets_dtype):
     """Write streamline position and offset data."""
     curr_filename = os.path.join(tmp_dir_name, "positions.3.{}".format(positions_dtype))
-    streamlines._data.astype(positions_dtype).tofile(curr_filename)
+    positions = streamlines._data.astype(positions_dtype)
+    tmm._ensure_little_endian(positions).tofile(curr_filename)
 
     curr_filename = os.path.join(tmp_dir_name, "offsets.{}".format(offsets_dtype))
-    streamlines._offsets.astype(offsets_dtype).tofile(curr_filename)
+    offsets = streamlines._offsets.astype(offsets_dtype)
+    tmm._ensure_little_endian(offsets).tofile(curr_filename)
 
 
 def _normalize_dtype(dtype_str):
@@ -460,7 +462,7 @@ def _write_data_array(tmp_dir_name, subdir_name, args, is_dpg=False):
             tmp_dir_name, subdir_name, "{}.{}{}".format(basename, dim, dtype)
         )
 
-    curr_arr.tofile(curr_filename)
+    tmm._ensure_little_endian(curr_arr).tofile(curr_filename)
 
 
 def generate_trx_from_scratch(  # noqa: C901

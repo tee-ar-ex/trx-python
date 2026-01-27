@@ -124,10 +124,11 @@ def test__dichotomic_search(arr, l_bound, r_bound, expected):
 )
 def test__create_memmap(basename, create, expected):
     if create:
-        # Need to create array before evaluating
         with get_trx_tmp_dir() as dirname:
             filename = os.path.join(dirname, basename)
-            fp = np.memmap(filename, dtype=np.int16, mode="w+", shape=(3, 4))
+            fp = tmm._create_memmap(
+                filename=filename, mode="w+", shape=(3, 4), dtype=np.int16
+            )
             fp[:] = expected[:]
             mmarr = tmm._create_memmap(filename=filename, shape=(3, 4), dtype=np.int16)
             assert np.array_equal(mmarr, expected)
@@ -361,3 +362,109 @@ def test_trxfile_to_memory():
 
 def test_trxfile_close():
     pass
+
+
+# Endianness tests for cross-platform compatibility (Issue #83)
+@pytest.mark.parametrize(
+    "dtype_input,expected_byteorder",
+    [
+        # Native dtypes should be converted to little-endian
+        (np.float32, "<"),
+        (np.float64, "<"),
+        (np.int32, "<"),
+        (np.int64, "<"),
+        (np.uint32, "<"),
+        (np.uint64, "<"),
+        ("float32", "<"),
+        ("float64", "<"),
+        # Big-endian dtypes should be converted to little-endian
+        (">f4", "<"),
+        (">f8", "<"),
+        (">i4", "<"),
+        (">u4", "<"),
+        # Little-endian dtypes should remain little-endian
+        ("<f4", "<"),
+        ("<i4", "<"),
+        # Single-byte types don't have endianness (byteorder is '|')
+        (np.uint8, "|"),
+        (np.int8, "|"),
+        (np.bool_, "|"),
+    ],
+)
+def test__get_dtype_little_endian(dtype_input, expected_byteorder):
+    """Test that _get_dtype_little_endian correctly converts dtypes."""
+    result = tmm._get_dtype_little_endian(dtype_input)
+    assert result.byteorder == expected_byteorder or (
+        result.byteorder == "=" and np.little_endian and expected_byteorder == "<"
+    )
+
+
+@pytest.mark.parametrize(
+    "dtype,test_value",
+    [
+        (np.float32, 3.14159),
+        (np.float64, 2.71828),
+        (np.int32, 12345),
+        (np.int64, 9876543210),
+        (np.uint32, 0xDEADBEEF),
+        (np.uint64, 0xDEADBEEFCAFEBABE),
+    ],
+)
+def test__ensure_little_endian(dtype, test_value):
+    """Test that _ensure_little_endian correctly converts arrays."""
+    # Create array in native byte order
+    arr = np.array([test_value], dtype=dtype)
+
+    # Ensure little endian
+    result = tmm._ensure_little_endian(arr)
+
+    # Result should be little-endian (or native if system is little-endian)
+    assert result.dtype.byteorder in ("<", "=", "|")
+
+    # Values should be preserved
+    assert result[0] == test_value
+
+
+def test__ensure_little_endian_big_endian_input():
+    """Test _ensure_little_endian with explicitly big-endian input."""
+    # Create a big-endian array
+    big_endian_dtype = np.dtype(">u4")
+    arr = np.array([0x12345678], dtype=big_endian_dtype)
+
+    # Ensure little endian
+    result = tmm._ensure_little_endian(arr)
+
+    # Result should be little-endian
+    assert result.dtype.byteorder == "<"
+
+    # Value should be preserved
+    assert result[0] == 0x12345678
+
+
+def test_endianness_roundtrip():
+    """Test that data survives write/read cycle with correct endianness."""
+    with get_trx_tmp_dir() as dirname:
+        # Test values that would be corrupted if endianness is wrong
+        test_positions = np.array(
+            [[1.5, 2.5, 3.5], [4.5, 5.5, 6.5], [7.5, 8.5, 9.5]], dtype=np.float32
+        )
+        test_offsets = np.array([0, 3], dtype=np.uint32)
+
+        # Write as little-endian
+        pos_file = os.path.join(dirname, "test_positions.3.float32")
+        off_file = os.path.join(dirname, "test_offsets.uint32")
+
+        tmm._ensure_little_endian(test_positions).tofile(pos_file)
+        tmm._ensure_little_endian(test_offsets).tofile(off_file)
+
+        # Read back using _create_memmap (which enforces little-endian)
+        read_positions = tmm._create_memmap(
+            pos_file, mode="r", shape=(3, 3), dtype="float32"
+        )
+        read_offsets = tmm._create_memmap(
+            off_file, mode="r", shape=(2,), dtype="uint32"
+        )
+
+        # Values should match
+        np.testing.assert_array_almost_equal(read_positions, test_positions)
+        np.testing.assert_array_equal(read_offsets, test_offsets)
