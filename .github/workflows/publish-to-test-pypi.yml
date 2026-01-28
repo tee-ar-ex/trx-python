@@ -43,7 +43,7 @@ jobs:
         run: pip install dist/*.tar.gz
       - run: python -c 'import trx.version; print(trx.version.__version__)'
       - name: Install pytest
-        run: pip install pytest
+        run: pip install pytest psutil pytest-console-scripts pytest-cov
       - name: Run tests
         run: pytest -v --pyargs trx
 
