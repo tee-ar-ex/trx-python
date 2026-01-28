@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import os
+import tempfile
+import zipfile
 
 from nibabel.streamlines import LazyTractogram
 from nibabel.streamlines.tests.test_tractogram import make_dummy_streamline
@@ -341,7 +343,37 @@ def test_copy_fixed_arrays_from():
 
 
 def test_initialize_empty_trx():
-    pass
+    """Test creating, saving, and loading an empty TRX file."""
+    trx = tmm.TrxFile()
+    assert trx.header["NB_STREAMLINES"] == 0
+    assert trx.header["NB_VERTICES"] == 0
+    assert len(trx.streamlines) == 0
+
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        out_path = os.path.join(tmp_dir, "empty.trx")
+        tmm.save(trx, out_path)
+
+        assert os.path.exists(out_path)
+        file_size = os.path.getsize(out_path)
+        assert file_size < 500  # Should be very small, just header.json in zip
+
+        with zipfile.ZipFile(out_path, "r") as zf:
+            filenames = [info.filename for info in zf.filelist]
+            assert "header.json" in filenames
+            positions_files = [f for f in filenames if f.startswith("positions")]
+            offsets_files = [f for f in filenames if f.startswith("offsets")]
+            assert len(positions_files) == 0
+            assert len(offsets_files) == 0
+
+        loaded_trx = tmm.load(out_path)
+        assert loaded_trx.header["NB_STREAMLINES"] == 0
+        assert loaded_trx.header["NB_VERTICES"] == 0
+        assert len(loaded_trx.streamlines) == 0
+        assert len(loaded_trx.groups) == 0
+        assert len(loaded_trx.data_per_streamline) == 0
+        assert len(loaded_trx.data_per_vertex) == 0
+        assert len(loaded_trx.data_per_group) == 0
+        loaded_trx.close()
 
 
 def test_create_trx_from_pointer():
