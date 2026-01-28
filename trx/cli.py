@@ -26,7 +26,7 @@ from trx.workflows import (
 )
 
 app = typer.Typer(
-    name="tff",
+    name="trx",
     help="TRX File Format Tools - CLI for brain tractography data manipulation.",
     add_completion=False,
     rich_markup_mode="rich",
@@ -758,55 +758,55 @@ def _create_standalone_app(command_func, name: str, help_text: str):
 
 concatenate_tractograms_cmd = _create_standalone_app(
     concatenate_tractograms,
-    "tff_concatenate_tractograms",
+    "trx_concatenate_tractograms",
     "Concatenate multiple tractograms into one.",
 )
 
 convert_dsi_cmd = _create_standalone_app(
     convert_dsi,
-    "tff_convert_dsi_studio",
+    "trx_convert_dsi_studio",
     "Fix DSI-Studio TRK files for compatibility.",
 )
 
 convert_cmd = _create_standalone_app(
     convert,
-    "tff_convert_tractogram",
+    "trx_convert_tractogram",
     "Convert tractograms between formats.",
 )
 
 generate_cmd = _create_standalone_app(
     generate,
-    "tff_generate_trx_from_scratch",
+    "trx_generate_from_scratch",
     "Generate TRX file from raw data files.",
 )
 
 manipulate_dtype_cmd = _create_standalone_app(
     manipulate_dtype,
-    "tff_manipulate_datatype",
+    "trx_manipulate_datatype",
     "Manipulate TRX file internal array data types.",
 )
 
 compare_cmd = _create_standalone_app(
     compare,
-    "tff_simple_compare",
+    "trx_simple_compare",
     "Simple comparison of tractograms by subtracting coordinates.",
 )
 
 validate_cmd = _create_standalone_app(
     validate,
-    "tff_validate_trx",
+    "trx_validate",
     "Validate TRX file and remove invalid streamlines.",
 )
 
 verify_header_cmd = _create_standalone_app(
     verify_header,
-    "tff_verify_header_compatibility",
+    "trx_verify_header_compatibility",
     "Compare spatial attributes of input files.",
 )
 
 visualize_cmd = _create_standalone_app(
     visualize,
-    "tff_visualize_overlap",
+    "trx_visualize_overlap",
     "Display tractogram and density map with bounding box.",
 )
 
