@@ -1,0 +1,22 @@
+trx
+===
+
+.. py:module:: trx
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/trx/cli/index
+   /autoapi/trx/fetcher/index
+   /autoapi/trx/io/index
+   /autoapi/trx/streamlines_ops/index
+   /autoapi/trx/trx_file_memmap/index
+   /autoapi/trx/utils/index
+   /autoapi/trx/viz/index
+   /autoapi/trx/workflows/index
+
+

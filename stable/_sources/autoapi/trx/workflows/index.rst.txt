@@ -1,0 +1,241 @@
+trx.workflows
+=============
+
+.. py:module:: trx.workflows
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   trx.workflows.dipy_available
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   trx.workflows.convert_dsi_studio
+   trx.workflows.convert_tractogram
+   trx.workflows.tractogram_simple_compare
+   trx.workflows.verify_header_compatibility
+   trx.workflows.tractogram_visualize_overlap
+   trx.workflows.validate_tractogram
+   trx.workflows._load_streamlines_from_csv
+   trx.workflows._load_streamlines_from_arrays
+   trx.workflows._apply_spatial_transforms
+   trx.workflows._write_header
+   trx.workflows._write_streamline_data
+   trx.workflows._normalize_dtype
+   trx.workflows._write_data_array
+   trx.workflows.generate_trx_from_scratch
+   trx.workflows.manipulate_trx_datatype
+
+
+Module Contents
+---------------
+
+.. py:data:: dipy_available
+   :value: True
+
+
+.. py:function:: convert_dsi_studio(in_dsi_tractogram, in_dsi_fa, out_tractogram, remove_invalid=True, keep_invalid=False)
+
+.. py:function:: convert_tractogram(in_tractogram, out_tractogram, reference, pos_dtype='float32', offsets_dtype='uint32')
+
+.. py:function:: tractogram_simple_compare(in_tractograms, reference)
+
+.. py:function:: verify_header_compatibility(in_files)
+
+.. py:function:: tractogram_visualize_overlap(in_tractogram, reference, remove_invalid=True)
+
+.. py:function:: validate_tractogram(in_tractogram, reference, out_tractogram, remove_identical_streamlines=True, precision=1)
+
+.. py:function:: _load_streamlines_from_csv(positions_csv)
+
+   
+   Load streamlines from CSV file.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: _load_streamlines_from_arrays(positions, offsets)
+
+   
+   Load streamlines from position and offset arrays.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: _apply_spatial_transforms(streamlines, reference, space_str, origin_str, verify_invalid, offsets)
+
+   
+   Apply spatial transforms and verify streamlines.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: _write_header(tmp_dir_name, reference, streamlines)
+
+   
+   Write header file.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: _write_streamline_data(tmp_dir_name, streamlines, positions_dtype, offsets_dtype)
+
+   
+   Write streamline position and offset data.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: _normalize_dtype(dtype_str)
+
+   
+   Normalize dtype string format.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: _write_data_array(tmp_dir_name, subdir_name, args, is_dpg=False)
+
+   
+   Write data array to file.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: generate_trx_from_scratch(reference, out_tractogram, positions_csv=False, positions=False, offsets=False, positions_dtype='float32', offsets_dtype='uint64', space_str='rasmm', origin_str='nifti', verify_invalid=True, dpv=None, dps=None, groups=None, dpg=None)
+
+   
+   Generate TRX file from scratch using various input formats.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: manipulate_trx_datatype(in_filename, out_filename, dict_dtype)
+

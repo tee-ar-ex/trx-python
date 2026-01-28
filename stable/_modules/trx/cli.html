@@ -1,0 +1,1367 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>trx.cli &#8212; trx-python dev documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../_static/documentation_options.js?v=3ce10a4d"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/trx/cli';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.16.1';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://tee-ar-ex.github.io/trx-python/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'dev';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
+        </script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="dev" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/trx_logo.png" class="logo__image only-light" alt="trx-python dev documentation - Home"/>
+    <img src="../../_static/trx_logo.png" class="logo__image only-dark pst-js-only" alt="trx-python dev documentation - Home"/>
+  
+  
+</a></div>
+    
+      <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../trx_specifications.html">
+    TRX File Format Specifications
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../scripts.html">
+    Command-line Interface
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../auto_examples/index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../dev.html">
+    Developer Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../autoapi/index.html">
+    API Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/tee-ar-ex" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-github-square fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../trx_specifications.html">
+    TRX File Format Specifications
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../scripts.html">
+    Command-line Interface
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../auto_examples/index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../dev.html">
+    Developer Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../autoapi/index.html">
+    API Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/tee-ar-ex" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-github-square fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">trx.cli</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for trx.cli</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">TRX Command Line Interface.</span>
+
+<span class="sd">This module provides a unified CLI for all TRX file format operations using Typer.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">typer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing_extensions</span><span class="w"> </span><span class="kn">import</span> <span class="n">Annotated</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">trx.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">load</span><span class="p">,</span> <span class="n">save</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">trx.trx_file_memmap</span><span class="w"> </span><span class="kn">import</span> <span class="n">TrxFile</span><span class="p">,</span> <span class="n">concatenate</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">trx.workflows</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">convert_dsi_studio</span><span class="p">,</span>
+    <span class="n">convert_tractogram</span><span class="p">,</span>
+    <span class="n">generate_trx_from_scratch</span><span class="p">,</span>
+    <span class="n">manipulate_trx_datatype</span><span class="p">,</span>
+    <span class="n">tractogram_simple_compare</span><span class="p">,</span>
+    <span class="n">tractogram_visualize_overlap</span><span class="p">,</span>
+    <span class="n">validate_tractogram</span><span class="p">,</span>
+    <span class="n">verify_header_compatibility</span><span class="p">,</span>
+<span class="p">)</span>
+
+<div class="viewcode-block" id="app">
+<a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli.app">[docs]</a>
+<span class="n">app</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Typer</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;tff&quot;</span><span class="p">,</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;TRX File Format Tools - CLI for brain tractography data manipulation.&quot;</span><span class="p">,</span>
+    <span class="n">add_completion</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">rich_markup_mode</span><span class="o">=</span><span class="s2">&quot;rich&quot;</span><span class="p">,</span>
+<span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="_check_overwrite">
+<a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli._check_overwrite">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">_check_overwrite</span><span class="p">(</span><span class="n">filepath</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if file exists and raise error if overwrite is not enabled.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filepath : Path</span>
+<span class="sd">        Path to the output file.</span>
+<span class="sd">    overwrite : bool</span>
+<span class="sd">        If True, allow overwriting existing files.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    typer.Exit</span>
+<span class="sd">        If file exists and overwrite is False.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">filepath</span><span class="o">.</span><span class="n">is_file</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">overwrite</span><span class="p">:</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span>
+            <span class="n">typer</span><span class="o">.</span><span class="n">style</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">filepath</span><span class="si">}</span><span class="s2"> already exists. Use --force to overwrite.&quot;</span><span class="p">,</span>
+                <span class="n">fg</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">RED</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">err</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">raise</span> <span class="n">typer</span><span class="o">.</span><span class="n">Exit</span><span class="p">(</span><span class="n">code</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
+
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s2">&quot;concatenate&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="concatenate_tractograms">
+<a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli.concatenate_tractograms">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">concatenate_tractograms</span><span class="p">(</span>
+    <span class="n">in_tractograms</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="n">List</span><span class="p">[</span><span class="n">Path</span><span class="p">],</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Input tractogram files. Format: trk, tck, vtk, fib, dpy, trx.&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+    <span class="p">],</span>
+    <span class="n">out_tractogram</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="n">Path</span><span class="p">,</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="n">help</span><span class="o">=</span><span class="s2">&quot;Output filename for the concatenated tractogram.&quot;</span><span class="p">),</span>
+    <span class="p">],</span>
+    <span class="n">delete_dpv</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="nb">bool</span><span class="p">,</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+            <span class="s2">&quot;--delete-dpv&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Delete data_per_vertex if not all inputs have the same metadata.&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">delete_dps</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="nb">bool</span><span class="p">,</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+            <span class="s2">&quot;--delete-dps&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Delete data_per_streamline if not all inputs have the same metadata.&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">delete_groups</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="nb">bool</span><span class="p">,</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+            <span class="s2">&quot;--delete-groups&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Delete groups if not all inputs have the same metadata.&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">reference</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">],</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+            <span class="s2">&quot;--reference&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;-r&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Reference anatomy for tck/vtk/fib/dpy files (.nii or .nii.gz).&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">force</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="nb">bool</span><span class="p">,</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="s2">&quot;--force&quot;</span><span class="p">,</span> <span class="s2">&quot;-f&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Force overwriting of output files.&quot;</span><span class="p">),</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Concatenate multiple tractograms into one.</span>
+
+<span class="sd">    If the data_per_point or data_per_streamline is not the same for all</span>
+<span class="sd">    tractograms, the data must be deleted first using the appropriate flags.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_check_overwrite</span><span class="p">(</span><span class="n">out_tractogram</span><span class="p">,</span> <span class="n">force</span><span class="p">)</span>
+
+    <span class="n">ref</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">reference</span><span class="p">)</span> <span class="k">if</span> <span class="n">reference</span> <span class="k">else</span> <span class="kc">None</span>
+
+    <span class="n">trx_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">has_group</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">in_tractograms</span><span class="p">:</span>
+        <span class="n">tractogram_obj</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">filename</span><span class="p">),</span> <span class="n">ref</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tractogram_obj</span><span class="p">,</span> <span class="n">TrxFile</span><span class="p">):</span>
+            <span class="n">tractogram_obj</span> <span class="o">=</span> <span class="n">TrxFile</span><span class="o">.</span><span class="n">from_sft</span><span class="p">(</span><span class="n">tractogram_obj</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">tractogram_obj</span><span class="o">.</span><span class="n">groups</span><span class="p">):</span>
+            <span class="n">has_group</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">trx_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tractogram_obj</span><span class="p">)</span>
+
+    <span class="n">trx</span> <span class="o">=</span> <span class="n">concatenate</span><span class="p">(</span>
+        <span class="n">trx_list</span><span class="p">,</span>
+        <span class="n">delete_dpv</span><span class="o">=</span><span class="n">delete_dpv</span><span class="p">,</span>
+        <span class="n">delete_dps</span><span class="o">=</span><span class="n">delete_dps</span><span class="p">,</span>
+        <span class="n">delete_groups</span><span class="o">=</span><span class="n">delete_groups</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">has_group</span><span class="p">,</span>
+        <span class="n">check_space_attributes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">preallocation</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">save</span><span class="p">(</span><span class="n">trx</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">out_tractogram</span><span class="p">))</span>
+
+    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">style</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Successfully concatenated </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">in_tractograms</span><span class="p">)</span><span class="si">}</span><span class="s2"> tractograms &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;to </span><span class="si">{</span><span class="n">out_tractogram</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">fg</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">GREEN</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span></div>
+
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s2">&quot;convert&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="convert">
+<a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli.convert">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">convert</span><span class="p">(</span>
+    <span class="n">in_tractogram</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="n">Path</span><span class="p">,</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="n">help</span><span class="o">=</span><span class="s2">&quot;Input tractogram. Format: trk, tck, vtk, fib, dpy, trx.&quot;</span><span class="p">),</span>
+    <span class="p">],</span>
+    <span class="n">out_tractogram</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="n">Path</span><span class="p">,</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="n">help</span><span class="o">=</span><span class="s2">&quot;Output tractogram. Format: trk, tck, vtk, fib, dpy, trx.&quot;</span><span class="p">),</span>
+    <span class="p">],</span>
+    <span class="n">reference</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">],</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+            <span class="s2">&quot;--reference&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;-r&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Reference anatomy for tck/vtk/fib/dpy files (.nii or .nii.gz).&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">positions_dtype</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="nb">str</span><span class="p">,</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+            <span class="s2">&quot;--positions-dtype&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Datatype for positions in TRX output.&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;float32&quot;</span><span class="p">,</span>
+    <span class="n">offsets_dtype</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="nb">str</span><span class="p">,</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+            <span class="s2">&quot;--offsets-dtype&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Datatype for offsets in TRX output.&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;uint64&quot;</span><span class="p">,</span>
+    <span class="n">force</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="nb">bool</span><span class="p">,</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="s2">&quot;--force&quot;</span><span class="p">,</span> <span class="s2">&quot;-f&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Force overwriting of output files.&quot;</span><span class="p">),</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert tractograms between formats.</span>
+
+<span class="sd">    Supports conversion of .tck, .trk, .fib, .vtk, .trx and .dpy files.</span>
+<span class="sd">    TCK files always need a reference NIFTI file for conversion.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_check_overwrite</span><span class="p">(</span><span class="n">out_tractogram</span><span class="p">,</span> <span class="n">force</span><span class="p">)</span>
+
+    <span class="n">ref</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">reference</span><span class="p">)</span> <span class="k">if</span> <span class="n">reference</span> <span class="k">else</span> <span class="kc">None</span>
+    <span class="n">convert_tractogram</span><span class="p">(</span>
+        <span class="nb">str</span><span class="p">(</span><span class="n">in_tractogram</span><span class="p">),</span>
+        <span class="nb">str</span><span class="p">(</span><span class="n">out_tractogram</span><span class="p">),</span>
+        <span class="n">ref</span><span class="p">,</span>
+        <span class="n">pos_dtype</span><span class="o">=</span><span class="n">positions_dtype</span><span class="p">,</span>
+        <span class="n">offsets_dtype</span><span class="o">=</span><span class="n">offsets_dtype</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">style</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Successfully converted </span><span class="si">{</span><span class="n">in_tractogram</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">out_tractogram</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">fg</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">GREEN</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span></div>
+
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s2">&quot;convert-dsi&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="convert_dsi">
+<a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli.convert_dsi">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">convert_dsi</span><span class="p">(</span>
+    <span class="n">in_dsi_tractogram</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="n">Path</span><span class="p">,</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="n">help</span><span class="o">=</span><span class="s2">&quot;Input tractogram from DSI Studio (.trk).&quot;</span><span class="p">),</span>
+    <span class="p">],</span>
+    <span class="n">in_dsi_fa</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="n">Path</span><span class="p">,</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="n">help</span><span class="o">=</span><span class="s2">&quot;Input FA from DSI Studio (.nii.gz).&quot;</span><span class="p">),</span>
+    <span class="p">],</span>
+    <span class="n">out_tractogram</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="n">Path</span><span class="p">,</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="n">help</span><span class="o">=</span><span class="s2">&quot;Output tractogram file.&quot;</span><span class="p">),</span>
+    <span class="p">],</span>
+    <span class="n">remove_invalid</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="nb">bool</span><span class="p">,</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+            <span class="s2">&quot;--remove-invalid&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Remove streamlines landing out of the bounding box.&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">keep_invalid</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="nb">bool</span><span class="p">,</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+            <span class="s2">&quot;--keep-invalid&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Keep streamlines landing out of the bounding box.&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">force</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="nb">bool</span><span class="p">,</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="s2">&quot;--force&quot;</span><span class="p">,</span> <span class="s2">&quot;-f&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Force overwriting of output files.&quot;</span><span class="p">),</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fix DSI-Studio TRK files for compatibility.</span>
+
+<span class="sd">    This script fixes DSI-Studio TRK files (unknown space/convention) to make</span>
+<span class="sd">    them compatible with TrackVis, MI-Brain, and Dipy Horizon.</span>
+
+<span class="sd">    [bold yellow]WARNING:[/bold yellow] This script is experimental. DSI-Studio evolves</span>
+<span class="sd">    quickly and results may vary depending on the data and DSI-Studio version.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_check_overwrite</span><span class="p">(</span><span class="n">out_tractogram</span><span class="p">,</span> <span class="n">force</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">remove_invalid</span> <span class="ow">and</span> <span class="n">keep_invalid</span><span class="p">:</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span>
+            <span class="n">typer</span><span class="o">.</span><span class="n">style</span><span class="p">(</span>
+                <span class="s2">&quot;Error: Cannot use both --remove-invalid and --keep-invalid.&quot;</span><span class="p">,</span>
+                <span class="n">fg</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">RED</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">err</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">raise</span> <span class="n">typer</span><span class="o">.</span><span class="n">Exit</span><span class="p">(</span><span class="n">code</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">convert_dsi_studio</span><span class="p">(</span>
+        <span class="nb">str</span><span class="p">(</span><span class="n">in_dsi_tractogram</span><span class="p">),</span>
+        <span class="nb">str</span><span class="p">(</span><span class="n">in_dsi_fa</span><span class="p">),</span>
+        <span class="nb">str</span><span class="p">(</span><span class="n">out_tractogram</span><span class="p">),</span>
+        <span class="n">remove_invalid</span><span class="o">=</span><span class="n">remove_invalid</span><span class="p">,</span>
+        <span class="n">keep_invalid</span><span class="o">=</span><span class="n">keep_invalid</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">style</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Successfully converted DSI-Studio tractogram to </span><span class="si">{</span><span class="n">out_tractogram</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">fg</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">GREEN</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span></div>
+
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s2">&quot;generate&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="generate">
+<a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli.generate">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">generate</span><span class="p">(</span>
+    <span class="n">reference</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="n">Path</span><span class="p">,</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="n">help</span><span class="o">=</span><span class="s2">&quot;Reference anatomy (.nii or .nii.gz).&quot;</span><span class="p">),</span>
+    <span class="p">],</span>
+    <span class="n">out_tractogram</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="n">Path</span><span class="p">,</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="n">help</span><span class="o">=</span><span class="s2">&quot;Output tractogram. Format: trk, tck, vtk, fib, dpy, trx.&quot;</span><span class="p">),</span>
+    <span class="p">],</span>
+    <span class="n">positions</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">],</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+            <span class="s2">&quot;--positions&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Binary file with streamline coordinates (Nx3 .npy).&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">offsets</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">],</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+            <span class="s2">&quot;--offsets&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Binary file with streamline offsets (.npy).&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">positions_csv</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">],</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+            <span class="s2">&quot;--positions-csv&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;CSV file with streamline coordinates (x1,y1,z1,x2,y2,z2,...).&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">space</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="nb">str</span><span class="p">,</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+            <span class="s2">&quot;--space&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Coordinate space. Non-default requires Dipy.&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;RASMM&quot;</span><span class="p">,</span>
+    <span class="n">origin</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="nb">str</span><span class="p">,</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+            <span class="s2">&quot;--origin&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Coordinate origin. Non-default requires Dipy.&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;NIFTI&quot;</span><span class="p">,</span>
+    <span class="n">positions_dtype</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="nb">str</span><span class="p">,</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="s2">&quot;--positions-dtype&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Datatype for positions.&quot;</span><span class="p">),</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;float32&quot;</span><span class="p">,</span>
+    <span class="n">offsets_dtype</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="nb">str</span><span class="p">,</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="s2">&quot;--offsets-dtype&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Datatype for offsets.&quot;</span><span class="p">),</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;uint64&quot;</span><span class="p">,</span>
+    <span class="n">dpv</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+            <span class="s2">&quot;--dpv&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Data per vertex: FILE,DTYPE (e.g., color.npy,uint8).&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">dps</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+            <span class="s2">&quot;--dps&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Data per streamline: FILE,DTYPE (e.g., algo.npy,uint8).&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">groups</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+            <span class="s2">&quot;--groups&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Groups: FILE,DTYPE (e.g., AF_L.npy,int32).&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">dpg</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+            <span class="s2">&quot;--dpg&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Data per group: GROUP,FILE,DTYPE (e.g., AF_L,mean_fa.npy,float32).&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">verify_invalid</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="nb">bool</span><span class="p">,</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+            <span class="s2">&quot;--verify-invalid&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Verify positions are valid (within bounding box). Requires Dipy.&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">force</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="nb">bool</span><span class="p">,</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="s2">&quot;--force&quot;</span><span class="p">,</span> <span class="s2">&quot;-f&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Force overwriting of output files.&quot;</span><span class="p">),</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate TRX file from raw data files.</span>
+
+<span class="sd">    Create a TRX file from CSV, TXT, or NPY files by specifying positions,</span>
+<span class="sd">    offsets, data_per_vertex, data_per_streamlines, groups, and data_per_group.</span>
+
+<span class="sd">    Each --dpv, --dps, --groups option requires FILE,DTYPE format.</span>
+<span class="sd">    Each --dpg option requires GROUP,FILE,DTYPE format.</span>
+
+<span class="sd">    Valid DTYPEs: (u)int8, (u)int16, (u)int32, (u)int64, float16, float32, float64, bool</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_check_overwrite</span><span class="p">(</span><span class="n">out_tractogram</span><span class="p">,</span> <span class="n">force</span><span class="p">)</span>
+
+    <span class="c1"># Validate input combinations</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">positions</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">positions_csv</span><span class="p">:</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span>
+            <span class="n">typer</span><span class="o">.</span><span class="n">style</span><span class="p">(</span>
+                <span class="s2">&quot;Error: At least one positions option must be provided &quot;</span>
+                <span class="s2">&quot;(--positions or --positions-csv).&quot;</span><span class="p">,</span>
+                <span class="n">fg</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">RED</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">err</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">raise</span> <span class="n">typer</span><span class="o">.</span><span class="n">Exit</span><span class="p">(</span><span class="n">code</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">positions_csv</span> <span class="ow">and</span> <span class="n">positions</span><span class="p">:</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span>
+            <span class="n">typer</span><span class="o">.</span><span class="n">style</span><span class="p">(</span>
+                <span class="s2">&quot;Error: Cannot use both --positions and --positions-csv.&quot;</span><span class="p">,</span>
+                <span class="n">fg</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">RED</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">err</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">raise</span> <span class="n">typer</span><span class="o">.</span><span class="n">Exit</span><span class="p">(</span><span class="n">code</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">positions</span> <span class="ow">and</span> <span class="n">offsets</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span>
+            <span class="n">typer</span><span class="o">.</span><span class="n">style</span><span class="p">(</span>
+                <span class="s2">&quot;Error: --offsets must be provided if --positions is used.&quot;</span><span class="p">,</span>
+                <span class="n">fg</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">RED</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">err</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">raise</span> <span class="n">typer</span><span class="o">.</span><span class="n">Exit</span><span class="p">(</span><span class="n">code</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">offsets</span> <span class="ow">and</span> <span class="n">positions</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span>
+            <span class="n">typer</span><span class="o">.</span><span class="n">style</span><span class="p">(</span>
+                <span class="s2">&quot;Error: --positions must be provided if --offsets is used.&quot;</span><span class="p">,</span>
+                <span class="n">fg</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">RED</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">err</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">raise</span> <span class="n">typer</span><span class="o">.</span><span class="n">Exit</span><span class="p">(</span><span class="n">code</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Parse comma-separated arguments to tuples</span>
+    <span class="n">dpv_list</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">dpv</span><span class="p">:</span>
+        <span class="n">dpv_list</span> <span class="o">=</span> <span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">))</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">dpv</span><span class="p">]</span>
+
+    <span class="n">dps_list</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">dps</span><span class="p">:</span>
+        <span class="n">dps_list</span> <span class="o">=</span> <span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">))</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">dps</span><span class="p">]</span>
+
+    <span class="n">groups_list</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">groups</span><span class="p">:</span>
+        <span class="n">groups_list</span> <span class="o">=</span> <span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">))</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">groups</span><span class="p">]</span>
+
+    <span class="n">dpg_list</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">dpg</span><span class="p">:</span>
+        <span class="n">dpg_list</span> <span class="o">=</span> <span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">))</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">dpg</span><span class="p">]</span>
+
+    <span class="n">generate_trx_from_scratch</span><span class="p">(</span>
+        <span class="nb">str</span><span class="p">(</span><span class="n">reference</span><span class="p">),</span>
+        <span class="nb">str</span><span class="p">(</span><span class="n">out_tractogram</span><span class="p">),</span>
+        <span class="n">positions_csv</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">positions_csv</span><span class="p">)</span> <span class="k">if</span> <span class="n">positions_csv</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">positions</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">positions</span><span class="p">)</span> <span class="k">if</span> <span class="n">positions</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">offsets</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">offsets</span><span class="p">)</span> <span class="k">if</span> <span class="n">offsets</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">positions_dtype</span><span class="o">=</span><span class="n">positions_dtype</span><span class="p">,</span>
+        <span class="n">offsets_dtype</span><span class="o">=</span><span class="n">offsets_dtype</span><span class="p">,</span>
+        <span class="n">space_str</span><span class="o">=</span><span class="n">space</span><span class="p">,</span>
+        <span class="n">origin_str</span><span class="o">=</span><span class="n">origin</span><span class="p">,</span>
+        <span class="n">verify_invalid</span><span class="o">=</span><span class="n">verify_invalid</span><span class="p">,</span>
+        <span class="n">dpv</span><span class="o">=</span><span class="n">dpv_list</span><span class="p">,</span>
+        <span class="n">dps</span><span class="o">=</span><span class="n">dps_list</span><span class="p">,</span>
+        <span class="n">groups</span><span class="o">=</span><span class="n">groups_list</span><span class="p">,</span>
+        <span class="n">dpg</span><span class="o">=</span><span class="n">dpg_list</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">style</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Successfully generated </span><span class="si">{</span><span class="n">out_tractogram</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">fg</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">GREEN</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span></div>
+
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s2">&quot;manipulate-dtype&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="manipulate_dtype">
+<a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli.manipulate_dtype">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">manipulate_dtype</span><span class="p">(</span>
+    <span class="n">in_tractogram</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="n">Path</span><span class="p">,</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="n">help</span><span class="o">=</span><span class="s2">&quot;Input TRX file.&quot;</span><span class="p">),</span>
+    <span class="p">],</span>
+    <span class="n">out_tractogram</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="n">Path</span><span class="p">,</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="n">help</span><span class="o">=</span><span class="s2">&quot;Output tractogram file.&quot;</span><span class="p">),</span>
+    <span class="p">],</span>
+    <span class="n">positions_dtype</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+            <span class="s2">&quot;--positions-dtype&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Datatype for positions (float16, float32, float64).&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">offsets_dtype</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+            <span class="s2">&quot;--offsets-dtype&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Datatype for offsets (uint32, uint64).&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">dpv</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+            <span class="s2">&quot;--dpv&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Data per vertex dtype: NAME,DTYPE (e.g., color_x,uint8).&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">dps</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+            <span class="s2">&quot;--dps&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Data per streamline dtype: NAME,DTYPE (e.g., algo,uint8).&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">groups</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+            <span class="s2">&quot;--groups&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Groups dtype: NAME,DTYPE (e.g., CC,uint64).&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">dpg</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+            <span class="s2">&quot;--dpg&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Data per group dtype: GROUP,NAME,DTYPE (e.g., CC,mean_fa,float64).&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">force</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="nb">bool</span><span class="p">,</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="s2">&quot;--force&quot;</span><span class="p">,</span> <span class="s2">&quot;-f&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Force overwriting of output files.&quot;</span><span class="p">),</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># noqa: C901</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Manipulate TRX file internal array data types.</span>
+
+<span class="sd">    Change the data types of positions, offsets, data_per_vertex,</span>
+<span class="sd">    data_per_streamline, groups, and data_per_group arrays.</span>
+
+<span class="sd">    Valid DTYPEs: (u)int8, (u)int16, (u)int32, (u)int64, float16, float32, float64, bool</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_check_overwrite</span><span class="p">(</span><span class="n">out_tractogram</span><span class="p">,</span> <span class="n">force</span><span class="p">)</span>
+
+    <span class="n">dtype_dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="n">positions_dtype</span><span class="p">:</span>
+        <span class="n">dtype_dict</span><span class="p">[</span><span class="s2">&quot;positions&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">positions_dtype</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">offsets_dtype</span><span class="p">:</span>
+        <span class="n">dtype_dict</span><span class="p">[</span><span class="s2">&quot;offsets&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">offsets_dtype</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">dpv</span><span class="p">:</span>
+        <span class="n">dtype_dict</span><span class="p">[</span><span class="s2">&quot;dpv&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">dpv</span><span class="p">:</span>
+            <span class="n">name</span><span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+            <span class="n">dtype_dict</span><span class="p">[</span><span class="s2">&quot;dpv&quot;</span><span class="p">][</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">dps</span><span class="p">:</span>
+        <span class="n">dtype_dict</span><span class="p">[</span><span class="s2">&quot;dps&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">dps</span><span class="p">:</span>
+            <span class="n">name</span><span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+            <span class="n">dtype_dict</span><span class="p">[</span><span class="s2">&quot;dps&quot;</span><span class="p">][</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">groups</span><span class="p">:</span>
+        <span class="n">dtype_dict</span><span class="p">[</span><span class="s2">&quot;groups&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">groups</span><span class="p">:</span>
+            <span class="n">name</span><span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+            <span class="n">dtype_dict</span><span class="p">[</span><span class="s2">&quot;groups&quot;</span><span class="p">][</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">dpg</span><span class="p">:</span>
+        <span class="n">dtype_dict</span><span class="p">[</span><span class="s2">&quot;dpg&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">dpg</span><span class="p">:</span>
+            <span class="n">parts</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+            <span class="n">group</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">parts</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">group</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dtype_dict</span><span class="p">[</span><span class="s2">&quot;dpg&quot;</span><span class="p">]:</span>
+                <span class="n">dtype_dict</span><span class="p">[</span><span class="s2">&quot;dpg&quot;</span><span class="p">][</span><span class="n">group</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">dtype_dict</span><span class="p">[</span><span class="s2">&quot;dpg&quot;</span><span class="p">][</span><span class="n">group</span><span class="p">][</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
+
+    <span class="n">manipulate_trx_datatype</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">in_tractogram</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">out_tractogram</span><span class="p">),</span> <span class="n">dtype_dict</span><span class="p">)</span>
+
+    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">style</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Successfully manipulated datatypes and saved to </span><span class="si">{</span><span class="n">out_tractogram</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">fg</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">GREEN</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span></div>
+
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s2">&quot;compare&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="compare">
+<a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli.compare">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">compare</span><span class="p">(</span>
+    <span class="n">in_tractogram1</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="n">Path</span><span class="p">,</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="n">help</span><span class="o">=</span><span class="s2">&quot;First tractogram file.&quot;</span><span class="p">),</span>
+    <span class="p">],</span>
+    <span class="n">in_tractogram2</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="n">Path</span><span class="p">,</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="n">help</span><span class="o">=</span><span class="s2">&quot;Second tractogram file.&quot;</span><span class="p">),</span>
+    <span class="p">],</span>
+    <span class="n">reference</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">],</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+            <span class="s2">&quot;--reference&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;-r&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Reference anatomy for tck/vtk/fib/dpy files (.nii or .nii.gz).&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Simple comparison of tractograms by subtracting coordinates.</span>
+
+<span class="sd">    Does not account for shuffling of streamlines. Simple A-B operations.</span>
+
+<span class="sd">    Differences below 1e-3 are expected for affines with large rotation/scaling.</span>
+<span class="sd">    Differences below 1e-6 are expected for isotropic data with small rotation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ref</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">reference</span><span class="p">)</span> <span class="k">if</span> <span class="n">reference</span> <span class="k">else</span> <span class="kc">None</span>
+    <span class="n">tractogram_simple_compare</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">in_tractogram1</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">in_tractogram2</span><span class="p">)],</span> <span class="n">ref</span><span class="p">)</span></div>
+
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s2">&quot;validate&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="validate">
+<a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli.validate">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">validate</span><span class="p">(</span>
+    <span class="n">in_tractogram</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="n">Path</span><span class="p">,</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="n">help</span><span class="o">=</span><span class="s2">&quot;Input tractogram. Format: trk, tck, vtk, fib, dpy, trx.&quot;</span><span class="p">),</span>
+    <span class="p">],</span>
+    <span class="n">out_tractogram</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">],</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+            <span class="s2">&quot;--out&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;-o&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Output tractogram after removing invalid streamlines.&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">remove_identical</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="nb">bool</span><span class="p">,</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+            <span class="s2">&quot;--remove-identical&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Remove identical streamlines from the set.&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">precision</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="nb">int</span><span class="p">,</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+            <span class="s2">&quot;--precision&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;-p&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Number of decimals when hashing streamline points.&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">reference</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">],</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+            <span class="s2">&quot;--reference&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;-r&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Reference anatomy for tck/vtk/fib/dpy files (.nii or .nii.gz).&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">force</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="nb">bool</span><span class="p">,</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="s2">&quot;--force&quot;</span><span class="p">,</span> <span class="s2">&quot;-f&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Force overwriting of output files.&quot;</span><span class="p">),</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Validate TRX file and remove invalid streamlines.</span>
+
+<span class="sd">    Removes streamlines that are out of the volume bounding box (in voxel space,</span>
+<span class="sd">    no negative coordinates or coordinates above volume dimensions).</span>
+
+<span class="sd">    Also removes streamlines with single or no points.</span>
+<span class="sd">    Use --remove-identical to remove duplicate streamlines based on precision.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">out_tractogram</span><span class="p">:</span>
+        <span class="n">_check_overwrite</span><span class="p">(</span><span class="n">out_tractogram</span><span class="p">,</span> <span class="n">force</span><span class="p">)</span>
+
+    <span class="n">ref</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">reference</span><span class="p">)</span> <span class="k">if</span> <span class="n">reference</span> <span class="k">else</span> <span class="kc">None</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">out_tractogram</span><span class="p">)</span> <span class="k">if</span> <span class="n">out_tractogram</span> <span class="k">else</span> <span class="kc">None</span>
+
+    <span class="n">validate_tractogram</span><span class="p">(</span>
+        <span class="nb">str</span><span class="p">(</span><span class="n">in_tractogram</span><span class="p">),</span>
+        <span class="n">reference</span><span class="o">=</span><span class="n">ref</span><span class="p">,</span>
+        <span class="n">out_tractogram</span><span class="o">=</span><span class="n">out</span><span class="p">,</span>
+        <span class="n">remove_identical_streamlines</span><span class="o">=</span><span class="n">remove_identical</span><span class="p">,</span>
+        <span class="n">precision</span><span class="o">=</span><span class="n">precision</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">out_tractogram</span><span class="p">:</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span>
+            <span class="n">typer</span><span class="o">.</span><span class="n">style</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Validation complete. Output saved to </span><span class="si">{</span><span class="n">out_tractogram</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="n">fg</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">GREEN</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span>
+            <span class="n">typer</span><span class="o">.</span><span class="n">style</span><span class="p">(</span>
+                <span class="s2">&quot;Validation complete.&quot;</span><span class="p">,</span>
+                <span class="n">fg</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">GREEN</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span></div>
+
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s2">&quot;verify-header&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="verify_header">
+<a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli.verify_header">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">verify_header</span><span class="p">(</span>
+    <span class="n">in_files</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="n">List</span><span class="p">[</span><span class="n">Path</span><span class="p">],</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="n">help</span><span class="o">=</span><span class="s2">&quot;Files to compare (trk, trx, and nii).&quot;</span><span class="p">),</span>
+    <span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compare spatial attributes of input files.</span>
+
+<span class="sd">    Compares all input files against the first one for compatibility of</span>
+<span class="sd">    spatial attributes: affine, dimensions, voxel sizes, and voxel order.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">verify_header_compatibility</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">in_files</span><span class="p">])</span></div>
+
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s2">&quot;visualize&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="visualize">
+<a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli.visualize">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">visualize</span><span class="p">(</span>
+    <span class="n">in_tractogram</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="n">Path</span><span class="p">,</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="n">help</span><span class="o">=</span><span class="s2">&quot;Input tractogram. Format: trk, tck, vtk, fib, dpy, trx.&quot;</span><span class="p">),</span>
+    <span class="p">],</span>
+    <span class="n">reference</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="n">Path</span><span class="p">,</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="n">help</span><span class="o">=</span><span class="s2">&quot;Reference anatomy (.nii or .nii.gz).&quot;</span><span class="p">),</span>
+    <span class="p">],</span>
+    <span class="n">remove_invalid</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="nb">bool</span><span class="p">,</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+            <span class="s2">&quot;--remove-invalid&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Remove invalid streamlines to avoid density_map crash.&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Display tractogram and density map with bounding box.</span>
+
+<span class="sd">    Shows the tractogram and its density map (computed from Dipy) in</span>
+<span class="sd">    rasmm, voxmm, and vox space with its bounding box.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">tractogram_visualize_overlap</span><span class="p">(</span>
+        <span class="nb">str</span><span class="p">(</span><span class="n">in_tractogram</span><span class="p">),</span>
+        <span class="nb">str</span><span class="p">(</span><span class="n">reference</span><span class="p">),</span>
+        <span class="n">remove_invalid</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="main">
+<a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli.main">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Entry point for the TRX CLI.&quot;&quot;&quot;</span>
+    <span class="n">app</span><span class="p">()</span></div>
+
+
+
+<span class="c1"># Standalone entry points for backward compatibility</span>
+<span class="c1"># These create individual Typer apps for each command</span>
+
+
+<div class="viewcode-block" id="_create_standalone_app">
+<a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli._create_standalone_app">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">_create_standalone_app</span><span class="p">(</span><span class="n">command_func</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">help_text</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a standalone Typer app for a single command.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    command_func : callable</span>
+<span class="sd">        The command function to wrap.</span>
+<span class="sd">    name : str</span>
+<span class="sd">        Name of the command.</span>
+<span class="sd">    help_text : str</span>
+<span class="sd">        Help text for the command.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    callable</span>
+<span class="sd">        Entry point function.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">standalone</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Typer</span><span class="p">(</span>
+        <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="n">help_text</span><span class="p">,</span>
+        <span class="n">add_completion</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">rich_markup_mode</span><span class="o">=</span><span class="s2">&quot;rich&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">standalone</span><span class="o">.</span><span class="n">command</span><span class="p">()(</span><span class="n">command_func</span><span class="p">)</span>
+    <span class="k">return</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">standalone</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="concatenate_tractograms_cmd">
+<a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli.concatenate_tractograms_cmd">[docs]</a>
+<span class="n">concatenate_tractograms_cmd</span> <span class="o">=</span> <span class="n">_create_standalone_app</span><span class="p">(</span>
+    <span class="n">concatenate_tractograms</span><span class="p">,</span>
+    <span class="s2">&quot;tff_concatenate_tractograms&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Concatenate multiple tractograms into one.&quot;</span><span class="p">,</span>
+<span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="convert_dsi_cmd">
+<a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli.convert_dsi_cmd">[docs]</a>
+<span class="n">convert_dsi_cmd</span> <span class="o">=</span> <span class="n">_create_standalone_app</span><span class="p">(</span>
+    <span class="n">convert_dsi</span><span class="p">,</span>
+    <span class="s2">&quot;tff_convert_dsi_studio&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Fix DSI-Studio TRK files for compatibility.&quot;</span><span class="p">,</span>
+<span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="convert_cmd">
+<a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli.convert_cmd">[docs]</a>
+<span class="n">convert_cmd</span> <span class="o">=</span> <span class="n">_create_standalone_app</span><span class="p">(</span>
+    <span class="n">convert</span><span class="p">,</span>
+    <span class="s2">&quot;tff_convert_tractogram&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Convert tractograms between formats.&quot;</span><span class="p">,</span>
+<span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="generate_cmd">
+<a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli.generate_cmd">[docs]</a>
+<span class="n">generate_cmd</span> <span class="o">=</span> <span class="n">_create_standalone_app</span><span class="p">(</span>
+    <span class="n">generate</span><span class="p">,</span>
+    <span class="s2">&quot;tff_generate_trx_from_scratch&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Generate TRX file from raw data files.&quot;</span><span class="p">,</span>
+<span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="manipulate_dtype_cmd">
+<a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli.manipulate_dtype_cmd">[docs]</a>
+<span class="n">manipulate_dtype_cmd</span> <span class="o">=</span> <span class="n">_create_standalone_app</span><span class="p">(</span>
+    <span class="n">manipulate_dtype</span><span class="p">,</span>
+    <span class="s2">&quot;tff_manipulate_datatype&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Manipulate TRX file internal array data types.&quot;</span><span class="p">,</span>
+<span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="compare_cmd">
+<a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli.compare_cmd">[docs]</a>
+<span class="n">compare_cmd</span> <span class="o">=</span> <span class="n">_create_standalone_app</span><span class="p">(</span>
+    <span class="n">compare</span><span class="p">,</span>
+    <span class="s2">&quot;tff_simple_compare&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Simple comparison of tractograms by subtracting coordinates.&quot;</span><span class="p">,</span>
+<span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="validate_cmd">
+<a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli.validate_cmd">[docs]</a>
+<span class="n">validate_cmd</span> <span class="o">=</span> <span class="n">_create_standalone_app</span><span class="p">(</span>
+    <span class="n">validate</span><span class="p">,</span>
+    <span class="s2">&quot;tff_validate_trx&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Validate TRX file and remove invalid streamlines.&quot;</span><span class="p">,</span>
+<span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="verify_header_cmd">
+<a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli.verify_header_cmd">[docs]</a>
+<span class="n">verify_header_cmd</span> <span class="o">=</span> <span class="n">_create_standalone_app</span><span class="p">(</span>
+    <span class="n">verify_header</span><span class="p">,</span>
+    <span class="s2">&quot;tff_verify_header_compatibility&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Compare spatial attributes of input files.&quot;</span><span class="p">,</span>
+<span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="visualize_cmd">
+<a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli.visualize_cmd">[docs]</a>
+<span class="n">visualize_cmd</span> <span class="o">=</span> <span class="n">_create_standalone_app</span><span class="p">(</span>
+    <span class="n">visualize</span><span class="p">,</span>
+    <span class="s2">&quot;tff_visualize_overlap&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Display tractogram and density map with bounding box.&quot;</span><span class="p">,</span>
+<span class="p">)</span></div>
+
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2021-2026, The TRX developers.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

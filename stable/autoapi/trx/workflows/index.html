@@ -1,0 +1,728 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>trx.workflows &#8212; trx-python dev documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=3ce10a4d"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'autoapi/trx/workflows/index';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.16.1';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://tee-ar-ex.github.io/trx-python/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'dev';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
+        </script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="prev" title="trx.viz" href="../viz/index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="dev" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/trx_logo.png" class="logo__image only-light" alt="trx-python dev documentation - Home"/>
+    <img src="../../../_static/trx_logo.png" class="logo__image only-dark pst-js-only" alt="trx-python dev documentation - Home"/>
+  
+  
+</a></div>
+    
+      <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../trx_specifications.html">
+    TRX File Format Specifications
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../scripts.html">
+    Command-line Interface
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../auto_examples/index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../dev.html">
+    Developer Guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../index.html">
+    API Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/tee-ar-ex" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-github-square fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../trx_specifications.html">
+    TRX File Format Specifications
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../scripts.html">
+    Command-line Interface
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../auto_examples/index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../dev.html">
+    Developer Guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../index.html">
+    API Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/tee-ar-ex" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-github-square fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../index.html">trx</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../cli/index.html">trx.cli</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fetcher/index.html">trx.fetcher</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../io/index.html">trx.io</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../streamlines_ops/index.html">trx.streamlines_ops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../trx_file_memmap/index.html">trx.trx_file_memmap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../utils/index.html">trx.utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../viz/index.html">trx.viz</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">trx.workflows</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">API Reference</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">trx</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">trx.workflows</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="module-trx.workflows">
+<span id="trx-workflows"></span><h1>trx.workflows<a class="headerlink" href="#module-trx.workflows" title="Link to this heading">#</a></h1>
+<section id="attributes">
+<h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.workflows.dipy_available" title="trx.workflows.dipy_available"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dipy_available</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.workflows.convert_dsi_studio" title="trx.workflows.convert_dsi_studio"><code class="xref py py-obj docutils literal notranslate"><span class="pre">convert_dsi_studio</span></code></a>(in_dsi_tractogram, in_dsi_fa, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#trx.workflows.convert_tractogram" title="trx.workflows.convert_tractogram"><code class="xref py py-obj docutils literal notranslate"><span class="pre">convert_tractogram</span></code></a>(in_tractogram, out_tractogram, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.workflows.tractogram_simple_compare" title="trx.workflows.tractogram_simple_compare"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tractogram_simple_compare</span></code></a>(in_tractograms, reference)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#trx.workflows.verify_header_compatibility" title="trx.workflows.verify_header_compatibility"><code class="xref py py-obj docutils literal notranslate"><span class="pre">verify_header_compatibility</span></code></a>(in_files)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.workflows.tractogram_visualize_overlap" title="trx.workflows.tractogram_visualize_overlap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tractogram_visualize_overlap</span></code></a>(in_tractogram, reference)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#trx.workflows.validate_tractogram" title="trx.workflows.validate_tractogram"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate_tractogram</span></code></a>(in_tractogram, reference, ...[, ...])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.workflows._load_streamlines_from_csv" title="trx.workflows._load_streamlines_from_csv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_load_streamlines_from_csv</span></code></a>(positions_csv)</p></td>
+<td><p>Load streamlines from CSV file.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#trx.workflows._load_streamlines_from_arrays" title="trx.workflows._load_streamlines_from_arrays"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_load_streamlines_from_arrays</span></code></a>(positions, offsets)</p></td>
+<td><p>Load streamlines from position and offset arrays.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.workflows._apply_spatial_transforms" title="trx.workflows._apply_spatial_transforms"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_apply_spatial_transforms</span></code></a>(streamlines, reference, ...)</p></td>
+<td><p>Apply spatial transforms and verify streamlines.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#trx.workflows._write_header" title="trx.workflows._write_header"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_write_header</span></code></a>(tmp_dir_name, reference, streamlines)</p></td>
+<td><p>Write header file.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.workflows._write_streamline_data" title="trx.workflows._write_streamline_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_write_streamline_data</span></code></a>(tmp_dir_name, streamlines, ...)</p></td>
+<td><p>Write streamline position and offset data.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#trx.workflows._normalize_dtype" title="trx.workflows._normalize_dtype"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_normalize_dtype</span></code></a>(dtype_str)</p></td>
+<td><p>Normalize dtype string format.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.workflows._write_data_array" title="trx.workflows._write_data_array"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_write_data_array</span></code></a>(tmp_dir_name, subdir_name, args[, ...])</p></td>
+<td><p>Write data array to file.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#trx.workflows.generate_trx_from_scratch" title="trx.workflows.generate_trx_from_scratch"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_trx_from_scratch</span></code></a>(reference, out_tractogram[, ...])</p></td>
+<td><p>Generate TRX file from scratch using various input formats.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.workflows.manipulate_trx_datatype" title="trx.workflows.manipulate_trx_datatype"><code class="xref py py-obj docutils literal notranslate"><span class="pre">manipulate_trx_datatype</span></code></a>(in_filename, out_filename, ...)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">#</a></h2>
+<dl class="py data">
+<dt class="sig sig-object py" id="trx.workflows.dipy_available">
+<span class="sig-prename descclassname"><span class="pre">trx.workflows.</span></span><span class="sig-name descname"><span class="pre">dipy_available</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></span><a class="reference internal" href="../../../_modules/trx/workflows.html#dipy_available"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.workflows.dipy_available" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trx.workflows.convert_dsi_studio">
+<span class="sig-prename descclassname"><span class="pre">trx.workflows.</span></span><span class="sig-name descname"><span class="pre">convert_dsi_studio</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_dsi_tractogram</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_dsi_fa</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_tractogram</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove_invalid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_invalid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/workflows.html#convert_dsi_studio"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.workflows.convert_dsi_studio" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trx.workflows.convert_tractogram">
+<span class="sig-prename descclassname"><span class="pre">trx.workflows.</span></span><span class="sig-name descname"><span class="pre">convert_tractogram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_tractogram</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_tractogram</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos_dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'float32'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offsets_dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'uint32'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/workflows.html#convert_tractogram"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.workflows.convert_tractogram" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trx.workflows.tractogram_simple_compare">
+<span class="sig-prename descclassname"><span class="pre">trx.workflows.</span></span><span class="sig-name descname"><span class="pre">tractogram_simple_compare</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_tractograms</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/workflows.html#tractogram_simple_compare"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.workflows.tractogram_simple_compare" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trx.workflows.verify_header_compatibility">
+<span class="sig-prename descclassname"><span class="pre">trx.workflows.</span></span><span class="sig-name descname"><span class="pre">verify_header_compatibility</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_files</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/workflows.html#verify_header_compatibility"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.workflows.verify_header_compatibility" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trx.workflows.tractogram_visualize_overlap">
+<span class="sig-prename descclassname"><span class="pre">trx.workflows.</span></span><span class="sig-name descname"><span class="pre">tractogram_visualize_overlap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_tractogram</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove_invalid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/workflows.html#tractogram_visualize_overlap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.workflows.tractogram_visualize_overlap" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trx.workflows.validate_tractogram">
+<span class="sig-prename descclassname"><span class="pre">trx.workflows.</span></span><span class="sig-name descname"><span class="pre">validate_tractogram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_tractogram</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_tractogram</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove_identical_streamlines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precision</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/workflows.html#validate_tractogram"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.workflows.validate_tractogram" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trx.workflows._load_streamlines_from_csv">
+<span class="sig-prename descclassname"><span class="pre">trx.workflows.</span></span><span class="sig-name descname"><span class="pre">_load_streamlines_from_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">positions_csv</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/workflows.html#_load_streamlines_from_csv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.workflows._load_streamlines_from_csv" title="Link to this definition">#</a></dt>
+<dd><p>Load streamlines from CSV file.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trx.workflows._load_streamlines_from_arrays">
+<span class="sig-prename descclassname"><span class="pre">trx.workflows.</span></span><span class="sig-name descname"><span class="pre">_load_streamlines_from_arrays</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">positions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offsets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/workflows.html#_load_streamlines_from_arrays"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.workflows._load_streamlines_from_arrays" title="Link to this definition">#</a></dt>
+<dd><p>Load streamlines from position and offset arrays.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trx.workflows._apply_spatial_transforms">
+<span class="sig-prename descclassname"><span class="pre">trx.workflows.</span></span><span class="sig-name descname"><span class="pre">_apply_spatial_transforms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">streamlines</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">space_str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">origin_str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verify_invalid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offsets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/workflows.html#_apply_spatial_transforms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.workflows._apply_spatial_transforms" title="Link to this definition">#</a></dt>
+<dd><p>Apply spatial transforms and verify streamlines.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trx.workflows._write_header">
+<span class="sig-prename descclassname"><span class="pre">trx.workflows.</span></span><span class="sig-name descname"><span class="pre">_write_header</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tmp_dir_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">streamlines</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/workflows.html#_write_header"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.workflows._write_header" title="Link to this definition">#</a></dt>
+<dd><p>Write header file.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trx.workflows._write_streamline_data">
+<span class="sig-prename descclassname"><span class="pre">trx.workflows.</span></span><span class="sig-name descname"><span class="pre">_write_streamline_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tmp_dir_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">streamlines</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">positions_dtype</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offsets_dtype</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/workflows.html#_write_streamline_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.workflows._write_streamline_data" title="Link to this definition">#</a></dt>
+<dd><p>Write streamline position and offset data.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trx.workflows._normalize_dtype">
+<span class="sig-prename descclassname"><span class="pre">trx.workflows.</span></span><span class="sig-name descname"><span class="pre">_normalize_dtype</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dtype_str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/workflows.html#_normalize_dtype"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.workflows._normalize_dtype" title="Link to this definition">#</a></dt>
+<dd><p>Normalize dtype string format.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trx.workflows._write_data_array">
+<span class="sig-prename descclassname"><span class="pre">trx.workflows.</span></span><span class="sig-name descname"><span class="pre">_write_data_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tmp_dir_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subdir_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_dpg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/workflows.html#_write_data_array"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.workflows._write_data_array" title="Link to this definition">#</a></dt>
+<dd><p>Write data array to file.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trx.workflows.generate_trx_from_scratch">
+<span class="sig-prename descclassname"><span class="pre">trx.workflows.</span></span><span class="sig-name descname"><span class="pre">generate_trx_from_scratch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reference</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_tractogram</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">positions_csv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">positions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offsets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">positions_dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'float32'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offsets_dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'uint64'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">space_str</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'rasmm'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">origin_str</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'nifti'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verify_invalid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/workflows.html#generate_trx_from_scratch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.workflows.generate_trx_from_scratch" title="Link to this definition">#</a></dt>
+<dd><p>Generate TRX file from scratch using various input formats.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trx.workflows.manipulate_trx_datatype">
+<span class="sig-prename descclassname"><span class="pre">trx.workflows.</span></span><span class="sig-name descname"><span class="pre">manipulate_trx_datatype</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dict_dtype</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/workflows.html#manipulate_trx_datatype"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.workflows.manipulate_trx_datatype" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../viz/index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">trx.viz</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#attributes">Attributes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#functions">Functions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-contents">Module Contents</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.workflows.dipy_available"><code class="docutils literal notranslate"><span class="pre">dipy_available</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.workflows.convert_dsi_studio"><code class="docutils literal notranslate"><span class="pre">convert_dsi_studio()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.workflows.convert_tractogram"><code class="docutils literal notranslate"><span class="pre">convert_tractogram()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.workflows.tractogram_simple_compare"><code class="docutils literal notranslate"><span class="pre">tractogram_simple_compare()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.workflows.verify_header_compatibility"><code class="docutils literal notranslate"><span class="pre">verify_header_compatibility()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.workflows.tractogram_visualize_overlap"><code class="docutils literal notranslate"><span class="pre">tractogram_visualize_overlap()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.workflows.validate_tractogram"><code class="docutils literal notranslate"><span class="pre">validate_tractogram()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.workflows._load_streamlines_from_csv"><code class="docutils literal notranslate"><span class="pre">_load_streamlines_from_csv()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.workflows._load_streamlines_from_arrays"><code class="docutils literal notranslate"><span class="pre">_load_streamlines_from_arrays()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.workflows._apply_spatial_transforms"><code class="docutils literal notranslate"><span class="pre">_apply_spatial_transforms()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.workflows._write_header"><code class="docutils literal notranslate"><span class="pre">_write_header()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.workflows._write_streamline_data"><code class="docutils literal notranslate"><span class="pre">_write_streamline_data()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.workflows._normalize_dtype"><code class="docutils literal notranslate"><span class="pre">_normalize_dtype()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.workflows._write_data_array"><code class="docutils literal notranslate"><span class="pre">_write_data_array()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.workflows.generate_trx_from_scratch"><code class="docutils literal notranslate"><span class="pre">generate_trx_from_scratch()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.workflows.manipulate_trx_datatype"><code class="docutils literal notranslate"><span class="pre">manipulate_trx_datatype()</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/autoapi/trx/workflows/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2021-2026, The TRX developers.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
