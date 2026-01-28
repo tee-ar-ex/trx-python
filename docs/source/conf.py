@@ -129,7 +129,7 @@ html_theme_options = {
 
 autoapi_type = 'python'
 autoapi_dirs = ['../../trx']
-autoapi_ignore = ['*test*', '*version*', "trx._version"]
+autoapi_ignore = ['*test*', '*version*']
 
 # Sphinx gallery configuration
 sphinx_gallery_conf = {
