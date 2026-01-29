@@ -453,8 +453,11 @@ def test__ensure_little_endian(dtype, test_value):
     # Result should be little-endian (or native if system is little-endian)
     assert result.dtype.byteorder in ("<", "=", "|")
 
-    # Values should be preserved
-    assert result[0] == test_value
+    # Values should be preserved (use isclose for float types due to precision)
+    if np.issubdtype(dtype, np.floating):
+        assert np.isclose(result[0], test_value, rtol=1e-6)
+    else:
+        assert result[0] == test_value
 
 
 def test__ensure_little_endian_big_endian_input():
