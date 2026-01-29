@@ -30,6 +30,27 @@ from trx.workflows import (
 fetch_data(get_testing_files_dict(), keys=["DSI.zip", "trx_from_scratch.zip"])
 
 
+def _normalize_dtype_dict(dtype_dict):
+    """Normalize dtype dict to use explicit little-endian byte order.
+
+    On little-endian systems, numpy may use '=' (native) or '<' (explicit)
+    interchangeably. This normalizes all dtypes to '<' for consistent comparison.
+    """
+    normalized = {}
+    for key, value in dtype_dict.items():
+        if isinstance(value, dict):
+            normalized[key] = _normalize_dtype_dict(value)
+        elif isinstance(value, np.dtype):
+            # Normalize to little-endian for multi-byte types
+            if value.byteorder == "=" and value.itemsize > 1:
+                normalized[key] = value.newbyteorder("<")
+            else:
+                normalized[key] = value
+        else:
+            normalized[key] = value
+    return normalized
+
+
 # Tests for standalone CLI commands (trx_* commands)
 class TestStandaloneCommands:
     """Tests for standalone CLI commands."""
@@ -391,7 +412,13 @@ class TestWorkflowFunctions:
                 "groups": {"g_AF_L": np.dtype("int32"), "g_AF_R": np.dtype("int32")},
             }
 
-            assert DeepDiff(trx.get_dtype_dict(), expected_dtype) == {}
+            assert (
+                DeepDiff(
+                    trx.get_dtype_dict(),
+                    _normalize_dtype_dict(expected_dtype),
+                )
+                == {}
+            )
             trx.close()
 
             generated_dtype = {
@@ -416,5 +443,11 @@ class TestWorkflowFunctions:
             out_gen_path = os.path.join(tmp_dir, "generated.trx")
             manipulate_trx_datatype(expected_trx, out_gen_path, generated_dtype)
             trx = tmm.load(out_gen_path)
-            assert DeepDiff(trx.get_dtype_dict(), generated_dtype) == {}
+            assert (
+                DeepDiff(
+                    trx.get_dtype_dict(),
+                    _normalize_dtype_dict(generated_dtype),
+                )
+                == {}
+            )
             trx.close()
