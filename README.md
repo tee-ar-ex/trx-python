@@ -41,28 +41,28 @@ save(trx, "output.trk")
 
 ### Command-Line Interface
 
-TRX-Python provides a unified CLI (`tff`) for common operations:
+TRX-Python provides a unified CLI (`trx`) for common operations:
 
 ```bash
 # Show all available commands
-tff --help
+trx --help
 
 # Convert between formats
-tff convert input.trk output.trx
+trx convert input.trk output.trx
 
 # Concatenate tractograms
-tff concatenate tract1.trx tract2.trx merged.trx
+trx concatenate tract1.trx tract2.trx merged.trx
 
 # Validate a TRX file
-tff validate data.trx
+trx validate data.trx
 ```
 
 Individual commands are also available for backward compatibility:
 
 ```bash
-tff_convert_tractogram input.trk output.trx
-tff_concatenate_tractograms tract1.trx tract2.trx merged.trx
-tff_validate_trx data.trx
+trx_convert_tractogram input.trk output.trx
+trx_concatenate_tractograms tract1.trx tract2.trx merged.trx
+trx_validate data.trx
 ```
 
 ## Development

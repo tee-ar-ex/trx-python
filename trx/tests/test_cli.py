@@ -30,89 +30,89 @@ from trx.workflows import (
 fetch_data(get_testing_files_dict(), keys=["DSI.zip", "trx_from_scratch.zip"])
 
 
-# Tests for standalone CLI commands (tff_* commands)
+# Tests for standalone CLI commands (trx_* commands)
 class TestStandaloneCommands:
     """Tests for standalone CLI commands."""
 
     def test_help_option_convert_dsi(self, script_runner):
-        ret = script_runner.run(["tff_convert_dsi_studio", "--help"])
+        ret = script_runner.run(["trx_convert_dsi_studio", "--help"])
         assert ret.success
 
     def test_help_option_convert(self, script_runner):
-        ret = script_runner.run(["tff_convert_tractogram", "--help"])
+        ret = script_runner.run(["trx_convert_tractogram", "--help"])
         assert ret.success
 
-    def test_help_option_generate_trx_from_scratch(self, script_runner):
-        ret = script_runner.run(["tff_generate_trx_from_scratch", "--help"])
+    def test_help_option_generate_from_scratch(self, script_runner):
+        ret = script_runner.run(["trx_generate_from_scratch", "--help"])
         assert ret.success
 
     def test_help_option_concatenate(self, script_runner):
-        ret = script_runner.run(["tff_concatenate_tractograms", "--help"])
+        ret = script_runner.run(["trx_concatenate_tractograms", "--help"])
         assert ret.success
 
     def test_help_option_manipulate(self, script_runner):
-        ret = script_runner.run(["tff_manipulate_datatype", "--help"])
+        ret = script_runner.run(["trx_manipulate_datatype", "--help"])
         assert ret.success
 
     def test_help_option_compare(self, script_runner):
-        ret = script_runner.run(["tff_simple_compare", "--help"])
+        ret = script_runner.run(["trx_simple_compare", "--help"])
         assert ret.success
 
     def test_help_option_validate(self, script_runner):
-        ret = script_runner.run(["tff_validate_trx", "--help"])
+        ret = script_runner.run(["trx_validate", "--help"])
         assert ret.success
 
     def test_help_option_verify_header(self, script_runner):
-        ret = script_runner.run(["tff_verify_header_compatibility", "--help"])
+        ret = script_runner.run(["trx_verify_header_compatibility", "--help"])
         assert ret.success
 
     def test_help_option_visualize(self, script_runner):
-        ret = script_runner.run(["tff_visualize_overlap", "--help"])
+        ret = script_runner.run(["trx_visualize_overlap", "--help"])
         assert ret.success
 
 
-# Tests for unified tff CLI
+# Tests for unified trx CLI
 class TestUnifiedCLI:
-    """Tests for the unified tff CLI."""
+    """Tests for the unified trx CLI."""
 
-    def test_tff_help(self, script_runner):
-        ret = script_runner.run(["tff", "--help"])
+    def test_trx_help(self, script_runner):
+        ret = script_runner.run(["trx", "--help"])
         assert ret.success
 
-    def test_tff_concatenate_help(self, script_runner):
-        ret = script_runner.run(["tff", "concatenate", "--help"])
+    def test_trx_concatenate_help(self, script_runner):
+        ret = script_runner.run(["trx", "concatenate", "--help"])
         assert ret.success
 
-    def test_tff_convert_help(self, script_runner):
-        ret = script_runner.run(["tff", "convert", "--help"])
+    def test_trx_convert_help(self, script_runner):
+        ret = script_runner.run(["trx", "convert", "--help"])
         assert ret.success
 
-    def test_tff_convert_dsi_help(self, script_runner):
-        ret = script_runner.run(["tff", "convert-dsi", "--help"])
+    def test_trx_convert_dsi_help(self, script_runner):
+        ret = script_runner.run(["trx", "convert-dsi", "--help"])
         assert ret.success
 
-    def test_tff_generate_help(self, script_runner):
-        ret = script_runner.run(["tff", "generate", "--help"])
+    def test_trx_generate_help(self, script_runner):
+        ret = script_runner.run(["trx", "generate", "--help"])
         assert ret.success
 
-    def test_tff_manipulate_dtype_help(self, script_runner):
-        ret = script_runner.run(["tff", "manipulate-dtype", "--help"])
+    def test_trx_manipulate_dtype_help(self, script_runner):
+        ret = script_runner.run(["trx", "manipulate-dtype", "--help"])
         assert ret.success
 
-    def test_tff_compare_help(self, script_runner):
-        ret = script_runner.run(["tff", "compare", "--help"])
+    def test_trx_compare_help(self, script_runner):
+        ret = script_runner.run(["trx", "compare", "--help"])
         assert ret.success
 
-    def test_tff_validate_help(self, script_runner):
-        ret = script_runner.run(["tff", "validate", "--help"])
+    def test_trx_validate_help(self, script_runner):
+        ret = script_runner.run(["trx", "validate", "--help"])
         assert ret.success
 
-    def test_tff_verify_header_help(self, script_runner):
-        ret = script_runner.run(["tff", "verify-header", "--help"])
+    def test_trx_verify_header_help(self, script_runner):
+        ret = script_runner.run(["trx", "verify-header", "--help"])
         assert ret.success
 
-    def test_tff_visualize_help(self, script_runner):
-        ret = script_runner.run(["tff", "visualize", "--help"])
+    def test_trx_visualize_help(self, script_runner):
+        ret = script_runner.run(["trx", "visualize", "--help"])
         assert ret.success
 
 

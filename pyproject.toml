@@ -70,16 +70,16 @@ Documentation = "https://tee-ar-ex.github.io/trx-python/"
 Repository = "https://github.com/tee-ar-ex/trx-python"
 
 [project.scripts]
-tff = "trx.cli:main"
-tff_concatenate_tractograms = "trx.cli:concatenate_tractograms_cmd"
-tff_convert_dsi_studio = "trx.cli:convert_dsi_cmd"
-tff_convert_tractogram = "trx.cli:convert_cmd"
-tff_generate_trx_from_scratch = "trx.cli:generate_cmd"
-tff_manipulate_datatype = "trx.cli:manipulate_dtype_cmd"
-tff_simple_compare = "trx.cli:compare_cmd"
-tff_validate_trx = "trx.cli:validate_cmd"
-tff_verify_header_compatibility = "trx.cli:verify_header_cmd"
-tff_visualize_overlap = "trx.cli:visualize_cmd"
+trx = "trx.cli:main"
+trx_concatenate_tractograms = "trx.cli:concatenate_tractograms_cmd"
+trx_convert_dsi_studio = "trx.cli:convert_dsi_cmd"
+trx_convert_tractogram = "trx.cli:convert_cmd"
+trx_generate_from_scratch = "trx.cli:generate_cmd"
+trx_manipulate_datatype = "trx.cli:manipulate_dtype_cmd"
+trx_simple_compare = "trx.cli:compare_cmd"
+trx_validate = "trx.cli:validate_cmd"
+trx_verify_header_compatibility = "trx.cli:verify_header_cmd"
+trx_visualize_overlap = "trx.cli:visualize_cmd"
 
 [tool.setuptools]
 packages = ["trx"]
