@@ -409,140 +409,140 @@
                   
   <section id="command-line-interface">
 <h1>Command-line Interface<a class="headerlink" href="#command-line-interface" title="Link to this heading">#</a></h1>
-<p>The TRX toolkit provides a unified command-line interface <code class="docutils literal notranslate"><span class="pre">tff</span></code> as well as individual standalone commands for backward compatibility. All commands become available on your <code class="docutils literal notranslate"><span class="pre">PATH</span></code> after installing <code class="docutils literal notranslate"><span class="pre">trx-python</span></code>.</p>
+<p>The TRX toolkit provides a unified command-line interface <code class="docutils literal notranslate"><span class="pre">trx</span></code> as well as individual standalone commands for backward compatibility. All commands become available on your <code class="docutils literal notranslate"><span class="pre">PATH</span></code> after installing <code class="docutils literal notranslate"><span class="pre">trx-python</span></code>.</p>
 <p>Each command supports <code class="docutils literal notranslate"><span class="pre">--help</span></code> for full options.</p>
-<section id="unified-cli-tff">
-<h2>Unified CLI: <code class="docutils literal notranslate"><span class="pre">tff</span></code><a class="headerlink" href="#unified-cli-tff" title="Link to this heading">#</a></h2>
-<p>The recommended way to use TRX commands is through the unified <code class="docutils literal notranslate"><span class="pre">tff</span></code> CLI:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tff<span class="w"> </span>--help<span class="w">              </span><span class="c1"># Show all available commands</span>
-tff<span class="w"> </span>&lt;command&gt;<span class="w"> </span>--help<span class="w">    </span><span class="c1"># Show help for a specific command</span>
+<section id="unified-cli-trx">
+<h2>Unified CLI: <code class="docutils literal notranslate"><span class="pre">trx</span></code><a class="headerlink" href="#unified-cli-trx" title="Link to this heading">#</a></h2>
+<p>The recommended way to use TRX commands is through the unified <code class="docutils literal notranslate"><span class="pre">trx</span></code> CLI:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>trx<span class="w"> </span>--help<span class="w">              </span><span class="c1"># Show all available commands</span>
+trx<span class="w"> </span>&lt;command&gt;<span class="w"> </span>--help<span class="w">    </span><span class="c1"># Show help for a specific command</span>
 </pre></div>
 </div>
 <p>Available subcommands:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">tff</span> <span class="pre">concatenate</span></code> - Concatenate multiple tractograms</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">tff</span> <span class="pre">convert</span></code> - Convert between tractography formats</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">tff</span> <span class="pre">convert-dsi</span></code> - Fix DSI-Studio TRK files</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">tff</span> <span class="pre">generate</span></code> - Generate TRX from raw data files</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">tff</span> <span class="pre">manipulate-dtype</span></code> - Change array data types</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">tff</span> <span class="pre">compare</span></code> - Simple tractogram comparison</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">tff</span> <span class="pre">validate</span></code> - Validate and clean TRX files</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">tff</span> <span class="pre">verify-header</span></code> - Check header compatibility</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">tff</span> <span class="pre">visualize</span></code> - Visualize tractogram overlap</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">trx</span> <span class="pre">concatenate</span></code> - Concatenate multiple tractograms</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">trx</span> <span class="pre">convert</span></code> - Convert between tractography formats</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">trx</span> <span class="pre">convert-dsi</span></code> - Fix DSI-Studio TRK files</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">trx</span> <span class="pre">generate</span></code> - Generate TRX from raw data files</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">trx</span> <span class="pre">manipulate-dtype</span></code> - Change array data types</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">trx</span> <span class="pre">compare</span></code> - Simple tractogram comparison</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">trx</span> <span class="pre">validate</span></code> - Validate and clean TRX files</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">trx</span> <span class="pre">verify-header</span></code> - Check header compatibility</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">trx</span> <span class="pre">visualize</span></code> - Visualize tractogram overlap</p></li>
 </ul>
 </section>
 <section id="standalone-commands">
 <h2>Standalone Commands<a class="headerlink" href="#standalone-commands" title="Link to this heading">#</a></h2>
 <p>For backward compatibility, standalone commands are also available:</p>
-<section id="tff-concatenate-tractograms">
-<h3>tff_concatenate_tractograms<a class="headerlink" href="#tff-concatenate-tractograms" title="Link to this heading">#</a></h3>
+<section id="trx-concatenate-tractograms">
+<h3>trx_concatenate_tractograms<a class="headerlink" href="#trx-concatenate-tractograms" title="Link to this heading">#</a></h3>
 <p>Concatenate multiple tractograms into a single output.</p>
 <ul class="simple">
 <li><p>Supports <code class="docutils literal notranslate"><span class="pre">trk</span></code>, <code class="docutils literal notranslate"><span class="pre">tck</span></code>, <code class="docutils literal notranslate"><span class="pre">vtk</span></code>, <code class="docutils literal notranslate"><span class="pre">fib</span></code>, <code class="docutils literal notranslate"><span class="pre">dpy</span></code>, and <code class="docutils literal notranslate"><span class="pre">trx</span></code> inputs.</p></li>
 <li><p>Flags: <code class="docutils literal notranslate"><span class="pre">--delete-dpv</span></code>, <code class="docutils literal notranslate"><span class="pre">--delete-dps</span></code>, <code class="docutils literal notranslate"><span class="pre">--delete-groups</span></code> to drop mismatched metadata; <code class="docutils literal notranslate"><span class="pre">--reference</span></code> for formats needing an anatomy reference; <code class="docutils literal notranslate"><span class="pre">-f</span></code> to overwrite.</p></li>
 </ul>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Using unified CLI</span>
-tff<span class="w"> </span>concatenate<span class="w"> </span>in1.trk<span class="w"> </span>in2.trk<span class="w"> </span>merged.trx
+trx<span class="w"> </span>concatenate<span class="w"> </span>in1.trk<span class="w"> </span>in2.trk<span class="w"> </span>merged.trx
 
 <span class="c1"># Using standalone command</span>
-tff_concatenate_tractograms<span class="w"> </span>in1.trk<span class="w"> </span>in2.trk<span class="w"> </span>merged.trx
+trx_concatenate_tractograms<span class="w"> </span>in1.trk<span class="w"> </span>in2.trk<span class="w"> </span>merged.trx
 </pre></div>
 </div>
 </section>
-<section id="tff-convert-dsi-studio">
-<h3>tff_convert_dsi_studio<a class="headerlink" href="#tff-convert-dsi-studio" title="Link to this heading">#</a></h3>
+<section id="trx-convert-dsi-studio">
+<h3>trx_convert_dsi_studio<a class="headerlink" href="#trx-convert-dsi-studio" title="Link to this heading">#</a></h3>
 <p>Convert a DSI Studio <code class="docutils literal notranslate"><span class="pre">.trk</span></code> with accompanying <code class="docutils literal notranslate"><span class="pre">.nii.gz</span></code> reference into a cleaned <code class="docutils literal notranslate"><span class="pre">.trk</span></code> or TRX.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Using unified CLI</span>
-tff<span class="w"> </span>convert-dsi<span class="w"> </span>input.trk<span class="w"> </span>reference.nii.gz<span class="w"> </span>cleaned.trk
+trx<span class="w"> </span>convert-dsi<span class="w"> </span>input.trk<span class="w"> </span>reference.nii.gz<span class="w"> </span>cleaned.trk
 
 <span class="c1"># Using standalone command</span>
-tff_convert_dsi_studio<span class="w"> </span>input.trk<span class="w"> </span>reference.nii.gz<span class="w"> </span>cleaned.trk
+trx_convert_dsi_studio<span class="w"> </span>input.trk<span class="w"> </span>reference.nii.gz<span class="w"> </span>cleaned.trk
 </pre></div>
 </div>
 </section>
-<section id="tff-convert-tractogram">
-<h3>tff_convert_tractogram<a class="headerlink" href="#tff-convert-tractogram" title="Link to this heading">#</a></h3>
+<section id="trx-convert-tractogram">
+<h3>trx_convert_tractogram<a class="headerlink" href="#trx-convert-tractogram" title="Link to this heading">#</a></h3>
 <p>General-purpose converter between <code class="docutils literal notranslate"><span class="pre">trk</span></code>, <code class="docutils literal notranslate"><span class="pre">tck</span></code>, <code class="docutils literal notranslate"><span class="pre">vtk</span></code>, <code class="docutils literal notranslate"><span class="pre">fib</span></code>, <code class="docutils literal notranslate"><span class="pre">dpy</span></code>, and <code class="docutils literal notranslate"><span class="pre">trx</span></code>.</p>
 <ul class="simple">
 <li><p>Flags: <code class="docutils literal notranslate"><span class="pre">--reference</span></code> for formats needing a NIfTI, <code class="docutils literal notranslate"><span class="pre">--positions-dtype</span></code>, <code class="docutils literal notranslate"><span class="pre">--offsets-dtype</span></code>, <code class="docutils literal notranslate"><span class="pre">-f</span></code> to overwrite.</p></li>
 </ul>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Using unified CLI</span>
-tff<span class="w"> </span>convert<span class="w"> </span>input.trk<span class="w"> </span>output.trx<span class="w"> </span>--positions-dtype<span class="w"> </span>float32<span class="w"> </span>--offsets-dtype<span class="w"> </span>uint64
+trx<span class="w"> </span>convert<span class="w"> </span>input.trk<span class="w"> </span>output.trx<span class="w"> </span>--positions-dtype<span class="w"> </span>float32<span class="w"> </span>--offsets-dtype<span class="w"> </span>uint64
 
 <span class="c1"># Using standalone command</span>
-tff_convert_tractogram<span class="w"> </span>input.trk<span class="w"> </span>output.trx<span class="w"> </span>--positions-dtype<span class="w"> </span>float32<span class="w"> </span>--offsets-dtype<span class="w"> </span>uint64
+trx_convert_tractogram<span class="w"> </span>input.trk<span class="w"> </span>output.trx<span class="w"> </span>--positions-dtype<span class="w"> </span>float32<span class="w"> </span>--offsets-dtype<span class="w"> </span>uint64
 </pre></div>
 </div>
 </section>
-<section id="tff-generate-trx-from-scratch">
-<h3>tff_generate_trx_from_scratch<a class="headerlink" href="#tff-generate-trx-from-scratch" title="Link to this heading">#</a></h3>
+<section id="trx-generate-from-scratch">
+<h3>trx_generate_from_scratch<a class="headerlink" href="#trx-generate-from-scratch" title="Link to this heading">#</a></h3>
 <p>Build a TRX file from raw NumPy arrays or CSV streamline coordinates.</p>
 <ul class="simple">
 <li><p>Flags: <code class="docutils literal notranslate"><span class="pre">--positions</span></code>, <code class="docutils literal notranslate"><span class="pre">--offsets</span></code>, <code class="docutils literal notranslate"><span class="pre">--positions-dtype</span></code>, <code class="docutils literal notranslate"><span class="pre">--offsets-dtype</span></code>, spatial options (<code class="docutils literal notranslate"><span class="pre">--space</span></code>, <code class="docutils literal notranslate"><span class="pre">--origin</span></code>), and metadata loaders for dpv/dps/groups/dpg.</p></li>
 </ul>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Using unified CLI</span>
-tff<span class="w"> </span>generate<span class="w"> </span>fa.nii.gz<span class="w"> </span>output.trx<span class="w"> </span>--positions<span class="w"> </span>positions.npy<span class="w"> </span>--offsets<span class="w"> </span>offsets.npy
+trx<span class="w"> </span>generate<span class="w"> </span>fa.nii.gz<span class="w"> </span>output.trx<span class="w"> </span>--positions<span class="w"> </span>positions.npy<span class="w"> </span>--offsets<span class="w"> </span>offsets.npy
 
 <span class="c1"># Using standalone command</span>
-tff_generate_trx_from_scratch<span class="w"> </span>fa.nii.gz<span class="w"> </span>output.trx<span class="w"> </span>--positions<span class="w"> </span>positions.npy<span class="w"> </span>--offsets<span class="w"> </span>offsets.npy
+trx_generate_from_scratch<span class="w"> </span>fa.nii.gz<span class="w"> </span>output.trx<span class="w"> </span>--positions<span class="w"> </span>positions.npy<span class="w"> </span>--offsets<span class="w"> </span>offsets.npy
 </pre></div>
 </div>
 </section>
-<section id="tff-manipulate-datatype">
-<h3>tff_manipulate_datatype<a class="headerlink" href="#tff-manipulate-datatype" title="Link to this heading">#</a></h3>
+<section id="trx-manipulate-datatype">
+<h3>trx_manipulate_datatype<a class="headerlink" href="#trx-manipulate-datatype" title="Link to this heading">#</a></h3>
 <p>Rewrite TRX datasets with new dtypes for positions/offsets/dpv/dps/dpg/groups.</p>
 <ul class="simple">
 <li><p>Accepts per-field dtype arguments and overwrites with <code class="docutils literal notranslate"><span class="pre">-f</span></code>.</p></li>
 </ul>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Using unified CLI</span>
-tff<span class="w"> </span>manipulate-dtype<span class="w"> </span>input.trx<span class="w"> </span>output.trx<span class="w"> </span>--positions-dtype<span class="w"> </span>float16<span class="w"> </span>--dpv<span class="w"> </span>color,uint8
+trx<span class="w"> </span>manipulate-dtype<span class="w"> </span>input.trx<span class="w"> </span>output.trx<span class="w"> </span>--positions-dtype<span class="w"> </span>float16<span class="w"> </span>--dpv<span class="w"> </span>color,uint8
 
 <span class="c1"># Using standalone command</span>
-tff_manipulate_datatype<span class="w"> </span>input.trx<span class="w"> </span>output.trx<span class="w"> </span>--positions-dtype<span class="w"> </span>float16<span class="w"> </span>--dpv<span class="w"> </span>color,uint8
+trx_manipulate_datatype<span class="w"> </span>input.trx<span class="w"> </span>output.trx<span class="w"> </span>--positions-dtype<span class="w"> </span>float16<span class="w"> </span>--dpv<span class="w"> </span>color,uint8
 </pre></div>
 </div>
 </section>
-<section id="tff-simple-compare">
-<h3>tff_simple_compare<a class="headerlink" href="#tff-simple-compare" title="Link to this heading">#</a></h3>
+<section id="trx-simple-compare">
+<h3>trx_simple_compare<a class="headerlink" href="#trx-simple-compare" title="Link to this heading">#</a></h3>
 <p>Compare two tractograms for quick difference checks.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Using unified CLI</span>
-tff<span class="w"> </span>compare<span class="w"> </span>first.trk<span class="w"> </span>second.trk
+trx<span class="w"> </span>compare<span class="w"> </span>first.trk<span class="w"> </span>second.trk
 
 <span class="c1"># Using standalone command</span>
-tff_simple_compare<span class="w"> </span>first.trk<span class="w"> </span>second.trk
+trx_simple_compare<span class="w"> </span>first.trk<span class="w"> </span>second.trk
 </pre></div>
 </div>
 </section>
-<section id="tff-validate-trx">
-<h3>tff_validate_trx<a class="headerlink" href="#tff-validate-trx" title="Link to this heading">#</a></h3>
+<section id="trx-validate">
+<h3>trx_validate<a class="headerlink" href="#trx-validate" title="Link to this heading">#</a></h3>
 <p>Validate a TRX file for consistency and remove invalid streamlines.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Using unified CLI</span>
-tff<span class="w"> </span>validate<span class="w"> </span>data.trx<span class="w"> </span>--out<span class="w"> </span>cleaned.trx
+trx<span class="w"> </span>validate<span class="w"> </span>data.trx<span class="w"> </span>--out<span class="w"> </span>cleaned.trx
 
 <span class="c1"># Using standalone command</span>
-tff_validate_trx<span class="w"> </span>data.trx<span class="w"> </span>--out<span class="w"> </span>cleaned.trx
+trx_validate<span class="w"> </span>data.trx<span class="w"> </span>--out<span class="w"> </span>cleaned.trx
 </pre></div>
 </div>
 </section>
-<section id="tff-verify-header-compatibility">
-<h3>tff_verify_header_compatibility<a class="headerlink" href="#tff-verify-header-compatibility" title="Link to this heading">#</a></h3>
+<section id="trx-verify-header-compatibility">
+<h3>trx_verify_header_compatibility<a class="headerlink" href="#trx-verify-header-compatibility" title="Link to this heading">#</a></h3>
 <p>Check whether tractogram headers are compatible for operations such as concatenation.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Using unified CLI</span>
-tff<span class="w"> </span>verify-header<span class="w"> </span>file1.trk<span class="w"> </span>file2.trk
+trx<span class="w"> </span>verify-header<span class="w"> </span>file1.trk<span class="w"> </span>file2.trk
 
 <span class="c1"># Using standalone command</span>
-tff_verify_header_compatibility<span class="w"> </span>file1.trk<span class="w"> </span>file2.trk
+trx_verify_header_compatibility<span class="w"> </span>file1.trk<span class="w"> </span>file2.trk
 </pre></div>
 </div>
 </section>
-<section id="tff-visualize-overlap">
-<h3>tff_visualize_overlap<a class="headerlink" href="#tff-visualize-overlap" title="Link to this heading">#</a></h3>
+<section id="trx-visualize-overlap">
+<h3>trx_visualize_overlap<a class="headerlink" href="#trx-visualize-overlap" title="Link to this heading">#</a></h3>
 <p>Visualize streamline overlap between tractograms (requires visualization dependencies).</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Using unified CLI</span>
-tff<span class="w"> </span>visualize<span class="w"> </span>tractogram.trk<span class="w"> </span>reference.nii.gz
+trx<span class="w"> </span>visualize<span class="w"> </span>tractogram.trk<span class="w"> </span>reference.nii.gz
 
 <span class="c1"># Using standalone command</span>
-tff_visualize_overlap<span class="w"> </span>tractogram.trk<span class="w"> </span>reference.nii.gz
+trx_visualize_overlap<span class="w"> </span>tractogram.trk<span class="w"> </span>reference.nii.gz
 </pre></div>
 </div>
 </section>
@@ -552,7 +552,7 @@ tff_visualize_overlap<span class="w"> </span>tractogram.trk<span class="w"> </sp
 <ul class="simple">
 <li><p>Test datasets for examples can be fetched with <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">trx.fetcher</span></code> helpers: <code class="docutils literal notranslate"><span class="pre">fetch_data(get_testing_files_dict())</span></code> downloads to <code class="docutils literal notranslate"><span class="pre">$TRX_HOME</span></code> (default <code class="docutils literal notranslate"><span class="pre">~/.tee_ar_ex</span></code>).</p></li>
 <li><p>All commands print detailed usage with <code class="docutils literal notranslate"><span class="pre">--help</span></code>.</p></li>
-<li><p>The unified <code class="docutils literal notranslate"><span class="pre">tff</span></code> CLI uses <a class="reference external" href="https://typer.tiangolo.com/">Typer</a> for beautiful terminal output with colors and rich formatting.</p></li>
+<li><p>The unified <code class="docutils literal notranslate"><span class="pre">trx</span></code> CLI uses <a class="reference external" href="https://typer.tiangolo.com/">Typer</a> for beautiful terminal output with colors and rich formatting.</p></li>
 </ul>
 </section>
 </section>

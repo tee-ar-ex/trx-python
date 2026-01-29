@@ -440,7 +440,7 @@
 <div class="viewcode-block" id="app">
 <a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli.app">[docs]</a>
 <span class="n">app</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Typer</span><span class="p">(</span>
-    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;tff&quot;</span><span class="p">,</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;trx&quot;</span><span class="p">,</span>
     <span class="n">help</span><span class="o">=</span><span class="s2">&quot;TRX File Format Tools - CLI for brain tractography data manipulation.&quot;</span><span class="p">,</span>
     <span class="n">add_completion</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">rich_markup_mode</span><span class="o">=</span><span class="s2">&quot;rich&quot;</span><span class="p">,</span>
@@ -1211,7 +1211,7 @@
 <a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli.concatenate_tractograms_cmd">[docs]</a>
 <span class="n">concatenate_tractograms_cmd</span> <span class="o">=</span> <span class="n">_create_standalone_app</span><span class="p">(</span>
     <span class="n">concatenate_tractograms</span><span class="p">,</span>
-    <span class="s2">&quot;tff_concatenate_tractograms&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;trx_concatenate_tractograms&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Concatenate multiple tractograms into one.&quot;</span><span class="p">,</span>
 <span class="p">)</span></div>
 
@@ -1220,7 +1220,7 @@
 <a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli.convert_dsi_cmd">[docs]</a>
 <span class="n">convert_dsi_cmd</span> <span class="o">=</span> <span class="n">_create_standalone_app</span><span class="p">(</span>
     <span class="n">convert_dsi</span><span class="p">,</span>
-    <span class="s2">&quot;tff_convert_dsi_studio&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;trx_convert_dsi_studio&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Fix DSI-Studio TRK files for compatibility.&quot;</span><span class="p">,</span>
 <span class="p">)</span></div>
 
@@ -1229,7 +1229,7 @@
 <a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli.convert_cmd">[docs]</a>
 <span class="n">convert_cmd</span> <span class="o">=</span> <span class="n">_create_standalone_app</span><span class="p">(</span>
     <span class="n">convert</span><span class="p">,</span>
-    <span class="s2">&quot;tff_convert_tractogram&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;trx_convert_tractogram&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Convert tractograms between formats.&quot;</span><span class="p">,</span>
 <span class="p">)</span></div>
 
@@ -1238,7 +1238,7 @@
 <a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli.generate_cmd">[docs]</a>
 <span class="n">generate_cmd</span> <span class="o">=</span> <span class="n">_create_standalone_app</span><span class="p">(</span>
     <span class="n">generate</span><span class="p">,</span>
-    <span class="s2">&quot;tff_generate_trx_from_scratch&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;trx_generate_from_scratch&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Generate TRX file from raw data files.&quot;</span><span class="p">,</span>
 <span class="p">)</span></div>
 
@@ -1247,7 +1247,7 @@
 <a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli.manipulate_dtype_cmd">[docs]</a>
 <span class="n">manipulate_dtype_cmd</span> <span class="o">=</span> <span class="n">_create_standalone_app</span><span class="p">(</span>
     <span class="n">manipulate_dtype</span><span class="p">,</span>
-    <span class="s2">&quot;tff_manipulate_datatype&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;trx_manipulate_datatype&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Manipulate TRX file internal array data types.&quot;</span><span class="p">,</span>
 <span class="p">)</span></div>
 
@@ -1256,7 +1256,7 @@
 <a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli.compare_cmd">[docs]</a>
 <span class="n">compare_cmd</span> <span class="o">=</span> <span class="n">_create_standalone_app</span><span class="p">(</span>
     <span class="n">compare</span><span class="p">,</span>
-    <span class="s2">&quot;tff_simple_compare&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;trx_simple_compare&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Simple comparison of tractograms by subtracting coordinates.&quot;</span><span class="p">,</span>
 <span class="p">)</span></div>
 
@@ -1265,7 +1265,7 @@
 <a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli.validate_cmd">[docs]</a>
 <span class="n">validate_cmd</span> <span class="o">=</span> <span class="n">_create_standalone_app</span><span class="p">(</span>
     <span class="n">validate</span><span class="p">,</span>
-    <span class="s2">&quot;tff_validate_trx&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;trx_validate&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Validate TRX file and remove invalid streamlines.&quot;</span><span class="p">,</span>
 <span class="p">)</span></div>
 
@@ -1274,7 +1274,7 @@
 <a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli.verify_header_cmd">[docs]</a>
 <span class="n">verify_header_cmd</span> <span class="o">=</span> <span class="n">_create_standalone_app</span><span class="p">(</span>
     <span class="n">verify_header</span><span class="p">,</span>
-    <span class="s2">&quot;tff_verify_header_compatibility&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;trx_verify_header_compatibility&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Compare spatial attributes of input files.&quot;</span><span class="p">,</span>
 <span class="p">)</span></div>
 
@@ -1283,7 +1283,7 @@
 <a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli.visualize_cmd">[docs]</a>
 <span class="n">visualize_cmd</span> <span class="o">=</span> <span class="n">_create_standalone_app</span><span class="p">(</span>
     <span class="n">visualize</span><span class="p">,</span>
-    <span class="s2">&quot;tff_visualize_overlap&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;trx_visualize_overlap&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Display tractogram and density map with bounding box.&quot;</span><span class="p">,</span>
 <span class="p">)</span></div>
 
