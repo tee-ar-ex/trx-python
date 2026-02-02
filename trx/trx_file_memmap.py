@@ -935,23 +935,25 @@ class TrxFile:
         json.dump(tmp_header, out_json)
         out_json.close()
 
-        positions_filename = _generate_filename_from_data(
-            to_dump, os.path.join(tmp_dir.name, "positions")
-        )
-        _ensure_little_endian(to_dump).tofile(positions_filename)
+        # Only write positions and offsets if TRX is not empty
+        if tmp_header["NB_STREAMLINES"] > 0 and tmp_header["NB_VERTICES"] > 0:
+            positions_filename = _generate_filename_from_data(
+                to_dump, os.path.join(tmp_dir.name, "positions")
+            )
+            _ensure_little_endian(to_dump).tofile(positions_filename)
 
-        if not self._copy_safe:
-            to_dump = _append_last_offsets(
-                self.streamlines.copy()._offsets, self.header["NB_VERTICES"]
+            if not self._copy_safe:
+                to_dump = _append_last_offsets(
+                    self.streamlines.copy()._offsets, self.header["NB_VERTICES"]
+                )
+            else:
+                to_dump = _append_last_offsets(
+                    self.streamlines._offsets, self.header["NB_VERTICES"]
+                )
+            offsets_filename = _generate_filename_from_data(
+                self.streamlines._offsets, os.path.join(tmp_dir.name, "offsets")
             )
-        else:
-            to_dump = _append_last_offsets(
-                self.streamlines._offsets, self.header["NB_VERTICES"]
-            )
-        offsets_filename = _generate_filename_from_data(
-            self.streamlines._offsets, os.path.join(tmp_dir.name, "offsets")
-        )
-        _ensure_little_endian(to_dump).tofile(offsets_filename)
+            _ensure_little_endian(to_dump).tofile(offsets_filename)
 
         if len(self.data_per_vertex.keys()) > 0:
             os.mkdir(os.path.join(tmp_dir.name, "dpv/"))
@@ -1243,9 +1245,13 @@ class TrxFile:
         TrxFile
             A TrxFile constructed from the pointer provided.
         """
-        # TODO support empty positions, using optional tag?
         trx = TrxFile()
         trx.header = header
+
+        # Handle empty TRX files early - no positions/offsets to load
+        if header["NB_STREAMLINES"] == 0 or header["NB_VERTICES"] == 0:
+            return trx
+
         positions, offsets = None, None
         for elem_filename in dict_pointer_size.keys():
             if root_zip:
