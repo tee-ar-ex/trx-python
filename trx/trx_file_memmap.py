@@ -1249,7 +1249,7 @@ class TrxFile:
         trx.header = header
 
         # Handle empty TRX files early - no positions/offsets to load
-        if header["NB_STREAMLINES"] == 0 and header["NB_VERTICES"] == 0:
+        if header["NB_STREAMLINES"] == 0 or header["NB_VERTICES"] == 0:
             return trx
 
         positions, offsets = None, None
