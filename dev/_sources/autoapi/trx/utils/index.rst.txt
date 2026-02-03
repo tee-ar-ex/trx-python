@@ -3,6 +3,13 @@ trx.utils
 
 .. py:module:: trx.utils
 
+.. autoapi-nested-parse::
+
+   Utility functions for reference handling, coordinate flips, and file operations.
+
+   ..
+       !! processed by numpydoc !!
+
 
 Attributes
 ----------
@@ -69,24 +76,24 @@ Module Contents
 .. py:function:: split_name_with_gz(filename)
 
    
-   Returns the clean basename and extension of a file.
-   Means that this correctly manages the ".nii.gz" extensions.
+   Return the clean basename and extension of a file.
 
+   Correctly manages the ".nii.gz" extensions.
 
    :Parameters:
 
-       **filename: str**
-           The filename to clean
+       **filename** : str
+           The filename to clean.
 
 
 
    :Returns:
 
-       **base, ext** : tuple(str, str)
-           ..
+       **base** : str
+           Clean basename.
 
-       Clean basename and the full extension
-           ..
+       **ext** : str
+           The full extension.
 
 
 
@@ -104,29 +111,29 @@ Module Contents
 .. py:function:: get_reference_info_wrapper(reference)
 
    
-   Will compare the spatial attribute of 2 references.
+   Extract spatial attributes from a reference object.
 
 
    :Parameters:
 
-       **reference** : Nifti or Trk filename, Nifti1Image or TrkFile, Nifti1Header or
-           trk.header (dict), TrxFile or trx.header (dict)
+       **reference** : str or dict or Nifti1Image or TrkFile or Nifti1Header or TrxFile
            Reference that provides the spatial attribute.
 
-       **Returns**
-           ..
-
-       **-------**
-           ..
-
-       **output** : tuple
-           - affine ndarray (4,4), np.float32, transformation of VOX to RASMM
-           - dimensions ndarray (3,), int16, volume shape for each axis
-           - voxel_sizes  ndarray (3,), float32, size of voxel for each axis
-           - voxel_order, string, Typically 'RAS' or 'LPS'
 
 
+   :Returns:
 
+       **affine** : ndarray (4, 4)
+           Transformation of VOX to RASMM, np.float32.
+
+       **dimensions** : ndarray (3,)
+           Volume shape for each axis, int16.
+
+       **voxel_sizes** : ndarray (3,)
+           Size of voxel for each axis, float32.
+
+       **voxel_order** : str
+           Typically 'RAS' or 'LPS'.
 
 
 
@@ -144,7 +151,7 @@ Module Contents
 .. py:function:: is_header_compatible(reference_1, reference_2)
 
    
-   Will compare the spatial attribute of 2 references.
+   Compare the spatial attributes of 2 references.
 
 
    :Parameters:
@@ -157,17 +164,12 @@ Module Contents
            Nifti1Header or trk.header (dict)
            Reference that provides the spatial attribute.
 
-       **Returns**
-           ..
-
-       **-------**
-           ..
-
-       **output** : bool
-           Does all the spatial attribute match
 
 
+   :Returns:
 
+       bool
+           Whether all the spatial attributes match.
 
 
 
@@ -185,27 +187,22 @@ Module Contents
 .. py:function:: get_axis_shift_vector(flip_axes)
 
    
-
+   Return a shift vector for the given axes.
 
 
    :Parameters:
 
        **flip_axes** : list of str
            String containing the axis to flip.
-           Possible values are 'x', 'y', 'z'
-
-       **Returns**
-           ..
-
-       **-------**
-           ..
-
-       **flip_vector** : np.ndarray (3,)
-           Vector containing the axis to flip.
-           Possible values are -1, 1
+           Possible values are 'x', 'y', 'z'.
 
 
 
+   :Returns:
+
+       **shift_vector** : np.ndarray (3,)
+           Vector containing the axis to shift.
+           Possible values are -1, 0.
 
 
 
@@ -223,27 +220,22 @@ Module Contents
 .. py:function:: get_axis_flip_vector(flip_axes)
 
    
-
+   Return a flip vector for the given axes.
 
 
    :Parameters:
 
        **flip_axes** : list of str
            String containing the axis to flip.
-           Possible values are 'x', 'y', 'z'
+           Possible values are 'x', 'y', 'z'.
 
-       **Returns**
-           ..
 
-       **-------**
-           ..
+
+   :Returns:
 
        **flip_vector** : np.ndarray (3,)
            Vector containing the axis to flip.
-           Possible values are -1, 1
-
-
-
+           Possible values are -1, 1.
 
 
 
@@ -261,26 +253,22 @@ Module Contents
 .. py:function:: get_shift_vector(sft)
 
    
+   Return the shift vector for flipping a tractogram.
+
    When flipping a tractogram the shift vector is used to change the origin
    of the grid from the corner to the center of the grid.
-
 
    :Parameters:
 
        **sft** : StatefulTractogram
-           StatefulTractogram object
+           StatefulTractogram object.
 
-       **Returns**
-           ..
 
-       **-------**
-           ..
+
+   :Returns:
 
        **shift_vector** : ndarray
-           Shift vector to apply to the streamlines
-
-
-
+           Shift vector to apply to the streamlines.
 
 
 
@@ -298,31 +286,26 @@ Module Contents
 .. py:function:: flip_sft(sft, flip_axes)
 
    
-   Flip the streamlines in the StatefulTractogram according to the
-   flip_axes. Uses the spatial information to flip according to the center
-   of the grid.
+   Flip the streamlines in a StatefulTractogram.
 
+   Use the spatial information to flip according to the center
+   of the grid.
 
    :Parameters:
 
        **sft** : StatefulTractogram
-           StatefulTractogram to flip
+           StatefulTractogram to flip.
 
        **flip_axes** : list of str
            Axes to flip.
-           Possible values are 'x', 'y', 'z'
+           Possible values are 'x', 'y', 'z'.
 
-       **Returns**
-           ..
 
-       **-------**
-           ..
+
+   :Returns:
 
        **sft** : StatefulTractogram
-           StatefulTractogram with flipped axes
-
-
-
+           StatefulTractogram with flipped axes.
 
 
 
@@ -348,17 +331,12 @@ Module Contents
        **filepath** : str
            Path to the matrix file.
 
-       **Returns**
-           ..
 
-       **-------**
-           ..
+
+   :Returns:
 
        **matrix** : numpy.ndarray
            The matrix.
-
-
-
 
 
 
@@ -387,17 +365,15 @@ Module Contents
        **origin_str** : str
            String representing the origin.
 
-       **Returns**
-           ..
-
-       **-------**
-           ..
-
-       **output** : str
-           Space and Origin as Enums.
 
 
+   :Returns:
 
+       **space** : Space
+           Space enum value.
+
+       **origin** : Origin
+           Origin enum value.
 
 
 
@@ -445,11 +421,44 @@ Module Contents
 
 .. py:function:: append_generator_to_dict(gen, data)
 
+   
+   Append items yielded by a tractogram generator into data dict.
+
+
+   :Parameters:
+
+       **gen** : TractogramItem class instance or np.ndarray
+           Item produced by a tractogram generator. Structured entries include
+           per-point and per-streamline metadata.
+
+       **data** : dict
+           Accumulator containing ``strs`` (positions), ``dpv`` and ``dps``
+           dictionaries that will be extended in-place.
+
+
+
+   :Returns:
+
+       None
+           The function mutates ``data`` and returns ``None``.
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
 .. py:function:: verify_trx_dtype(trx, dict_dtype)
 
    
-   Verify if the dtype of the data in the trx is the same as the one in
-   the dict.
+   Verify that data dtypes in the trx match the given dict.
 
 
    :Parameters:
@@ -460,17 +469,12 @@ Module Contents
        **dict_dtype** : dict
            Dictionary containing all elements dtype to verify.
 
-       **Returns**
-           ..
 
-       **-------**
-           ..
 
-       **output** : bool
+   :Returns:
+
+       bool
            True if the dtype is the same, False otherwise.
-
-
-
 
 
 

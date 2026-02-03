@@ -3,6 +3,13 @@ trx.fetcher
 
 .. py:module:: trx.fetcher
 
+.. autoapi-nested-parse::
+
+   Test data management for downloading and verifying test assets.
+
+   ..
+       !! processed by numpydoc !!
+
 
 Attributes
 ----------
@@ -49,12 +56,16 @@ Module Contents
 .. py:function:: get_home()
 
    
-   Set a user-writeable file-system location to put files
+   Return a user-writeable file-system location to put files.
 
 
 
 
 
+   :Returns:
+
+       str
+           Path to the TRX home directory.
 
 
 
@@ -72,7 +83,7 @@ Module Contents
 .. py:function:: get_testing_files_dict()
 
    
-   Get dictionary linking zip file to their GitHub release URL & checksums.
+   Return dictionary linking zip file to their GitHub release URL and checksums.
 
    Assets are hosted under the v0.1.0 release of tee-ar-ex/trx-test-data.
    If URLs change, check TEST_DATA_API_URL to discover the latest asset
@@ -81,6 +92,10 @@ Module Contents
 
 
 
+   :Returns:
+
+       dict
+           Mapping of filenames to (url, md5, sha256) tuples.
 
 
 
@@ -98,12 +113,20 @@ Module Contents
 .. py:function:: md5sum(filename)
 
    
-   Compute one md5 checksum for a file
+   Compute the MD5 checksum of a file.
+
+
+   :Parameters:
+
+       **filename** : str
+           Path to file to hash.
 
 
 
+   :Returns:
 
-
+       str
+           Hexadecimal MD5 digest.
 
 
 
@@ -121,12 +144,20 @@ Module Contents
 .. py:function:: sha256sum(filename)
 
    
-   Compute one sha256 checksum for a file
+   Compute the SHA256 checksum of a file.
+
+
+   :Parameters:
+
+       **filename** : str
+           Path to file to hash.
 
 
 
+   :Returns:
 
-
+       str
+           Hexadecimal SHA256 digest.
 
 
 
@@ -144,16 +175,20 @@ Module Contents
 .. py:function:: fetch_data(files_dict, keys=None)
 
    
-   Downloads files to folder and checks their md5 checksums
+   Download files to folder and check their md5 checksums.
 
 
    :Parameters:
 
-       **files_dict** : dictionary
+       **files_dict** : dict
            For each file in `files_dict` the value should be (url, md5).
            The file will be downloaded from url, if the file does not already
            exist or if the file exists but the md5 checksum does not match.
-           Zip files are automatically unzipped and its content* are md5 checked.
+           Zip files are automatically unzipped and its contents are md5 checked.
+
+       **keys** : list of str or str or None, optional
+           Subset of keys from ``files_dict`` to download. When None, all
+           keys are downloaded.
 
 
 

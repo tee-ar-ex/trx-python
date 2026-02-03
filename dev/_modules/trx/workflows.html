@@ -411,6 +411,7 @@
                   
   <h1>Source code for trx.workflows</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;High-level processing workflows for tractogram operations.&quot;&quot;&quot;</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
@@ -458,6 +459,26 @@
     <span class="n">remove_invalid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">keep_invalid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a DSI-Studio TRK file to TRX, fixing space metadata.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    in_dsi_tractogram : str</span>
+<span class="sd">        Input DSI-Studio TRK path (optionally .trk.gz).</span>
+<span class="sd">    in_dsi_fa : str</span>
+<span class="sd">        FA image (.nii.gz) used as reference anatomy.</span>
+<span class="sd">    out_tractogram : str</span>
+<span class="sd">        Destination tractogram path; ``.trx`` will be written using TRX writer.</span>
+<span class="sd">    remove_invalid : bool, optional</span>
+<span class="sd">        Remove streamlines falling outside the bounding box. Defaults to True.</span>
+<span class="sd">    keep_invalid : bool, optional</span>
+<span class="sd">        Keep invalid streamlines even if outside bounding box. Defaults to False.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">        Writes the converted tractogram to disk.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">dipy_available</span><span class="p">:</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Dipy library is missing, scripts are not available.&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span>
@@ -514,6 +535,26 @@
     <span class="n">pos_dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">,</span>
     <span class="n">offsets_dtype</span><span class="o">=</span><span class="s2">&quot;uint32&quot;</span><span class="p">,</span>
 <span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert tractograms between formats with dtype control.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    in_tractogram : str</span>
+<span class="sd">        Input tractogram path.</span>
+<span class="sd">    out_tractogram : str</span>
+<span class="sd">        Output tractogram path.</span>
+<span class="sd">    reference : str</span>
+<span class="sd">        Reference anatomy required for formats without header affine.</span>
+<span class="sd">    pos_dtype : str, optional</span>
+<span class="sd">        Datatype for positions in TRX output.</span>
+<span class="sd">    offsets_dtype : str, optional</span>
+<span class="sd">        Datatype for offsets in TRX output.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">        Writes the converted tractogram to disk.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">dipy_available</span><span class="p">:</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Dipy library is missing, scripts are not available.&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span>
@@ -557,6 +598,20 @@
 <div class="viewcode-block" id="tractogram_simple_compare">
 <a class="viewcode-back" href="../../autoapi/trx/workflows/index.html#trx.workflows.tractogram_simple_compare">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">tractogram_simple_compare</span><span class="p">(</span><span class="n">in_tractograms</span><span class="p">,</span> <span class="n">reference</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compare tractograms against a reference and return a summary diff.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    in_tractograms : list of str</span>
+<span class="sd">        Paths to tractograms to compare.</span>
+<span class="sd">    reference : str</span>
+<span class="sd">        Reference tractogram path.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    dict</span>
+<span class="sd">        Dictionary capturing differences across tractograms.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">dipy_available</span><span class="p">:</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Dipy library is missing, scripts are not available.&quot;</span><span class="p">)</span>
         <span class="k">return</span>
@@ -612,6 +667,18 @@
 <div class="viewcode-block" id="verify_header_compatibility">
 <a class="viewcode-back" href="../../autoapi/trx/workflows/index.html#trx.workflows.verify_header_compatibility">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">verify_header_compatibility</span><span class="p">(</span><span class="n">in_files</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Verify that multiple tractogram headers are mutually compatible.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    in_files : list of str</span>
+<span class="sd">        Paths to tractogram or NIfTI files to compare.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">        Prints compatibility results to stdout.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">dipy_available</span><span class="p">:</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Dipy library is missing, scripts are not available.&quot;</span><span class="p">)</span>
         <span class="k">return</span>
@@ -636,6 +703,22 @@
 <div class="viewcode-block" id="tractogram_visualize_overlap">
 <a class="viewcode-back" href="../../autoapi/trx/workflows/index.html#trx.workflows.tractogram_visualize_overlap">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">tractogram_visualize_overlap</span><span class="p">(</span><span class="n">in_tractogram</span><span class="p">,</span> <span class="n">reference</span><span class="p">,</span> <span class="n">remove_invalid</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Visualize overlap between tractogram density maps in different spaces.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    in_tractogram : str</span>
+<span class="sd">        Input tractogram path.</span>
+<span class="sd">    reference : str</span>
+<span class="sd">        Reference anatomy (.nii or .nii.gz).</span>
+<span class="sd">    remove_invalid : bool, optional</span>
+<span class="sd">        Remove streamlines outside bounding box before visualization.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">        Opens interactive windows when fury is available.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">dipy_available</span><span class="p">:</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Dipy library is missing, scripts are not available.&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span>
@@ -704,6 +787,26 @@
     <span class="n">remove_identical_streamlines</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">precision</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
 <span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Validate a tractogram and optionally remove invalid/duplicate streamlines.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    in_tractogram : str</span>
+<span class="sd">        Input tractogram path.</span>
+<span class="sd">    reference : str</span>
+<span class="sd">        Reference anatomy for formats requiring it.</span>
+<span class="sd">    out_tractogram : str or None</span>
+<span class="sd">        Optional output path to save the cleaned tractogram.</span>
+<span class="sd">    remove_identical_streamlines : bool, optional</span>
+<span class="sd">        Remove duplicate streamlines based on hashing precision.</span>
+<span class="sd">    precision : int, optional</span>
+<span class="sd">        Number of decimals when hashing streamline points.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">        Prints warnings and optionally writes a cleaned tractogram.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">dipy_available</span><span class="p">:</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Dipy library is missing, scripts are not available.&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span>
@@ -784,7 +887,18 @@
 <div class="viewcode-block" id="_load_streamlines_from_csv">
 <a class="viewcode-back" href="../../autoapi/trx/workflows/index.html#trx.workflows._load_streamlines_from_csv">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">_load_streamlines_from_csv</span><span class="p">(</span><span class="n">positions_csv</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load streamlines from CSV file.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load streamlines from a CSV file.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    positions_csv : str</span>
+<span class="sd">        Path to CSV containing flattened coordinates.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    nibabel.streamlines.ArraySequence class instance</span>
+<span class="sd">        Streamlines reconstructed from the CSV rows.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">positions_csv</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
         <span class="n">data</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">reader</span><span class="p">)</span>
@@ -796,7 +910,20 @@
 <div class="viewcode-block" id="_load_streamlines_from_arrays">
 <a class="viewcode-back" href="../../autoapi/trx/workflows/index.html#trx.workflows._load_streamlines_from_arrays">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">_load_streamlines_from_arrays</span><span class="p">(</span><span class="n">positions</span><span class="p">,</span> <span class="n">offsets</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load streamlines from position and offset arrays.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load streamlines from position and offset arrays.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    positions : str</span>
+<span class="sd">        Path to positions array (.npy or text) shaped (N, 3).</span>
+<span class="sd">    offsets : str</span>
+<span class="sd">        Path to offsets array marking streamline boundaries.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    tuple</span>
+<span class="sd">        (ArraySequence, np.ndarray) of streamlines and offsets.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">positions</span> <span class="o">=</span> <span class="n">load_matrix_in_any_format</span><span class="p">(</span><span class="n">positions</span><span class="p">)</span>
     <span class="n">offsets</span> <span class="o">=</span> <span class="n">load_matrix_in_any_format</span><span class="p">(</span><span class="n">offsets</span><span class="p">)</span>
     <span class="n">lengths</span> <span class="o">=</span> <span class="n">tmm</span><span class="o">.</span><span class="n">_compute_lengths</span><span class="p">(</span><span class="n">offsets</span><span class="p">)</span>
@@ -813,7 +940,28 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">_apply_spatial_transforms</span><span class="p">(</span>
     <span class="n">streamlines</span><span class="p">,</span> <span class="n">reference</span><span class="p">,</span> <span class="n">space_str</span><span class="p">,</span> <span class="n">origin_str</span><span class="p">,</span> <span class="n">verify_invalid</span><span class="p">,</span> <span class="n">offsets</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Apply spatial transforms and verify streamlines.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Apply spatial transforms and optionally remove invalid streamlines.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    streamlines : ArraySequence class instance</span>
+<span class="sd">        Streamlines to transform.</span>
+<span class="sd">    reference : str</span>
+<span class="sd">        Reference anatomy used for space/origin.</span>
+<span class="sd">    space_str : str</span>
+<span class="sd">        Desired space (e.g., \&quot;rasmm\&quot;).</span>
+<span class="sd">    origin_str : str</span>
+<span class="sd">        Desired origin (e.g., \&quot;nifti\&quot;).</span>
+<span class="sd">    verify_invalid : bool</span>
+<span class="sd">        Remove streamlines outside bounding box when True.</span>
+<span class="sd">    offsets : np.ndarray</span>
+<span class="sd">        Offsets array to preserve after transforms.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ArraySequence class instance or None</span>
+<span class="sd">        Transformed streamlines, or None if dipy is unavailable.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">dipy_available</span><span class="p">:</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
             <span class="s2">&quot;Dipy library is missing, advanced options &quot;</span>
@@ -842,7 +990,17 @@
 <div class="viewcode-block" id="_write_header">
 <a class="viewcode-back" href="../../autoapi/trx/workflows/index.html#trx.workflows._write_header">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">_write_header</span><span class="p">(</span><span class="n">tmp_dir_name</span><span class="p">,</span> <span class="n">reference</span><span class="p">,</span> <span class="n">streamlines</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Write header file.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Write TRX header file to a temporary directory.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    tmp_dir_name : str</span>
+<span class="sd">        Temporary directory where header.json is written.</span>
+<span class="sd">    reference : str</span>
+<span class="sd">        Reference anatomy used to derive affine and dimensions.</span>
+<span class="sd">    streamlines : ArraySequence class instance</span>
+<span class="sd">        Streamlines whose counts populate the header.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">affine</span><span class="p">,</span> <span class="n">dimensions</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_reference_info_wrapper</span><span class="p">(</span><span class="n">reference</span><span class="p">)</span>
     <span class="n">header</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;DIMENSIONS&quot;</span><span class="p">:</span> <span class="n">dimensions</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
@@ -862,7 +1020,19 @@
 <div class="viewcode-block" id="_write_streamline_data">
 <a class="viewcode-back" href="../../autoapi/trx/workflows/index.html#trx.workflows._write_streamline_data">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">_write_streamline_data</span><span class="p">(</span><span class="n">tmp_dir_name</span><span class="p">,</span> <span class="n">streamlines</span><span class="p">,</span> <span class="n">positions_dtype</span><span class="p">,</span> <span class="n">offsets_dtype</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Write streamline position and offset data.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Write streamline position and offset data.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    tmp_dir_name : str</span>
+<span class="sd">        Temporary directory to store binary arrays.</span>
+<span class="sd">    streamlines : ArraySequence class instance</span>
+<span class="sd">        Streamlines to serialize.</span>
+<span class="sd">    positions_dtype : str</span>
+<span class="sd">        Datatype for positions array.</span>
+<span class="sd">    offsets_dtype : str</span>
+<span class="sd">        Datatype for offsets array.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">curr_filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp_dir_name</span><span class="p">,</span> <span class="s2">&quot;positions.3.</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">positions_dtype</span><span class="p">))</span>
     <span class="n">positions</span> <span class="o">=</span> <span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">positions_dtype</span><span class="p">)</span>
     <span class="n">tmm</span><span class="o">.</span><span class="n">_ensure_little_endian</span><span class="p">(</span><span class="n">positions</span><span class="p">)</span><span class="o">.</span><span class="n">tofile</span><span class="p">(</span><span class="n">curr_filename</span><span class="p">)</span>
@@ -876,7 +1046,18 @@
 <div class="viewcode-block" id="_normalize_dtype">
 <a class="viewcode-back" href="../../autoapi/trx/workflows/index.html#trx.workflows._normalize_dtype">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">_normalize_dtype</span><span class="p">(</span><span class="n">dtype_str</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Normalize dtype string format.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Normalize dtype string format for file naming.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dtype_str : str</span>
+<span class="sd">        Input dtype string (e.g., \&quot;bool\&quot;, \&quot;float32\&quot;).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">        Normalized dtype string where ``bool`` is mapped to ``bit``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="s2">&quot;bit&quot;</span> <span class="k">if</span> <span class="n">dtype_str</span> <span class="o">==</span> <span class="s2">&quot;bool&quot;</span> <span class="k">else</span> <span class="n">dtype_str</span></div>
 
 
@@ -884,7 +1065,24 @@
 <div class="viewcode-block" id="_write_data_array">
 <a class="viewcode-back" href="../../autoapi/trx/workflows/index.html#trx.workflows._write_data_array">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">_write_data_array</span><span class="p">(</span><span class="n">tmp_dir_name</span><span class="p">,</span> <span class="n">subdir_name</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">is_dpg</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Write data array to file.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Write a data array (dpv/dps/group/dpg) to disk.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    tmp_dir_name : str</span>
+<span class="sd">        Base temporary directory.</span>
+<span class="sd">    subdir_name : str</span>
+<span class="sd">        Subdirectory name (dpv, dps, groups, dpg).</span>
+<span class="sd">    args : tuple</span>
+<span class="sd">        Tuple describing the array path and dtype (and group when dpg).</span>
+<span class="sd">    is_dpg : bool, optional</span>
+<span class="sd">        True when writing data_per_group arrays.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">        Writes the array to disk.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">is_dpg</span><span class="p">:</span>
         <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp_dir_name</span><span class="p">,</span> <span class="s2">&quot;dpg&quot;</span><span class="p">,</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">curr_arr</span> <span class="o">=</span> <span class="n">load_matrix_in_any_format</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
@@ -937,7 +1135,44 @@
     <span class="n">groups</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">dpg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate TRX file from scratch using various input formats.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate TRX file from scratch using various input formats.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    reference : str</span>
+<span class="sd">        Reference anatomy used to set affine and dimensions.</span>
+<span class="sd">    out_tractogram : str</span>
+<span class="sd">        Output TRX filename.</span>
+<span class="sd">    positions_csv : str or bool, optional</span>
+<span class="sd">        CSV file containing streamline coordinates; False to disable.</span>
+<span class="sd">    positions : str or bool, optional</span>
+<span class="sd">        Binary positions array file; False to disable.</span>
+<span class="sd">    offsets : str or bool, optional</span>
+<span class="sd">        Offsets array file; False to disable.</span>
+<span class="sd">    positions_dtype : str, optional</span>
+<span class="sd">        Datatype for positions.</span>
+<span class="sd">    offsets_dtype : str, optional</span>
+<span class="sd">        Datatype for offsets.</span>
+<span class="sd">    space_str : str, optional</span>
+<span class="sd">        Desired space for generated streamlines.</span>
+<span class="sd">    origin_str : str, optional</span>
+<span class="sd">        Desired origin for generated streamlines.</span>
+<span class="sd">    verify_invalid : bool, optional</span>
+<span class="sd">        Remove invalid streamlines when True.</span>
+<span class="sd">    dpv : list or None, optional</span>
+<span class="sd">        Data per vertex definitions.</span>
+<span class="sd">    dps : list or None, optional</span>
+<span class="sd">        Data per streamline definitions.</span>
+<span class="sd">    groups : list or None, optional</span>
+<span class="sd">        Group definitions.</span>
+<span class="sd">    dpg : list or None, optional</span>
+<span class="sd">        Data per group definitions.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">        Writes the generated TRX file to disk.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">dpv</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">dpv</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">if</span> <span class="n">dps</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -995,6 +1230,22 @@
 <div class="viewcode-block" id="manipulate_trx_datatype">
 <a class="viewcode-back" href="../../autoapi/trx/workflows/index.html#trx.workflows.manipulate_trx_datatype">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">manipulate_trx_datatype</span><span class="p">(</span><span class="n">in_filename</span><span class="p">,</span> <span class="n">out_filename</span><span class="p">,</span> <span class="n">dict_dtype</span><span class="p">):</span>  <span class="c1"># noqa: C901</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Change dtype of positions, offsets, dpv, dps, dpg, and groups in a TRX.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    in_filename : str</span>
+<span class="sd">        Input TRX file path.</span>
+<span class="sd">    out_filename : str</span>
+<span class="sd">        Output TRX file path.</span>
+<span class="sd">    dict_dtype : dict</span>
+<span class="sd">        Mapping describing target dtypes for each data category.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">        Writes the converted TRX to ``out_filename``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">trx</span> <span class="o">=</span> <span class="n">tmm</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">in_filename</span><span class="p">)</span>
 
     <span class="c1"># For each key in dict_dtype, we create a new memmap with the new dtype</span>

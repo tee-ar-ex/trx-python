@@ -529,6 +529,28 @@
 
 <span class="sd">    If the data_per_point or data_per_streamline is not the same for all</span>
 <span class="sd">    tractograms, the data must be deleted first using the appropriate flags.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    in_tractograms : list of Path</span>
+<span class="sd">        Input tractogram files (.trk, .tck, .vtk, .fib, .dpy, .trx).</span>
+<span class="sd">    out_tractogram : Path</span>
+<span class="sd">        Output filename for the concatenated tractogram.</span>
+<span class="sd">    delete_dpv : bool, optional</span>
+<span class="sd">        Delete ``data_per_vertex`` if metadata differ across inputs.</span>
+<span class="sd">    delete_dps : bool, optional</span>
+<span class="sd">        Delete ``data_per_streamline`` if metadata differ across inputs.</span>
+<span class="sd">    delete_groups : bool, optional</span>
+<span class="sd">        Delete groups when metadata differ across inputs.</span>
+<span class="sd">    reference : Path or None, optional</span>
+<span class="sd">        Reference anatomy for tck/vtk/fib/dpy inputs.</span>
+<span class="sd">    force : bool, optional</span>
+<span class="sd">        Overwrite output if it already exists.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">        Writes the concatenated tractogram to ``out_tractogram``.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">_check_overwrite</span><span class="p">(</span><span class="n">out_tractogram</span><span class="p">,</span> <span class="n">force</span><span class="p">)</span>
 
@@ -608,6 +630,26 @@
 
 <span class="sd">    Supports conversion of .tck, .trk, .fib, .vtk, .trx and .dpy files.</span>
 <span class="sd">    TCK files always need a reference NIFTI file for conversion.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    in_tractogram : Path</span>
+<span class="sd">        Input tractogram file.</span>
+<span class="sd">    out_tractogram : Path</span>
+<span class="sd">        Output tractogram path.</span>
+<span class="sd">    reference : Path or None, optional</span>
+<span class="sd">        Reference anatomy required for some input formats.</span>
+<span class="sd">    positions_dtype : str, optional</span>
+<span class="sd">        Datatype for positions in TRX output.</span>
+<span class="sd">    offsets_dtype : str, optional</span>
+<span class="sd">        Datatype for offsets in TRX output.</span>
+<span class="sd">    force : bool, optional</span>
+<span class="sd">        Overwrite output if it already exists.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">        Writes the converted tractogram to disk.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">_check_overwrite</span><span class="p">(</span><span class="n">out_tractogram</span><span class="p">,</span> <span class="n">force</span><span class="p">)</span>
 
@@ -664,13 +706,27 @@
         <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="s2">&quot;--force&quot;</span><span class="p">,</span> <span class="s2">&quot;-f&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Force overwriting of output files.&quot;</span><span class="p">),</span>
     <span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fix DSI-Studio TRK files for compatibility.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a DSI-Studio TRK file to TRX or TRK and fix space metadata.</span>
 
-<span class="sd">    This script fixes DSI-Studio TRK files (unknown space/convention) to make</span>
-<span class="sd">    them compatible with TrackVis, MI-Brain, and Dipy Horizon.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    in_dsi_tractogram : Path</span>
+<span class="sd">        Input DSI-Studio tractogram (.trk or .trk.gz).</span>
+<span class="sd">    in_dsi_fa : Path</span>
+<span class="sd">        FA volume used as reference (.nii.gz).</span>
+<span class="sd">    out_tractogram : Path</span>
+<span class="sd">        Output tractogram path (.trx or .trk).</span>
+<span class="sd">    remove_invalid : bool, optional</span>
+<span class="sd">        Remove streamlines outside the bounding box. Defaults to False.</span>
+<span class="sd">    keep_invalid : bool, optional</span>
+<span class="sd">        Keep streamlines outside the bounding box. Defaults to False.</span>
+<span class="sd">    force : bool, optional</span>
+<span class="sd">        Overwrite output if it already exists.</span>
 
-<span class="sd">    [bold yellow]WARNING:[/bold yellow] This script is experimental. DSI-Studio evolves</span>
-<span class="sd">    quickly and results may vary depending on the data and DSI-Studio version.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">        Writes the converted tractogram to disk.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">_check_overwrite</span><span class="p">(</span><span class="n">out_tractogram</span><span class="p">,</span> <span class="n">force</span><span class="p">)</span>
 
@@ -796,15 +852,48 @@
         <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="s2">&quot;--force&quot;</span><span class="p">,</span> <span class="s2">&quot;-f&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Force overwriting of output files.&quot;</span><span class="p">),</span>
     <span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate TRX file from raw data files.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate a TRX file from raw data files.</span>
 
 <span class="sd">    Create a TRX file from CSV, TXT, or NPY files by specifying positions,</span>
 <span class="sd">    offsets, data_per_vertex, data_per_streamlines, groups, and data_per_group.</span>
 
-<span class="sd">    Each --dpv, --dps, --groups option requires FILE,DTYPE format.</span>
-<span class="sd">    Each --dpg option requires GROUP,FILE,DTYPE format.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    reference : Path</span>
+<span class="sd">        Reference anatomy (.nii or .nii.gz).</span>
+<span class="sd">    out_tractogram : Path</span>
+<span class="sd">        Output tractogram (.trk, .tck, .vtk, .fib, .dpy, .trx).</span>
+<span class="sd">    positions : Path or None, optional</span>
+<span class="sd">        Binary file with streamline coordinates (Nx3 .npy).</span>
+<span class="sd">    offsets : Path or None, optional</span>
+<span class="sd">        Binary file with streamline offsets (.npy).</span>
+<span class="sd">    positions_csv : Path or None, optional</span>
+<span class="sd">        CSV file with flattened streamline coordinates.</span>
+<span class="sd">    space : str, optional</span>
+<span class="sd">        Coordinate space. Non-default requires Dipy.</span>
+<span class="sd">    origin : str, optional</span>
+<span class="sd">        Coordinate origin. Non-default requires Dipy.</span>
+<span class="sd">    positions_dtype : str, optional</span>
+<span class="sd">        Datatype for positions.</span>
+<span class="sd">    offsets_dtype : str, optional</span>
+<span class="sd">        Datatype for offsets.</span>
+<span class="sd">    dpv : list of str or None, optional</span>
+<span class="sd">        Data per vertex entries as FILE,DTYPE pairs.</span>
+<span class="sd">    dps : list of str or None, optional</span>
+<span class="sd">        Data per streamline entries as FILE,DTYPE pairs.</span>
+<span class="sd">    groups : list of str or None, optional</span>
+<span class="sd">        Group entries as FILE,DTYPE pairs.</span>
+<span class="sd">    dpg : list of str or None, optional</span>
+<span class="sd">        Data per group entries as GROUP,FILE,DTYPE triplets.</span>
+<span class="sd">    verify_invalid : bool, optional</span>
+<span class="sd">        Verify positions are inside bounding box (requires Dipy).</span>
+<span class="sd">    force : bool, optional</span>
+<span class="sd">        Overwrite output if it already exists.</span>
 
-<span class="sd">    Valid DTYPEs: (u)int8, (u)int16, (u)int32, (u)int64, float16, float32, float64, bool</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">        Writes the generated tractogram to disk.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">_check_overwrite</span><span class="p">(</span><span class="n">out_tractogram</span><span class="p">,</span> <span class="n">force</span><span class="p">)</span>
 
@@ -954,7 +1043,31 @@
 <span class="sd">    Change the data types of positions, offsets, data_per_vertex,</span>
 <span class="sd">    data_per_streamline, groups, and data_per_group arrays.</span>
 
-<span class="sd">    Valid DTYPEs: (u)int8, (u)int16, (u)int32, (u)int64, float16, float32, float64, bool</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    in_tractogram : Path</span>
+<span class="sd">        Input TRX file.</span>
+<span class="sd">    out_tractogram : Path</span>
+<span class="sd">        Output TRX file.</span>
+<span class="sd">    positions_dtype : str or None, optional</span>
+<span class="sd">        Target dtype for positions (float16, float32, float64).</span>
+<span class="sd">    offsets_dtype : str or None, optional</span>
+<span class="sd">        Target dtype for offsets (uint32, uint64).</span>
+<span class="sd">    dpv : list of str or None, optional</span>
+<span class="sd">        Data per vertex dtype overrides as NAME,DTYPE pairs.</span>
+<span class="sd">    dps : list of str or None, optional</span>
+<span class="sd">        Data per streamline dtype overrides as NAME,DTYPE pairs.</span>
+<span class="sd">    groups : list of str or None, optional</span>
+<span class="sd">        Group dtype overrides as NAME,DTYPE pairs.</span>
+<span class="sd">    dpg : list of str or None, optional</span>
+<span class="sd">        Data per group dtype overrides as GROUP,NAME,DTYPE triplets.</span>
+<span class="sd">    force : bool, optional</span>
+<span class="sd">        Overwrite output if it already exists.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">        Writes the dtype-converted TRX file.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">_check_overwrite</span><span class="p">(</span><span class="n">out_tractogram</span><span class="p">,</span> <span class="n">force</span><span class="p">)</span>
 
@@ -1019,12 +1132,21 @@
         <span class="p">),</span>
     <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Simple comparison of tractograms by subtracting coordinates.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compare two tractograms and report basic differences.</span>
 
-<span class="sd">    Does not account for shuffling of streamlines. Simple A-B operations.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    in_tractogram1 : Path</span>
+<span class="sd">        First tractogram file.</span>
+<span class="sd">    in_tractogram2 : Path</span>
+<span class="sd">        Second tractogram file.</span>
+<span class="sd">    reference : Path or None, optional</span>
+<span class="sd">        Reference anatomy for formats requiring it.</span>
 
-<span class="sd">    Differences below 1e-3 are expected for affines with large rotation/scaling.</span>
-<span class="sd">    Differences below 1e-6 are expected for isotropic data with small rotation.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">        Prints comparison summary to stdout.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">ref</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">reference</span><span class="p">)</span> <span class="k">if</span> <span class="n">reference</span> <span class="k">else</span> <span class="kc">None</span>
     <span class="n">tractogram_simple_compare</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">in_tractogram1</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">in_tractogram2</span><span class="p">)],</span> <span class="n">ref</span><span class="p">)</span></div>
@@ -1075,13 +1197,27 @@
         <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="s2">&quot;--force&quot;</span><span class="p">,</span> <span class="s2">&quot;-f&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Force overwriting of output files.&quot;</span><span class="p">),</span>
     <span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Validate TRX file and remove invalid streamlines.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Validate a tractogram and optionally clean invalid/duplicate streamlines.</span>
 
-<span class="sd">    Removes streamlines that are out of the volume bounding box (in voxel space,</span>
-<span class="sd">    no negative coordinates or coordinates above volume dimensions).</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    in_tractogram : Path</span>
+<span class="sd">        Input tractogram (.trk, .tck, .vtk, .fib, .dpy, .trx).</span>
+<span class="sd">    out_tractogram : Path or None, optional</span>
+<span class="sd">        Optional output tractogram with invalid streamlines removed.</span>
+<span class="sd">    remove_identical : bool, optional</span>
+<span class="sd">        Remove duplicate streamlines based on hashing precision.</span>
+<span class="sd">    precision : int, optional</span>
+<span class="sd">        Number of decimals when hashing streamline points.</span>
+<span class="sd">    reference : Path or None, optional</span>
+<span class="sd">        Reference anatomy for formats requiring it.</span>
+<span class="sd">    force : bool, optional</span>
+<span class="sd">        Overwrite output if it already exists.</span>
 
-<span class="sd">    Also removes streamlines with single or no points.</span>
-<span class="sd">    Use --remove-identical to remove duplicate streamlines based on precision.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">        Prints validation summary and optionally writes cleaned output.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">out_tractogram</span><span class="p">:</span>
         <span class="n">_check_overwrite</span><span class="p">(</span><span class="n">out_tractogram</span><span class="p">,</span> <span class="n">force</span><span class="p">)</span>
@@ -1125,8 +1261,15 @@
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Compare spatial attributes of input files.</span>
 
-<span class="sd">    Compares all input files against the first one for compatibility of</span>
-<span class="sd">    spatial attributes: affine, dimensions, voxel sizes, and voxel order.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    in_files : list of Path</span>
+<span class="sd">        Files to compare (.trk, .trx, .nii, .nii.gz).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">        Prints compatibility results to stdout.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">verify_header_compatibility</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">in_files</span><span class="p">])</span></div>
 
@@ -1154,8 +1297,19 @@
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Display tractogram and density map with bounding box.</span>
 
-<span class="sd">    Shows the tractogram and its density map (computed from Dipy) in</span>
-<span class="sd">    rasmm, voxmm, and vox space with its bounding box.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    in_tractogram : Path</span>
+<span class="sd">        Input tractogram (.trk, .tck, .vtk, .fib, .dpy, .trx).</span>
+<span class="sd">    reference : Path</span>
+<span class="sd">        Reference anatomy (.nii or .nii.gz).</span>
+<span class="sd">    remove_invalid : bool, optional</span>
+<span class="sd">        Remove invalid streamlines to avoid density map crashes.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">        Opens visualization windows when fury is available.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">tractogram_visualize_overlap</span><span class="p">(</span>
         <span class="nb">str</span><span class="p">(</span><span class="n">in_tractogram</span><span class="p">),</span>

@@ -441,6 +441,7 @@
                   
   <section id="module-trx.trx_file_memmap">
 <span id="trx-trx-file-memmap"></span><h1>trx.trx_file_memmap<a class="headerlink" href="#module-trx.trx_file_memmap" title="Link to this heading">#</a></h1>
+<p>Core TrxFile class with memory-mapped data access.</p>
 <section id="attributes">
 <h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading">#</a></h2>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
@@ -457,7 +458,7 @@
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#trx.trx_file_memmap.TrxFile" title="trx.trx_file_memmap.TrxFile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TrxFile</span></code></a></p></td>
-<td><p>Core class of the TrxFile</p></td>
+<td><p>Core class of the TrxFile.</p></td>
 </tr>
 </tbody>
 </table>
@@ -557,7 +558,7 @@ as little-endian when reading/writing TRX files.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>dtype</strong><span class="classifier">np.dtype, str, or type</span></dt><dd><p>Input dtype specification (e.g., np.float32, ‘float32’, ‘&gt;f4’)</p>
+<dt><strong>dtype</strong><span class="classifier">np.dtype, str, or type</span></dt><dd><p>Input dtype specification (e.g., np.float32, ‘float32’, ‘&gt;f4’).</p>
 </dd>
 </dl>
 </dd>
@@ -578,7 +579,7 @@ returns the original dtype as endianness is not applicable.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>arr</strong><span class="classifier">np.ndarray</span></dt><dd><p>Input array</p>
+<dt><strong>arr</strong><span class="classifier">np.ndarray</span></dt><dd><p>Input array.</p>
 </dd>
 </dl>
 </dd>
@@ -818,48 +819,182 @@ streamline (nibabel convention).</p>
 <dt class="sig sig-object py" id="trx.trx_file_memmap._filter_empty_trx_files">
 <span class="sig-prename descclassname"><span class="pre">trx.trx_file_memmap.</span></span><span class="sig-name descname"><span class="pre">_filter_empty_trx_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trx_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#trx.trx_file_memmap.TrxFile" title="trx.trx_file_memmap.TrxFile"><span class="pre">TrxFile</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#trx.trx_file_memmap.TrxFile" title="trx.trx_file_memmap.TrxFile"><span class="pre">TrxFile</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/trx/trx_file_memmap.html#_filter_empty_trx_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.trx_file_memmap._filter_empty_trx_files" title="Link to this definition">#</a></dt>
 <dd><p>Remove empty TrxFiles from the list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>trx_list</strong><span class="classifier">list of TrxFile class instances</span></dt><dd><p>Collection of tractograms to filter.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>list of TrxFile class instances</dt><dd><p>Only entries containing at least one streamline.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="trx.trx_file_memmap._get_all_data_keys">
 <span class="sig-prename descclassname"><span class="pre">trx.trx_file_memmap.</span></span><span class="sig-name descname"><span class="pre">_get_all_data_keys</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trx_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#trx.trx_file_memmap.TrxFile" title="trx.trx_file_memmap.TrxFile"><span class="pre">TrxFile</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">set</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">set</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/trx/trx_file_memmap.html#_get_all_data_keys"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.trx_file_memmap._get_all_data_keys" title="Link to this definition">#</a></dt>
 <dd><p>Get all dps and dpv keys from the TrxFile list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>trx_list</strong><span class="classifier">list of TrxFile class instances</span></dt><dd><p>Collection of tractograms.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>tuple of set</dt><dd><p>Sets of <cite>data_per_streamline</cite> keys and <cite>data_per_vertex</cite> keys.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="trx.trx_file_memmap._check_space_attributes">
 <span class="sig-prename descclassname"><span class="pre">trx.trx_file_memmap.</span></span><span class="sig-name descname"><span class="pre">_check_space_attributes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trx_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#trx.trx_file_memmap.TrxFile" title="trx.trx_file_memmap.TrxFile"><span class="pre">TrxFile</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/trx/trx_file_memmap.html#_check_space_attributes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.trx_file_memmap._check_space_attributes" title="Link to this definition">#</a></dt>
 <dd><p>Verify that space attributes are consistent across TrxFiles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>trx_list</strong><span class="classifier">list of TrxFile</span></dt><dd><p>Tractograms to compare for affine and dimension consistency.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>ValueError</dt><dd><p>If voxel-to-RASMM matrices or dimensions differ.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="trx.trx_file_memmap._verify_dpv_coherence">
 <span class="sig-prename descclassname"><span class="pre">trx.trx_file_memmap.</span></span><span class="sig-name descname"><span class="pre">_verify_dpv_coherence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trx_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#trx.trx_file_memmap.TrxFile" title="trx.trx_file_memmap.TrxFile"><span class="pre">TrxFile</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_dpv</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">set</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_trx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#trx.trx_file_memmap.TrxFile" title="trx.trx_file_memmap.TrxFile"><span class="pre">TrxFile</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">delete_dpv</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/trx/trx_file_memmap.html#_verify_dpv_coherence"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.trx_file_memmap._verify_dpv_coherence" title="Link to this definition">#</a></dt>
 <dd><p>Verify dpv coherence across TrxFiles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>trx_list</strong><span class="classifier">list of TrxFile class instances</span></dt><dd><p>Tractograms being concatenated.</p>
+</dd>
+<dt><strong>all_dpv</strong><span class="classifier">set</span></dt><dd><p>Union of <cite>data_per_vertex</cite> keys across tractograms.</p>
+</dd>
+<dt><strong>ref_trx</strong><span class="classifier">TrxFile class instance</span></dt><dd><p>Reference tractogram for dtype/key checks.</p>
+</dd>
+<dt><strong>delete_dpv</strong><span class="classifier">bool</span></dt><dd><p>Drop mismatched dpv keys instead of raising when True.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>ValueError</dt><dd><p>If dpv keys or dtypes differ and <cite>delete_dpv</cite> is False.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="trx.trx_file_memmap._verify_dps_coherence">
 <span class="sig-prename descclassname"><span class="pre">trx.trx_file_memmap.</span></span><span class="sig-name descname"><span class="pre">_verify_dps_coherence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trx_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#trx.trx_file_memmap.TrxFile" title="trx.trx_file_memmap.TrxFile"><span class="pre">TrxFile</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_dps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">set</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_trx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#trx.trx_file_memmap.TrxFile" title="trx.trx_file_memmap.TrxFile"><span class="pre">TrxFile</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">delete_dps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/trx/trx_file_memmap.html#_verify_dps_coherence"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.trx_file_memmap._verify_dps_coherence" title="Link to this definition">#</a></dt>
 <dd><p>Verify dps coherence across TrxFiles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>trx_list</strong><span class="classifier">list of TrxFile class instances</span></dt><dd><p>Tractograms being concatenated.</p>
+</dd>
+<dt><strong>all_dps</strong><span class="classifier">set</span></dt><dd><p>Union of data_per_streamline keys across tractograms.</p>
+</dd>
+<dt><strong>ref_trx</strong><span class="classifier">TrxFile class instance</span></dt><dd><p>Reference tractogram for dtype/key checks.</p>
+</dd>
+<dt><strong>delete_dps</strong><span class="classifier">bool</span></dt><dd><p>Drop mismatched dps keys instead of raising when True.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>ValueError</dt><dd><p>If dps keys or dtypes differ and <cite>delete_dps</cite> is False.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="trx.trx_file_memmap._compute_groups_info">
 <span class="sig-prename descclassname"><span class="pre">trx.trx_file_memmap.</span></span><span class="sig-name descname"><span class="pre">_compute_groups_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trx_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#trx.trx_file_memmap.TrxFile" title="trx.trx_file_memmap.TrxFile"><span class="pre">TrxFile</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/trx/trx_file_memmap.html#_compute_groups_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.trx_file_memmap._compute_groups_info" title="Link to this definition">#</a></dt>
 <dd><p>Compute group length and dtype information.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>trx_list</strong><span class="classifier">list of TrxFile class instances</span></dt><dd><p>Tractograms being concatenated.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>tuple of dict</dt><dd><p>(group lengths, group dtypes) keyed by group name.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="trx.trx_file_memmap._create_new_trx_for_concatenation">
 <span class="sig-prename descclassname"><span class="pre">trx.trx_file_memmap.</span></span><span class="sig-name descname"><span class="pre">_create_new_trx_for_concatenation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trx_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#trx.trx_file_memmap.TrxFile" title="trx.trx_file_memmap.TrxFile"><span class="pre">TrxFile</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_trx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#trx.trx_file_memmap.TrxFile" title="trx.trx_file_memmap.TrxFile"><span class="pre">TrxFile</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">delete_dps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delete_dpv</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delete_groups</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#trx.trx_file_memmap.TrxFile" title="trx.trx_file_memmap.TrxFile"><span class="pre">TrxFile</span></a></span></span><a class="reference internal" href="../../../_modules/trx/trx_file_memmap.html#_create_new_trx_for_concatenation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.trx_file_memmap._create_new_trx_for_concatenation" title="Link to this definition">#</a></dt>
 <dd><p>Create a new TrxFile for concatenation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>trx_list</strong><span class="classifier">list of TrxFile class instances</span></dt><dd><p>Input tractograms to concatenate.</p>
+</dd>
+<dt><strong>ref_trx</strong><span class="classifier">TrxFile class instance</span></dt><dd><p>Reference tractogram for header/dtype template.</p>
+</dd>
+<dt><strong>delete_dps</strong><span class="classifier">bool</span></dt><dd><p>Drop <cite>data_per_streamline</cite> keys not shared.</p>
+</dd>
+<dt><strong>delete_dpv</strong><span class="classifier">bool</span></dt><dd><p>Drop <cite>data_per_vertex</cite> keys not shared.</p>
+</dd>
+<dt><strong>delete_groups</strong><span class="classifier">bool</span></dt><dd><p>Drop groups when metadata differ.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>TrxFile</dt><dd><p>Empty TRX ready to receive concatenated data.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="trx.trx_file_memmap._setup_groups_for_concatenation">
 <span class="sig-prename descclassname"><span class="pre">trx.trx_file_memmap.</span></span><span class="sig-name descname"><span class="pre">_setup_groups_for_concatenation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_trx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#trx.trx_file_memmap.TrxFile" title="trx.trx_file_memmap.TrxFile"><span class="pre">TrxFile</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">trx_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#trx.trx_file_memmap.TrxFile" title="trx.trx_file_memmap.TrxFile"><span class="pre">TrxFile</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_groups_len</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_groups_dtype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delete_groups</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/trx/trx_file_memmap.html#_setup_groups_for_concatenation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.trx_file_memmap._setup_groups_for_concatenation" title="Link to this definition">#</a></dt>
 <dd><p>Setup groups in the new TrxFile for concatenation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>new_trx</strong><span class="classifier">TrxFile class instance</span></dt><dd><p>Destination tractogram.</p>
+</dd>
+<dt><strong>trx_list</strong><span class="classifier">list of TrxFile class instances</span></dt><dd><p>Source tractograms.</p>
+</dd>
+<dt><strong>all_groups_len</strong><span class="classifier">dict</span></dt><dd><p>Mapping of group name to total length.</p>
+</dd>
+<dt><strong>all_groups_dtype</strong><span class="classifier">dict</span></dt><dd><p>Mapping of group name to dtype.</p>
+</dd>
+<dt><strong>delete_groups</strong><span class="classifier">bool</span></dt><dd><p>If True, skip creating group arrays.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -939,7 +1074,21 @@ Default is zipfile.ZIP_STORED.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="trx.trx_file_memmap.TrxFile">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">trx.trx_file_memmap.</span></span><span class="sig-name descname"><span class="pre">TrxFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nb_vertices</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nb_streamlines</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_as</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#trx.trx_file_memmap.TrxFile" title="trx.trx_file_memmap.TrxFile"><span class="pre">TrxFile</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">nibabel.nifti1.Nifti1Image</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">nibabel.streamlines.trk.TrkFile</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">nibabel.nifti1.Nifti1Header</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/trx_file_memmap.html#TrxFile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.trx_file_memmap.TrxFile" title="Link to this definition">#</a></dt>
-<dd><p>Core class of the TrxFile</p>
+<dd><p>Core class of the TrxFile.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>nb_vertices</strong><span class="classifier">int, optional</span></dt><dd><p>The number of vertices to use in the new TrxFile.</p>
+</dd>
+<dt><strong>nb_streamlines</strong><span class="classifier">int, optional</span></dt><dd><p>The number of streamlines in the new TrxFile.</p>
+</dd>
+<dt><strong>init_as</strong><span class="classifier">TrxFile class instance, optional</span></dt><dd><p>A TrxFile to use as reference.</p>
+</dd>
+<dt><strong>reference</strong><span class="classifier">str, dict, Nifti1Image, TrkFile, or Nifti1Header, optional</span></dt><dd><p>A Nifti or Trk file/obj to use as reference.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="trx.trx_file_memmap.TrxFile.header">
 <span class="sig-name descname"><span class="pre">header</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></span><a class="reference internal" href="../../../_modules/trx/trx_file_memmap.html#TrxFile.header"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.trx_file_memmap.TrxFile.header" title="Link to this definition">#</a></dt>
@@ -996,7 +1145,22 @@ Default is zipfile.ZIP_STORED.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="trx.trx_file_memmap.TrxFile.__deepcopy__">
 <span class="sig-name descname"><span class="pre">__deepcopy__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#trx.trx_file_memmap.TrxFile" title="trx.trx_file_memmap.TrxFile"><span class="pre">TrxFile</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/trx/trx_file_memmap.html#TrxFile.__deepcopy__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.trx_file_memmap.TrxFile.__deepcopy__" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Return a deep copy of the TrxFile.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>self</strong></dt><dd><p>TrxFile class instance.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>TrxFile class instance</dt><dd><p>Deep-copied instance.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="trx.trx_file_memmap.TrxFile.deepcopy">
@@ -1142,7 +1306,24 @@ TrxFile disk file/folder.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="trx.trx_file_memmap.TrxFile.append">
 <span class="sig-name descname"><span class="pre">append</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_buffer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/trx/trx_file_memmap.html#TrxFile.append"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.trx_file_memmap.TrxFile.append" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Append another tractogram-like object to this TRX.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>obj</strong><span class="classifier">TrxFile or Tractogram or StatefulTractogram class instance</span></dt><dd><p>Object whose streamlines and associated data will be appended.</p>
+</dd>
+<dt><strong>extra_buffer</strong><span class="classifier">int, optional</span></dt><dd><p>Additional preallocation buffer for streamlines (in count).</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>None</dt><dd><p>Mutates the current TrxFile in-place.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="trx.trx_file_memmap.TrxFile._append_trx">
@@ -1240,19 +1421,68 @@ number of streamlines. Use 0 for no buffer. Default is 0.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="trx.trx_file_memmap.TrxFile.from_sft">
 <span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">from_sft</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sft</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/trx_file_memmap.html#TrxFile.from_sft"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.trx_file_memmap.TrxFile.from_sft" title="Link to this definition">#</a></dt>
-<dd><p>Generate a valid TrxFile from a StatefulTractogram</p>
+<dd><p>Generate a TrxFile from a StatefulTractogram.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>sft</strong><span class="classifier">StatefulTractogram class instance</span></dt><dd><p>Input tractogram.</p>
+</dd>
+<dt><strong>dtype_dict</strong><span class="classifier">dict or None, optional</span></dt><dd><p>Mapping of target dtypes for positions, offsets, dpv, and dps. When
+None, uses <code class="docutils literal notranslate"><span class="pre">sft.dtype_dict</span></code> or sensible defaults.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>TrxFile</dt><dd><p>TRX representation of the StatefulTractogram.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="trx.trx_file_memmap.TrxFile.from_tractogram">
 <span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">from_tractogram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tractogram</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/trx_file_memmap.html#TrxFile.from_tractogram"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.trx_file_memmap.TrxFile.from_tractogram" title="Link to this definition">#</a></dt>
-<dd><p>Generate a valid TrxFile from a Nibabel Tractogram</p>
+<dd><p>Generate a TrxFile from a nibabel Tractogram.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>tractogram</strong><span class="classifier">nibabel.streamlines.Tractogram class instance</span></dt><dd><p>Input tractogram to convert.</p>
+</dd>
+<dt><strong>reference</strong><span class="classifier">object</span></dt><dd><p>Reference anatomy used to populate header fields.</p>
+</dd>
+<dt><strong>dtype_dict</strong><span class="classifier">dict or None, optional</span></dt><dd><p>Mapping of target dtypes for positions, offsets, dpv, and dps.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>TrxFile class instance</dt><dd><p>TRX representation of the tractogram.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="trx.trx_file_memmap.TrxFile.to_tractogram">
 <span class="sig-name descname"><span class="pre">to_tractogram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/trx_file_memmap.html#TrxFile.to_tractogram"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.trx_file_memmap.TrxFile.to_tractogram" title="Link to this definition">#</a></dt>
-<dd><p>Convert a TrxFile to a nibabel Tractogram (in RAM)</p>
+<dd><p>Convert this TrxFile to a nibabel Tractogram.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>resize</strong><span class="classifier">bool, optional</span></dt><dd><p>If True, resize to actual data length before conversion.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>nibabel.streamlines.Tractogram class instance</dt><dd><p>Tractogram containing streamlines and metadata.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -1279,13 +1509,35 @@ Default is False.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="trx.trx_file_memmap.TrxFile.to_sft">
 <span class="sig-name descname"><span class="pre">to_sft</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/trx_file_memmap.html#TrxFile.to_sft"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.trx_file_memmap.TrxFile.to_sft" title="Link to this definition">#</a></dt>
-<dd><p>Convert a TrxFile to a valid StatefulTractogram (in RAM)</p>
+<dd><p>Convert this TrxFile to a StatefulTractogram.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>resize</strong><span class="classifier">bool, optional</span></dt><dd><p>If True, resize to actual data length before conversion.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>StatefulTractogram class instance or None</dt><dd><p>StatefulTractogram object, or None if dipy is unavailable.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="trx.trx_file_memmap.TrxFile.close">
 <span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/trx/trx_file_memmap.html#TrxFile.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.trx_file_memmap.TrxFile.close" title="Link to this definition">#</a></dt>
-<dd><p>Cleanup on-disk temporary folder and initialize an empty TrxFile</p>
+<dd><p>Cleanup on-disk temporary folder and memmaps.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>None</dt><dd><p>Releases file handles and removes temporary storage.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>

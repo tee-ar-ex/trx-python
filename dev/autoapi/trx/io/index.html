@@ -441,6 +441,7 @@
                   
   <section id="module-trx.io">
 <span id="trx-io"></span><h1>trx.io<a class="headerlink" href="#module-trx.io" title="Link to this heading">#</a></h1>
+<p>Unified I/O interface for tractogram file formats.</p>
 <section id="attributes">
 <h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading">#</a></h2>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
@@ -457,16 +458,16 @@
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#trx.io.get_trx_tmp_dir" title="trx.io.get_trx_tmp_dir"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_trx_tmp_dir</span></code></a>()</p></td>
-<td><p></p></td>
+<td><p>Return a temporary directory honoring the <code class="docutils literal notranslate"><span class="pre">TRX_TMPDIR</span></code> setting.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#trx.io.load_sft_with_reference" title="trx.io.load_sft_with_reference"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_sft_with_reference</span></code></a>(filepath[, reference, bbox_check])</p></td>
-<td><p></p></td>
+<td><p>Load a tractogram as a StatefulTractogram with an explicit reference.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#trx.io.load" title="trx.io.load"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load</span></code></a>(tractogram_filename, reference)</p></td>
-<td><p></p></td>
+<td><p>Load a tractogram from disk and return a TRX or StatefulTractogram.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#trx.io.save" title="trx.io.save"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save</span></code></a>(tractogram_obj, tractogram_filename[, ...])</p></td>
-<td><p></p></td>
+<td><p>Save a tractogram object to disk.</p></td>
 </tr>
 </tbody>
 </table>
@@ -482,22 +483,103 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="trx.io.get_trx_tmp_dir">
 <span class="sig-prename descclassname"><span class="pre">trx.io.</span></span><span class="sig-name descname"><span class="pre">get_trx_tmp_dir</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/io.html#get_trx_tmp_dir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.io.get_trx_tmp_dir" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Return a temporary directory honoring the <code class="docutils literal notranslate"><span class="pre">TRX_TMPDIR</span></code> setting.</p>
+<p>When the <code class="docutils literal notranslate"><span class="pre">TRX_TMPDIR</span></code> environment variable is set to <code class="docutils literal notranslate"><span class="pre">&quot;use_working_dir&quot;</span></code>
+the current working directory is used. Otherwise, the value of
+<code class="docutils literal notranslate"><span class="pre">TRX_TMPDIR</span></code> is used directly. If the variable is not set, the system
+temporary directory is used.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>tempfile.TemporaryDirectory</dt><dd><p>Context-managed temporary directory placed according to the environment
+configuration.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="trx.io.load_sft_with_reference">
 <span class="sig-prename descclassname"><span class="pre">trx.io.</span></span><span class="sig-name descname"><span class="pre">load_sft_with_reference</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bbox_check</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/io.html#load_sft_with_reference"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.io.load_sft_with_reference" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Load a tractogram as a StatefulTractogram with an explicit reference.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>filepath</strong><span class="classifier">str</span></dt><dd><p>Path to the tractogram file (.trk, .tck, .fib, .vtk, .dpy).</p>
+</dd>
+<dt><strong>reference</strong><span class="classifier">str or nibabel.Nifti1Image, optional</span></dt><dd><p>Reference image used for formats without embedded affine information.
+Pass <code class="docutils literal notranslate"><span class="pre">&quot;same&quot;</span></code> to reuse the header embedded in .trk files.</p>
+</dd>
+<dt><strong>bbox_check</strong><span class="classifier">bool, optional</span></dt><dd><p>If True, validate that streamlines lie within the reference bounding
+box. Defaults to True.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>StatefulTractogram or None</dt><dd><p>Loaded tractogram. Returns <code class="docutils literal notranslate"><span class="pre">None</span></code> when <code class="docutils literal notranslate"><span class="pre">dipy</span></code> is unavailable.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>IOError</dt><dd><p>If the file format is unsupported or a required reference is missing.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="trx.io.load">
 <span class="sig-prename descclassname"><span class="pre">trx.io.</span></span><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tractogram_filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/io.html#load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.io.load" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Load a tractogram from disk and return a TRX or StatefulTractogram.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>tractogram_filename</strong><span class="classifier">str</span></dt><dd><p>Path to the input tractogram. TRX directories are supported.</p>
+</dd>
+<dt><strong>reference</strong><span class="classifier">str or nibabel.Nifti1Image</span></dt><dd><p>Reference image used for formats without embedded affine information.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>TrxFile or StatefulTractogram</dt><dd><p>TRX file handle for <code class="docutils literal notranslate"><span class="pre">.trx</span></code> inputs, otherwise a StatefulTractogram.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="trx.io.save">
 <span class="sig-prename descclassname"><span class="pre">trx.io.</span></span><span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tractogram_obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tractogram_filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bbox_valid_check</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/io.html#save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.io.save" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Save a tractogram object to disk.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>tractogram_obj</strong><span class="classifier">TrxFile or StatefulTractogram</span></dt><dd><p>Tractogram to persist. Non-TRX inputs are converted to StatefulTractogram
+before saving to non-TRX formats.</p>
+</dd>
+<dt><strong>tractogram_filename</strong><span class="classifier">str</span></dt><dd><p>Destination file name. <code class="docutils literal notranslate"><span class="pre">.trx</span></code> will be saved using the TRX writer; all
+other extensions are handled by <code class="docutils literal notranslate"><span class="pre">dipy.save_tractogram</span></code>.</p>
+</dd>
+<dt><strong>bbox_valid_check</strong><span class="classifier">bool, optional</span></dt><dd><p>If True, validate that streamlines lie within the reference bounding
+box when saving non-TRX formats. Defaults to False.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>None</dt><dd><p>The function writes to disk and returns <code class="docutils literal notranslate"><span class="pre">None</span></code>. Returns <code class="docutils literal notranslate"><span class="pre">None</span></code>
+immediately when <code class="docutils literal notranslate"><span class="pre">dipy</span></code> is unavailable.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 </section>

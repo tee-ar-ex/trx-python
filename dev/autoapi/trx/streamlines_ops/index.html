@@ -441,6 +441,7 @@
                   
   <section id="module-trx.streamlines_ops">
 <span id="trx-streamlines-ops"></span><h1>trx.streamlines_ops<a class="headerlink" href="#module-trx.streamlines_ops" title="Link to this heading">#</a></h1>
+<p>Set operations on streamlines with precision-based matching.</p>
 <section id="attributes">
 <h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading">#</a></h2>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
@@ -460,22 +461,22 @@
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#trx.streamlines_ops.intersection" title="trx.streamlines_ops.intersection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">intersection</span></code></a>(left, right)</p></td>
-<td><p>Intersection of two streamlines dict (see hash_streamlines)</p></td>
+<td><p>Return the intersection of two streamline hash dictionaries.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#trx.streamlines_ops.difference" title="trx.streamlines_ops.difference"><code class="xref py py-obj docutils literal notranslate"><span class="pre">difference</span></code></a>(left, right)</p></td>
-<td><p>Difference of two streamlines dict (see hash_streamlines)</p></td>
+<td><p>Return the difference of two streamline hash dictionaries.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#trx.streamlines_ops.union" title="trx.streamlines_ops.union"><code class="xref py py-obj docutils literal notranslate"><span class="pre">union</span></code></a>(left, right)</p></td>
-<td><p>Union of two streamlines dict (see hash_streamlines)</p></td>
+<td><p>Return the union of two streamline hash dictionaries.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#trx.streamlines_ops.get_streamline_key" title="trx.streamlines_ops.get_streamline_key"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_streamline_key</span></code></a>(streamline[, precision])</p></td>
-<td><p>Produces a key using a hash from a streamline using a few points only and</p></td>
+<td><p>Produce a hash key from a streamline using a few points.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#trx.streamlines_ops.hash_streamlines" title="trx.streamlines_ops.hash_streamlines"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hash_streamlines</span></code></a>(streamlines[, start_index, precision])</p></td>
-<td><p>Produces a dict from streamlines</p></td>
+<td><p>Produce a dict from streamlines.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#trx.streamlines_ops.perform_streamlines_operation" title="trx.streamlines_ops.perform_streamlines_operation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">perform_streamlines_operation</span></code></a>(operation, streamlines)</p></td>
-<td><p>Performs an operation on a list of list of streamlines</p></td>
+<td><p>Perform an operation on a list of list of streamlines.</p></td>
 </tr>
 </tbody>
 </table>
@@ -496,32 +497,80 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="trx.streamlines_ops.intersection">
 <span class="sig-prename descclassname"><span class="pre">trx.streamlines_ops.</span></span><span class="sig-name descname"><span class="pre">intersection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">left</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">right</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/streamlines_ops.html#intersection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.streamlines_ops.intersection" title="Link to this definition">#</a></dt>
-<dd><p>Intersection of two streamlines dict (see hash_streamlines)</p>
+<dd><p>Return the intersection of two streamline hash dictionaries.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>left</strong><span class="classifier">dict</span></dt><dd><p>Hash dictionary returned by <a class="reference internal" href="#trx.streamlines_ops.hash_streamlines" title="trx.streamlines_ops.hash_streamlines"><code class="xref py py-func docutils literal notranslate"><span class="pre">hash_streamlines()</span></code></a>.</p>
+</dd>
+<dt><strong>right</strong><span class="classifier">dict</span></dt><dd><p>Hash dictionary returned by <a class="reference internal" href="#trx.streamlines_ops.hash_streamlines" title="trx.streamlines_ops.hash_streamlines"><code class="xref py py-func docutils literal notranslate"><span class="pre">hash_streamlines()</span></code></a>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>dict</dt><dd><p>Dictionary containing only keys present in both inputs.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="trx.streamlines_ops.difference">
 <span class="sig-prename descclassname"><span class="pre">trx.streamlines_ops.</span></span><span class="sig-name descname"><span class="pre">difference</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">left</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">right</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/streamlines_ops.html#difference"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.streamlines_ops.difference" title="Link to this definition">#</a></dt>
-<dd><p>Difference of two streamlines dict (see hash_streamlines)</p>
+<dd><p>Return the difference of two streamline hash dictionaries.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>left</strong><span class="classifier">dict</span></dt><dd><p>Hash dictionary returned by <a class="reference internal" href="#trx.streamlines_ops.hash_streamlines" title="trx.streamlines_ops.hash_streamlines"><code class="xref py py-func docutils literal notranslate"><span class="pre">hash_streamlines()</span></code></a>.</p>
+</dd>
+<dt><strong>right</strong><span class="classifier">dict</span></dt><dd><p>Hash dictionary returned by <a class="reference internal" href="#trx.streamlines_ops.hash_streamlines" title="trx.streamlines_ops.hash_streamlines"><code class="xref py py-func docutils literal notranslate"><span class="pre">hash_streamlines()</span></code></a>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>dict</dt><dd><p>Dictionary containing keys present in <code class="docutils literal notranslate"><span class="pre">left</span></code> but not in <code class="docutils literal notranslate"><span class="pre">right</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="trx.streamlines_ops.union">
 <span class="sig-prename descclassname"><span class="pre">trx.streamlines_ops.</span></span><span class="sig-name descname"><span class="pre">union</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">left</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">right</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/streamlines_ops.html#union"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.streamlines_ops.union" title="Link to this definition">#</a></dt>
-<dd><p>Union of two streamlines dict (see hash_streamlines)</p>
+<dd><p>Return the union of two streamline hash dictionaries.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>left</strong><span class="classifier">dict</span></dt><dd><p>Hash dictionary returned by <a class="reference internal" href="#trx.streamlines_ops.hash_streamlines" title="trx.streamlines_ops.hash_streamlines"><code class="xref py py-func docutils literal notranslate"><span class="pre">hash_streamlines()</span></code></a>.</p>
+</dd>
+<dt><strong>right</strong><span class="classifier">dict</span></dt><dd><p>Hash dictionary returned by <a class="reference internal" href="#trx.streamlines_ops.hash_streamlines" title="trx.streamlines_ops.hash_streamlines"><code class="xref py py-func docutils literal notranslate"><span class="pre">hash_streamlines()</span></code></a>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>dict</dt><dd><p>Dictionary containing all keys from both inputs. Values from <code class="docutils literal notranslate"><span class="pre">left</span></code>
+overwrite those from <code class="docutils literal notranslate"><span class="pre">right</span></code> when keys overlap.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="trx.streamlines_ops.get_streamline_key">
 <span class="sig-prename descclassname"><span class="pre">trx.streamlines_ops.</span></span><span class="sig-name descname"><span class="pre">get_streamline_key</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">streamline</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precision</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/streamlines_ops.html#get_streamline_key"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.streamlines_ops.get_streamline_key" title="Link to this definition">#</a></dt>
-<dd><p>Produces a key using a hash from a streamline using a few points only and
-the desired precision</p>
+<dd><p>Produce a hash key from a streamline using a few points.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>streamlines: ndarray</strong></dt><dd><p>A single streamline (N,3)</p>
+<dt><strong>streamline</strong><span class="classifier">ndarray</span></dt><dd><p>A single streamline (N, 3).</p>
 </dd>
-<dt><strong>precision: int, optional</strong></dt><dd><p>The number of decimals to keep when hashing the points of the
+<dt><strong>precision</strong><span class="classifier">int, optional</span></dt><dd><p>The number of decimals to keep when hashing the points of the
 streamlines. Allows a soft comparison of streamlines. If None, no
 rounding is performed.</p>
 </dd>
@@ -529,7 +578,8 @@ rounding is performed.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt>Value of the hash of the first/last MIN_NB_POINTS points of the streamline.</dt><dd></dd>
+<dt>bytes</dt><dd><p>Hash of the first/last MIN_NB_POINTS points of the streamline.</p>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -538,17 +588,17 @@ rounding is performed.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="trx.streamlines_ops.hash_streamlines">
 <span class="sig-prename descclassname"><span class="pre">trx.streamlines_ops.</span></span><span class="sig-name descname"><span class="pre">hash_streamlines</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">streamlines</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precision</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/streamlines_ops.html#hash_streamlines"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.streamlines_ops.hash_streamlines" title="Link to this definition">#</a></dt>
-<dd><p>Produces a dict from streamlines</p>
-<p>Produces a dict from streamlines by using the points as keys and the
+<dd><p>Produce a dict from streamlines.</p>
+<p>Produce a dict from streamlines by using the points as keys and the
 indices of the streamlines as values.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>streamlines: list of ndarray</strong></dt><dd><p>The list of streamlines used to produce the dict.</p>
+<dt><strong>streamlines</strong><span class="classifier">list of ndarray</span></dt><dd><p>The list of streamlines used to produce the dict.</p>
 </dd>
-<dt><strong>start_index: int, optional</strong></dt><dd><p>The index of the first streamline. 0 by default.</p>
+<dt><strong>start_index</strong><span class="classifier">int, optional</span></dt><dd><p>The index of the first streamline. 0 by default.</p>
 </dd>
-<dt><strong>precision: int, optional</strong></dt><dd><p>The number of decimals to keep when hashing the points of the
+<dt><strong>precision</strong><span class="classifier">int, optional</span></dt><dd><p>The number of decimals to keep when hashing the points of the
 streamlines. Allows a soft comparison of streamlines. If None, no
 rounding is performed.</p>
 </dd>
@@ -556,8 +606,9 @@ rounding is performed.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt>A dict where the keys are streamline points and the values are indices</dt><dd></dd>
-<dt>starting at start_index.</dt><dd></dd>
+<dt>dict</dt><dd><p>A dict where the keys are streamline points and the values are
+indices starting at start_index.</p>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -566,33 +617,33 @@ rounding is performed.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="trx.streamlines_ops.perform_streamlines_operation">
 <span class="sig-prename descclassname"><span class="pre">trx.streamlines_ops.</span></span><span class="sig-name descname"><span class="pre">perform_streamlines_operation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">operation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">streamlines</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precision</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/streamlines_ops.html#perform_streamlines_operation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.streamlines_ops.perform_streamlines_operation" title="Link to this definition">#</a></dt>
-<dd><p>Performs an operation on a list of list of streamlines</p>
+<dd><p>Perform an operation on a list of list of streamlines.</p>
 <p>Given a list of list of streamlines, this function applies the operation
 to the first two lists of streamlines. The result in then used recursively
 with the third, fourth, etc. lists of streamlines.</p>
 <p>A valid operation is any function that takes two streamlines dict as input
 and produces a new streamlines dict (see hash_streamlines). Union,
 difference, and intersection are valid examples of operations.</p>
-<dl class="field-list simple">
+<dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>operation: callable</strong></dt><dd><p>A callable that takes two streamlines dicts as inputs and preduces a
+<dt><strong>operation</strong><span class="classifier">callable</span></dt><dd><p>A callable that takes two streamlines dicts as inputs and produces a
 new streamline dict.</p>
 </dd>
-<dt><strong>streamlines: list of list of streamlines</strong></dt><dd><p>The streamlines used in the operation.</p>
+<dt><strong>streamlines</strong><span class="classifier">list of list of streamlines</span></dt><dd><p>The streamlines used in the operation.</p>
 </dd>
-<dt><strong>precision: int, optional</strong></dt><dd><p>The number of decimals to keep when hashing the points of the
+<dt><strong>precision</strong><span class="classifier">int, optional</span></dt><dd><p>The number of decimals to keep when hashing the points of the
 streamlines. Allows a soft comparison of streamlines. If None, no
 rounding is performed.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>streamlines: list of <cite>nib.streamline.ArraySequence</cite></dt><dd><p>The streamlines obtained after performing the operation on all the
+<dd class="field-even"><dl>
+<dt><strong>streamlines</strong><span class="classifier">list of <cite>nib.streamline.ArraySequence</cite></span></dt><dd><p>The streamlines obtained after performing the operation on all the
 input streamlines.</p>
 </dd>
-<dt>indices: np.ndarray</dt><dd><p>The indices of the streamlines that are used in the output.</p>
+<dt><strong>indices</strong><span class="classifier">np.ndarray</span></dt><dd><p>The indices of the streamlines that are used in the output.</p>
 </dd>
 </dl>
 </dd>

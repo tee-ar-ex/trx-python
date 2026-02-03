@@ -441,6 +441,7 @@
                   
   <section id="module-trx.fetcher">
 <span id="trx-fetcher"></span><h1>trx.fetcher<a class="headerlink" href="#module-trx.fetcher" title="Link to this heading">#</a></h1>
+<p>Test data management for downloading and verifying test assets.</p>
 <section id="attributes">
 <h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading">#</a></h2>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
@@ -466,19 +467,19 @@
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#trx.fetcher.get_home" title="trx.fetcher.get_home"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_home</span></code></a>()</p></td>
-<td><p>Set a user-writeable file-system location to put files</p></td>
+<td><p>Return a user-writeable file-system location to put files.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#trx.fetcher.get_testing_files_dict" title="trx.fetcher.get_testing_files_dict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_testing_files_dict</span></code></a>()</p></td>
-<td><p>Get dictionary linking zip file to their GitHub release URL &amp; checksums.</p></td>
+<td><p>Return dictionary linking zip file to their GitHub release URL and checksums.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#trx.fetcher.md5sum" title="trx.fetcher.md5sum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">md5sum</span></code></a>(filename)</p></td>
-<td><p>Compute one md5 checksum for a file</p></td>
+<td><p>Compute the MD5 checksum of a file.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#trx.fetcher.sha256sum" title="trx.fetcher.sha256sum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sha256sum</span></code></a>(filename)</p></td>
-<td><p>Compute one sha256 checksum for a file</p></td>
+<td><p>Compute the SHA256 checksum of a file.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#trx.fetcher.fetch_data" title="trx.fetcher.fetch_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fetch_data</span></code></a>(files_dict[, keys])</p></td>
-<td><p>Downloads files to folder and checks their md5 checksums</p></td>
+<td><p>Download files to folder and check their md5 checksums.</p></td>
 </tr>
 </tbody>
 </table>
@@ -509,41 +510,88 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="trx.fetcher.get_home">
 <span class="sig-prename descclassname"><span class="pre">trx.fetcher.</span></span><span class="sig-name descname"><span class="pre">get_home</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/fetcher.html#get_home"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.fetcher.get_home" title="Link to this definition">#</a></dt>
-<dd><p>Set a user-writeable file-system location to put files</p>
+<dd><p>Return a user-writeable file-system location to put files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>str</dt><dd><p>Path to the TRX home directory.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="trx.fetcher.get_testing_files_dict">
 <span class="sig-prename descclassname"><span class="pre">trx.fetcher.</span></span><span class="sig-name descname"><span class="pre">get_testing_files_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/fetcher.html#get_testing_files_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.fetcher.get_testing_files_dict" title="Link to this definition">#</a></dt>
-<dd><p>Get dictionary linking zip file to their GitHub release URL &amp; checksums.</p>
+<dd><p>Return dictionary linking zip file to their GitHub release URL and checksums.</p>
 <p>Assets are hosted under the v0.1.0 release of tee-ar-ex/trx-test-data.
 If URLs change, check TEST_DATA_API_URL to discover the latest asset
 locations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>dict</dt><dd><p>Mapping of filenames to (url, md5, sha256) tuples.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="trx.fetcher.md5sum">
 <span class="sig-prename descclassname"><span class="pre">trx.fetcher.</span></span><span class="sig-name descname"><span class="pre">md5sum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/fetcher.html#md5sum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.fetcher.md5sum" title="Link to this definition">#</a></dt>
-<dd><p>Compute one md5 checksum for a file</p>
+<dd><p>Compute the MD5 checksum of a file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>filename</strong><span class="classifier">str</span></dt><dd><p>Path to file to hash.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>str</dt><dd><p>Hexadecimal MD5 digest.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="trx.fetcher.sha256sum">
 <span class="sig-prename descclassname"><span class="pre">trx.fetcher.</span></span><span class="sig-name descname"><span class="pre">sha256sum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/fetcher.html#sha256sum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.fetcher.sha256sum" title="Link to this definition">#</a></dt>
-<dd><p>Compute one sha256 checksum for a file</p>
+<dd><p>Compute the SHA256 checksum of a file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>filename</strong><span class="classifier">str</span></dt><dd><p>Path to file to hash.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>str</dt><dd><p>Hexadecimal SHA256 digest.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="trx.fetcher.fetch_data">
 <span class="sig-prename descclassname"><span class="pre">trx.fetcher.</span></span><span class="sig-name descname"><span class="pre">fetch_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">files_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/fetcher.html#fetch_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.fetcher.fetch_data" title="Link to this definition">#</a></dt>
-<dd><p>Downloads files to folder and checks their md5 checksums</p>
+<dd><p>Download files to folder and check their md5 checksums.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>files_dict</strong><span class="classifier">dictionary</span></dt><dd><p>For each file in <cite>files_dict</cite> the value should be (url, md5).
+<dt><strong>files_dict</strong><span class="classifier">dict</span></dt><dd><p>For each file in <cite>files_dict</cite> the value should be (url, md5).
 The file will be downloaded from url, if the file does not already
 exist or if the file exists but the md5 checksum does not match.
-Zip files are automatically unzipped and its content* are md5 checked.</p>
+Zip files are automatically unzipped and its contents are md5 checked.</p>
+</dd>
+<dt><strong>keys</strong><span class="classifier">list of str or str or None, optional</span></dt><dd><p>Subset of keys from <code class="docutils literal notranslate"><span class="pre">files_dict</span></code> to download. When None, all
+keys are downloaded.</p>
 </dd>
 </dl>
 </dd>

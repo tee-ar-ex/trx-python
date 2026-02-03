@@ -411,6 +411,7 @@
                   
   <h1>Source code for trx.fetcher</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;Test data management for downloading and verifying test assets.&quot;&quot;&quot;</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">hashlib</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
@@ -445,7 +446,13 @@
 <div class="viewcode-block" id="get_home">
 <a class="viewcode-back" href="../../autoapi/trx/fetcher/index.html#trx.fetcher.get_home">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_home</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set a user-writeable file-system location to put files&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a user-writeable file-system location to put files.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">        Path to the TRX home directory.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="s2">&quot;TRX_HOME&quot;</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
         <span class="n">trx_home</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;TRX_HOME&quot;</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
@@ -457,11 +464,16 @@
 <div class="viewcode-block" id="get_testing_files_dict">
 <a class="viewcode-back" href="../../autoapi/trx/fetcher/index.html#trx.fetcher.get_testing_files_dict">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_testing_files_dict</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get dictionary linking zip file to their GitHub release URL &amp; checksums.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return dictionary linking zip file to their GitHub release URL and checksums.</span>
 
 <span class="sd">    Assets are hosted under the v0.1.0 release of tee-ar-ex/trx-test-data.</span>
 <span class="sd">    If URLs change, check TEST_DATA_API_URL to discover the latest asset</span>
 <span class="sd">    locations.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    dict</span>
+<span class="sd">        Mapping of filenames to (url, md5, sha256) tuples.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="p">{</span>
         <span class="s2">&quot;DSI.zip&quot;</span><span class="p">:</span> <span class="p">(</span>
@@ -491,7 +503,18 @@
 <div class="viewcode-block" id="md5sum">
 <a class="viewcode-back" href="../../autoapi/trx/fetcher/index.html#trx.fetcher.md5sum">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">md5sum</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute one md5 checksum for a file&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the MD5 checksum of a file.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filename : str</span>
+<span class="sd">        Path to file to hash.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">        Hexadecimal MD5 digest.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">h</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">()</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="nb">iter</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">128</span> <span class="o">*</span> <span class="n">h</span><span class="o">.</span><span class="n">block_size</span><span class="p">),</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
@@ -503,7 +526,18 @@
 <div class="viewcode-block" id="sha256sum">
 <a class="viewcode-back" href="../../autoapi/trx/fetcher/index.html#trx.fetcher.sha256sum">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">sha256sum</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute one sha256 checksum for a file&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the SHA256 checksum of a file.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filename : str</span>
+<span class="sd">        Path to file to hash.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">        Hexadecimal SHA256 digest.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">h</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">()</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="nb">iter</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">128</span> <span class="o">*</span> <span class="n">h</span><span class="o">.</span><span class="n">block_size</span><span class="p">),</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
@@ -515,15 +549,18 @@
 <div class="viewcode-block" id="fetch_data">
 <a class="viewcode-back" href="../../autoapi/trx/fetcher/index.html#trx.fetcher.fetch_data">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">fetch_data</span><span class="p">(</span><span class="n">files_dict</span><span class="p">,</span> <span class="n">keys</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>  <span class="c1"># noqa: C901</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Downloads files to folder and checks their md5 checksums</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Download files to folder and check their md5 checksums.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    files_dict : dictionary</span>
+<span class="sd">    files_dict : dict</span>
 <span class="sd">        For each file in `files_dict` the value should be (url, md5).</span>
 <span class="sd">        The file will be downloaded from url, if the file does not already</span>
 <span class="sd">        exist or if the file exists but the md5 checksum does not match.</span>
-<span class="sd">        Zip files are automatically unzipped and its content* are md5 checked.</span>
+<span class="sd">        Zip files are automatically unzipped and its contents are md5 checked.</span>
+<span class="sd">    keys : list of str or str or None, optional</span>
+<span class="sd">        Subset of keys from ``files_dict`` to download. When None, all</span>
+<span class="sd">        keys are downloaded.</span>
 
 <span class="sd">    Raises</span>
 <span class="sd">    ------</span>

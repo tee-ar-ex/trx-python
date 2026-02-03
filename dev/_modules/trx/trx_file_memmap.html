@@ -411,6 +411,7 @@
                   
   <h1>Source code for trx.trx_file_memmap</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;Core TrxFile class with memory-mapped data access.&quot;&quot;&quot;</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
@@ -460,7 +461,7 @@
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    dtype : np.dtype, str, or type</span>
-<span class="sd">        Input dtype specification (e.g., np.float32, &#39;float32&#39;, &#39;&gt;f4&#39;)</span>
+<span class="sd">        Input dtype specification (e.g., np.float32, &#39;float32&#39;, &#39;&gt;f4&#39;).</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -488,7 +489,7 @@
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    arr : np.ndarray</span>
-<span class="sd">        Input array</span>
+<span class="sd">        Input array.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -531,6 +532,18 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">is_sorted</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return True if array is sorted non-decreasing.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        a : np.ndarray</span>
+<span class="sd">            1D array of numeric offsets.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            True when ``a`` is monotonically non-decreasing.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">a</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">is_sorted</span><span class="p">(</span><span class="n">nib_offsets</span><span class="p">):</span>
@@ -914,7 +927,18 @@
 <div class="viewcode-block" id="_filter_empty_trx_files">
 <a class="viewcode-back" href="../../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap._filter_empty_trx_files">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">_filter_empty_trx_files</span><span class="p">(</span><span class="n">trx_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="s2">&quot;TrxFile&quot;</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="s2">&quot;TrxFile&quot;</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove empty TrxFiles from the list.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove empty TrxFiles from the list.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    trx_list : list of TrxFile class instances</span>
+<span class="sd">        Collection of tractograms to filter.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list of TrxFile class instances</span>
+<span class="sd">        Only entries containing at least one streamline.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="p">[</span><span class="n">curr_trx</span> <span class="k">for</span> <span class="n">curr_trx</span> <span class="ow">in</span> <span class="n">trx_list</span> <span class="k">if</span> <span class="n">curr_trx</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">&quot;NB_STREAMLINES&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span></div>
 
 
@@ -922,7 +946,18 @@
 <div class="viewcode-block" id="_get_all_data_keys">
 <a class="viewcode-back" href="../../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap._get_all_data_keys">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">_get_all_data_keys</span><span class="p">(</span><span class="n">trx_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="s2">&quot;TrxFile&quot;</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">set</span><span class="p">,</span> <span class="nb">set</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get all dps and dpv keys from the TrxFile list.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get all dps and dpv keys from the TrxFile list.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    trx_list : list of TrxFile class instances</span>
+<span class="sd">        Collection of tractograms.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    tuple of set</span>
+<span class="sd">        Sets of `data_per_streamline` keys and `data_per_vertex` keys.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">all_dps</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">all_dpv</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">curr_trx</span> <span class="ow">in</span> <span class="n">trx_list</span><span class="p">:</span>
@@ -935,7 +970,18 @@
 <div class="viewcode-block" id="_check_space_attributes">
 <a class="viewcode-back" href="../../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap._check_space_attributes">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">_check_space_attributes</span><span class="p">(</span><span class="n">trx_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="s2">&quot;TrxFile&quot;</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Verify that space attributes are consistent across TrxFiles.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Verify that space attributes are consistent across TrxFiles.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    trx_list : list of TrxFile</span>
+<span class="sd">        Tractograms to compare for affine and dimension consistency.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If voxel-to-RASMM matrices or dimensions differ.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">ref_trx</span> <span class="o">=</span> <span class="n">trx_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">for</span> <span class="n">curr_trx</span> <span class="ow">in</span> <span class="n">trx_list</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span>
@@ -952,7 +998,24 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">_verify_dpv_coherence</span><span class="p">(</span>
     <span class="n">trx_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="s2">&quot;TrxFile&quot;</span><span class="p">],</span> <span class="n">all_dpv</span><span class="p">:</span> <span class="nb">set</span><span class="p">,</span> <span class="n">ref_trx</span><span class="p">:</span> <span class="s2">&quot;TrxFile&quot;</span><span class="p">,</span> <span class="n">delete_dpv</span><span class="p">:</span> <span class="nb">bool</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Verify dpv coherence across TrxFiles.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Verify dpv coherence across TrxFiles.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    trx_list : list of TrxFile class instances</span>
+<span class="sd">        Tractograms being concatenated.</span>
+<span class="sd">    all_dpv : set</span>
+<span class="sd">        Union of `data_per_vertex` keys across tractograms.</span>
+<span class="sd">    ref_trx : TrxFile class instance</span>
+<span class="sd">        Reference tractogram for dtype/key checks.</span>
+<span class="sd">    delete_dpv : bool</span>
+<span class="sd">        Drop mismatched dpv keys instead of raising when True.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If dpv keys or dtypes differ and `delete_dpv` is False.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">curr_trx</span> <span class="ow">in</span> <span class="n">trx_list</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">all_dpv</span><span class="p">:</span>
             <span class="k">if</span> <span class="p">(</span>
@@ -981,7 +1044,24 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">_verify_dps_coherence</span><span class="p">(</span>
     <span class="n">trx_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="s2">&quot;TrxFile&quot;</span><span class="p">],</span> <span class="n">all_dps</span><span class="p">:</span> <span class="nb">set</span><span class="p">,</span> <span class="n">ref_trx</span><span class="p">:</span> <span class="s2">&quot;TrxFile&quot;</span><span class="p">,</span> <span class="n">delete_dps</span><span class="p">:</span> <span class="nb">bool</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Verify dps coherence across TrxFiles.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Verify dps coherence across TrxFiles.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    trx_list : list of TrxFile class instances</span>
+<span class="sd">        Tractograms being concatenated.</span>
+<span class="sd">    all_dps : set</span>
+<span class="sd">        Union of data_per_streamline keys across tractograms.</span>
+<span class="sd">    ref_trx : TrxFile class instance</span>
+<span class="sd">        Reference tractogram for dtype/key checks.</span>
+<span class="sd">    delete_dps : bool</span>
+<span class="sd">        Drop mismatched dps keys instead of raising when True.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If dps keys or dtypes differ and `delete_dps` is False.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">curr_trx</span> <span class="ow">in</span> <span class="n">trx_list</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">all_dps</span><span class="p">:</span>
             <span class="k">if</span> <span class="p">(</span>
@@ -1008,7 +1088,18 @@
 <div class="viewcode-block" id="_compute_groups_info">
 <a class="viewcode-back" href="../../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap._compute_groups_info">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">_compute_groups_info</span><span class="p">(</span><span class="n">trx_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="s2">&quot;TrxFile&quot;</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute group length and dtype information.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute group length and dtype information.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    trx_list : list of TrxFile class instances</span>
+<span class="sd">        Tractograms being concatenated.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    tuple of dict</span>
+<span class="sd">        (group lengths, group dtypes) keyed by group name.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">all_groups_len</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">all_groups_dtype</span> <span class="o">=</span> <span class="p">{}</span>
 
@@ -1040,7 +1131,26 @@
     <span class="n">delete_dpv</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
     <span class="n">delete_groups</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;TrxFile&quot;</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a new TrxFile for concatenation.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a new TrxFile for concatenation.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    trx_list : list of TrxFile class instances</span>
+<span class="sd">        Input tractograms to concatenate.</span>
+<span class="sd">    ref_trx : TrxFile class instance</span>
+<span class="sd">        Reference tractogram for header/dtype template.</span>
+<span class="sd">    delete_dps : bool</span>
+<span class="sd">        Drop `data_per_streamline` keys not shared.</span>
+<span class="sd">    delete_dpv : bool</span>
+<span class="sd">        Drop `data_per_vertex` keys not shared.</span>
+<span class="sd">    delete_groups : bool</span>
+<span class="sd">        Drop groups when metadata differ.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    TrxFile</span>
+<span class="sd">        Empty TRX ready to receive concatenated data.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">nb_vertices</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">nb_streamlines</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">for</span> <span class="n">curr_trx</span> <span class="ow">in</span> <span class="n">trx_list</span><span class="p">:</span>
@@ -1071,7 +1181,21 @@
     <span class="n">all_groups_dtype</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
     <span class="n">delete_groups</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Setup groups in the new TrxFile for concatenation.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Setup groups in the new TrxFile for concatenation.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    new_trx : TrxFile class instance</span>
+<span class="sd">        Destination tractogram.</span>
+<span class="sd">    trx_list : list of TrxFile class instances</span>
+<span class="sd">        Source tractograms.</span>
+<span class="sd">    all_groups_len : dict</span>
+<span class="sd">        Mapping of group name to total length.</span>
+<span class="sd">    all_groups_dtype : dict</span>
+<span class="sd">        Mapping of group name to dtype.</span>
+<span class="sd">    delete_groups : bool</span>
+<span class="sd">        If True, skip creating group arrays.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">delete_groups</span><span class="p">:</span>
         <span class="k">return</span>
 
@@ -1243,7 +1367,20 @@
 <div class="viewcode-block" id="TrxFile">
 <a class="viewcode-back" href="../../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap.TrxFile">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">TrxFile</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Core class of the TrxFile&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Core class of the TrxFile.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    nb_vertices : int, optional</span>
+<span class="sd">        The number of vertices to use in the new TrxFile.</span>
+<span class="sd">    nb_streamlines : int, optional</span>
+<span class="sd">        The number of streamlines in the new TrxFile.</span>
+<span class="sd">    init_as : TrxFile class instance, optional</span>
+<span class="sd">        A TrxFile to use as reference.</span>
+
+<span class="sd">    reference : str, dict, Nifti1Image, TrkFile, or Nifti1Header, optional</span>
+<span class="sd">        A Nifti or Trk file/obj to use as reference.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="TrxFile.header">
 <a class="viewcode-back" href="../../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap.TrxFile.header">[docs]</a>
@@ -1423,6 +1560,18 @@
 <div class="viewcode-block" id="TrxFile.__deepcopy__">
 <a class="viewcode-back" href="../../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap.TrxFile.__deepcopy__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">__deepcopy__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Type</span><span class="p">[</span><span class="s2">&quot;TrxFile&quot;</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a deep copy of the TrxFile.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        self</span>
+<span class="sd">            TrxFile class instance.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        TrxFile class instance</span>
+<span class="sd">            Deep-copied instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">()</span></div>
 
 
@@ -2069,6 +2218,20 @@
 <div class="viewcode-block" id="TrxFile.append">
 <a class="viewcode-back" href="../../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap.TrxFile.append">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">extra_buffer</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Append another tractogram-like object to this TRX.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        obj : TrxFile or Tractogram or StatefulTractogram class instance</span>
+<span class="sd">            Object whose streamlines and associated data will be appended.</span>
+<span class="sd">        extra_buffer : int, optional</span>
+<span class="sd">            Additional preallocation buffer for streamlines (in count).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">            Mutates the current TrxFile in-place.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">curr_dtype_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_dtype_dict</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">dipy_available</span><span class="p">:</span>
             <span class="kn">from</span><span class="w"> </span><span class="nn">dipy.io.stateful_tractogram</span><span class="w"> </span><span class="kn">import</span> <span class="n">StatefulTractogram</span>
@@ -2319,7 +2482,21 @@
 <div class="viewcode-block" id="TrxFile.from_sft">
 <a class="viewcode-back" href="../../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap.TrxFile.from_sft">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">from_sft</span><span class="p">(</span><span class="n">sft</span><span class="p">,</span> <span class="n">dtype_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate a valid TrxFile from a StatefulTractogram&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate a TrxFile from a StatefulTractogram.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        sft : StatefulTractogram class instance</span>
+<span class="sd">            Input tractogram.</span>
+<span class="sd">        dtype_dict : dict or None, optional</span>
+<span class="sd">            Mapping of target dtypes for positions, offsets, dpv, and dps. When</span>
+<span class="sd">            None, uses ``sft.dtype_dict`` or sensible defaults.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        TrxFile</span>
+<span class="sd">            TRX representation of the StatefulTractogram.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">dtype_dict</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">dtype_dict</span> <span class="o">=</span> <span class="p">{}</span>
 
@@ -2414,7 +2591,22 @@
         <span class="n">reference</span><span class="p">,</span>
         <span class="n">dtype_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate a valid TrxFile from a Nibabel Tractogram&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate a TrxFile from a nibabel Tractogram.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        tractogram : nibabel.streamlines.Tractogram class instance</span>
+<span class="sd">            Input tractogram to convert.</span>
+<span class="sd">        reference : object</span>
+<span class="sd">            Reference anatomy used to populate header fields.</span>
+<span class="sd">        dtype_dict : dict or None, optional</span>
+<span class="sd">            Mapping of target dtypes for positions, offsets, dpv, and dps.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        TrxFile class instance</span>
+<span class="sd">            TRX representation of the tractogram.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">dtype_dict</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">dtype_dict</span> <span class="o">=</span> <span class="p">{</span>
                 <span class="s2">&quot;positions&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span>
@@ -2492,7 +2684,18 @@
 <div class="viewcode-block" id="TrxFile.to_tractogram">
 <a class="viewcode-back" href="../../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap.TrxFile.to_tractogram">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">to_tractogram</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">resize</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert a TrxFile to a nibabel Tractogram (in RAM)&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert this TrxFile to a nibabel Tractogram.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        resize : bool, optional</span>
+<span class="sd">            If True, resize to actual data length before conversion.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        nibabel.streamlines.Tractogram class instance</span>
+<span class="sd">            Tractogram containing streamlines and metadata.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">resize</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">resize</span><span class="p">()</span>
 
@@ -2546,7 +2749,18 @@
 <div class="viewcode-block" id="TrxFile.to_sft">
 <a class="viewcode-back" href="../../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap.TrxFile.to_sft">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">to_sft</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">resize</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert a TrxFile to a valid StatefulTractogram (in RAM)&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert this TrxFile to a StatefulTractogram.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        resize : bool, optional</span>
+<span class="sd">            If True, resize to actual data length before conversion.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatefulTractogram class instance or None</span>
+<span class="sd">            StatefulTractogram object, or None if dipy is unavailable.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="kn">from</span><span class="w"> </span><span class="nn">dipy.io.stateful_tractogram</span><span class="w"> </span><span class="kn">import</span> <span class="n">Space</span><span class="p">,</span> <span class="n">StatefulTractogram</span>
         <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
@@ -2581,7 +2795,13 @@
 <div class="viewcode-block" id="TrxFile.close">
 <a class="viewcode-back" href="../../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap.TrxFile.close">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Cleanup on-disk temporary folder and initialize an empty TrxFile&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Cleanup on-disk temporary folder and memmaps.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">            Releases file handles and removes temporary storage.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_uncompressed_folder_handle</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">close_or_delete_mmap</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">streamlines</span><span class="p">)</span>
 

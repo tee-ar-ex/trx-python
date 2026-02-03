@@ -441,6 +441,7 @@
                   
   <section id="module-trx.viz">
 <span id="trx-viz"></span><h1>trx.viz<a class="headerlink" href="#module-trx.viz" title="Link to this heading">#</a></h1>
+<p>Optional 3D visualization using FURY/VTK.</p>
 <section id="attributes">
 <h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading">#</a></h2>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
@@ -457,7 +458,7 @@
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#trx.viz.display" title="trx.viz.display"><code class="xref py py-obj docutils literal notranslate"><span class="pre">display</span></code></a>(volume[, volume_affine, streamlines, title, ...])</p></td>
-<td><p></p></td>
+<td><p>Display a volume with optional streamlines using fury.</p></td>
 </tr>
 </tbody>
 </table>
@@ -473,7 +474,30 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="trx.viz.display">
 <span class="sig-prename descclassname"><span class="pre">trx.viz.</span></span><span class="sig-name descname"><span class="pre">display</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">volume</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume_affine</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">streamlines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'FURY'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">display_bounds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/viz.html#display"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.viz.display" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Display a volume with optional streamlines using fury.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>volume</strong><span class="classifier">np.ndarray</span></dt><dd><p>3D volume to display.</p>
+</dd>
+<dt><strong>volume_affine</strong><span class="classifier">np.ndarray or None, optional</span></dt><dd><p>Affine matrix for the volume; None assumes identity.</p>
+</dd>
+<dt><strong>streamlines</strong><span class="classifier">sequence or None, optional</span></dt><dd><p>Streamlines to render as lines.</p>
+</dd>
+<dt><strong>title</strong><span class="classifier">str, optional</span></dt><dd><p>Window title.</p>
+</dd>
+<dt><strong>display_bounds</strong><span class="classifier">bool, optional</span></dt><dd><p>If True, draw bounding box and coordinate annotations.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>None</dt><dd><p>Opens an interactive visualization window when fury is available.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 </section>

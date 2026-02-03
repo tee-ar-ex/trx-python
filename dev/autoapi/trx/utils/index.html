@@ -441,6 +441,7 @@
                   
   <section id="module-trx.utils">
 <span id="trx-utils"></span><h1>trx.utils<a class="headerlink" href="#module-trx.utils" title="Link to this heading">#</a></h1>
+<p>Utility functions for reference handling, coordinate flips, and file operations.</p>
 <section id="attributes">
 <h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading">#</a></h2>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
@@ -460,25 +461,25 @@
 <td><p>Close the memory-mapped file if it exists, otherwise set the object to None.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#trx.utils.split_name_with_gz" title="trx.utils.split_name_with_gz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">split_name_with_gz</span></code></a>(filename)</p></td>
-<td><p>Returns the clean basename and extension of a file.</p></td>
+<td><p>Return the clean basename and extension of a file.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#trx.utils.get_reference_info_wrapper" title="trx.utils.get_reference_info_wrapper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_reference_info_wrapper</span></code></a>(reference)</p></td>
-<td><p>Will compare the spatial attribute of 2 references.</p></td>
+<td><p>Extract spatial attributes from a reference object.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#trx.utils.is_header_compatible" title="trx.utils.is_header_compatible"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_header_compatible</span></code></a>(reference_1, reference_2)</p></td>
-<td><p>Will compare the spatial attribute of 2 references.</p></td>
+<td><p>Compare the spatial attributes of 2 references.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#trx.utils.get_axis_shift_vector" title="trx.utils.get_axis_shift_vector"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_axis_shift_vector</span></code></a>(flip_axes)</p></td>
-<td><p></p></td>
+<td><p>Return a shift vector for the given axes.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#trx.utils.get_axis_flip_vector" title="trx.utils.get_axis_flip_vector"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_axis_flip_vector</span></code></a>(flip_axes)</p></td>
-<td><p></p></td>
+<td><p>Return a flip vector for the given axes.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#trx.utils.get_shift_vector" title="trx.utils.get_shift_vector"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_shift_vector</span></code></a>(sft)</p></td>
-<td><p>When flipping a tractogram the shift vector is used to change the origin</p></td>
+<td><p>Return the shift vector for flipping a tractogram.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#trx.utils.flip_sft" title="trx.utils.flip_sft"><code class="xref py py-obj docutils literal notranslate"><span class="pre">flip_sft</span></code></a>(sft, flip_axes)</p></td>
-<td><p>Flip the streamlines in the StatefulTractogram according to the</p></td>
+<td><p>Flip the streamlines in a StatefulTractogram.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#trx.utils.load_matrix_in_any_format" title="trx.utils.load_matrix_in_any_format"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_matrix_in_any_format</span></code></a>(filepath)</p></td>
 <td><p>Load a matrix from a txt file OR a npy file.</p></td>
@@ -490,10 +491,10 @@
 <td><p>Convert data from a lazy tractogram to a tractogram.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#trx.utils.append_generator_to_dict" title="trx.utils.append_generator_to_dict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">append_generator_to_dict</span></code></a>(gen, data)</p></td>
-<td><p></p></td>
+<td><p>Append items yielded by a tractogram generator into data dict.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#trx.utils.verify_trx_dtype" title="trx.utils.verify_trx_dtype"><code class="xref py py-obj docutils literal notranslate"><span class="pre">verify_trx_dtype</span></code></a>(trx, dict_dtype)</p></td>
-<td><p>Verify if the dtype of the data in the trx is the same as the one in</p></td>
+<td><p>Verify that data dtypes in the trx match the given dict.</p></td>
 </tr>
 </tbody>
 </table>
@@ -523,19 +524,21 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="trx.utils.split_name_with_gz">
 <span class="sig-prename descclassname"><span class="pre">trx.utils.</span></span><span class="sig-name descname"><span class="pre">split_name_with_gz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/utils.html#split_name_with_gz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.utils.split_name_with_gz" title="Link to this definition">#</a></dt>
-<dd><p>Returns the clean basename and extension of a file.
-Means that this correctly manages the “.nii.gz” extensions.</p>
+<dd><p>Return the clean basename and extension of a file.</p>
+<p>Correctly manages the “.nii.gz” extensions.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>filename: str</strong></dt><dd><p>The filename to clean</p>
+<dt><strong>filename</strong><span class="classifier">str</span></dt><dd><p>The filename to clean.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>base, ext</strong><span class="classifier">tuple(str, str)</span></dt><dd></dd>
-<dt>Clean basename and the full extension</dt><dd></dd>
+<dt><strong>base</strong><span class="classifier">str</span></dt><dd><p>Clean basename.</p>
+</dd>
+<dt><strong>ext</strong><span class="classifier">str</span></dt><dd><p>The full extension.</p>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -544,21 +547,23 @@ Means that this correctly manages the “.nii.gz” extensions.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="trx.utils.get_reference_info_wrapper">
 <span class="sig-prename descclassname"><span class="pre">trx.utils.</span></span><span class="sig-name descname"><span class="pre">get_reference_info_wrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reference</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/utils.html#get_reference_info_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.utils.get_reference_info_wrapper" title="Link to this definition">#</a></dt>
-<dd><p>Will compare the spatial attribute of 2 references.</p>
+<dd><p>Extract spatial attributes from a reference object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>reference</strong><span class="classifier">Nifti or Trk filename, Nifti1Image or TrkFile, Nifti1Header or</span></dt><dd><p>trk.header (dict), TrxFile or trx.header (dict)
-Reference that provides the spatial attribute.</p>
+<dt><strong>reference</strong><span class="classifier">str or dict or Nifti1Image or TrkFile or Nifti1Header or TrxFile</span></dt><dd><p>Reference that provides the spatial attribute.</p>
 </dd>
-<dt><strong>Returns</strong></dt><dd></dd>
-<dt><strong>——-</strong></dt><dd></dd>
-<dt><strong>output</strong><span class="classifier">tuple</span></dt><dd><ul class="simple">
-<li><p>affine ndarray (4,4), np.float32, transformation of VOX to RASMM</p></li>
-<li><p>dimensions ndarray (3,), int16, volume shape for each axis</p></li>
-<li><p>voxel_sizes  ndarray (3,), float32, size of voxel for each axis</p></li>
-<li><p>voxel_order, string, Typically ‘RAS’ or ‘LPS’</p></li>
-</ul>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>affine</strong><span class="classifier">ndarray (4, 4)</span></dt><dd><p>Transformation of VOX to RASMM, np.float32.</p>
+</dd>
+<dt><strong>dimensions</strong><span class="classifier">ndarray (3,)</span></dt><dd><p>Volume shape for each axis, int16.</p>
+</dd>
+<dt><strong>voxel_sizes</strong><span class="classifier">ndarray (3,)</span></dt><dd><p>Size of voxel for each axis, float32.</p>
+</dd>
+<dt><strong>voxel_order</strong><span class="classifier">str</span></dt><dd><p>Typically ‘RAS’ or ‘LPS’.</p>
 </dd>
 </dl>
 </dd>
@@ -568,7 +573,7 @@ Reference that provides the spatial attribute.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="trx.utils.is_header_compatible">
 <span class="sig-prename descclassname"><span class="pre">trx.utils.</span></span><span class="sig-name descname"><span class="pre">is_header_compatible</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reference_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference_2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/utils.html#is_header_compatible"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.utils.is_header_compatible" title="Link to this definition">#</a></dt>
-<dd><p>Will compare the spatial attribute of 2 references.</p>
+<dd><p>Compare the spatial attributes of 2 references.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -578,9 +583,11 @@ Reference that provides the spatial attribute.</p>
 <dt><strong>reference_2</strong><span class="classifier">Nifti or Trk filename, Nifti1Image or TrkFile,</span></dt><dd><p>Nifti1Header or trk.header (dict)
 Reference that provides the spatial attribute.</p>
 </dd>
-<dt><strong>Returns</strong></dt><dd></dd>
-<dt><strong>——-</strong></dt><dd></dd>
-<dt><strong>output</strong><span class="classifier">bool</span></dt><dd><p>Does all the spatial attribute match</p>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>bool</dt><dd><p>Whether all the spatial attributes match.</p>
 </dd>
 </dl>
 </dd>
@@ -590,16 +597,19 @@ Reference that provides the spatial attribute.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="trx.utils.get_axis_shift_vector">
 <span class="sig-prename descclassname"><span class="pre">trx.utils.</span></span><span class="sig-name descname"><span class="pre">get_axis_shift_vector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flip_axes</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/utils.html#get_axis_shift_vector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.utils.get_axis_shift_vector" title="Link to this definition">#</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Return a shift vector for the given axes.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>flip_axes</strong><span class="classifier">list of str</span></dt><dd><p>String containing the axis to flip.
-Possible values are ‘x’, ‘y’, ‘z’</p>
+Possible values are ‘x’, ‘y’, ‘z’.</p>
 </dd>
-<dt><strong>Returns</strong></dt><dd></dd>
-<dt><strong>——-</strong></dt><dd></dd>
-<dt><strong>flip_vector</strong><span class="classifier">np.ndarray (3,)</span></dt><dd><p>Vector containing the axis to flip.
-Possible values are -1, 1</p>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>shift_vector</strong><span class="classifier">np.ndarray (3,)</span></dt><dd><p>Vector containing the axis to shift.
+Possible values are -1, 0.</p>
 </dd>
 </dl>
 </dd>
@@ -609,16 +619,19 @@ Possible values are -1, 1</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="trx.utils.get_axis_flip_vector">
 <span class="sig-prename descclassname"><span class="pre">trx.utils.</span></span><span class="sig-name descname"><span class="pre">get_axis_flip_vector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flip_axes</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/utils.html#get_axis_flip_vector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.utils.get_axis_flip_vector" title="Link to this definition">#</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Return a flip vector for the given axes.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>flip_axes</strong><span class="classifier">list of str</span></dt><dd><p>String containing the axis to flip.
-Possible values are ‘x’, ‘y’, ‘z’</p>
+Possible values are ‘x’, ‘y’, ‘z’.</p>
 </dd>
-<dt><strong>Returns</strong></dt><dd></dd>
-<dt><strong>——-</strong></dt><dd></dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
 <dt><strong>flip_vector</strong><span class="classifier">np.ndarray (3,)</span></dt><dd><p>Vector containing the axis to flip.
-Possible values are -1, 1</p>
+Possible values are -1, 1.</p>
 </dd>
 </dl>
 </dd>
@@ -628,16 +641,19 @@ Possible values are -1, 1</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="trx.utils.get_shift_vector">
 <span class="sig-prename descclassname"><span class="pre">trx.utils.</span></span><span class="sig-name descname"><span class="pre">get_shift_vector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sft</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/utils.html#get_shift_vector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.utils.get_shift_vector" title="Link to this definition">#</a></dt>
-<dd><p>When flipping a tractogram the shift vector is used to change the origin
+<dd><p>Return the shift vector for flipping a tractogram.</p>
+<p>When flipping a tractogram the shift vector is used to change the origin
 of the grid from the corner to the center of the grid.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>sft</strong><span class="classifier">StatefulTractogram</span></dt><dd><p>StatefulTractogram object</p>
+<dt><strong>sft</strong><span class="classifier">StatefulTractogram</span></dt><dd><p>StatefulTractogram object.</p>
 </dd>
-<dt><strong>Returns</strong></dt><dd></dd>
-<dt><strong>——-</strong></dt><dd></dd>
-<dt><strong>shift_vector</strong><span class="classifier">ndarray</span></dt><dd><p>Shift vector to apply to the streamlines</p>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>shift_vector</strong><span class="classifier">ndarray</span></dt><dd><p>Shift vector to apply to the streamlines.</p>
 </dd>
 </dl>
 </dd>
@@ -647,20 +663,22 @@ of the grid from the corner to the center of the grid.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="trx.utils.flip_sft">
 <span class="sig-prename descclassname"><span class="pre">trx.utils.</span></span><span class="sig-name descname"><span class="pre">flip_sft</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sft</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flip_axes</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/utils.html#flip_sft"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.utils.flip_sft" title="Link to this definition">#</a></dt>
-<dd><p>Flip the streamlines in the StatefulTractogram according to the
-flip_axes. Uses the spatial information to flip according to the center
+<dd><p>Flip the streamlines in a StatefulTractogram.</p>
+<p>Use the spatial information to flip according to the center
 of the grid.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>sft</strong><span class="classifier">StatefulTractogram</span></dt><dd><p>StatefulTractogram to flip</p>
+<dt><strong>sft</strong><span class="classifier">StatefulTractogram</span></dt><dd><p>StatefulTractogram to flip.</p>
 </dd>
 <dt><strong>flip_axes</strong><span class="classifier">list of str</span></dt><dd><p>Axes to flip.
-Possible values are ‘x’, ‘y’, ‘z’</p>
+Possible values are ‘x’, ‘y’, ‘z’.</p>
 </dd>
-<dt><strong>Returns</strong></dt><dd></dd>
-<dt><strong>——-</strong></dt><dd></dd>
-<dt><strong>sft</strong><span class="classifier">StatefulTractogram</span></dt><dd><p>StatefulTractogram with flipped axes</p>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>sft</strong><span class="classifier">StatefulTractogram</span></dt><dd><p>StatefulTractogram with flipped axes.</p>
 </dd>
 </dl>
 </dd>
@@ -676,8 +694,10 @@ Possible values are ‘x’, ‘y’, ‘z’</p>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>filepath</strong><span class="classifier">str</span></dt><dd><p>Path to the matrix file.</p>
 </dd>
-<dt><strong>Returns</strong></dt><dd></dd>
-<dt><strong>——-</strong></dt><dd></dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
 <dt><strong>matrix</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>The matrix.</p>
 </dd>
 </dl>
@@ -696,9 +716,13 @@ Possible values are ‘x’, ‘y’, ‘z’</p>
 </dd>
 <dt><strong>origin_str</strong><span class="classifier">str</span></dt><dd><p>String representing the origin.</p>
 </dd>
-<dt><strong>Returns</strong></dt><dd></dd>
-<dt><strong>——-</strong></dt><dd></dd>
-<dt><strong>output</strong><span class="classifier">str</span></dt><dd><p>Space and Origin as Enums.</p>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>space</strong><span class="classifier">Space</span></dt><dd><p>Space enum value.</p>
+</dd>
+<dt><strong>origin</strong><span class="classifier">Origin</span></dt><dd><p>Origin enum value.</p>
 </dd>
 </dl>
 </dd>
@@ -728,13 +752,31 @@ Possible values are ‘x’, ‘y’, ‘z’</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="trx.utils.append_generator_to_dict">
 <span class="sig-prename descclassname"><span class="pre">trx.utils.</span></span><span class="sig-name descname"><span class="pre">append_generator_to_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/utils.html#append_generator_to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.utils.append_generator_to_dict" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Append items yielded by a tractogram generator into data dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>gen</strong><span class="classifier">TractogramItem class instance or np.ndarray</span></dt><dd><p>Item produced by a tractogram generator. Structured entries include
+per-point and per-streamline metadata.</p>
+</dd>
+<dt><strong>data</strong><span class="classifier">dict</span></dt><dd><p>Accumulator containing <code class="docutils literal notranslate"><span class="pre">strs</span></code> (positions), <code class="docutils literal notranslate"><span class="pre">dpv</span></code> and <code class="docutils literal notranslate"><span class="pre">dps</span></code>
+dictionaries that will be extended in-place.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>None</dt><dd><p>The function mutates <code class="docutils literal notranslate"><span class="pre">data</span></code> and returns <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="trx.utils.verify_trx_dtype">
 <span class="sig-prename descclassname"><span class="pre">trx.utils.</span></span><span class="sig-name descname"><span class="pre">verify_trx_dtype</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dict_dtype</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/utils.html#verify_trx_dtype"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.utils.verify_trx_dtype" title="Link to this definition">#</a></dt>
-<dd><p>Verify if the dtype of the data in the trx is the same as the one in
-the dict.</p>
+<dd><p>Verify that data dtypes in the trx match the given dict.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -742,9 +784,11 @@ the dict.</p>
 </dd>
 <dt><strong>dict_dtype</strong><span class="classifier">dict</span></dt><dd><p>Dictionary containing all elements dtype to verify.</p>
 </dd>
-<dt><strong>Returns</strong></dt><dd></dd>
-<dt><strong>——-</strong></dt><dd></dd>
-<dt><strong>output</strong><span class="classifier">bool</span></dt><dd><p>True if the dtype is the same, False otherwise.</p>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>bool</dt><dd><p>True if the dtype is the same, False otherwise.</p>
 </dd>
 </dl>
 </dd>

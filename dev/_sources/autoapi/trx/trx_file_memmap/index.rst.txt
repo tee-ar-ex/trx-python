@@ -3,6 +3,13 @@ trx.trx_file_memmap
 
 .. py:module:: trx.trx_file_memmap
 
+.. autoapi-nested-parse::
+
+   Core TrxFile class with memory-mapped data access.
+
+   ..
+       !! processed by numpydoc !!
+
 
 Attributes
 ----------
@@ -69,7 +76,7 @@ Module Contents
    :Parameters:
 
        **dtype** : np.dtype, str, or type
-           Input dtype specification (e.g., np.float32, 'float32', '>f4')
+           Input dtype specification (e.g., np.float32, 'float32', '>f4').
 
 
 
@@ -101,7 +108,7 @@ Module Contents
    :Parameters:
 
        **arr** : np.ndarray
-           Input array
+           Input array.
 
 
 
@@ -472,9 +479,17 @@ Module Contents
    Remove empty TrxFiles from the list.
 
 
+   :Parameters:
+
+       **trx_list** : list of TrxFile class instances
+           Collection of tractograms to filter.
 
 
 
+   :Returns:
+
+       list of TrxFile class instances
+           Only entries containing at least one streamline.
 
 
 
@@ -495,9 +510,17 @@ Module Contents
    Get all dps and dpv keys from the TrxFile list.
 
 
+   :Parameters:
+
+       **trx_list** : list of TrxFile class instances
+           Collection of tractograms.
 
 
 
+   :Returns:
+
+       tuple of set
+           Sets of `data_per_streamline` keys and `data_per_vertex` keys.
 
 
 
@@ -518,6 +541,10 @@ Module Contents
    Verify that space attributes are consistent across TrxFiles.
 
 
+   :Parameters:
+
+       **trx_list** : list of TrxFile
+           Tractograms to compare for affine and dimension consistency.
 
 
 
@@ -525,6 +552,10 @@ Module Contents
 
 
 
+   :Raises:
+
+       ValueError
+           If voxel-to-RASMM matrices or dimensions differ.
 
 
 
@@ -541,6 +572,19 @@ Module Contents
    Verify dpv coherence across TrxFiles.
 
 
+   :Parameters:
+
+       **trx_list** : list of TrxFile class instances
+           Tractograms being concatenated.
+
+       **all_dpv** : set
+           Union of `data_per_vertex` keys across tractograms.
+
+       **ref_trx** : TrxFile class instance
+           Reference tractogram for dtype/key checks.
+
+       **delete_dpv** : bool
+           Drop mismatched dpv keys instead of raising when True.
 
 
 
@@ -548,6 +592,10 @@ Module Contents
 
 
 
+   :Raises:
+
+       ValueError
+           If dpv keys or dtypes differ and `delete_dpv` is False.
 
 
 
@@ -564,6 +612,19 @@ Module Contents
    Verify dps coherence across TrxFiles.
 
 
+   :Parameters:
+
+       **trx_list** : list of TrxFile class instances
+           Tractograms being concatenated.
+
+       **all_dps** : set
+           Union of data_per_streamline keys across tractograms.
+
+       **ref_trx** : TrxFile class instance
+           Reference tractogram for dtype/key checks.
+
+       **delete_dps** : bool
+           Drop mismatched dps keys instead of raising when True.
 
 
 
@@ -571,6 +632,10 @@ Module Contents
 
 
 
+   :Raises:
+
+       ValueError
+           If dps keys or dtypes differ and `delete_dps` is False.
 
 
 
@@ -587,9 +652,17 @@ Module Contents
    Compute group length and dtype information.
 
 
+   :Parameters:
+
+       **trx_list** : list of TrxFile class instances
+           Tractograms being concatenated.
 
 
 
+   :Returns:
+
+       tuple of dict
+           (group lengths, group dtypes) keyed by group name.
 
 
 
@@ -610,9 +683,29 @@ Module Contents
    Create a new TrxFile for concatenation.
 
 
+   :Parameters:
+
+       **trx_list** : list of TrxFile class instances
+           Input tractograms to concatenate.
+
+       **ref_trx** : TrxFile class instance
+           Reference tractogram for header/dtype template.
+
+       **delete_dps** : bool
+           Drop `data_per_streamline` keys not shared.
+
+       **delete_dpv** : bool
+           Drop `data_per_vertex` keys not shared.
+
+       **delete_groups** : bool
+           Drop groups when metadata differ.
 
 
 
+   :Returns:
+
+       TrxFile
+           Empty TRX ready to receive concatenated data.
 
 
 
@@ -633,6 +726,22 @@ Module Contents
    Setup groups in the new TrxFile for concatenation.
 
 
+   :Parameters:
+
+       **new_trx** : TrxFile class instance
+           Destination tractogram.
+
+       **trx_list** : list of TrxFile class instances
+           Source tractograms.
+
+       **all_groups_len** : dict
+           Mapping of group name to total length.
+
+       **all_groups_dtype** : dict
+           Mapping of group name to dtype.
+
+       **delete_groups** : bool
+           If True, skip creating group arrays.
 
 
 
@@ -773,9 +882,22 @@ Module Contents
 .. py:class:: TrxFile(nb_vertices: Optional[int] = None, nb_streamlines: Optional[int] = None, init_as: Optional[Type[TrxFile]] = None, reference: Union[str, dict, Type[nibabel.nifti1.Nifti1Image], Type[nibabel.streamlines.trk.TrkFile], Type[nibabel.nifti1.Nifti1Header], None] = None)
 
    
-   Core class of the TrxFile
+   Core class of the TrxFile.
 
 
+   :Parameters:
+
+       **nb_vertices** : int, optional
+           The number of vertices to use in the new TrxFile.
+
+       **nb_streamlines** : int, optional
+           The number of streamlines in the new TrxFile.
+
+       **init_as** : TrxFile class instance, optional
+           A TrxFile to use as reference.
+
+       **reference** : str, dict, Nifti1Image, TrkFile, or Nifti1Header, optional
+           A Nifti or Trk file/obj to use as reference.
 
 
 
@@ -895,6 +1017,35 @@ Module Contents
 
 
    .. py:method:: __deepcopy__() -> Type[TrxFile]
+
+      
+      Return a deep copy of the TrxFile.
+
+
+      :Parameters:
+
+          **self**
+              TrxFile class instance.
+
+
+
+      :Returns:
+
+          TrxFile class instance
+              Deep-copied instance.
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
 
 
    .. py:method:: deepcopy() -> Type[TrxFile]
@@ -1144,6 +1295,38 @@ Module Contents
 
    .. py:method:: append(obj, extra_buffer: int = 0) -> None
 
+      
+      Append another tractogram-like object to this TRX.
+
+
+      :Parameters:
+
+          **obj** : TrxFile or Tractogram or StatefulTractogram class instance
+              Object whose streamlines and associated data will be appended.
+
+          **extra_buffer** : int, optional
+              Additional preallocation buffer for streamlines (in count).
+
+
+
+      :Returns:
+
+          None
+              Mutates the current TrxFile in-place.
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
 
    .. py:method:: _append_trx(trx: Type[TrxFile], extra_buffer: int = 0) -> None
 
@@ -1304,12 +1487,24 @@ Module Contents
 
 
       
-      Generate a valid TrxFile from a StatefulTractogram
+      Generate a TrxFile from a StatefulTractogram.
+
+
+      :Parameters:
+
+          **sft** : StatefulTractogram class instance
+              Input tractogram.
+
+          **dtype_dict** : dict or None, optional
+              Mapping of target dtypes for positions, offsets, dpv, and dps. When
+              None, uses ``sft.dtype_dict`` or sensible defaults.
 
 
 
+      :Returns:
 
-
+          TrxFile
+              TRX representation of the StatefulTractogram.
 
 
 
@@ -1330,12 +1525,26 @@ Module Contents
 
 
       
-      Generate a valid TrxFile from a Nibabel Tractogram
+      Generate a TrxFile from a nibabel Tractogram.
+
+
+      :Parameters:
+
+          **tractogram** : nibabel.streamlines.Tractogram class instance
+              Input tractogram to convert.
+
+          **reference** : object
+              Reference anatomy used to populate header fields.
+
+          **dtype_dict** : dict or None, optional
+              Mapping of target dtypes for positions, offsets, dpv, and dps.
 
 
 
+      :Returns:
 
-
+          TrxFile class instance
+              TRX representation of the tractogram.
 
 
 
@@ -1354,12 +1563,20 @@ Module Contents
    .. py:method:: to_tractogram(resize=False)
 
       
-      Convert a TrxFile to a nibabel Tractogram (in RAM)
+      Convert this TrxFile to a nibabel Tractogram.
+
+
+      :Parameters:
+
+          **resize** : bool, optional
+              If True, resize to actual data length before conversion.
 
 
 
+      :Returns:
 
-
+          nibabel.streamlines.Tractogram class instance
+              Tractogram containing streamlines and metadata.
 
 
 
@@ -1411,12 +1628,20 @@ Module Contents
    .. py:method:: to_sft(resize=False)
 
       
-      Convert a TrxFile to a valid StatefulTractogram (in RAM)
+      Convert this TrxFile to a StatefulTractogram.
+
+
+      :Parameters:
+
+          **resize** : bool, optional
+              If True, resize to actual data length before conversion.
 
 
 
+      :Returns:
 
-
+          StatefulTractogram class instance or None
+              StatefulTractogram object, or None if dipy is unavailable.
 
 
 
@@ -1435,12 +1660,16 @@ Module Contents
    .. py:method:: close() -> None
 
       
-      Cleanup on-disk temporary folder and initialize an empty TrxFile
+      Cleanup on-disk temporary folder and memmaps.
 
 
 
 
 
+      :Returns:
+
+          None
+              Releases file handles and removes temporary storage.
 
 
 

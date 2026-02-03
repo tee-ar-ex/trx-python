@@ -411,6 +411,7 @@
                   
   <h1>Source code for trx.io</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;Unified I/O interface for tractogram file formats.&quot;&quot;&quot;</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
@@ -433,6 +434,19 @@
 <div class="viewcode-block" id="get_trx_tmp_dir">
 <a class="viewcode-back" href="../../autoapi/trx/io/index.html#trx.io.get_trx_tmp_dir">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_trx_tmp_dir</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a temporary directory honoring the ``TRX_TMPDIR`` setting.</span>
+
+<span class="sd">    When the ``TRX_TMPDIR`` environment variable is set to ``&quot;use_working_dir&quot;``</span>
+<span class="sd">    the current working directory is used. Otherwise, the value of</span>
+<span class="sd">    ``TRX_TMPDIR`` is used directly. If the variable is not set, the system</span>
+<span class="sd">    temporary directory is used.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    tempfile.TemporaryDirectory</span>
+<span class="sd">        Context-managed temporary directory placed according to the environment</span>
+<span class="sd">        configuration.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;TRX_TMPDIR&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;TRX_TMPDIR&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;use_working_dir&quot;</span><span class="p">:</span>
             <span class="n">trx_tmp_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
@@ -453,6 +467,29 @@
 <div class="viewcode-block" id="load_sft_with_reference">
 <a class="viewcode-back" href="../../autoapi/trx/io/index.html#trx.io.load_sft_with_reference">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">load_sft_with_reference</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">reference</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bbox_check</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load a tractogram as a StatefulTractogram with an explicit reference.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filepath : str</span>
+<span class="sd">        Path to the tractogram file (.trk, .tck, .fib, .vtk, .dpy).</span>
+<span class="sd">    reference : str or nibabel.Nifti1Image, optional</span>
+<span class="sd">        Reference image used for formats without embedded affine information.</span>
+<span class="sd">        Pass ``&quot;same&quot;`` to reuse the header embedded in .trk files.</span>
+<span class="sd">    bbox_check : bool, optional</span>
+<span class="sd">        If True, validate that streamlines lie within the reference bounding</span>
+<span class="sd">        box. Defaults to True.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    StatefulTractogram or None</span>
+<span class="sd">        Loaded tractogram. Returns ``None`` when ``dipy`` is unavailable.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    IOError</span>
+<span class="sd">        If the file format is unsupported or a required reference is missing.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">dipy_available</span><span class="p">:</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
             <span class="s2">&quot;Dipy library is missing, cannot use functions related &quot;</span>
@@ -487,6 +524,20 @@
 <div class="viewcode-block" id="load">
 <a class="viewcode-back" href="../../autoapi/trx/io/index.html#trx.io.load">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">load</span><span class="p">(</span><span class="n">tractogram_filename</span><span class="p">,</span> <span class="n">reference</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load a tractogram from disk and return a TRX or StatefulTractogram.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    tractogram_filename : str</span>
+<span class="sd">        Path to the input tractogram. TRX directories are supported.</span>
+<span class="sd">    reference : str or nibabel.Nifti1Image</span>
+<span class="sd">        Reference image used for formats without embedded affine information.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    TrxFile or StatefulTractogram</span>
+<span class="sd">        TRX file handle for ``.trx`` inputs, otherwise a StatefulTractogram.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">trx.trx_file_memmap</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tmm</span>
 
     <span class="n">in_ext</span> <span class="o">=</span> <span class="n">split_name_with_gz</span><span class="p">(</span><span class="n">tractogram_filename</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
@@ -504,6 +555,26 @@
 <div class="viewcode-block" id="save">
 <a class="viewcode-back" href="../../autoapi/trx/io/index.html#trx.io.save">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="n">tractogram_obj</span><span class="p">,</span> <span class="n">tractogram_filename</span><span class="p">,</span> <span class="n">bbox_valid_check</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Save a tractogram object to disk.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    tractogram_obj : TrxFile or StatefulTractogram</span>
+<span class="sd">        Tractogram to persist. Non-TRX inputs are converted to StatefulTractogram</span>
+<span class="sd">        before saving to non-TRX formats.</span>
+<span class="sd">    tractogram_filename : str</span>
+<span class="sd">        Destination file name. ``.trx`` will be saved using the TRX writer; all</span>
+<span class="sd">        other extensions are handled by ``dipy.save_tractogram``.</span>
+<span class="sd">    bbox_valid_check : bool, optional</span>
+<span class="sd">        If True, validate that streamlines lie within the reference bounding</span>
+<span class="sd">        box when saving non-TRX formats. Defaults to False.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">        The function writes to disk and returns ``None``. Returns ``None``</span>
+<span class="sd">        immediately when ``dipy`` is unavailable.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">dipy_available</span><span class="p">:</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
             <span class="s2">&quot;Dipy library is missing, cannot use functions related &quot;</span>
