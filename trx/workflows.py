@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+"""High-level processing workflows for tractogram operations."""
 
 from copy import deepcopy
 import csv

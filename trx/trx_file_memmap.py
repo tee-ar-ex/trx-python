@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+"""Core TrxFile class with memory-mapped data access."""
 
 from copy import deepcopy
 import json
@@ -43,7 +44,7 @@ def _get_dtype_little_endian(dtype: Union[np.dtype, str, type]) -> np.dtype:
     Parameters
     ----------
     dtype : np.dtype, str, or type
-        Input dtype specification (e.g., np.float32, 'float32', '>f4')
+        Input dtype specification (e.g., np.float32, 'float32', '>f4').
 
     Returns
     -------
@@ -68,7 +69,7 @@ def _ensure_little_endian(arr: np.ndarray) -> np.ndarray:
     Parameters
     ----------
     arr : np.ndarray
-        Input array
+        Input array.
 
     Returns
     -------
@@ -880,7 +881,19 @@ def zip_from_folder(
 
 
 class TrxFile:
-    """Core class of the TrxFile"""
+    """Core class of the TrxFile.
+
+    Parameters
+    ----------
+    nb_vertices : int, optional
+        The number of vertices to use in the new TrxFile.
+    nb_streamlines : int, optional
+        The number of streamlines in the new TrxFile.
+    init_as : TrxFile, optional
+        A TrxFile to use as reference.
+    reference : str, dict, Nifti1Image, TrkFile, Nifti1Header, optional
+        A Nifti or Trk file/obj to use as reference.
+    """
 
     header: dict
     streamlines: Type[ArraySequence]
@@ -1045,11 +1058,6 @@ class TrxFile:
     def deepcopy(self) -> Type["TrxFile"]:  # noqa: C901
         """Create a deepcopy of the TrxFile.
 
-        Parameters
-        ----------
-        self
-            TrxFile instance.
-
         Returns
         -------
         TrxFile
@@ -1147,11 +1155,6 @@ class TrxFile:
 
     def _get_real_len(self) -> Tuple[int, int]:
         """Get the real size of data (ignoring zeros of preallocation).
-
-        Parameters
-        ----------
-        self
-            TrxFile instance.
 
         Returns
         -------
@@ -1640,11 +1643,6 @@ class TrxFile:
     def get_dtype_dict(self):
         """Get the dtype dictionary for the TrxFile.
 
-        Parameters
-        ----------
-        self
-            TrxFile instance.
-
         Returns
         -------
         dict
@@ -2037,6 +2035,7 @@ class TrxFile:
         Parameters
         ----------
         tractogram : nibabel.streamlines.Tractogram
+            Input tractogram to convert.
         reference : object
             Reference anatomy used to populate header fields.
         dtype_dict : dict or None, optional
@@ -2224,11 +2223,6 @@ class TrxFile:
 
     def close(self) -> None:
         """Cleanup on-disk temporary folder and memmaps.
-
-        Parameters
-        ----------
-        self
-            TrxFile instance.
 
         Returns
         -------

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+"""Set operations on streamlines with precision-based matching."""
 
 from functools import reduce
 import itertools
@@ -67,22 +68,21 @@ def union(left, right):
 
 
 def get_streamline_key(streamline, precision=None):
-    """Produces a key using a hash from a streamline using a few points only and
-    the desired precision
+    """Produce a hash key from a streamline using a few points.
 
     Parameters
     ----------
-    streamlines: ndarray
-        A single streamline (N,3)
-    precision: int, optional
+    streamline : ndarray
+        A single streamline (N, 3).
+    precision : int, optional
         The number of decimals to keep when hashing the points of the
         streamlines. Allows a soft comparison of streamlines. If None, no
         rounding is performed.
 
     Returns
     -------
-    Value of the hash of the first/last MIN_NB_POINTS points of the streamline.
-
+    bytes
+        Hash of the first/last MIN_NB_POINTS points of the streamline.
     """
 
     # Use just a few data points as hash key. I could use all the data of
@@ -102,34 +102,34 @@ def get_streamline_key(streamline, precision=None):
 
 
 def hash_streamlines(streamlines, start_index=0, precision=None):
-    """Produces a dict from streamlines
+    """Produce a dict from streamlines.
 
-    Produces a dict from streamlines by using the points as keys and the
+    Produce a dict from streamlines by using the points as keys and the
     indices of the streamlines as values.
 
     Parameters
     ----------
-    streamlines: list of ndarray
+    streamlines : list of ndarray
         The list of streamlines used to produce the dict.
-    start_index: int, optional
+    start_index : int, optional
         The index of the first streamline. 0 by default.
-    precision: int, optional
+    precision : int, optional
         The number of decimals to keep when hashing the points of the
         streamlines. Allows a soft comparison of streamlines. If None, no
         rounding is performed.
 
     Returns
     -------
-    A dict where the keys are streamline points and the values are indices
-    starting at start_index.
-
+    dict
+        A dict where the keys are streamline points and the values are
+        indices starting at start_index.
     """
     keys = [get_streamline_key(s, precision) for s in streamlines]
     return {k: i for i, k in enumerate(keys, start_index)}
 
 
 def perform_streamlines_operation(operation, streamlines, precision=0):
-    """Performs an operation on a list of list of streamlines
+    """Perform an operation on a list of list of streamlines.
 
     Given a list of list of streamlines, this function applies the operation
     to the first two lists of streamlines. The result in then used recursively
@@ -141,24 +141,23 @@ def perform_streamlines_operation(operation, streamlines, precision=0):
 
     Parameters
     ----------
-    operation: callable
-        A callable that takes two streamlines dicts as inputs and preduces a
+    operation : callable
+        A callable that takes two streamlines dicts as inputs and produces a
         new streamline dict.
-    streamlines: list of list of streamlines
+    streamlines : list of list of streamlines
         The streamlines used in the operation.
-    precision: int, optional
+    precision : int, optional
         The number of decimals to keep when hashing the points of the
         streamlines. Allows a soft comparison of streamlines. If None, no
         rounding is performed.
 
     Returns
     -------
-    streamlines: list of `nib.streamline.ArraySequence`
+    streamlines : list of `nib.streamline.ArraySequence`
         The streamlines obtained after performing the operation on all the
         input streamlines.
-    indices: np.ndarray
+    indices : np.ndarray
         The indices of the streamlines that are used in the output.
-
     """
 
     # Hash the streamlines using the desired precision.

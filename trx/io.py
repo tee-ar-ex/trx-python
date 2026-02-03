@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+"""Unified I/O interface for tractogram file formats."""
 
 import logging
 import os

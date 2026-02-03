@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+"""Utility functions for reference handling, coordinate flips, and file operations."""
 
 import logging
 import os
@@ -37,19 +38,21 @@ def close_or_delete_mmap(obj):
 
 
 def split_name_with_gz(filename):
-    """
-    Returns the clean basename and extension of a file.
-    Means that this correctly manages the ".nii.gz" extensions.
+    """Return the clean basename and extension of a file.
+
+    Correctly manages the ".nii.gz" extensions.
 
     Parameters
     ----------
-    filename: str
-        The filename to clean
+    filename : str
+        The filename to clean.
 
     Returns
     -------
-        base, ext : tuple(str, str)
-        Clean basename and the full extension
+    base : str
+        Clean basename.
+    ext : str
+        The full extension.
     """
     base, ext = os.path.splitext(filename)
 
@@ -65,20 +68,23 @@ def split_name_with_gz(filename):
 
 
 def get_reference_info_wrapper(reference):  # noqa: C901
-    """Will compare the spatial attribute of 2 references.
+    """Extract spatial attributes from a reference object.
 
     Parameters
     ----------
-    reference : Nifti or Trk filename, Nifti1Image or TrkFile, Nifti1Header or
-        trk.header (dict), TrxFile or trx.header (dict)
+    reference : str or dict or Nifti1Image or TrkFile or Nifti1Header or TrxFile
         Reference that provides the spatial attribute.
+
     Returns
     -------
-    output : tuple
-        - affine ndarray (4,4), np.float32, transformation of VOX to RASMM
-        - dimensions ndarray (3,), int16, volume shape for each axis
-        - voxel_sizes  ndarray (3,), float32, size of voxel for each axis
-        - voxel_order, string, Typically 'RAS' or 'LPS'
+    affine : ndarray (4, 4)
+        Transformation of VOX to RASMM, np.float32.
+    dimensions : ndarray (3,)
+        Volume shape for each axis, int16.
+    voxel_sizes : ndarray (3,)
+        Size of voxel for each axis, float32.
+    voxel_order : str
+        Typically 'RAS' or 'LPS'.
     """
     from trx import trx_file_memmap
 
@@ -158,7 +164,7 @@ def get_reference_info_wrapper(reference):  # noqa: C901
 
 
 def is_header_compatible(reference_1, reference_2):
-    """Will compare the spatial attribute of 2 references.
+    """Compare the spatial attributes of 2 references.
 
     Parameters
     ----------
@@ -168,10 +174,11 @@ def is_header_compatible(reference_1, reference_2):
     reference_2 : Nifti or Trk filename, Nifti1Image or TrkFile,
         Nifti1Header or trk.header (dict)
         Reference that provides the spatial attribute.
+
     Returns
     -------
-    output : bool
-        Does all the spatial attribute match
+    bool
+        Whether all the spatial attributes match.
     """
 
     affine_1, dimensions_1, voxel_sizes_1, voxel_order_1 = get_reference_info_wrapper(
@@ -202,17 +209,19 @@ def is_header_compatible(reference_1, reference_2):
 
 
 def get_axis_shift_vector(flip_axes):
-    """
+    """Return a shift vector for the given axes.
+
     Parameters
     ----------
     flip_axes : list of str
         String containing the axis to flip.
-        Possible values are 'x', 'y', 'z'
+        Possible values are 'x', 'y', 'z'.
+
     Returns
     -------
-    flip_vector : np.ndarray (3,)
-        Vector containing the axis to flip.
-        Possible values are -1, 1
+    shift_vector : np.ndarray (3,)
+        Vector containing the axis to shift.
+        Possible values are -1, 0.
     """
     shift_vector = np.zeros(3)
     if "x" in flip_axes:
@@ -226,17 +235,19 @@ def get_axis_shift_vector(flip_axes):
 
 
 def get_axis_flip_vector(flip_axes):
-    """
+    """Return a flip vector for the given axes.
+
     Parameters
     ----------
     flip_axes : list of str
         String containing the axis to flip.
-        Possible values are 'x', 'y', 'z'
+        Possible values are 'x', 'y', 'z'.
+
     Returns
     -------
     flip_vector : np.ndarray (3,)
         Vector containing the axis to flip.
-        Possible values are -1, 1
+        Possible values are -1, 1.
     """
     flip_vector = np.ones(3)
     if "x" in flip_axes:
@@ -250,18 +261,20 @@ def get_axis_flip_vector(flip_axes):
 
 
 def get_shift_vector(sft):
-    """
+    """Return the shift vector for flipping a tractogram.
+
     When flipping a tractogram the shift vector is used to change the origin
     of the grid from the corner to the center of the grid.
 
     Parameters
     ----------
     sft : StatefulTractogram
-        StatefulTractogram object
+        StatefulTractogram object.
+
     Returns
     -------
     shift_vector : ndarray
-        Shift vector to apply to the streamlines
+        Shift vector to apply to the streamlines.
     """
     dims = sft.space_attributes[1]
     shift_vector = -1.0 * (np.array(dims) / 2.0)
@@ -270,21 +283,23 @@ def get_shift_vector(sft):
 
 
 def flip_sft(sft, flip_axes):
-    """Flip the streamlines in the StatefulTractogram according to the
-    flip_axes. Uses the spatial information to flip according to the center
+    """Flip the streamlines in a StatefulTractogram.
+
+    Use the spatial information to flip according to the center
     of the grid.
 
     Parameters
     ----------
     sft : StatefulTractogram
-        StatefulTractogram to flip
+        StatefulTractogram to flip.
     flip_axes : list of str
         Axes to flip.
-        Possible values are 'x', 'y', 'z'
+        Possible values are 'x', 'y', 'z'.
+
     Returns
     -------
     sft : StatefulTractogram
-        StatefulTractogram with flipped axes
+        StatefulTractogram with flipped axes.
     """
     if not dipy_available:
         logging.error(
@@ -321,6 +336,7 @@ def load_matrix_in_any_format(filepath):
     ----------
     filepath : str
         Path to the matrix file.
+
     Returns
     -------
     matrix : numpy.ndarray
@@ -346,10 +362,13 @@ def get_reverse_enum(space_str, origin_str):
         String representing the space.
     origin_str : str
         String representing the origin.
+
     Returns
     -------
-    output : str
-        Space and Origin as Enums.
+    space : Space
+        Space enum value.
+    origin : Origin
+        Origin enum value.
     """
     if not dipy_available:
         logging.error(
@@ -443,8 +462,7 @@ def append_generator_to_dict(gen, data):
 
 
 def verify_trx_dtype(trx, dict_dtype):  # noqa: C901
-    """Verify if the dtype of the data in the trx is the same as the one in
-    the dict.
+    """Verify that data dtypes in the trx match the given dict.
 
     Parameters
     ----------
@@ -452,9 +470,10 @@ def verify_trx_dtype(trx, dict_dtype):  # noqa: C901
         Tractogram to verify.
     dict_dtype : dict
         Dictionary containing all elements dtype to verify.
+
     Returns
     -------
-    output : bool
+    bool
         True if the dtype is the same, False otherwise.
     """
     identical = True

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+"""Optional 3D visualization using FURY/VTK."""
 
 import itertools
 import logging
