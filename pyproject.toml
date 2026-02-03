@@ -102,3 +102,38 @@ package = "trx"
 "Test" = [".spin/cmds.py:test", ".spin/cmds.py:lint"]
 "Docs" = [".spin/cmds.py:docs"]
 "Clean" = [".spin/cmds.py:clean"]
+
+[tool.numpydoc_validation]
+checks = [
+    "all",   # report on all checks, except the below
+    # These we we ignore:
+    "GL01",  # Docstring should start in the line immediately after the quotes
+    "GL02",  # Closing quotes on own line (doesn't work on Python 3.13 anyway)
+    "EX01",
+    "EX02",  # examples failed (we test them separately)
+    "ES01",  # no extended summary
+    "SA01",  # no see also
+    "YD01",  # no yields section
+    "SA04",  # no description in See Also
+    "PR04",  # Parameter "shape (n_channels" has no type
+    "RT02",  # The first line of the Returns section should
+]
+# remember to use single quotes for regex in TOML
+exclude = [  # don't report on objects that match any of these regex
+    '\.undocumented_method$',
+    '\.__repr__$',
+    '\.__str__$',
+    '\.__len__$',
+    '\.__getitem__$',
+    '\.__deepcopy__$',
+]
+exclude_files = [ # don't process filepaths that match these regex
+    '^trx/tests/.*',
+    '^module/gui.*',
+    '^examples/.*',
+]
+override_SS05 = [  # override SS05 to allow docstrings starting with these words
+    '^Process ',
+    '^Assess ',
+    '^Access ',
+]
