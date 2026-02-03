@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+"""Test data management for downloading and verifying test assets."""
 
 import hashlib
 import logging
@@ -19,7 +20,13 @@ TEST_DATA_BASE_URL = (
 
 
 def get_home():
-    """Set a user-writeable file-system location to put files"""
+    """Return a user-writeable file-system location to put files.
+
+    Returns
+    -------
+    str
+        Path to the TRX home directory.
+    """
     if "TRX_HOME" in os.environ:
         trx_home = os.environ["TRX_HOME"]
     else:
@@ -28,11 +35,16 @@ def get_home():
 
 
 def get_testing_files_dict():
-    """Get dictionary linking zip file to their GitHub release URL & checksums.
+    """Return dictionary linking zip file to their GitHub release URL and checksums.
 
     Assets are hosted under the v0.1.0 release of tee-ar-ex/trx-test-data.
     If URLs change, check TEST_DATA_API_URL to discover the latest asset
     locations.
+
+    Returns
+    -------
+    dict
+        Mapping of filenames to (url, md5, sha256) tuples.
     """
     return {
         "DSI.zip": (
@@ -59,7 +71,18 @@ def get_testing_files_dict():
 
 
 def md5sum(filename):
-    """Compute one md5 checksum for a file"""
+    """Compute the MD5 checksum of a file.
+
+    Parameters
+    ----------
+    filename : str
+        Path to file to hash.
+
+    Returns
+    -------
+    str
+        Hexadecimal MD5 digest.
+    """
     h = hashlib.md5()
     with open(filename, "rb") as f:
         for chunk in iter(lambda: f.read(128 * h.block_size), b""):
@@ -68,7 +91,18 @@ def md5sum(filename):
 
 
 def sha256sum(filename):
-    """Compute one sha256 checksum for a file"""
+    """Compute the SHA256 checksum of a file.
+
+    Parameters
+    ----------
+    filename : str
+        Path to file to hash.
+
+    Returns
+    -------
+    str
+        Hexadecimal SHA256 digest.
+    """
     h = hashlib.sha256()
     with open(filename, "rb") as f:
         for chunk in iter(lambda: f.read(128 * h.block_size), b""):
@@ -77,15 +111,18 @@ def sha256sum(filename):
 
 
 def fetch_data(files_dict, keys=None):  # noqa: C901
-    """Downloads files to folder and checks their md5 checksums
+    """Download files to folder and check their md5 checksums.
 
     Parameters
     ----------
-    files_dict : dictionary
+    files_dict : dict
         For each file in `files_dict` the value should be (url, md5).
         The file will be downloaded from url, if the file does not already
         exist or if the file exists but the md5 checksum does not match.
-        Zip files are automatically unzipped and its content* are md5 checked.
+        Zip files are automatically unzipped and its contents are md5 checked.
+    keys : list of str or str or None, optional
+        Subset of keys from ``files_dict`` to download. When None, all
+        keys are downloaded.
 
     Raises
     ------

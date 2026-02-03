@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+"""Unified I/O interface for tractogram file formats."""
 
 import logging
 import os
@@ -16,6 +17,19 @@ from trx.utils import split_name_with_gz
 
 
 def get_trx_tmp_dir():
+    """Return a temporary directory honoring the ``TRX_TMPDIR`` setting.
+
+    When the ``TRX_TMPDIR`` environment variable is set to ``"use_working_dir"``
+    the current working directory is used. Otherwise, the value of
+    ``TRX_TMPDIR`` is used directly. If the variable is not set, the system
+    temporary directory is used.
+
+    Returns
+    -------
+    tempfile.TemporaryDirectory
+        Context-managed temporary directory placed according to the environment
+        configuration.
+    """
     if os.getenv("TRX_TMPDIR") is not None:
         if os.getenv("TRX_TMPDIR") == "use_working_dir":
             trx_tmp_dir = os.getcwd()
@@ -33,6 +47,29 @@ def get_trx_tmp_dir():
 
 
 def load_sft_with_reference(filepath, reference=None, bbox_check=True):
+    """Load a tractogram as a StatefulTractogram with an explicit reference.
+
+    Parameters
+    ----------
+    filepath : str
+        Path to the tractogram file (.trk, .tck, .fib, .vtk, .dpy).
+    reference : str or nibabel.Nifti1Image, optional
+        Reference image used for formats without embedded affine information.
+        Pass ``"same"`` to reuse the header embedded in .trk files.
+    bbox_check : bool, optional
+        If True, validate that streamlines lie within the reference bounding
+        box. Defaults to True.
+
+    Returns
+    -------
+    StatefulTractogram or None
+        Loaded tractogram. Returns ``None`` when ``dipy`` is unavailable.
+
+    Raises
+    ------
+    IOError
+        If the file format is unsupported or a required reference is missing.
+    """
     if not dipy_available:
         logging.error(
             "Dipy library is missing, cannot use functions related "
@@ -64,6 +101,20 @@ def load_sft_with_reference(filepath, reference=None, bbox_check=True):
 
 
 def load(tractogram_filename, reference):
+    """Load a tractogram from disk and return a TRX or StatefulTractogram.
+
+    Parameters
+    ----------
+    tractogram_filename : str
+        Path to the input tractogram. TRX directories are supported.
+    reference : str or nibabel.Nifti1Image
+        Reference image used for formats without embedded affine information.
+
+    Returns
+    -------
+    TrxFile or StatefulTractogram
+        TRX file handle for ``.trx`` inputs, otherwise a StatefulTractogram.
+    """
     import trx.trx_file_memmap as tmm
 
     in_ext = split_name_with_gz(tractogram_filename)[1]
@@ -78,6 +129,26 @@ def load(tractogram_filename, reference):
 
 
 def save(tractogram_obj, tractogram_filename, bbox_valid_check=False):
+    """Save a tractogram object to disk.
+
+    Parameters
+    ----------
+    tractogram_obj : TrxFile or StatefulTractogram
+        Tractogram to persist. Non-TRX inputs are converted to StatefulTractogram
+        before saving to non-TRX formats.
+    tractogram_filename : str
+        Destination file name. ``.trx`` will be saved using the TRX writer; all
+        other extensions are handled by ``dipy.save_tractogram``.
+    bbox_valid_check : bool, optional
+        If True, validate that streamlines lie within the reference bounding
+        box when saving non-TRX formats. Defaults to False.
+
+    Returns
+    -------
+    None
+        The function writes to disk and returns ``None``. Returns ``None``
+        immediately when ``dipy`` is unavailable.
+    """
     if not dipy_available:
         logging.error(
             "Dipy library is missing, cannot use functions related "

@@ -14,7 +14,22 @@ UPSTREAM_NAME = "upstream"
 
 
 def run(cmd, check=True, capture=True):
-    """Run a shell command."""
+    """Run a shell command.
+
+    Parameters
+    ----------
+    cmd : list of str
+        Command and arguments to execute.
+    check : bool, optional
+        If True, check the return code and report errors.
+    capture : bool, optional
+        If True, capture stdout and stderr.
+
+    Returns
+    -------
+    str or int or None
+        Captured stdout string, return code, or None on error.
+    """
     result = subprocess.run(cmd, capture_output=capture, text=True, check=False)
     if check and result.returncode != 0:
         if capture:
@@ -24,7 +39,13 @@ def run(cmd, check=True, capture=True):
 
 
 def get_remotes():
-    """Get dict of remote names to URLs."""
+    """Get dict of remote names to URLs.
+
+    Returns
+    -------
+    dict
+        Mapping of remote names to their fetch URLs.
+    """
     output = run(["git", "remote", "-v"])
     if not output:
         return {}
@@ -110,11 +131,14 @@ def test(pattern, verbose, pytest_args):
 
     Additional arguments are passed directly to pytest.
 
-    Examples:
-        spin test                    # Run all tests
-        spin test -m memmap          # Run tests matching 'memmap'
-        spin test -v                 # Verbose output
-        spin test -- -x --tb=short   # Pass args to pytest
+    Parameters
+    ----------
+    pattern : str or None
+        Only run tests matching this pattern (passed to pytest -k).
+    verbose : bool
+        If True, enable verbose output.
+    pytest_args : tuple
+        Additional arguments passed directly to pytest.
     """
     cmd = ["pytest", "trx/tests"]
 
@@ -138,9 +162,10 @@ def test(pattern, verbose, pytest_args):
 def lint(fix):
     """Run linting checks using ruff and codespell.
 
-    Examples:
-        spin lint        # Run ruff and codespell checks
-        spin lint --fix  # Run ruff and auto-fix issues
+    Parameters
+    ----------
+    fix : bool
+        If True, automatically fix issues where possible.
     """
     click.echo("Running ruff linter...")
     cmd = ["ruff", "check", "."]
@@ -191,10 +216,12 @@ def lint(fix):
 def docs(clean, open_browser):
     """Build documentation using Sphinx.
 
-    Examples:
-        spin docs          # Build docs
-        spin docs --clean  # Clean and rebuild
-        spin docs --open   # Build and open in browser
+    Parameters
+    ----------
+    clean : bool
+        If True, clean build directory before building.
+    open_browser : bool
+        If True, open documentation in browser after building.
     """
     import os
 

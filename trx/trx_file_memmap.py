@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+"""Core TrxFile class with memory-mapped data access."""
 
 from copy import deepcopy
 import json
@@ -43,7 +44,7 @@ def _get_dtype_little_endian(dtype: Union[np.dtype, str, type]) -> np.dtype:
     Parameters
     ----------
     dtype : np.dtype, str, or type
-        Input dtype specification (e.g., np.float32, 'float32', '>f4')
+        Input dtype specification (e.g., np.float32, 'float32', '>f4').
 
     Returns
     -------
@@ -68,7 +69,7 @@ def _ensure_little_endian(arr: np.ndarray) -> np.ndarray:
     Parameters
     ----------
     arr : np.ndarray
-        Input array
+        Input array.
 
     Returns
     -------
@@ -108,6 +109,18 @@ def _append_last_offsets(nib_offsets: np.ndarray, nb_vertices: int) -> np.ndarra
     """
 
     def is_sorted(a):
+        """Return True if array is sorted non-decreasing.
+
+        Parameters
+        ----------
+        a : np.ndarray
+            1D array of numeric offsets.
+
+        Returns
+        -------
+        bool
+            True when ``a`` is monotonically non-decreasing.
+        """
         return np.all(a[:-1] <= a[1:])
 
     if not is_sorted(nib_offsets):
@@ -461,12 +474,34 @@ def load_from_directory(directory: str) -> Type["TrxFile"]:
 
 
 def _filter_empty_trx_files(trx_list: List["TrxFile"]) -> List["TrxFile"]:
-    """Remove empty TrxFiles from the list."""
+    """Remove empty TrxFiles from the list.
+
+    Parameters
+    ----------
+    trx_list : list of TrxFile class instances
+        Collection of tractograms to filter.
+
+    Returns
+    -------
+    list of TrxFile class instances
+        Only entries containing at least one streamline.
+    """
     return [curr_trx for curr_trx in trx_list if curr_trx.header["NB_STREAMLINES"] > 0]
 
 
 def _get_all_data_keys(trx_list: List["TrxFile"]) -> Tuple[set, set]:
-    """Get all dps and dpv keys from the TrxFile list."""
+    """Get all dps and dpv keys from the TrxFile list.
+
+    Parameters
+    ----------
+    trx_list : list of TrxFile class instances
+        Collection of tractograms.
+
+    Returns
+    -------
+    tuple of set
+        Sets of `data_per_streamline` keys and `data_per_vertex` keys.
+    """
     all_dps = []
     all_dpv = []
     for curr_trx in trx_list:
@@ -476,7 +511,18 @@ def _get_all_data_keys(trx_list: List["TrxFile"]) -> Tuple[set, set]:
 
 
 def _check_space_attributes(trx_list: List["TrxFile"]) -> None:
-    """Verify that space attributes are consistent across TrxFiles."""
+    """Verify that space attributes are consistent across TrxFiles.
+
+    Parameters
+    ----------
+    trx_list : list of TrxFile
+        Tractograms to compare for affine and dimension consistency.
+
+    Raises
+    ------
+    ValueError
+        If voxel-to-RASMM matrices or dimensions differ.
+    """
     ref_trx = trx_list[0]
     for curr_trx in trx_list[1:]:
         if not np.allclose(
@@ -490,7 +536,24 @@ def _check_space_attributes(trx_list: List["TrxFile"]) -> None:
 def _verify_dpv_coherence(
     trx_list: List["TrxFile"], all_dpv: set, ref_trx: "TrxFile", delete_dpv: bool
 ) -> None:
-    """Verify dpv coherence across TrxFiles."""
+    """Verify dpv coherence across TrxFiles.
+
+    Parameters
+    ----------
+    trx_list : list of TrxFile class instances
+        Tractograms being concatenated.
+    all_dpv : set
+        Union of `data_per_vertex` keys across tractograms.
+    ref_trx : TrxFile class instance
+        Reference tractogram for dtype/key checks.
+    delete_dpv : bool
+        Drop mismatched dpv keys instead of raising when True.
+
+    Raises
+    ------
+    ValueError
+        If dpv keys or dtypes differ and `delete_dpv` is False.
+    """
     for curr_trx in trx_list:
         for key in all_dpv:
             if (
@@ -516,7 +579,24 @@ def _verify_dpv_coherence(
 def _verify_dps_coherence(
     trx_list: List["TrxFile"], all_dps: set, ref_trx: "TrxFile", delete_dps: bool
 ) -> None:
-    """Verify dps coherence across TrxFiles."""
+    """Verify dps coherence across TrxFiles.
+
+    Parameters
+    ----------
+    trx_list : list of TrxFile class instances
+        Tractograms being concatenated.
+    all_dps : set
+        Union of data_per_streamline keys across tractograms.
+    ref_trx : TrxFile class instance
+        Reference tractogram for dtype/key checks.
+    delete_dps : bool
+        Drop mismatched dps keys instead of raising when True.
+
+    Raises
+    ------
+    ValueError
+        If dps keys or dtypes differ and `delete_dps` is False.
+    """
     for curr_trx in trx_list:
         for key in all_dps:
             if (
@@ -540,7 +620,18 @@ def _verify_dps_coherence(
 
 
 def _compute_groups_info(trx_list: List["TrxFile"]) -> Tuple[dict, dict]:
-    """Compute group length and dtype information."""
+    """Compute group length and dtype information.
+
+    Parameters
+    ----------
+    trx_list : list of TrxFile class instances
+        Tractograms being concatenated.
+
+    Returns
+    -------
+    tuple of dict
+        (group lengths, group dtypes) keyed by group name.
+    """
     all_groups_len = {}
     all_groups_dtype = {}
 
@@ -569,7 +660,26 @@ def _create_new_trx_for_concatenation(
     delete_dpv: bool,
     delete_groups: bool,
 ) -> "TrxFile":
-    """Create a new TrxFile for concatenation."""
+    """Create a new TrxFile for concatenation.
+
+    Parameters
+    ----------
+    trx_list : list of TrxFile class instances
+        Input tractograms to concatenate.
+    ref_trx : TrxFile class instance
+        Reference tractogram for header/dtype template.
+    delete_dps : bool
+        Drop `data_per_streamline` keys not shared.
+    delete_dpv : bool
+        Drop `data_per_vertex` keys not shared.
+    delete_groups : bool
+        Drop groups when metadata differ.
+
+    Returns
+    -------
+    TrxFile
+        Empty TRX ready to receive concatenated data.
+    """
     nb_vertices = 0
     nb_streamlines = 0
     for curr_trx in trx_list:
@@ -597,7 +707,21 @@ def _setup_groups_for_concatenation(
     all_groups_dtype: dict,
     delete_groups: bool,
 ) -> None:
-    """Setup groups in the new TrxFile for concatenation."""
+    """Setup groups in the new TrxFile for concatenation.
+
+    Parameters
+    ----------
+    new_trx : TrxFile class instance
+        Destination tractogram.
+    trx_list : list of TrxFile class instances
+        Source tractograms.
+    all_groups_len : dict
+        Mapping of group name to total length.
+    all_groups_dtype : dict
+        Mapping of group name to dtype.
+    delete_groups : bool
+        If True, skip creating group arrays.
+    """
     if delete_groups:
         return
 
@@ -757,7 +881,20 @@ def zip_from_folder(
 
 
 class TrxFile:
-    """Core class of the TrxFile"""
+    """Core class of the TrxFile.
+
+    Parameters
+    ----------
+    nb_vertices : int, optional
+        The number of vertices to use in the new TrxFile.
+    nb_streamlines : int, optional
+        The number of streamlines in the new TrxFile.
+    init_as : TrxFile class instance, optional
+        A TrxFile to use as reference.
+
+    reference : str, dict, Nifti1Image, TrkFile, or Nifti1Header, optional
+        A Nifti or Trk file/obj to use as reference.
+    """
 
     header: dict
     streamlines: Type[ArraySequence]
@@ -905,6 +1042,18 @@ class TrxFile:
         return self.select(key, keep_group=False)
 
     def __deepcopy__(self) -> Type["TrxFile"]:
+        """Return a deep copy of the TrxFile.
+
+        Parameters
+        ----------
+        self
+            TrxFile class instance.
+
+        Returns
+        -------
+        TrxFile class instance
+            Deep-copied instance.
+        """
         return self.deepcopy()
 
     def deepcopy(self) -> Type["TrxFile"]:  # noqa: C901
@@ -1527,6 +1676,20 @@ class TrxFile:
         return dtype_dict
 
     def append(self, obj, extra_buffer: int = 0) -> None:
+        """Append another tractogram-like object to this TRX.
+
+        Parameters
+        ----------
+        obj : TrxFile or Tractogram or StatefulTractogram class instance
+            Object whose streamlines and associated data will be appended.
+        extra_buffer : int, optional
+            Additional preallocation buffer for streamlines (in count).
+
+        Returns
+        -------
+        None
+            Mutates the current TrxFile in-place.
+        """
         curr_dtype_dict = self.get_dtype_dict()
         if dipy_available:
             from dipy.io.stateful_tractogram import StatefulTractogram
@@ -1762,7 +1925,21 @@ class TrxFile:
 
     @staticmethod
     def from_sft(sft, dtype_dict=None):
-        """Generate a valid TrxFile from a StatefulTractogram"""
+        """Generate a TrxFile from a StatefulTractogram.
+
+        Parameters
+        ----------
+        sft : StatefulTractogram class instance
+            Input tractogram.
+        dtype_dict : dict or None, optional
+            Mapping of target dtypes for positions, offsets, dpv, and dps. When
+            None, uses ``sft.dtype_dict`` or sensible defaults.
+
+        Returns
+        -------
+        TrxFile
+            TRX representation of the StatefulTractogram.
+        """
         if dtype_dict is None:
             dtype_dict = {}
 
@@ -1854,7 +2031,22 @@ class TrxFile:
         reference,
         dtype_dict=None,
     ):
-        """Generate a valid TrxFile from a Nibabel Tractogram"""
+        """Generate a TrxFile from a nibabel Tractogram.
+
+        Parameters
+        ----------
+        tractogram : nibabel.streamlines.Tractogram class instance
+            Input tractogram to convert.
+        reference : object
+            Reference anatomy used to populate header fields.
+        dtype_dict : dict or None, optional
+            Mapping of target dtypes for positions, offsets, dpv, and dps.
+
+        Returns
+        -------
+        TrxFile class instance
+            TRX representation of the tractogram.
+        """
         if dtype_dict is None:
             dtype_dict = {
                 "positions": np.float32,
@@ -1929,7 +2121,18 @@ class TrxFile:
         return trx
 
     def to_tractogram(self, resize=False):
-        """Convert a TrxFile to a nibabel Tractogram (in RAM)"""
+        """Convert this TrxFile to a nibabel Tractogram.
+
+        Parameters
+        ----------
+        resize : bool, optional
+            If True, resize to actual data length before conversion.
+
+        Returns
+        -------
+        nibabel.streamlines.Tractogram class instance
+            Tractogram containing streamlines and metadata.
+        """
         if resize:
             self.resize()
 
@@ -1977,7 +2180,18 @@ class TrxFile:
         return trx_obj
 
     def to_sft(self, resize=False):
-        """Convert a TrxFile to a valid StatefulTractogram (in RAM)"""
+        """Convert this TrxFile to a StatefulTractogram.
+
+        Parameters
+        ----------
+        resize : bool, optional
+            If True, resize to actual data length before conversion.
+
+        Returns
+        -------
+        StatefulTractogram class instance or None
+            StatefulTractogram object, or None if dipy is unavailable.
+        """
         try:
             from dipy.io.stateful_tractogram import Space, StatefulTractogram
         except ImportError:
@@ -2009,7 +2223,13 @@ class TrxFile:
         return sft
 
     def close(self) -> None:
-        """Cleanup on-disk temporary folder and initialize an empty TrxFile"""
+        """Cleanup on-disk temporary folder and memmaps.
+
+        Returns
+        -------
+        None
+            Releases file handles and removes temporary storage.
+        """
         if self._uncompressed_folder_handle is not None:
             close_or_delete_mmap(self.streamlines)
 

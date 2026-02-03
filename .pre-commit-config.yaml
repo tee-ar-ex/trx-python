@@ -3,7 +3,7 @@ default_language_version:
 
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.8.6
+    rev: v0.14.14
     hooks:
       # Run the linter
       - id: ruff
@@ -11,9 +11,15 @@ repos:
       # Run the formatter
       - id: ruff-format
   - repo: https://github.com/codespell-project/codespell
-    rev: v2.3.0
+    rev: v2.4.1
     hooks:
       - id: codespell
         args: [--skip, "pyproject.toml,docs/_build/*,*.egg-info"]
         additional_dependencies:
           - tomli
+  - repo: https://github.com/numpy/numpydoc
+    rev: v1.10.0
+    hooks:
+      - id: numpydoc-validation
+        name: numpydoc validate
+        description: Run numpydoc validation across trx package

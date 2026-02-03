@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+"""Optional 3D visualization using FURY/VTK."""
 
 import itertools
 import logging
@@ -19,6 +20,26 @@ except ImportError:
 def display(
     volume, volume_affine=None, streamlines=None, title="FURY", display_bounds=True
 ):
+    """Display a volume with optional streamlines using fury.
+
+    Parameters
+    ----------
+    volume : np.ndarray
+        3D volume to display.
+    volume_affine : np.ndarray or None, optional
+        Affine matrix for the volume; None assumes identity.
+    streamlines : sequence or None, optional
+        Streamlines to render as lines.
+    title : str, optional
+        Window title.
+    display_bounds : bool, optional
+        If True, draw bounding box and coordinate annotations.
+
+    Returns
+    -------
+    None
+        Opens an interactive visualization window when fury is available.
+    """
     if not fury_available:
         logging.error(
             "Fury library is missing, visualization functions are not available."
