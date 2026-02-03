@@ -10,17 +10,57 @@ KEY_INDEX = np.concatenate((range(5), range(-1, -6, -1)))
 
 
 def intersection(left, right):
-    """Intersection of two streamlines dict (see hash_streamlines)"""
+    """Return the intersection of two streamline hash dictionaries.
+
+    Parameters
+    ----------
+    left : dict
+        Hash dictionary returned by :func:`hash_streamlines`.
+    right : dict
+        Hash dictionary returned by :func:`hash_streamlines`.
+
+    Returns
+    -------
+    dict
+        Dictionary containing only keys present in both inputs.
+    """
     return {k: v for k, v in left.items() if k in right}
 
 
 def difference(left, right):
-    """Difference of two streamlines dict (see hash_streamlines)"""
+    """Return the difference of two streamline hash dictionaries.
+
+    Parameters
+    ----------
+    left : dict
+        Hash dictionary returned by :func:`hash_streamlines`.
+    right : dict
+        Hash dictionary returned by :func:`hash_streamlines`.
+
+    Returns
+    -------
+    dict
+        Dictionary containing keys present in ``left`` but not in ``right``.
+    """
     return {k: v for k, v in left.items() if k not in right}
 
 
 def union(left, right):
-    """Union of two streamlines dict (see hash_streamlines)"""
+    """Return the union of two streamline hash dictionaries.
+
+    Parameters
+    ----------
+    left : dict
+        Hash dictionary returned by :func:`hash_streamlines`.
+    right : dict
+        Hash dictionary returned by :func:`hash_streamlines`.
+
+    Returns
+    -------
+    dict
+        Dictionary containing all keys from both inputs. Values from ``left``
+        overwrite those from ``right`` when keys overlap.
+    """
     result = right.copy()
     result.update(left)
     return result

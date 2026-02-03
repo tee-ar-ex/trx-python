@@ -59,7 +59,18 @@ def get_testing_files_dict():
 
 
 def md5sum(filename):
-    """Compute one md5 checksum for a file"""
+    """Compute the MD5 checksum of a file.
+
+    Parameters
+    ----------
+    filename : str
+        Path to file to hash.
+
+    Returns
+    -------
+    str
+        Hexadecimal MD5 digest.
+    """
     h = hashlib.md5()
     with open(filename, "rb") as f:
         for chunk in iter(lambda: f.read(128 * h.block_size), b""):
@@ -68,7 +79,18 @@ def md5sum(filename):
 
 
 def sha256sum(filename):
-    """Compute one sha256 checksum for a file"""
+    """Compute the SHA256 checksum of a file.
+
+    Parameters
+    ----------
+    filename : str
+        Path to file to hash.
+
+    Returns
+    -------
+    str
+        Hexadecimal SHA256 digest.
+    """
     h = hashlib.sha256()
     with open(filename, "rb") as f:
         for chunk in iter(lambda: f.read(128 * h.block_size), b""):

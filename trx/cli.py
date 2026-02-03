@@ -109,6 +109,28 @@ def concatenate_tractograms(
 
     If the data_per_point or data_per_streamline is not the same for all
     tractograms, the data must be deleted first using the appropriate flags.
+
+    Parameters
+    ----------
+    in_tractograms : list of Path
+        Input tractogram files (.trk, .tck, .vtk, .fib, .dpy, .trx).
+    out_tractogram : Path
+        Output filename for the concatenated tractogram.
+    delete_dpv : bool, optional
+        Delete ``data_per_vertex`` if metadata differ across inputs.
+    delete_dps : bool, optional
+        Delete ``data_per_streamline`` if metadata differ across inputs.
+    delete_groups : bool, optional
+        Delete groups when metadata differ across inputs.
+    reference : Path or None, optional
+        Reference anatomy for tck/vtk/fib/dpy inputs.
+    force : bool, optional
+        Overwrite output if it already exists.
+
+    Returns
+    -------
+    None
+        Writes the concatenated tractogram to ``out_tractogram``.
     """
     _check_overwrite(out_tractogram, force)
 
@@ -185,6 +207,26 @@ def convert(
 
     Supports conversion of .tck, .trk, .fib, .vtk, .trx and .dpy files.
     TCK files always need a reference NIFTI file for conversion.
+
+    Parameters
+    ----------
+    in_tractogram : Path
+        Input tractogram file.
+    out_tractogram : Path
+        Output tractogram path.
+    reference : Path or None, optional
+        Reference anatomy required for some input formats.
+    positions_dtype : str, optional
+        Datatype for positions in TRX output.
+    offsets_dtype : str, optional
+        Datatype for offsets in TRX output.
+    force : bool, optional
+        Overwrite output if it already exists.
+
+    Returns
+    -------
+    None
+        Writes the converted tractogram to disk.
     """
     _check_overwrite(out_tractogram, force)
 
@@ -238,13 +280,27 @@ def convert_dsi(
         typer.Option("--force", "-f", help="Force overwriting of output files."),
     ] = False,
 ) -> None:
-    """Fix DSI-Studio TRK files for compatibility.
+    """Convert a DSI-Studio TRK file to TRX or TRK and fix space metadata.
 
-    This script fixes DSI-Studio TRK files (unknown space/convention) to make
-    them compatible with TrackVis, MI-Brain, and Dipy Horizon.
+    Parameters
+    ----------
+    in_dsi_tractogram : Path
+        Input DSI-Studio tractogram (.trk or .trk.gz).
+    in_dsi_fa : Path
+        FA volume used as reference (.nii.gz).
+    out_tractogram : Path
+        Output tractogram path (.trx or .trk).
+    remove_invalid : bool, optional
+        Remove streamlines outside the bounding box. Defaults to False.
+    keep_invalid : bool, optional
+        Keep streamlines outside the bounding box. Defaults to False.
+    force : bool, optional
+        Overwrite output if it already exists.
 
-    [bold yellow]WARNING:[/bold yellow] This script is experimental. DSI-Studio evolves
-    quickly and results may vary depending on the data and DSI-Studio version.
+    Returns
+    -------
+    None
+        Writes the converted tractogram to disk.
     """
     _check_overwrite(out_tractogram, force)
 
@@ -367,15 +423,48 @@ def generate(
         typer.Option("--force", "-f", help="Force overwriting of output files."),
     ] = False,
 ) -> None:
-    """Generate TRX file from raw data files.
+    """Generate a TRX file from raw data files.
 
     Create a TRX file from CSV, TXT, or NPY files by specifying positions,
     offsets, data_per_vertex, data_per_streamlines, groups, and data_per_group.
 
-    Each --dpv, --dps, --groups option requires FILE,DTYPE format.
-    Each --dpg option requires GROUP,FILE,DTYPE format.
+    Parameters
+    ----------
+    reference : Path
+        Reference anatomy (.nii or .nii.gz).
+    out_tractogram : Path
+        Output tractogram (.trk, .tck, .vtk, .fib, .dpy, .trx).
+    positions : Path or None, optional
+        Binary file with streamline coordinates (Nx3 .npy).
+    offsets : Path or None, optional
+        Binary file with streamline offsets (.npy).
+    positions_csv : Path or None, optional
+        CSV file with flattened streamline coordinates.
+    space : str, optional
+        Coordinate space. Non-default requires Dipy.
+    origin : str, optional
+        Coordinate origin. Non-default requires Dipy.
+    positions_dtype : str, optional
+        Datatype for positions.
+    offsets_dtype : str, optional
+        Datatype for offsets.
+    dpv : list of str or None, optional
+        Data per vertex entries as FILE,DTYPE pairs.
+    dps : list of str or None, optional
+        Data per streamline entries as FILE,DTYPE pairs.
+    groups : list of str or None, optional
+        Group entries as FILE,DTYPE pairs.
+    dpg : list of str or None, optional
+        Data per group entries as GROUP,FILE,DTYPE triplets.
+    verify_invalid : bool, optional
+        Verify positions are inside bounding box (requires Dipy).
+    force : bool, optional
+        Overwrite output if it already exists.
 
-    Valid DTYPEs: (u)int8, (u)int16, (u)int32, (u)int64, float16, float32, float64, bool
+    Returns
+    -------
+    None
+        Writes the generated tractogram to disk.
     """
     _check_overwrite(out_tractogram, force)
 
@@ -522,7 +611,31 @@ def manipulate_dtype(
     Change the data types of positions, offsets, data_per_vertex,
     data_per_streamline, groups, and data_per_group arrays.
 
-    Valid DTYPEs: (u)int8, (u)int16, (u)int32, (u)int64, float16, float32, float64, bool
+    Parameters
+    ----------
+    in_tractogram : Path
+        Input TRX file.
+    out_tractogram : Path
+        Output TRX file.
+    positions_dtype : str or None, optional
+        Target dtype for positions (float16, float32, float64).
+    offsets_dtype : str or None, optional
+        Target dtype for offsets (uint32, uint64).
+    dpv : list of str or None, optional
+        Data per vertex dtype overrides as NAME,DTYPE pairs.
+    dps : list of str or None, optional
+        Data per streamline dtype overrides as NAME,DTYPE pairs.
+    groups : list of str or None, optional
+        Group dtype overrides as NAME,DTYPE pairs.
+    dpg : list of str or None, optional
+        Data per group dtype overrides as GROUP,NAME,DTYPE triplets.
+    force : bool, optional
+        Overwrite output if it already exists.
+
+    Returns
+    -------
+    None
+        Writes the dtype-converted TRX file.
     """
     _check_overwrite(out_tractogram, force)
 
@@ -584,12 +697,21 @@ def compare(
         ),
     ] = None,
 ) -> None:
-    """Simple comparison of tractograms by subtracting coordinates.
+    """Compare two tractograms and report basic differences.
 
-    Does not account for shuffling of streamlines. Simple A-B operations.
+    Parameters
+    ----------
+    in_tractogram1 : Path
+        First tractogram file.
+    in_tractogram2 : Path
+        Second tractogram file.
+    reference : Path or None, optional
+        Reference anatomy for formats requiring it.
 
-    Differences below 1e-3 are expected for affines with large rotation/scaling.
-    Differences below 1e-6 are expected for isotropic data with small rotation.
+    Returns
+    -------
+    None
+        Prints comparison summary to stdout.
     """
     ref = str(reference) if reference else None
     tractogram_simple_compare([str(in_tractogram1), str(in_tractogram2)], ref)
@@ -637,13 +759,27 @@ def validate(
         typer.Option("--force", "-f", help="Force overwriting of output files."),
     ] = False,
 ) -> None:
-    """Validate TRX file and remove invalid streamlines.
+    """Validate a tractogram and optionally clean invalid/duplicate streamlines.
 
-    Removes streamlines that are out of the volume bounding box (in voxel space,
-    no negative coordinates or coordinates above volume dimensions).
+    Parameters
+    ----------
+    in_tractogram : Path
+        Input tractogram (.trk, .tck, .vtk, .fib, .dpy, .trx).
+    out_tractogram : Path or None, optional
+        Optional output tractogram with invalid streamlines removed.
+    remove_identical : bool, optional
+        Remove duplicate streamlines based on hashing precision.
+    precision : int, optional
+        Number of decimals when hashing streamline points.
+    reference : Path or None, optional
+        Reference anatomy for formats requiring it.
+    force : bool, optional
+        Overwrite output if it already exists.
 
-    Also removes streamlines with single or no points.
-    Use --remove-identical to remove duplicate streamlines based on precision.
+    Returns
+    -------
+    None
+        Prints validation summary and optionally writes cleaned output.
     """
     if out_tractogram:
         _check_overwrite(out_tractogram, force)
@@ -684,8 +820,15 @@ def verify_header(
 ) -> None:
     """Compare spatial attributes of input files.
 
-    Compares all input files against the first one for compatibility of
-    spatial attributes: affine, dimensions, voxel sizes, and voxel order.
+    Parameters
+    ----------
+    in_files : list of Path
+        Files to compare (.trk, .trx, .nii, .nii.gz).
+
+    Returns
+    -------
+    None
+        Prints compatibility results to stdout.
     """
     verify_header_compatibility([str(f) for f in in_files])
 
@@ -710,8 +853,19 @@ def visualize(
 ) -> None:
     """Display tractogram and density map with bounding box.
 
-    Shows the tractogram and its density map (computed from Dipy) in
-    rasmm, voxmm, and vox space with its bounding box.
+    Parameters
+    ----------
+    in_tractogram : Path
+        Input tractogram (.trk, .tck, .vtk, .fib, .dpy, .trx).
+    reference : Path
+        Reference anatomy (.nii or .nii.gz).
+    remove_invalid : bool, optional
+        Remove invalid streamlines to avoid density map crashes.
+
+    Returns
+    -------
+    None
+        Opens visualization windows when fury is available.
     """
     tractogram_visualize_overlap(
         str(in_tractogram),

@@ -411,6 +411,23 @@ def convert_data_dict_to_tractogram(data):
 
 
 def append_generator_to_dict(gen, data):
+    """Append items yielded by a tractogram generator into data dict.
+
+    Parameters
+    ----------
+    gen : TractogramItem or np.ndarray
+        Item produced by a tractogram generator. Structured entries include
+        per-point and per-streamline metadata.
+    data : dict
+        Accumulator containing ``strs`` (positions), ``dpv`` and ``dps``
+        dictionaries that will be extended in-place.
+
+    Returns
+    -------
+    None
+        The function mutates ``data`` and returns ``None``.
+    """
+
     if isinstance(gen, TractogramItem):
         data["strs"].append(gen.streamline.tolist())
         for key in gen.data_for_points:
