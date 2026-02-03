@@ -434,7 +434,7 @@ def append_generator_to_dict(gen, data):
 
     Parameters
     ----------
-    gen : TractogramItem or np.ndarray
+    gen : TractogramItem class instance or np.ndarray
         Item produced by a tractogram generator. Structured entries include
         per-point and per-streamline metadata.
     data : dict

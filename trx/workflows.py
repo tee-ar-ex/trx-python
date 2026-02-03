@@ -461,7 +461,7 @@ def _load_streamlines_from_csv(positions_csv):
 
     Returns
     -------
-    nibabel.streamlines.ArraySequence
+    nibabel.streamlines.ArraySequence class instance
         Streamlines reconstructed from the CSV rows.
     """
     with open(positions_csv, newline="") as f:
@@ -503,7 +503,7 @@ def _apply_spatial_transforms(
 
     Parameters
     ----------
-    streamlines : ArraySequence
+    streamlines : ArraySequence class instance
         Streamlines to transform.
     reference : str
         Reference anatomy used for space/origin.
@@ -518,7 +518,7 @@ def _apply_spatial_transforms(
 
     Returns
     -------
-    ArraySequence or None
+    ArraySequence class instance or None
         Transformed streamlines, or None if dipy is unavailable.
     """
     if not dipy_available:
@@ -554,7 +554,7 @@ def _write_header(tmp_dir_name, reference, streamlines):
         Temporary directory where header.json is written.
     reference : str
         Reference anatomy used to derive affine and dimensions.
-    streamlines : ArraySequence
+    streamlines : ArraySequence class instance
         Streamlines whose counts populate the header.
     """
     affine, dimensions, _, _ = get_reference_info_wrapper(reference)
@@ -579,7 +579,7 @@ def _write_streamline_data(tmp_dir_name, streamlines, positions_dtype, offsets_d
     ----------
     tmp_dir_name : str
         Temporary directory to store binary arrays.
-    streamlines : ArraySequence
+    streamlines : ArraySequence class instance
         Streamlines to serialize.
     positions_dtype : str
         Datatype for positions array.

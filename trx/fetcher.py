@@ -119,7 +119,7 @@ def fetch_data(files_dict, keys=None):  # noqa: C901
         For each file in `files_dict` the value should be (url, md5).
         The file will be downloaded from url, if the file does not already
         exist or if the file exists but the md5 checksum does not match.
-        Zip files are automatically unzipped and its content are md5 checked.
+        Zip files are automatically unzipped and its contents are md5 checked.
     keys : list of str or str or None, optional
         Subset of keys from ``files_dict`` to download. When None, all
         keys are downloaded.

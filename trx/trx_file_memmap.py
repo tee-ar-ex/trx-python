@@ -478,12 +478,12 @@ def _filter_empty_trx_files(trx_list: List["TrxFile"]) -> List["TrxFile"]:
 
     Parameters
     ----------
-    trx_list : list of TrxFile
+    trx_list : list of TrxFile class instances
         Collection of tractograms to filter.
 
     Returns
     -------
-    list of TrxFile
+    list of TrxFile class instances
         Only entries containing at least one streamline.
     """
     return [curr_trx for curr_trx in trx_list if curr_trx.header["NB_STREAMLINES"] > 0]
@@ -494,13 +494,13 @@ def _get_all_data_keys(trx_list: List["TrxFile"]) -> Tuple[set, set]:
 
     Parameters
     ----------
-    trx_list : list of TrxFile
+    trx_list : list of TrxFile class instances
         Collection of tractograms.
 
     Returns
     -------
     tuple of set
-        Sets of data_per_streamline keys and data_per_vertex keys.
+        Sets of `data_per_streamline` keys and `data_per_vertex` keys.
     """
     all_dps = []
     all_dpv = []
@@ -540,11 +540,11 @@ def _verify_dpv_coherence(
 
     Parameters
     ----------
-    trx_list : list of TrxFile
+    trx_list : list of TrxFile class instances
         Tractograms being concatenated.
     all_dpv : set
-        Union of data_per_vertex keys across tractograms.
-    ref_trx : TrxFile
+        Union of `data_per_vertex` keys across tractograms.
+    ref_trx : TrxFile class instance
         Reference tractogram for dtype/key checks.
     delete_dpv : bool
         Drop mismatched dpv keys instead of raising when True.
@@ -552,7 +552,7 @@ def _verify_dpv_coherence(
     Raises
     ------
     ValueError
-        If dpv keys or dtypes differ and delete_dpv is False.
+        If dpv keys or dtypes differ and `delete_dpv` is False.
     """
     for curr_trx in trx_list:
         for key in all_dpv:
@@ -583,11 +583,11 @@ def _verify_dps_coherence(
 
     Parameters
     ----------
-    trx_list : list of TrxFile
+    trx_list : list of TrxFile class instances
         Tractograms being concatenated.
     all_dps : set
         Union of data_per_streamline keys across tractograms.
-    ref_trx : TrxFile
+    ref_trx : TrxFile class instance
         Reference tractogram for dtype/key checks.
     delete_dps : bool
         Drop mismatched dps keys instead of raising when True.
@@ -595,7 +595,7 @@ def _verify_dps_coherence(
     Raises
     ------
     ValueError
-        If dps keys or dtypes differ and delete_dps is False.
+        If dps keys or dtypes differ and `delete_dps` is False.
     """
     for curr_trx in trx_list:
         for key in all_dps:
@@ -624,7 +624,7 @@ def _compute_groups_info(trx_list: List["TrxFile"]) -> Tuple[dict, dict]:
 
     Parameters
     ----------
-    trx_list : list of TrxFile
+    trx_list : list of TrxFile class instances
         Tractograms being concatenated.
 
     Returns
@@ -664,14 +664,14 @@ def _create_new_trx_for_concatenation(
 
     Parameters
     ----------
-    trx_list : list of TrxFile
+    trx_list : list of TrxFile class instances
         Input tractograms to concatenate.
-    ref_trx : TrxFile
+    ref_trx : TrxFile class instance
         Reference tractogram for header/dtype template.
     delete_dps : bool
-        Drop data_per_streamline keys not shared.
+        Drop `data_per_streamline` keys not shared.
     delete_dpv : bool
-        Drop data_per_vertex keys not shared.
+        Drop `data_per_vertex` keys not shared.
     delete_groups : bool
         Drop groups when metadata differ.
 
@@ -711,9 +711,9 @@ def _setup_groups_for_concatenation(
 
     Parameters
     ----------
-    new_trx : TrxFile
+    new_trx : TrxFile class instance
         Destination tractogram.
-    trx_list : list of TrxFile
+    trx_list : list of TrxFile class instances
         Source tractograms.
     all_groups_len : dict
         Mapping of group name to total length.
@@ -889,9 +889,10 @@ class TrxFile:
         The number of vertices to use in the new TrxFile.
     nb_streamlines : int, optional
         The number of streamlines in the new TrxFile.
-    init_as : TrxFile, optional
+    init_as : TrxFile class instance, optional
         A TrxFile to use as reference.
-    reference : str, dict, Nifti1Image, TrkFile, Nifti1Header, optional
+
+    reference : str, dict, Nifti1Image, TrkFile, or Nifti1Header, optional
         A Nifti or Trk file/obj to use as reference.
     """
 
@@ -1046,11 +1047,11 @@ class TrxFile:
         Parameters
         ----------
         self
-            TrxFile instance.
+            TrxFile class instance.
 
         Returns
         -------
-        TrxFile
+        TrxFile class instance
             Deep-copied instance.
         """
         return self.deepcopy()
@@ -1679,7 +1680,7 @@ class TrxFile:
 
         Parameters
         ----------
-        obj : TrxFile or Tractogram or StatefulTractogram
+        obj : TrxFile or Tractogram or StatefulTractogram class instance
             Object whose streamlines and associated data will be appended.
         extra_buffer : int, optional
             Additional preallocation buffer for streamlines (in count).
@@ -1928,7 +1929,7 @@ class TrxFile:
 
         Parameters
         ----------
-        sft : StatefulTractogram
+        sft : StatefulTractogram class instance
             Input tractogram.
         dtype_dict : dict or None, optional
             Mapping of target dtypes for positions, offsets, dpv, and dps. When
@@ -2034,7 +2035,7 @@ class TrxFile:
 
         Parameters
         ----------
-        tractogram : nibabel.streamlines.Tractogram
+        tractogram : nibabel.streamlines.Tractogram class instance
             Input tractogram to convert.
         reference : object
             Reference anatomy used to populate header fields.
@@ -2043,7 +2044,7 @@ class TrxFile:
 
         Returns
         -------
-        TrxFile
+        TrxFile class instance
             TRX representation of the tractogram.
         """
         if dtype_dict is None:
@@ -2129,7 +2130,7 @@ class TrxFile:
 
         Returns
         -------
-        nibabel.streamlines.Tractogram
+        nibabel.streamlines.Tractogram class instance
             Tractogram containing streamlines and metadata.
         """
         if resize:
@@ -2188,7 +2189,7 @@ class TrxFile:
 
         Returns
         -------
-        StatefulTractogram or None
+        StatefulTractogram class instance or None
             StatefulTractogram object, or None if dipy is unavailable.
         """
         try:
