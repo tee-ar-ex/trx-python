@@ -1,7 +1,7 @@
 """TRX file format for brain tractography data."""
 
 try:
-    from .version import __version__  # noqa: F401
+    from ._version import __version__  # noqa: F401
 except ImportError:
     try:
         from importlib.metadata import PackageNotFoundError, version
