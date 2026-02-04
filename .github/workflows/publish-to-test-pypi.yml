@@ -41,7 +41,7 @@ jobs:
         run: python -c "import sys; print(sys.version)"
       - name: Install sdist without optional dependencies
         run: pip install dist/*.tar.gz
-      - run: python -c 'import trx.version; print(trx.version.__version__)'
+      - run: python -c 'import trx; print(trx.__version__)'
       - name: Install pytest
         run: pip install pytest psutil pytest-console-scripts pytest-cov
       - name: Run tests
