@@ -4,8 +4,8 @@ try:
     from ._version import __version__  # noqa: F401
 except ImportError:
     try:
-        from importlib.metadata import version
+        from importlib.metadata import PackageNotFoundError, version
 
         __version__ = version("trx-python")
-    except Exception:
+    except (ImportError, PackageNotFoundError):
         __version__ = "unknown"
