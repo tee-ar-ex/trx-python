@@ -132,11 +132,6 @@ autoapi_type = 'python'
 autoapi_dirs = ['../../trx']
 autoapi_ignore = ['*test*', '*version*']
 
-# Added to suppress warnings from autoapi about import of _version
-# within __init__.py:
-suppress_warnings = ['autoapi.python_import_resolution']
-
-
 # Sphinx gallery configuration
 sphinx_gallery_conf = {
      'examples_dirs': '../../examples',
