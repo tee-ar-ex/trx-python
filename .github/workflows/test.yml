@@ -32,9 +32,9 @@ jobs:
 
       - name: Install dependencies
         run: |
-          python -c "import trx; print(trx.__version__)"
           python -m pip install --upgrade pip
           python -m pip install -e .[dev,test]
+          python -c "import trx; print(trx.__version__)"
 
       - name: Test
         run: spin test
