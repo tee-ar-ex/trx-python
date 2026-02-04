@@ -86,7 +86,7 @@ packages = ["trx"]
 include-package-data = true
 
 [tool.setuptools_scm]
-write_to = "trx/version.py"
+write_to = "trx/_version.py"
 fallback_version = "0.0"
 local_scheme = "no-local-version"
 
