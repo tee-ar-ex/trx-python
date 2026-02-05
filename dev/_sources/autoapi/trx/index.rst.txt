@@ -43,3 +43,16 @@ Submodules
    /autoapi/trx/workflows/index
 
 
+Attributes
+----------
+
+.. autoapisummary::
+
+   trx.__version__
+
+
+Package Contents
+----------------
+
+.. py:data:: __version__
+

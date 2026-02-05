@@ -6,9 +6,8 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-
-    <title>Tutorials &#8212; trx-python 0.4.dev39 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>trx &#8212; trx-python 0.4.dev39 documentation</title>
   
   
   
@@ -48,7 +47,7 @@
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'auto_examples/index';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/trx';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.16.1';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://tee-ar-ex.github.io/trx-python/switcher.json';
@@ -58,8 +57,6 @@
         </script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Reading and Writing TRX Files" href="plot_read_write_trx.html" />
-    <link rel="prev" title="Command-line Interface" href="../scripts.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.4.dev39" />
@@ -178,8 +175,8 @@
 </li>
 
 
-<li class="nav-item current active">
-  <a class="nav-link nav-internal" href="#">
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../auto_examples/index.html">
     Tutorials
   </a>
 </li>
@@ -257,10 +254,6 @@
   
 
   
-    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
-      <span class="fa-solid fa-outdent"></span>
-    </button>
-  
 </div>
 
     </header>
@@ -271,8 +264,10 @@
       
       
       
+        
+      
       <dialog id="pst-primary-sidebar-modal"></dialog>
-      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
         
 
   
@@ -301,8 +296,8 @@
 </li>
 
 
-<li class="nav-item current active">
-  <a class="nav-link nav-internal" href="#">
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../auto_examples/index.html">
     Tutorials
   </a>
 </li>
@@ -359,20 +354,6 @@
     
   </div>
   
-    <div class="sidebar-primary-items__start sidebar-primary__section">
-        <div class="sidebar-primary-item">
-<nav class="bd-docs-nav bd-links"
-     aria-label="Section Navigation">
-  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="plot_read_write_trx.html">Reading and Writing TRX Files</a></li>
-<li class="toctree-l1"><a class="reference internal" href="plot_groups.html">Working with Groups</a></li>
-<li class="toctree-l1"><a class="reference internal" href="plot_dps_dpv.html">Data Per Vertex and Data Per Streamline</a></li>
-</ul>
-</div>
-</nav></div>
-    </div>
-  
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
       <div class="sidebar-primary-item">
@@ -408,7 +389,10 @@
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Tutorials</span></li>
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">trx</span></li>
   </ul>
 </nav>
 </div>
@@ -425,50 +409,22 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="tutorials">
-<h1>Tutorials<a class="headerlink" href="#tutorials" title="Link to this heading">#</a></h1>
-<p>These tutorials demonstrate how to use the trx-python library
-for working with TRX tractography files.</p>
-<section id="getting-started">
-<h2>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading">#</a></h2>
-<p>New to TRX? These tutorials will guide you through:</p>
-<ol class="arabic simple">
-<li><p><strong>Reading and Writing TRX Files</strong> - Load, inspect, and save TRX files</p></li>
-<li><p><strong>Working with Groups</strong> - Organize streamlines into anatomical bundles</p></li>
-<li><p><strong>Data Per Vertex and Streamline</strong> - Work with metadata</p></li>
-</ol>
-</section>
-<section id="prerequisites">
-<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading">#</a></h2>
-<p>To run these tutorials, you need:</p>
-<ul class="simple">
-<li><p>trx-python installed (<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">trx-python[all]</span></code>)</p></li>
-<li><p>An internet connection (for downloading test data on first run)</p></li>
-</ul>
-<p>Each tutorial can be run as a Python script or in a Jupyter notebook.</p>
-<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="This tutorial demonstrates how to read and write TRX files using trx-python. TRX is a tractography file format designed for efficient storage and access of brain fiber tract streamline data."><img alt="" src="../_images/sphx_glr_plot_read_write_trx_thumb.png" />
-<p><a class="reference internal" href="plot_read_write_trx.html"><span class="doc">Reading and Writing TRX Files</span></a></p>
-  <div class="sphx-glr-thumbnail-title">Reading and Writing TRX Files</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This tutorial demonstrates how to work with groups in TRX files. Groups allow you to organize streamlines into meaningful subsets, such as anatomical bundles or clusters."><img alt="" src="../_images/sphx_glr_plot_groups_thumb.png" />
-<p><a class="reference internal" href="plot_groups.html"><span class="doc">Working with Groups</span></a></p>
-  <div class="sphx-glr-thumbnail-title">Working with Groups</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This tutorial demonstrates how to work with metadata in TRX files. TRX supports two types of metadata:"><img alt="" src="../_images/sphx_glr_plot_dps_dpv_thumb.png" />
-<p><a class="reference internal" href="plot_dps_dpv.html"><span class="doc">Data Per Vertex and Data Per Streamline</span></a></p>
-  <div class="sphx-glr-thumbnail-title">Data Per Vertex and Data Per Streamline</div>
-</div></div><div class="toctree-wrapper compound">
-</div>
-<div class="sphx-glr-footer sphx-glr-footer-gallery docutils container">
-<div class="sphx-glr-download sphx-glr-download-python docutils container">
-<p><a class="reference download internal" download="" href="../_downloads/07fcc19ba03226cd3d83d4e40ec44385/auto_examples_python.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">all</span> <span class="pre">examples</span> <span class="pre">in</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">auto_examples_python.zip</span></code></a></p>
-</div>
-<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
-<p><a class="reference download internal" download="" href="../_downloads/6f1e7a639e0699d6164445b55e6c116d/auto_examples_jupyter.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">all</span> <span class="pre">examples</span> <span class="pre">in</span> <span class="pre">Jupyter</span> <span class="pre">notebooks:</span> <span class="pre">auto_examples_jupyter.zip</span></code></a></p>
-</div>
-</div>
-<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
-</section>
-</section>
+  <h1>Source code for trx</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;TRX file format for brain tractography data.&quot;&quot;&quot;</span>
 
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">._version</span><span class="w"> </span><span class="kn">import</span> <span class="n">__version__</span>  <span class="c1"># noqa: F401</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">importlib.metadata</span><span class="w"> </span><span class="kn">import</span> <span class="n">PackageNotFoundError</span><span class="p">,</span> <span class="n">version</span>
+
+<div class="viewcode-block" id="__version__">
+<a class="viewcode-back" href="../autoapi/trx/index.html#trx.__version__">[docs]</a>
+        <span class="n">__version__</span> <span class="o">=</span> <span class="n">version</span><span class="p">(</span><span class="s2">&quot;trx-python&quot;</span><span class="p">)</span></div>
+
+    <span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="n">PackageNotFoundError</span><span class="p">):</span>
+        <span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;unknown&quot;</span>
+</pre></div>
 
                 </article>
               
@@ -479,58 +435,12 @@ for working with TRX tractography files.</p>
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
-    <a class="left-prev"
-       href="../scripts.html"
-       title="previous page">
-      <i class="fa-solid fa-angle-left"></i>
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Command-line Interface</p>
-      </div>
-    </a>
-    <a class="right-next"
-       href="plot_read_write_trx.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Reading and Writing TRX Files</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
-    </a>
 </div>
                 </footer>
               
             </div>
             
             
-              
-                <dialog id="pst-secondary-sidebar-modal"></dialog>
-                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
-
-
-  <div class="sidebar-secondary-item">
-<div
-    id="pst-page-navigation-heading-2"
-    class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> On this page
-  </div>
-  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-started">Getting Started</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">Prerequisites</a></li>
-</ul>
-  </nav></div>
-
-  <div class="sidebar-secondary-item">
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../_sources/auto_examples/index.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div></div>
-
-</div></div>
               
             
           </div>

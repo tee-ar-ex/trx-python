@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:00.249** total execution time for 3 files **from all galleries**:
+**00:00.197** total execution time for 3 files **from all galleries**:
 
 .. container::
 
@@ -33,7 +33,7 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_auto_examples_plot_read_write_trx.py` (``../../examples/plot_read_write_trx.py``)
-     - 00:00.231
+     - 00:00.179
      - 0.0
    * - :ref:`sphx_glr_auto_examples_plot_dps_dpv.py` (``../../examples/plot_dps_dpv.py``)
      - 00:00.010
