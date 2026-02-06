@@ -6,6 +6,7 @@ import json
 import logging
 import os
 import shutil
+import struct
 from typing import Any, List, Optional, Tuple, Type, Union
 import zipfile
 
@@ -407,12 +408,29 @@ def load_from_zip(filename: str) -> Type["TrxFile"]:
             if ext == ".bit":
                 ext = ".bool"
 
-            mem_adress = zip_info.header_offset + len(zip_info.FileHeader())
+            # Read actual local file header to get correct data offset.
+            # We can't use zip_info.FileHeader() because ZIP spec allows local
+            # headers to differ from central directory entries.
+            # See: https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT
+            _ZIP_LOCAL_HEADER_SIZE = 30
+            _ZIP_LOCAL_HEADER_SIGNATURE = b"PK\x03\x04"
+
+            zf.fp.seek(zip_info.header_offset)
+            local_header = zf.fp.read(_ZIP_LOCAL_HEADER_SIZE)
+            if len(local_header) < _ZIP_LOCAL_HEADER_SIZE:
+                raise ValueError(f"Truncated local file header for {elem_filename}")
+            if local_header[:4] != _ZIP_LOCAL_HEADER_SIGNATURE:
+                raise ValueError(
+                    f"Invalid local file header signature for {elem_filename}"
+                )
+            fname_len, extra_len = struct.unpack("<HH", local_header[26:30])
+
+            mem_adress = (
+                zip_info.header_offset + _ZIP_LOCAL_HEADER_SIZE + fname_len + extra_len
+            )
+
             dtype_size = np.dtype(ext[1:]).itemsize
             size = zip_info.file_size / dtype_size
-
-            if len(zip_info.extra):
-                mem_adress -= len(zip_info.extra)
 
             if size.is_integer():
                 files_pointer_size[elem_filename] = mem_adress, int(size)
