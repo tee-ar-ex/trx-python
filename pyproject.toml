@@ -80,6 +80,7 @@ trx_simple_compare = "trx.cli:compare_cmd"
 trx_validate = "trx.cli:validate_cmd"
 trx_verify_header_compatibility = "trx.cli:verify_header_cmd"
 trx_visualize_overlap = "trx.cli:visualize_cmd"
+trx_info = "trx.cli:info_cmd"
 
 [tool.setuptools]
 packages = ["trx"]

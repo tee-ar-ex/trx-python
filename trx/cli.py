@@ -13,7 +13,7 @@ import typer
 from typing_extensions import Annotated
 
 from trx.io import load, save
-from trx.trx_file_memmap import TrxFile, concatenate
+from trx.trx_file_memmap import TrxFile, concatenate, load as load_trx
 from trx.workflows import (
     convert_dsi_studio,
     convert_tractogram,
@@ -874,6 +874,111 @@ def visualize(
     )
 
 
+def _format_size(size_bytes: int) -> str:
+    """Format byte size to human readable string.
+
+    Parameters
+    ----------
+    size_bytes : int
+        Size in bytes.
+
+    Returns
+    -------
+    str
+        Human readable size string (e.g., "1.5 MB").
+    """
+    for unit in ["B", "KB", "MB", "GB"]:
+        if size_bytes < 1024:
+            return f"{size_bytes:.1f} {unit}" if unit != "B" else f"{size_bytes} {unit}"
+        size_bytes /= 1024
+    return f"{size_bytes:.1f} TB"
+
+
+@app.command("info")
+def info(
+    in_tractogram: Annotated[
+        Path,
+        typer.Argument(help="Input TRX file."),
+    ],
+) -> None:
+    """Display detailed information about a TRX file.
+
+    Shows file size, compression status, header metadata (affine, dimensions,
+    voxel sizes), streamline/vertex counts, data keys (dpv, dps, dpg), groups,
+    and archive contents listing similar to ``unzip -l``.
+
+    Parameters
+    ----------
+    in_tractogram : Path
+        Input TRX file (.trx extension required).
+
+    Returns
+    -------
+    None
+        Prints TRX file information to stdout.
+
+    Examples
+    --------
+    $ trx info tractogram.trx
+    $ trx_info tractogram.trx
+    """
+    import zipfile
+
+    if not in_tractogram.exists():
+        typer.echo(
+            typer.style(f"Error: {in_tractogram} does not exist.", fg=typer.colors.RED),
+            err=True,
+        )
+        raise typer.Exit(code=1)
+
+    if in_tractogram.suffix.lower() != ".trx":
+        typer.echo(
+            typer.style(
+                f"Error: {in_tractogram.name} is not a TRX file. "
+                "Only .trx files are supported.",
+                fg=typer.colors.RED,
+            ),
+            err=True,
+        )
+        raise typer.Exit(code=1)
+
+    # Show archive info
+    file_size = in_tractogram.stat().st_size
+    typer.echo(f"File: {in_tractogram}")
+    typer.echo(f"Size: {_format_size(file_size)}")
+
+    with zipfile.ZipFile(str(in_tractogram), "r") as zf:
+        total_uncompressed = sum(info.file_size for info in zf.infolist())
+        is_compressed = any(info.compress_type != 0 for info in zf.infolist())
+        typer.echo(f"Entries: {len(zf.infolist())}")
+        typer.echo(f"Compressed: {'Yes' if is_compressed else 'No'}")
+        typer.echo(f"Uncompressed size: {_format_size(total_uncompressed)}")
+
+    typer.echo("")
+
+    # Show TRX content info
+    trx = load_trx(str(in_tractogram))
+    typer.echo(trx)
+
+    # Show file listing (unzip -l style)
+    typer.echo("\nArchive contents:")
+    typer.echo("  Length      Date    Time    Name")
+    typer.echo("---------  ---------- -----   ----")
+    with zipfile.ZipFile(str(in_tractogram), "r") as zf:
+        for zinfo in zf.infolist():
+            dt = zinfo.date_time
+            date_str = f"{dt[1]:02d}-{dt[2]:02d}-{dt[0]}"
+            time_str = f"{dt[3]:02d}:{dt[4]:02d}"
+            typer.echo(
+                f"{zinfo.file_size:>9}  {date_str} {time_str}   {zinfo.filename}"
+            )
+        num_files = len(zf.infolist())
+        typer.echo("---------                     -------")
+        typer.echo(f"{total_uncompressed:>9}                     {num_files} files")
+
+    trx.close()
+
+
 def main():
     """Entry point for the TRX CLI."""
     app()
@@ -962,6 +1067,12 @@ visualize_cmd = _create_standalone_app(
     visualize,
     "trx_visualize_overlap",
     "Display tractogram and density map with bounding box.",
+)
+
+info_cmd = _create_standalone_app(
+    info,
+    "trx_info",
+    "Display information about a TRX file.",
 )
 
 
