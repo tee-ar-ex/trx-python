@@ -27,7 +27,10 @@ from trx.workflows import (
 )
 
 # If they already exist, this only takes 5 seconds (check md5sum)
-fetch_data(get_testing_files_dict(), keys=["DSI.zip", "trx_from_scratch.zip"])
+fetch_data(
+    get_testing_files_dict(),
+    keys=["DSI.zip", "trx_from_scratch.zip", "gold_standard.zip"],
+)
 
 
 def _normalize_dtype_dict(dtype_dict):
@@ -91,6 +94,10 @@ class TestStandaloneCommands:
         ret = script_runner.run(["trx_visualize_overlap", "--help"])
         assert ret.success
 
+    def test_help_option_info(self, script_runner):
+        ret = script_runner.run(["trx_info", "--help"])
+        assert ret.success
+
 
 # Tests for unified trx CLI
 class TestUnifiedCLI:
@@ -135,6 +142,35 @@ class TestUnifiedCLI:
     def test_trx_visualize_help(self, script_runner):
         ret = script_runner.run(["trx", "visualize", "--help"])
         assert ret.success
+
+    def test_trx_info_help(self, script_runner):
+        ret = script_runner.run(["trx", "info", "--help"])
+        assert ret.success
+
+    def test_trx_info_execution(self, script_runner):
+        """Test trx info command execution on a real TRX file."""
+        trx_path = os.path.join(get_home(), "gold_standard", "gs.trx")
+        ret = script_runner.run(["trx", "info", trx_path])
+        assert ret.success
+        # Check key output elements
+        assert "VOXEL_TO_RASMM" in ret.stdout
+        assert "DIMENSIONS" in ret.stdout
+        assert "streamline_count" in ret.stdout
+        assert "vertex_count" in ret.stdout
+        assert "Archive contents:" in ret.stdout
+
+    def test_trx_info_wrong_extension(self, script_runner):
+        """Test trx info rejects non-TRX files."""
+        tck_path = os.path.join(get_home(), "gold_standard", "gs.tck")
+        ret = script_runner.run(["trx", "info", tck_path])
+        assert not ret.success
+        assert "not a TRX file" in ret.stderr
+
+    def test_trx_info_file_not_found(self, script_runner):
+        """Test trx info handles missing files."""
+        ret = script_runner.run(["trx", "info", "nonexistent.trx"])
+        assert not ret.success
+        assert "does not exist" in ret.stderr
 
 
 # Tests for workflow functions

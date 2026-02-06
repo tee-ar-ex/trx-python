@@ -47,6 +47,9 @@ TRX-Python provides a unified CLI (`trx`) for common operations:
 # Show all available commands
 trx --help
 
+# Display TRX file information (header, groups, data keys, archive contents)
+trx info data.trx
+
 # Convert between formats
 trx convert input.trk output.trx
 
@@ -60,6 +63,7 @@ trx validate data.trx
 Individual commands are also available for backward compatibility:
 
 ```bash
+trx_info data.trx
 trx_convert_tractogram input.trk output.trx
 trx_concatenate_tractograms tract1.trx tract2.trx merged.trx
 trx_validate data.trx
