@@ -28,6 +28,7 @@ Attributes
    trx.cli.validate_cmd
    trx.cli.verify_header_cmd
    trx.cli.visualize_cmd
+   trx.cli.info_cmd
 
 
 Functions
@@ -45,6 +46,8 @@ Functions
    trx.cli.validate
    trx.cli.verify_header
    trx.cli.visualize
+   trx.cli._format_size
+   trx.cli.info
    trx.cli.main
    trx.cli._create_standalone_app
 
@@ -516,6 +519,75 @@ Module Contents
    ..
        !! processed by numpydoc !!
 
+.. py:function:: _format_size(size_bytes: int) -> str
+
+   
+   Format byte size to human readable string.
+
+
+   :Parameters:
+
+       **size_bytes** : int
+           Size in bytes.
+
+
+
+   :Returns:
+
+       str
+           Human readable size string (e.g., "1.5 MB").
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: info(in_tractogram: typing_extensions.Annotated[pathlib.Path, typer.Argument(help='Input TRX file.')]) -> None
+
+   
+   Display detailed information about a TRX file.
+
+   Shows file size, compression status, header metadata (affine, dimensions,
+   voxel sizes), streamline/vertex counts, data keys (dpv, dps, dpg), groups,
+   and archive contents listing similar to ``unzip -l``.
+
+   :Parameters:
+
+       **in_tractogram** : Path
+           Input TRX file (.trx extension required).
+
+
+
+   :Returns:
+
+       None
+           Prints TRX file information to stdout.
+
+
+
+
+
+
+
+
+
+
+   .. rubric:: Examples
+
+   $ trx info tractogram.trx
+   $ trx_info tractogram.trx
+
+   ..
+       !! processed by numpydoc !!
+
 .. py:function:: main()
 
    
@@ -593,4 +665,6 @@ Module Contents
 .. py:data:: verify_header_cmd
 
 .. py:data:: visualize_cmd
+
+.. py:data:: info_cmd
 
