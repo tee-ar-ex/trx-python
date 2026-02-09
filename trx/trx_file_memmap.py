@@ -1010,12 +1010,24 @@ class TrxFile:
 
         text += "\nstreamline_count: {}".format(strs_len)
         text += "\nvertex_count: {}".format(pts_len)
-        text += "\ndata_per_vertex keys: {}".format(list(self.data_per_vertex.keys()))
-        text += "\ndata_per_streamline keys: {}".format(
-            list(self.data_per_streamline.keys())
-        )
 
-        text += "\ngroups keys: {}".format(list(self.groups.keys()))
+        dpv_keys = list(self.data_per_vertex.keys())
+        if dpv_keys:
+            text += "\ndata_per_vertex keys: {}".format(dpv_keys)
+        else:
+            text += "\nNo data per vertex (dpv) keys"
+
+        dps_keys = list(self.data_per_streamline.keys())
+        if dps_keys:
+            text += "\ndata_per_streamline keys: {}".format(dps_keys)
+        else:
+            text += "\nNo data per streamline (dps) keys"
+
+        group_keys = list(self.groups.keys())
+        if group_keys:
+            text += "\ngroups keys: {}".format(group_keys)
+        else:
+            text += "\nNo group keys"
         for group_key in self.groups.keys():
             if group_key in self.data_per_group:
                 text += "\ndata_per_groups ({}) keys: {}".format(
