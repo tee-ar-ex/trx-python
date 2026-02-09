@@ -132,14 +132,57 @@ autoapi_type = 'python'
 autoapi_dirs = ['../../trx']
 autoapi_ignore = ['*test*', '*version*']
 
+
+def _validate_reference_urls(urls, timeout=5):
+    """Validate reference URLs and return only reachable ones.
+
+    Checks if the objects.inv file (used by sphinx for intersphinx) is
+    accessible at each URL.
+
+    Parameters
+    ----------
+    urls : dict
+        Dictionary of package names to documentation URLs.
+    timeout : int
+        Connection timeout in seconds.
+
+    Returns
+    -------
+    dict
+        Dictionary containing only URLs that are reachable.
+    """
+    import urllib.request
+    import urllib.error
+
+    valid_urls = {}
+    for name, url in urls.items():
+        objects_inv_url = url.rstrip('/') + '/objects.inv'
+        try:
+            req = urllib.request.Request(
+                objects_inv_url,
+                headers={'User-Agent': 'Sphinx-doc-builder'}
+            )
+            urllib.request.urlopen(req, timeout=timeout)
+            valid_urls[name] = url
+        except urllib.error.URLError as e:
+            reason = getattr(e, 'reason', str(e))
+            print(f"WARNING: Skipping '{name}' reference URL ({url}): {reason}")
+        except Exception as e:
+            print(f"WARNING: Skipping '{name}' reference URL ({url}): {e}")
+    return valid_urls
+
+
+# Reference URLs for sphinx-gallery hyperlinks
+_reference_urls = {
+    'numpy': 'https://numpy.org/doc/stable/',
+    'nibabel': 'https://nipy.org/nibabel/',
+}
+
 # Sphinx gallery configuration
 sphinx_gallery_conf = {
      'examples_dirs': '../../examples',
      'gallery_dirs': 'auto_examples',
      'within_subsection_order': 'NumberOfCodeLinesSortKey',
-     'reference_url': {
-         'numpy': 'https://numpy.org/doc/stable/',
-         'nibabel': 'https://nipy.org/nibabel/',
-     },
+     'reference_url': _validate_reference_urls(_reference_urls),
      'default_thumb_file': os.path.join(os.path.dirname(__file__), '..', '_static', 'trx_logo.png'),
 }
