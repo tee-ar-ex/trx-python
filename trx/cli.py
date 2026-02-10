@@ -6,11 +6,10 @@ This module provides a unified CLI for all TRX file format operations using Type
 """
 
 from pathlib import Path
-from typing import List, Optional
+from typing import Annotated, List, Optional
 
 import numpy as np
 import typer
-from typing_extensions import Annotated
 
 from trx.io import load, save
 from trx.trx_file_memmap import TrxFile, concatenate, load as load_trx
@@ -25,11 +24,99 @@ from trx.workflows import (
     verify_header_compatibility,
 )
 
+
+def _debug_callback(value: bool) -> None:
+    """Print environment and dependency diagnostics, then exit.
+
+    Parameters
+    ----------
+    value : bool
+        Whether the ``--debug`` flag was passed.
+    """
+    if not value:
+        return
+
+    import importlib.metadata
+    import importlib.util
+    import sys
+
+    from trx import __version__
+
+    typer.echo("Environment diagnostics:")
+    typer.echo(f"  Python executable : {sys.executable}")
+    typer.echo(f"  sys.prefix        : {sys.prefix}")
+    typer.echo(f"  trx-python version: {__version__}")
+
+    trx_spec = importlib.util.find_spec("trx")
+    trx_location = (
+        trx_spec.submodule_search_locations[0]
+        if trx_spec and trx_spec.submodule_search_locations
+        else "unknown"
+    )
+    typer.echo(f"  trx package       : {trx_location}")
+
+    # Read required dependencies from package metadata
+    required_deps = []
+    try:
+        import re
+
+        for req in importlib.metadata.requires("trx-python") or []:
+            # Skip optional / extra deps (they contain "; extra ==")
+            if "extra ==" in req:
+                continue
+            # Extract the package name (strip version specifiers like >=, <=, ~=)
+            dep_name = re.split(r"[>=<!~;\s]", req)[0]
+            required_deps.append(dep_name)
+    except importlib.metadata.PackageNotFoundError:
+        required_deps = ["deepdiff", "nibabel", "numpy", "typer"]
+
+    optional_deps = ["dipy", "fury", "vtk"]
+
+    typer.echo("\nRequired dependencies:")
+    for dep in required_deps:
+        spec = importlib.util.find_spec(dep)
+        if spec is None:
+            typer.echo(f"  {dep:12s} NOT FOUND")
+        else:
+            typer.echo(f"  {dep:12s} found")
+
+    typer.echo("\nOptional dependencies:")
+    for dep in optional_deps:
+        spec = importlib.util.find_spec(dep)
+        if spec is None:
+            typer.echo(f"  {dep:12s} not found")
+        else:
+            typer.echo(f"  {dep:12s} found")
+
+    raise typer.Exit()
+
+
+def _main_callback(
+    _debug: Annotated[
+        bool,
+        typer.Option(
+            "--debug",
+            help="Print environment and dependency diagnostics.",
+            callback=_debug_callback,
+            is_eager=True,
+        ),
+    ] = False,
+) -> None:
+    """TRX File Format Tools - CLI for brain tractography data manipulation.
+
+    Parameters
+    ----------
+    _debug : bool, optional
+        If True, print environment and dependency diagnostics and exit.
+    """
+
+
 app = typer.Typer(
     name="trx",
     help="TRX File Format Tools - CLI for brain tractography data manipulation.",
     add_completion=False,
     rich_markup_mode="rich",
+    callback=_main_callback,
 )
 
 

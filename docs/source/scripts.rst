@@ -19,6 +19,7 @@ The recommended way to use TRX commands is through the unified ``trx`` CLI:
 
 Available subcommands:
 
+- ``trx info`` - Display detailed TRX file information
 - ``trx concatenate`` - Concatenate multiple tractograms
 - ``trx convert`` - Convert between tractography formats
 - ``trx convert-dsi`` - Fix DSI-Studio TRK files
@@ -33,6 +34,20 @@ Standalone Commands
 -------------------
 
 For backward compatibility, standalone commands are also available:
+
+trx_info
+~~~~~~~~
+Display detailed information about a TRX file, including file size, compression status, header metadata (affine, dimensions, voxel sizes), streamline/vertex counts, data keys (dpv, dps, dpg), groups, and archive contents.
+
+- Only ``.trx`` files are supported.
+
+.. code-block:: bash
+
+    # Using unified CLI
+    trx info tractogram.trx
+
+    # Using standalone command
+    trx_info tractogram.trx
 
 trx_concatenate_tractograms
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -150,6 +165,35 @@ Visualize streamline overlap between tractograms (requires visualization depende
 
     # Using standalone command
     trx_visualize_overlap tractogram.trk reference.nii.gz
+
+Troubleshooting
+---------------
+
+If the ``trx`` command is not working as expected, run ``trx --debug`` to print
+diagnostic information about the Python interpreter, package location, and
+whether all required and optional dependencies are installed:
+
+.. code-block:: bash
+
+    trx --debug
+
+    # Example output:
+    # Environment diagnostics:
+    #   Python executable : /Users/you/myenv/bin/python
+    #   sys.prefix        : /Users/you/myenv
+    #   trx-python version: 0.3.1
+    #   trx package       : /Users/you/myenv/lib/python3.11/site-packages/trx
+    #
+    # Required dependencies:
+    #   deepdiff     found
+    #   nibabel      found
+    #   numpy        found
+    #   typer        found
+    #
+    # Optional dependencies:
+    #   dipy         found
+    #   fury         not found
+    #   vtk          not found
 
 Notes
 -----
