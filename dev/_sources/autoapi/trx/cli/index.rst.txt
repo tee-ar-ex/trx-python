@@ -91,7 +91,7 @@ Module Contents
    ..
        !! processed by numpydoc !!
 
-.. py:function:: concatenate_tractograms(in_tractograms: typing_extensions.Annotated[List[pathlib.Path], typer.Argument(help='Input tractogram files. Format: trk, tck, vtk, fib, dpy, trx.')], out_tractogram: typing_extensions.Annotated[pathlib.Path, typer.Argument(help='Output filename for the concatenated tractogram.')], delete_dpv: typing_extensions.Annotated[bool, typer.Option('--delete-dpv', help='Delete data_per_vertex if not all inputs have the same metadata.')] = False, delete_dps: typing_extensions.Annotated[bool, typer.Option('--delete-dps', help='Delete data_per_streamline if not all inputs have the same metadata.')] = False, delete_groups: typing_extensions.Annotated[bool, typer.Option('--delete-groups', help='Delete groups if not all inputs have the same metadata.')] = False, reference: typing_extensions.Annotated[Optional[pathlib.Path], typer.Option('--reference', '-r', help='Reference anatomy for tck/vtk/fib/dpy files (.nii or .nii.gz).')] = None, force: typing_extensions.Annotated[bool, typer.Option('--force', '-f', help='Force overwriting of output files.')] = False) -> None
+.. py:function:: concatenate_tractograms(in_tractograms: Annotated[List[pathlib.Path], typer.Argument(help='Input tractogram files. Format: trk, tck, vtk, fib, dpy, trx.')], out_tractogram: Annotated[pathlib.Path, typer.Argument(help='Output filename for the concatenated tractogram.')], delete_dpv: Annotated[bool, typer.Option('--delete-dpv', help='Delete data_per_vertex if not all inputs have the same metadata.')] = False, delete_dps: Annotated[bool, typer.Option('--delete-dps', help='Delete data_per_streamline if not all inputs have the same metadata.')] = False, delete_groups: Annotated[bool, typer.Option('--delete-groups', help='Delete groups if not all inputs have the same metadata.')] = False, reference: Annotated[Optional[pathlib.Path], typer.Option('--reference', '-r', help='Reference anatomy for tck/vtk/fib/dpy files (.nii or .nii.gz).')] = None, force: Annotated[bool, typer.Option('--force', '-f', help='Force overwriting of output files.')] = False) -> None
 
    
    Concatenate multiple tractograms into one.
@@ -142,7 +142,7 @@ Module Contents
    ..
        !! processed by numpydoc !!
 
-.. py:function:: convert(in_tractogram: typing_extensions.Annotated[pathlib.Path, typer.Argument(help='Input tractogram. Format: trk, tck, vtk, fib, dpy, trx.')], out_tractogram: typing_extensions.Annotated[pathlib.Path, typer.Argument(help='Output tractogram. Format: trk, tck, vtk, fib, dpy, trx.')], reference: typing_extensions.Annotated[Optional[pathlib.Path], typer.Option('--reference', '-r', help='Reference anatomy for tck/vtk/fib/dpy files (.nii or .nii.gz).')] = None, positions_dtype: typing_extensions.Annotated[str, typer.Option('--positions-dtype', help='Datatype for positions in TRX output.')] = 'float32', offsets_dtype: typing_extensions.Annotated[str, typer.Option('--offsets-dtype', help='Datatype for offsets in TRX output.')] = 'uint64', force: typing_extensions.Annotated[bool, typer.Option('--force', '-f', help='Force overwriting of output files.')] = False) -> None
+.. py:function:: convert(in_tractogram: Annotated[pathlib.Path, typer.Argument(help='Input tractogram. Format: trk, tck, vtk, fib, dpy, trx.')], out_tractogram: Annotated[pathlib.Path, typer.Argument(help='Output tractogram. Format: trk, tck, vtk, fib, dpy, trx.')], reference: Annotated[Optional[pathlib.Path], typer.Option('--reference', '-r', help='Reference anatomy for tck/vtk/fib/dpy files (.nii or .nii.gz).')] = None, positions_dtype: Annotated[str, typer.Option('--positions-dtype', help='Datatype for positions in TRX output.')] = 'float32', offsets_dtype: Annotated[str, typer.Option('--offsets-dtype', help='Datatype for offsets in TRX output.')] = 'uint64', force: Annotated[bool, typer.Option('--force', '-f', help='Force overwriting of output files.')] = False) -> None
 
    
    Convert tractograms between formats.
@@ -190,7 +190,7 @@ Module Contents
    ..
        !! processed by numpydoc !!
 
-.. py:function:: convert_dsi(in_dsi_tractogram: typing_extensions.Annotated[pathlib.Path, typer.Argument(help='Input tractogram from DSI Studio (.trk).')], in_dsi_fa: typing_extensions.Annotated[pathlib.Path, typer.Argument(help='Input FA from DSI Studio (.nii.gz).')], out_tractogram: typing_extensions.Annotated[pathlib.Path, typer.Argument(help='Output tractogram file.')], remove_invalid: typing_extensions.Annotated[bool, typer.Option('--remove-invalid', help='Remove streamlines landing out of the bounding box.')] = False, keep_invalid: typing_extensions.Annotated[bool, typer.Option('--keep-invalid', help='Keep streamlines landing out of the bounding box.')] = False, force: typing_extensions.Annotated[bool, typer.Option('--force', '-f', help='Force overwriting of output files.')] = False) -> None
+.. py:function:: convert_dsi(in_dsi_tractogram: Annotated[pathlib.Path, typer.Argument(help='Input tractogram from DSI Studio (.trk).')], in_dsi_fa: Annotated[pathlib.Path, typer.Argument(help='Input FA from DSI Studio (.nii.gz).')], out_tractogram: Annotated[pathlib.Path, typer.Argument(help='Output tractogram file.')], remove_invalid: Annotated[bool, typer.Option('--remove-invalid', help='Remove streamlines landing out of the bounding box.')] = False, keep_invalid: Annotated[bool, typer.Option('--keep-invalid', help='Keep streamlines landing out of the bounding box.')] = False, force: Annotated[bool, typer.Option('--force', '-f', help='Force overwriting of output files.')] = False) -> None
 
    
    Convert a DSI-Studio TRK file to TRX or TRK and fix space metadata.
@@ -236,7 +236,7 @@ Module Contents
    ..
        !! processed by numpydoc !!
 
-.. py:function:: generate(reference: typing_extensions.Annotated[pathlib.Path, typer.Argument(help='Reference anatomy (.nii or .nii.gz).')], out_tractogram: typing_extensions.Annotated[pathlib.Path, typer.Argument(help='Output tractogram. Format: trk, tck, vtk, fib, dpy, trx.')], positions: typing_extensions.Annotated[Optional[pathlib.Path], typer.Option('--positions', help='Binary file with streamline coordinates (Nx3 .npy).')] = None, offsets: typing_extensions.Annotated[Optional[pathlib.Path], typer.Option('--offsets', help='Binary file with streamline offsets (.npy).')] = None, positions_csv: typing_extensions.Annotated[Optional[pathlib.Path], typer.Option('--positions-csv', help='CSV file with streamline coordinates (x1,y1,z1,x2,y2,z2,...).')] = None, space: typing_extensions.Annotated[str, typer.Option('--space', help='Coordinate space. Non-default requires Dipy.')] = 'RASMM', origin: typing_extensions.Annotated[str, typer.Option('--origin', help='Coordinate origin. Non-default requires Dipy.')] = 'NIFTI', positions_dtype: typing_extensions.Annotated[str, typer.Option('--positions-dtype', help='Datatype for positions.')] = 'float32', offsets_dtype: typing_extensions.Annotated[str, typer.Option('--offsets-dtype', help='Datatype for offsets.')] = 'uint64', dpv: typing_extensions.Annotated[Optional[List[str]], typer.Option('--dpv', help='Data per vertex: FILE,DTYPE (e.g., color.npy,uint8).')] = None, dps: typing_extensions.Annotated[Optional[List[str]], typer.Option('--dps', help='Data per streamline: FILE,DTYPE (e.g., algo.npy,uint8).')] = None, groups: typing_extensions.Annotated[Optional[List[str]], typer.Option('--groups', help='Groups: FILE,DTYPE (e.g., AF_L.npy,int32).')] = None, dpg: typing_extensions.Annotated[Optional[List[str]], typer.Option('--dpg', help='Data per group: GROUP,FILE,DTYPE (e.g., AF_L,mean_fa.npy,float32).')] = None, verify_invalid: typing_extensions.Annotated[bool, typer.Option('--verify-invalid', help='Verify positions are valid (within bounding box). Requires Dipy.')] = False, force: typing_extensions.Annotated[bool, typer.Option('--force', '-f', help='Force overwriting of output files.')] = False) -> None
+.. py:function:: generate(reference: Annotated[pathlib.Path, typer.Argument(help='Reference anatomy (.nii or .nii.gz).')], out_tractogram: Annotated[pathlib.Path, typer.Argument(help='Output tractogram. Format: trk, tck, vtk, fib, dpy, trx.')], positions: Annotated[Optional[pathlib.Path], typer.Option('--positions', help='Binary file with streamline coordinates (Nx3 .npy).')] = None, offsets: Annotated[Optional[pathlib.Path], typer.Option('--offsets', help='Binary file with streamline offsets (.npy).')] = None, positions_csv: Annotated[Optional[pathlib.Path], typer.Option('--positions-csv', help='CSV file with streamline coordinates (x1,y1,z1,x2,y2,z2,...).')] = None, space: Annotated[str, typer.Option('--space', help='Coordinate space. Non-default requires Dipy.')] = 'RASMM', origin: Annotated[str, typer.Option('--origin', help='Coordinate origin. Non-default requires Dipy.')] = 'NIFTI', positions_dtype: Annotated[str, typer.Option('--positions-dtype', help='Datatype for positions.')] = 'float32', offsets_dtype: Annotated[str, typer.Option('--offsets-dtype', help='Datatype for offsets.')] = 'uint64', dpv: Annotated[Optional[List[str]], typer.Option('--dpv', help='Data per vertex: FILE,DTYPE (e.g., color.npy,uint8).')] = None, dps: Annotated[Optional[List[str]], typer.Option('--dps', help='Data per streamline: FILE,DTYPE (e.g., algo.npy,uint8).')] = None, groups: Annotated[Optional[List[str]], typer.Option('--groups', help='Groups: FILE,DTYPE (e.g., AF_L.npy,int32).')] = None, dpg: Annotated[Optional[List[str]], typer.Option('--dpg', help='Data per group: GROUP,FILE,DTYPE (e.g., AF_L,mean_fa.npy,float32).')] = None, verify_invalid: Annotated[bool, typer.Option('--verify-invalid', help='Verify positions are valid (within bounding box). Requires Dipy.')] = False, force: Annotated[bool, typer.Option('--force', '-f', help='Force overwriting of output files.')] = False) -> None
 
    
    Generate a TRX file from raw data files.
@@ -311,7 +311,7 @@ Module Contents
    ..
        !! processed by numpydoc !!
 
-.. py:function:: manipulate_dtype(in_tractogram: typing_extensions.Annotated[pathlib.Path, typer.Argument(help='Input TRX file.')], out_tractogram: typing_extensions.Annotated[pathlib.Path, typer.Argument(help='Output tractogram file.')], positions_dtype: typing_extensions.Annotated[Optional[str], typer.Option('--positions-dtype', help='Datatype for positions (float16, float32, float64).')] = None, offsets_dtype: typing_extensions.Annotated[Optional[str], typer.Option('--offsets-dtype', help='Datatype for offsets (uint32, uint64).')] = None, dpv: typing_extensions.Annotated[Optional[List[str]], typer.Option('--dpv', help='Data per vertex dtype: NAME,DTYPE (e.g., color_x,uint8).')] = None, dps: typing_extensions.Annotated[Optional[List[str]], typer.Option('--dps', help='Data per streamline dtype: NAME,DTYPE (e.g., algo,uint8).')] = None, groups: typing_extensions.Annotated[Optional[List[str]], typer.Option('--groups', help='Groups dtype: NAME,DTYPE (e.g., CC,uint64).')] = None, dpg: typing_extensions.Annotated[Optional[List[str]], typer.Option('--dpg', help='Data per group dtype: GROUP,NAME,DTYPE (e.g., CC,mean_fa,float64).')] = None, force: typing_extensions.Annotated[bool, typer.Option('--force', '-f', help='Force overwriting of output files.')] = False) -> None
+.. py:function:: manipulate_dtype(in_tractogram: Annotated[pathlib.Path, typer.Argument(help='Input TRX file.')], out_tractogram: Annotated[pathlib.Path, typer.Argument(help='Output tractogram file.')], positions_dtype: Annotated[Optional[str], typer.Option('--positions-dtype', help='Datatype for positions (float16, float32, float64).')] = None, offsets_dtype: Annotated[Optional[str], typer.Option('--offsets-dtype', help='Datatype for offsets (uint32, uint64).')] = None, dpv: Annotated[Optional[List[str]], typer.Option('--dpv', help='Data per vertex dtype: NAME,DTYPE (e.g., color_x,uint8).')] = None, dps: Annotated[Optional[List[str]], typer.Option('--dps', help='Data per streamline dtype: NAME,DTYPE (e.g., algo,uint8).')] = None, groups: Annotated[Optional[List[str]], typer.Option('--groups', help='Groups dtype: NAME,DTYPE (e.g., CC,uint64).')] = None, dpg: Annotated[Optional[List[str]], typer.Option('--dpg', help='Data per group dtype: GROUP,NAME,DTYPE (e.g., CC,mean_fa,float64).')] = None, force: Annotated[bool, typer.Option('--force', '-f', help='Force overwriting of output files.')] = False) -> None
 
    
    Manipulate TRX file internal array data types.
@@ -368,7 +368,7 @@ Module Contents
    ..
        !! processed by numpydoc !!
 
-.. py:function:: compare(in_tractogram1: typing_extensions.Annotated[pathlib.Path, typer.Argument(help='First tractogram file.')], in_tractogram2: typing_extensions.Annotated[pathlib.Path, typer.Argument(help='Second tractogram file.')], reference: typing_extensions.Annotated[Optional[pathlib.Path], typer.Option('--reference', '-r', help='Reference anatomy for tck/vtk/fib/dpy files (.nii or .nii.gz).')] = None) -> None
+.. py:function:: compare(in_tractogram1: Annotated[pathlib.Path, typer.Argument(help='First tractogram file.')], in_tractogram2: Annotated[pathlib.Path, typer.Argument(help='Second tractogram file.')], reference: Annotated[Optional[pathlib.Path], typer.Option('--reference', '-r', help='Reference anatomy for tck/vtk/fib/dpy files (.nii or .nii.gz).')] = None) -> None
 
    
    Compare two tractograms and report basic differences.
@@ -405,7 +405,7 @@ Module Contents
    ..
        !! processed by numpydoc !!
 
-.. py:function:: validate(in_tractogram: typing_extensions.Annotated[pathlib.Path, typer.Argument(help='Input tractogram. Format: trk, tck, vtk, fib, dpy, trx.')], out_tractogram: typing_extensions.Annotated[Optional[pathlib.Path], typer.Option('--out', '-o', help='Output tractogram after removing invalid streamlines.')] = None, remove_identical: typing_extensions.Annotated[bool, typer.Option('--remove-identical', help='Remove identical streamlines from the set.')] = False, precision: typing_extensions.Annotated[int, typer.Option('--precision', '-p', help='Number of decimals when hashing streamline points.')] = 1, reference: typing_extensions.Annotated[Optional[pathlib.Path], typer.Option('--reference', '-r', help='Reference anatomy for tck/vtk/fib/dpy files (.nii or .nii.gz).')] = None, force: typing_extensions.Annotated[bool, typer.Option('--force', '-f', help='Force overwriting of output files.')] = False) -> None
+.. py:function:: validate(in_tractogram: Annotated[pathlib.Path, typer.Argument(help='Input tractogram. Format: trk, tck, vtk, fib, dpy, trx.')], out_tractogram: Annotated[Optional[pathlib.Path], typer.Option('--out', '-o', help='Output tractogram after removing invalid streamlines.')] = None, remove_identical: Annotated[bool, typer.Option('--remove-identical', help='Remove identical streamlines from the set.')] = False, precision: Annotated[int, typer.Option('--precision', '-p', help='Number of decimals when hashing streamline points.')] = 1, reference: Annotated[Optional[pathlib.Path], typer.Option('--reference', '-r', help='Reference anatomy for tck/vtk/fib/dpy files (.nii or .nii.gz).')] = None, force: Annotated[bool, typer.Option('--force', '-f', help='Force overwriting of output files.')] = False) -> None
 
    
    Validate a tractogram and optionally clean invalid/duplicate streamlines.
@@ -451,7 +451,7 @@ Module Contents
    ..
        !! processed by numpydoc !!
 
-.. py:function:: verify_header(in_files: typing_extensions.Annotated[List[pathlib.Path], typer.Argument(help='Files to compare (trk, trx, and nii).')]) -> None
+.. py:function:: verify_header(in_files: Annotated[List[pathlib.Path], typer.Argument(help='Files to compare (trk, trx, and nii).')]) -> None
 
    
    Compare spatial attributes of input files.
@@ -482,7 +482,7 @@ Module Contents
    ..
        !! processed by numpydoc !!
 
-.. py:function:: visualize(in_tractogram: typing_extensions.Annotated[pathlib.Path, typer.Argument(help='Input tractogram. Format: trk, tck, vtk, fib, dpy, trx.')], reference: typing_extensions.Annotated[pathlib.Path, typer.Argument(help='Reference anatomy (.nii or .nii.gz).')], remove_invalid: typing_extensions.Annotated[bool, typer.Option('--remove-invalid', help='Remove invalid streamlines to avoid density_map crash.')] = False) -> None
+.. py:function:: visualize(in_tractogram: Annotated[pathlib.Path, typer.Argument(help='Input tractogram. Format: trk, tck, vtk, fib, dpy, trx.')], reference: Annotated[pathlib.Path, typer.Argument(help='Reference anatomy (.nii or .nii.gz).')], remove_invalid: Annotated[bool, typer.Option('--remove-invalid', help='Remove invalid streamlines to avoid density_map crash.')] = False) -> None
 
    
    Display tractogram and density map with bounding box.
@@ -550,7 +550,7 @@ Module Contents
    ..
        !! processed by numpydoc !!
 
-.. py:function:: info(in_tractogram: typing_extensions.Annotated[pathlib.Path, typer.Argument(help='Input TRX file.')]) -> None
+.. py:function:: info(in_tractogram: Annotated[pathlib.Path, typer.Argument(help='Input TRX file.')]) -> None
 
    
    Display detailed information about a TRX file.

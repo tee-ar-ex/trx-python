@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>trx.trx_file_memmap &#8212; trx-python 0.4.dev43 documentation</title>
+    <title>trx.trx_file_memmap &#8212; trx-python 0.4.dev45 documentation</title>
   
   
   
@@ -43,7 +43,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../_static/documentation_options.js?v=f3ab9f6d"></script>
+    <script src="../../_static/documentation_options.js?v=9c5a8bb9"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
@@ -59,7 +59,7 @@
     <link rel="search" title="Search" href="../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.4.dev43" />
+  <meta name="docsearch:version" content="0.4.dev45" />
   </head>
   
   
@@ -125,8 +125,8 @@
       
     
     
-    <img src="../../_static/trx_logo.png" class="logo__image only-light" alt="trx-python 0.4.dev43 documentation - Home"/>
-    <img src="../../_static/trx_logo.png" class="logo__image only-dark pst-js-only" alt="trx-python 0.4.dev43 documentation - Home"/>
+    <img src="../../_static/trx_logo.png" class="logo__image only-light" alt="trx-python 0.4.dev45 documentation - Home"/>
+    <img src="../../_static/trx_logo.png" class="logo__image only-dark pst-js-only" alt="trx-python 0.4.dev45 documentation - Home"/>
   
   
 </a></div>
@@ -421,6 +421,7 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">struct</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Union</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">zipfile</span>
 
@@ -857,12 +858,29 @@
             <span class="k">if</span> <span class="n">ext</span> <span class="o">==</span> <span class="s2">&quot;.bit&quot;</span><span class="p">:</span>
                 <span class="n">ext</span> <span class="o">=</span> <span class="s2">&quot;.bool&quot;</span>
 
-            <span class="n">mem_adress</span> <span class="o">=</span> <span class="n">zip_info</span><span class="o">.</span><span class="n">header_offset</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">zip_info</span><span class="o">.</span><span class="n">FileHeader</span><span class="p">())</span>
+            <span class="c1"># Read actual local file header to get correct data offset.</span>
+            <span class="c1"># We can&#39;t use zip_info.FileHeader() because ZIP spec allows local</span>
+            <span class="c1"># headers to differ from central directory entries.</span>
+            <span class="c1"># See: https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT</span>
+            <span class="n">_ZIP_LOCAL_HEADER_SIZE</span> <span class="o">=</span> <span class="mi">30</span>
+            <span class="n">_ZIP_LOCAL_HEADER_SIGNATURE</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;PK</span><span class="se">\x03\x04</span><span class="s2">&quot;</span>
+
+            <span class="n">zf</span><span class="o">.</span><span class="n">fp</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">zip_info</span><span class="o">.</span><span class="n">header_offset</span><span class="p">)</span>
+            <span class="n">local_header</span> <span class="o">=</span> <span class="n">zf</span><span class="o">.</span><span class="n">fp</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">_ZIP_LOCAL_HEADER_SIZE</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">local_header</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">_ZIP_LOCAL_HEADER_SIZE</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Truncated local file header for </span><span class="si">{</span><span class="n">elem_filename</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">local_header</span><span class="p">[:</span><span class="mi">4</span><span class="p">]</span> <span class="o">!=</span> <span class="n">_ZIP_LOCAL_HEADER_SIGNATURE</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Invalid local file header signature for </span><span class="si">{</span><span class="n">elem_filename</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+            <span class="n">fname_len</span><span class="p">,</span> <span class="n">extra_len</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&lt;HH&quot;</span><span class="p">,</span> <span class="n">local_header</span><span class="p">[</span><span class="mi">26</span><span class="p">:</span><span class="mi">30</span><span class="p">])</span>
+
+            <span class="n">mem_adress</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">zip_info</span><span class="o">.</span><span class="n">header_offset</span> <span class="o">+</span> <span class="n">_ZIP_LOCAL_HEADER_SIZE</span> <span class="o">+</span> <span class="n">fname_len</span> <span class="o">+</span> <span class="n">extra_len</span>
+            <span class="p">)</span>
+
             <span class="n">dtype_size</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">ext</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span><span class="o">.</span><span class="n">itemsize</span>
             <span class="n">size</span> <span class="o">=</span> <span class="n">zip_info</span><span class="o">.</span><span class="n">file_size</span> <span class="o">/</span> <span class="n">dtype_size</span>
-
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">zip_info</span><span class="o">.</span><span class="n">extra</span><span class="p">):</span>
-                <span class="n">mem_adress</span> <span class="o">-=</span> <span class="nb">len</span><span class="p">(</span><span class="n">zip_info</span><span class="o">.</span><span class="n">extra</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">size</span><span class="o">.</span><span class="n">is_integer</span><span class="p">():</span>
                 <span class="n">files_pointer_size</span><span class="p">[</span><span class="n">elem_filename</span><span class="p">]</span> <span class="o">=</span> <span class="n">mem_adress</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
