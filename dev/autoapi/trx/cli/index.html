@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>trx.cli &#8212; trx-python 0.4.dev45 documentation</title>
+    <title>trx.cli &#8212; trx-python 0.4.dev47 documentation</title>
   
   
   
@@ -44,7 +44,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../_static/documentation_options.js?v=9c5a8bb9"></script>
+    <script src="../../../_static/documentation_options.js?v=0fda85ca"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
@@ -62,7 +62,7 @@
     <link rel="prev" title="trx" href="../index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.4.dev45" />
+  <meta name="docsearch:version" content="0.4.dev47" />
   </head>
   
   
@@ -128,8 +128,8 @@
       
     
     
-    <img src="../../../_static/trx_logo.png" class="logo__image only-light" alt="trx-python 0.4.dev45 documentation - Home"/>
-    <img src="../../../_static/trx_logo.png" class="logo__image only-dark pst-js-only" alt="trx-python 0.4.dev45 documentation - Home"/>
+    <img src="../../../_static/trx_logo.png" class="logo__image only-light" alt="trx-python 0.4.dev47 documentation - Home"/>
+    <img src="../../../_static/trx_logo.png" class="logo__image only-dark pst-js-only" alt="trx-python 0.4.dev47 documentation - Home"/>
   
   
 </a></div>
@@ -488,6 +488,12 @@
 <h2>Functions<a class="headerlink" href="#functions" title="Link to this heading">#</a></h2>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.cli._debug_callback" title="trx.cli._debug_callback"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_debug_callback</span></code></a>(→ None)</p></td>
+<td><p>Print environment and dependency diagnostics, then exit.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#trx.cli._main_callback" title="trx.cli._main_callback"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_main_callback</span></code></a>(] = False) → None)</p></td>
+<td><p>TRX File Format Tools - CLI for brain tractography data manipulation.</p></td>
+</tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#trx.cli._check_overwrite" title="trx.cli._check_overwrite"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_check_overwrite</span></code></a>(→ None)</p></td>
 <td><p>Check if file exists and raise error if overwrite is not enabled.</p></td>
 </tr>
@@ -536,6 +542,34 @@
 </section>
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="trx.cli._debug_callback">
+<span class="sig-prename descclassname"><span class="pre">trx.cli.</span></span><span class="sig-name descname"><span class="pre">_debug_callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/trx/cli.html#_debug_callback"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.cli._debug_callback" title="Link to this definition">#</a></dt>
+<dd><p>Print environment and dependency diagnostics, then exit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>value</strong><span class="classifier">bool</span></dt><dd><p>Whether the <code class="docutils literal notranslate"><span class="pre">--debug</span></code> flag was passed.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trx.cli._main_callback">
+<span class="sig-prename descclassname"><span class="pre">trx.cli.</span></span><span class="sig-name descname"><span class="pre">_main_callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_debug</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Option</span><span class="p"><span class="pre">(</span></span><span class="s"><span class="pre">'--debug'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Print</span> <span class="pre">environment</span> <span class="pre">and</span> <span class="pre">dependency</span> <span class="pre">diagnostics.'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">callback</span></span><span class="o"><span class="pre">=</span></span><span class="pre">_debug_callback</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">is_eager</span></span><span class="o"><span class="pre">=</span></span><span class="k"><span class="pre">True</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/trx/cli.html#_main_callback"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.cli._main_callback" title="Link to this definition">#</a></dt>
+<dd><p>TRX File Format Tools - CLI for brain tractography data manipulation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>_debug</strong><span class="classifier">bool, optional</span></dt><dd><p>If True, print environment and dependency diagnostics and exit.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py data">
 <dt class="sig sig-object py" id="trx.cli.app">
 <span class="sig-prename descclassname"><span class="pre">trx.cli.</span></span><span class="sig-name descname"><span class="pre">app</span></span><a class="reference internal" href="../../../_modules/trx/cli.html#app"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.cli.app" title="Link to this definition">#</a></dt>
@@ -1024,6 +1058,8 @@ $ trx_info tractogram.trx</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#attributes">Attributes</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#functions">Functions</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-contents">Module Contents</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.cli._debug_callback"><code class="docutils literal notranslate"><span class="pre">_debug_callback()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.cli._main_callback"><code class="docutils literal notranslate"><span class="pre">_main_callback()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.cli.app"><code class="docutils literal notranslate"><span class="pre">app</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.cli._check_overwrite"><code class="docutils literal notranslate"><span class="pre">_check_overwrite()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.cli.concatenate_tractograms"><code class="docutils literal notranslate"><span class="pre">concatenate_tractograms()</span></code></a></li>

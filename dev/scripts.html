@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Command-line Interface &#8212; trx-python 0.4.dev45 documentation</title>
+    <title>Command-line Interface &#8212; trx-python 0.4.dev47 documentation</title>
   
   
   
@@ -44,7 +44,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="_static/documentation_options.js?v=9c5a8bb9"></script>
+    <script src="_static/documentation_options.js?v=0fda85ca"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/design-tabs.js?v=f930bc37"></script>
@@ -62,7 +62,7 @@
     <link rel="prev" title="TRX File Format Specifications" href="trx_specifications.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.4.dev45" />
+  <meta name="docsearch:version" content="0.4.dev47" />
   </head>
   
   
@@ -128,8 +128,8 @@
       
     
     
-    <img src="_static/trx_logo.png" class="logo__image only-light" alt="trx-python 0.4.dev45 documentation - Home"/>
-    <img src="_static/trx_logo.png" class="logo__image only-dark pst-js-only" alt="trx-python 0.4.dev45 documentation - Home"/>
+    <img src="_static/trx_logo.png" class="logo__image only-light" alt="trx-python 0.4.dev47 documentation - Home"/>
+    <img src="_static/trx_logo.png" class="logo__image only-dark pst-js-only" alt="trx-python 0.4.dev47 documentation - Home"/>
   
   
 </a></div>
@@ -420,6 +420,7 @@ trx<span class="w"> </span>&lt;command&gt;<span class="w"> </span>--help<span cl
 </div>
 <p>Available subcommands:</p>
 <ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">trx</span> <span class="pre">info</span></code> - Display detailed TRX file information</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">trx</span> <span class="pre">concatenate</span></code> - Concatenate multiple tractograms</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">trx</span> <span class="pre">convert</span></code> - Convert between tractography formats</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">trx</span> <span class="pre">convert-dsi</span></code> - Fix DSI-Studio TRK files</p></li>
@@ -434,6 +435,20 @@ trx<span class="w"> </span>&lt;command&gt;<span class="w"> </span>--help<span cl
 <section id="standalone-commands">
 <h2>Standalone Commands<a class="headerlink" href="#standalone-commands" title="Link to this heading">#</a></h2>
 <p>For backward compatibility, standalone commands are also available:</p>
+<section id="trx-info">
+<h3>trx_info<a class="headerlink" href="#trx-info" title="Link to this heading">#</a></h3>
+<p>Display detailed information about a TRX file, including file size, compression status, header metadata (affine, dimensions, voxel sizes), streamline/vertex counts, data keys (dpv, dps, dpg), groups, and archive contents.</p>
+<ul class="simple">
+<li><p>Only <code class="docutils literal notranslate"><span class="pre">.trx</span></code> files are supported.</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Using unified CLI</span>
+trx<span class="w"> </span>info<span class="w"> </span>tractogram.trx
+
+<span class="c1"># Using standalone command</span>
+trx_info<span class="w"> </span>tractogram.trx
+</pre></div>
+</div>
+</section>
 <section id="trx-concatenate-tractograms">
 <h3>trx_concatenate_tractograms<a class="headerlink" href="#trx-concatenate-tractograms" title="Link to this heading">#</a></h3>
 <p>Concatenate multiple tractograms into a single output.</p>
@@ -546,6 +561,33 @@ trx_visualize_overlap<span class="w"> </span>tractogram.trk<span class="w"> </sp
 </pre></div>
 </div>
 </section>
+</section>
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading">#</a></h2>
+<p>If the <code class="docutils literal notranslate"><span class="pre">trx</span></code> command is not working as expected, run <code class="docutils literal notranslate"><span class="pre">trx</span> <span class="pre">--debug</span></code> to print
+diagnostic information about the Python interpreter, package location, and
+whether all required and optional dependencies are installed:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>trx<span class="w"> </span>--debug
+
+<span class="c1"># Example output:</span>
+<span class="c1"># Environment diagnostics:</span>
+<span class="c1">#   Python executable : /Users/you/myenv/bin/python</span>
+<span class="c1">#   sys.prefix        : /Users/you/myenv</span>
+<span class="c1">#   trx-python version: 0.3.1</span>
+<span class="c1">#   trx package       : /Users/you/myenv/lib/python3.11/site-packages/trx</span>
+<span class="c1">#</span>
+<span class="c1"># Required dependencies:</span>
+<span class="c1">#   deepdiff     found</span>
+<span class="c1">#   nibabel      found</span>
+<span class="c1">#   numpy        found</span>
+<span class="c1">#   typer        found</span>
+<span class="c1">#</span>
+<span class="c1"># Optional dependencies:</span>
+<span class="c1">#   dipy         found</span>
+<span class="c1">#   fury         not found</span>
+<span class="c1">#   vtk          not found</span>
+</pre></div>
+</div>
 </section>
 <section id="notes">
 <h2>Notes<a class="headerlink" href="#notes" title="Link to this heading">#</a></h2>

@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>trx.cli &#8212; trx-python 0.4.dev45 documentation</title>
+    <title>trx.cli &#8212; trx-python 0.4.dev47 documentation</title>
   
   
   
@@ -43,7 +43,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../_static/documentation_options.js?v=9c5a8bb9"></script>
+    <script src="../../_static/documentation_options.js?v=0fda85ca"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
@@ -59,7 +59,7 @@
     <link rel="search" title="Search" href="../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.4.dev45" />
+  <meta name="docsearch:version" content="0.4.dev47" />
   </head>
   
   
@@ -125,8 +125,8 @@
       
     
     
-    <img src="../../_static/trx_logo.png" class="logo__image only-light" alt="trx-python 0.4.dev45 documentation - Home"/>
-    <img src="../../_static/trx_logo.png" class="logo__image only-dark pst-js-only" alt="trx-python 0.4.dev45 documentation - Home"/>
+    <img src="../../_static/trx_logo.png" class="logo__image only-light" alt="trx-python 0.4.dev47 documentation - Home"/>
+    <img src="../../_static/trx_logo.png" class="logo__image only-dark pst-js-only" alt="trx-python 0.4.dev47 documentation - Home"/>
   
   
 </a></div>
@@ -421,11 +421,10 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Annotated</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">typer</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing_extensions</span><span class="w"> </span><span class="kn">import</span> <span class="n">Annotated</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">trx.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">load</span><span class="p">,</span> <span class="n">save</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">trx.trx_file_memmap</span><span class="w"> </span><span class="kn">import</span> <span class="n">TrxFile</span><span class="p">,</span> <span class="n">concatenate</span><span class="p">,</span> <span class="n">load</span> <span class="k">as</span> <span class="n">load_trx</span>
@@ -440,6 +439,99 @@
     <span class="n">verify_header_compatibility</span><span class="p">,</span>
 <span class="p">)</span>
 
+
+<div class="viewcode-block" id="_debug_callback">
+<a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli._debug_callback">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">_debug_callback</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Print environment and dependency diagnostics, then exit.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    value : bool</span>
+<span class="sd">        Whether the ``--debug`` flag was passed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
+        <span class="k">return</span>
+
+    <span class="kn">import</span><span class="w"> </span><span class="nn">importlib.metadata</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">importlib.util</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+
+    <span class="kn">from</span><span class="w"> </span><span class="nn">trx</span><span class="w"> </span><span class="kn">import</span> <span class="n">__version__</span>
+
+    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s2">&quot;Environment diagnostics:&quot;</span><span class="p">)</span>
+    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Python executable : </span><span class="si">{</span><span class="n">sys</span><span class="o">.</span><span class="n">executable</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  sys.prefix        : </span><span class="si">{</span><span class="n">sys</span><span class="o">.</span><span class="n">prefix</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  trx-python version: </span><span class="si">{</span><span class="n">__version__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">trx_spec</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">find_spec</span><span class="p">(</span><span class="s2">&quot;trx&quot;</span><span class="p">)</span>
+    <span class="n">trx_location</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">trx_spec</span><span class="o">.</span><span class="n">submodule_search_locations</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">trx_spec</span> <span class="ow">and</span> <span class="n">trx_spec</span><span class="o">.</span><span class="n">submodule_search_locations</span>
+        <span class="k">else</span> <span class="s2">&quot;unknown&quot;</span>
+    <span class="p">)</span>
+    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  trx package       : </span><span class="si">{</span><span class="n">trx_location</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Read required dependencies from package metadata</span>
+    <span class="n">required_deps</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+
+        <span class="k">for</span> <span class="n">req</span> <span class="ow">in</span> <span class="n">importlib</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">requires</span><span class="p">(</span><span class="s2">&quot;trx-python&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]:</span>
+            <span class="c1"># Skip optional / extra deps (they contain &quot;; extra ==&quot;)</span>
+            <span class="k">if</span> <span class="s2">&quot;extra ==&quot;</span> <span class="ow">in</span> <span class="n">req</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="c1"># Extract the package name (strip version specifiers like &gt;=, &lt;=, ~=)</span>
+            <span class="n">dep_name</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[&gt;=&lt;!~;\s]&quot;</span><span class="p">,</span> <span class="n">req</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">required_deps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dep_name</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">importlib</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">PackageNotFoundError</span><span class="p">:</span>
+        <span class="n">required_deps</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;deepdiff&quot;</span><span class="p">,</span> <span class="s2">&quot;nibabel&quot;</span><span class="p">,</span> <span class="s2">&quot;numpy&quot;</span><span class="p">,</span> <span class="s2">&quot;typer&quot;</span><span class="p">]</span>
+
+    <span class="n">optional_deps</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;dipy&quot;</span><span class="p">,</span> <span class="s2">&quot;fury&quot;</span><span class="p">,</span> <span class="s2">&quot;vtk&quot;</span><span class="p">]</span>
+
+    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Required dependencies:&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">dep</span> <span class="ow">in</span> <span class="n">required_deps</span><span class="p">:</span>
+        <span class="n">spec</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">find_spec</span><span class="p">(</span><span class="n">dep</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">spec</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">dep</span><span class="si">:</span><span class="s2">12s</span><span class="si">}</span><span class="s2"> NOT FOUND&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">dep</span><span class="si">:</span><span class="s2">12s</span><span class="si">}</span><span class="s2"> found&quot;</span><span class="p">)</span>
+
+    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Optional dependencies:&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">dep</span> <span class="ow">in</span> <span class="n">optional_deps</span><span class="p">:</span>
+        <span class="n">spec</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">find_spec</span><span class="p">(</span><span class="n">dep</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">spec</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">dep</span><span class="si">:</span><span class="s2">12s</span><span class="si">}</span><span class="s2"> not found&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">dep</span><span class="si">:</span><span class="s2">12s</span><span class="si">}</span><span class="s2"> found&quot;</span><span class="p">)</span>
+
+    <span class="k">raise</span> <span class="n">typer</span><span class="o">.</span><span class="n">Exit</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="_main_callback">
+<a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli._main_callback">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">_main_callback</span><span class="p">(</span>
+    <span class="n">_debug</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="nb">bool</span><span class="p">,</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+            <span class="s2">&quot;--debug&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Print environment and dependency diagnostics.&quot;</span><span class="p">,</span>
+            <span class="n">callback</span><span class="o">=</span><span class="n">_debug_callback</span><span class="p">,</span>
+            <span class="n">is_eager</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">),</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;TRX File Format Tools - CLI for brain tractography data manipulation.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    _debug : bool, optional</span>
+<span class="sd">        If True, print environment and dependency diagnostics and exit.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+
 <div class="viewcode-block" id="app">
 <a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli.app">[docs]</a>
 <span class="n">app</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Typer</span><span class="p">(</span>
@@ -447,6 +539,7 @@
     <span class="n">help</span><span class="o">=</span><span class="s2">&quot;TRX File Format Tools - CLI for brain tractography data manipulation.&quot;</span><span class="p">,</span>
     <span class="n">add_completion</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">rich_markup_mode</span><span class="o">=</span><span class="s2">&quot;rich&quot;</span><span class="p">,</span>
+    <span class="n">callback</span><span class="o">=</span><span class="n">_main_callback</span><span class="p">,</span>
 <span class="p">)</span></div>
 
 

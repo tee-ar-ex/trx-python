@@ -36,6 +36,8 @@ Functions
 
 .. autoapisummary::
 
+   trx.cli._debug_callback
+   trx.cli._main_callback
    trx.cli._check_overwrite
    trx.cli.concatenate_tractograms
    trx.cli.convert
@@ -54,6 +56,60 @@ Functions
 
 Module Contents
 ---------------
+
+.. py:function:: _debug_callback(value: bool) -> None
+
+   
+   Print environment and dependency diagnostics, then exit.
+
+
+   :Parameters:
+
+       **value** : bool
+           Whether the ``--debug`` flag was passed.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: _main_callback(_debug: Annotated[bool, typer.Option('--debug', help='Print environment and dependency diagnostics.', callback=_debug_callback, is_eager=True)] = False) -> None
+
+   
+   TRX File Format Tools - CLI for brain tractography data manipulation.
+
+
+   :Parameters:
+
+       **_debug** : bool, optional
+           If True, print environment and dependency diagnostics and exit.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 
 .. py:data:: app
 
