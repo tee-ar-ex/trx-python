@@ -15,7 +15,18 @@ BASE_URL = "https://tee-ar-ex.github.io/trx-python"
 
 
 def load_switcher(path):
-    """Load existing switcher.json or return empty list."""
+    """Load existing switcher.json or return empty list.
+
+    Parameters
+    ----------
+    path : str or Path
+        Path to the switcher.json file.
+
+    Returns
+    -------
+    list
+        List of version entries from the switcher file.
+    """
     try:
         with open(path, "r") as f:
             return json.load(f)
@@ -24,14 +35,33 @@ def load_switcher(path):
 
 
 def save_switcher(path, versions):
-    """Save switcher.json with proper formatting."""
+    """Save switcher.json with proper formatting.
+
+    Parameters
+    ----------
+    path : str or Path
+        Path to the switcher.json file.
+    versions : list
+        List of version entries to write.
+    """
     with open(path, "w") as f:
         json.dump(versions, f, indent=4)
         f.write("\n")
 
 
 def ensure_dev_entry(versions):
-    """Ensure dev entry exists in versions list."""
+    """Ensure dev entry exists in versions list.
+
+    Parameters
+    ----------
+    versions : list
+        List of version entries.
+
+    Returns
+    -------
+    list
+        Updated versions list with dev entry.
+    """
     dev_exists = any(v.get("version") == "dev" for v in versions)
     if not dev_exists:
         versions.insert(0, {"name": "dev", "version": "dev", "url": f"{BASE_URL}/dev/"})
@@ -39,7 +69,18 @@ def ensure_dev_entry(versions):
 
 
 def ensure_stable_entry(versions):
-    """Ensure stable entry exists with preferred flag."""
+    """Ensure stable entry exists with preferred flag.
+
+    Parameters
+    ----------
+    versions : list
+        List of version entries.
+
+    Returns
+    -------
+    list
+        Updated versions list with stable entry.
+    """
     stable_idx = next(
         (i for i, v in enumerate(versions) if v.get("version") == "stable"), None
     )
@@ -98,7 +139,13 @@ def add_version(versions, version):
 
 
 def main():
-    """Main entry point."""
+    """Run the switcher update workflow.
+
+    Returns
+    -------
+    int
+        Exit code (0 for success).
+    """
     parser = argparse.ArgumentParser(
         description="Update switcher.json for documentation version switching"
     )

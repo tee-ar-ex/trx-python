@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 
+import json
 import os
+import struct
+import tempfile
+import zipfile
 
 from nibabel.streamlines import LazyTractogram
 from nibabel.streamlines.tests.test_tractogram import make_dummy_streamline
@@ -341,7 +345,37 @@ def test_copy_fixed_arrays_from():
 
 
 def test_initialize_empty_trx():
-    pass
+    """Test creating, saving, and loading an empty TRX file."""
+    trx = tmm.TrxFile()
+    assert trx.header["NB_STREAMLINES"] == 0
+    assert trx.header["NB_VERTICES"] == 0
+    assert len(trx.streamlines) == 0
+
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        out_path = os.path.join(tmp_dir, "empty.trx")
+        tmm.save(trx, out_path)
+
+        assert os.path.exists(out_path)
+        file_size = os.path.getsize(out_path)
+        assert file_size < 500  # Should be very small, just header.json in zip
+
+        with zipfile.ZipFile(out_path, "r") as zf:
+            filenames = [info.filename for info in zf.filelist]
+            assert "header.json" in filenames
+            positions_files = [f for f in filenames if f.startswith("positions")]
+            offsets_files = [f for f in filenames if f.startswith("offsets")]
+            assert len(positions_files) == 0
+            assert len(offsets_files) == 0
+
+        loaded_trx = tmm.load(out_path)
+        assert loaded_trx.header["NB_STREAMLINES"] == 0
+        assert loaded_trx.header["NB_VERTICES"] == 0
+        assert len(loaded_trx.streamlines) == 0
+        assert len(loaded_trx.groups) == 0
+        assert len(loaded_trx.data_per_streamline) == 0
+        assert len(loaded_trx.data_per_vertex) == 0
+        assert len(loaded_trx.data_per_group) == 0
+        loaded_trx.close()
 
 
 def test_create_trx_from_pointer():
@@ -421,8 +455,11 @@ def test__ensure_little_endian(dtype, test_value):
     # Result should be little-endian (or native if system is little-endian)
     assert result.dtype.byteorder in ("<", "=", "|")
 
-    # Values should be preserved
-    assert result[0] == test_value
+    # Values should be preserved (use isclose for float types due to precision)
+    if np.issubdtype(dtype, np.floating):
+        assert np.isclose(result[0], test_value, rtol=1e-6)
+    else:
+        assert result[0] == test_value
 
 
 def test__ensure_little_endian_big_endian_input():
@@ -439,6 +476,112 @@ def test__ensure_little_endian_big_endian_input():
 
     # Value should be preserved
     assert result[0] == 0x12345678
+
+
+def test_load_zip_with_local_header_extra_field():
+    """Test loading ZIP where local header has extra field not in central dir.
+
+    Regression test for a bug where zip_info.FileHeader() was used to calculate
+    data offset. The ZIP spec allows local headers to have different extra
+    fields than central directory entries. The fix reads the actual local
+    file header to get the correct offset.
+    """
+    positions = np.array([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]], dtype=np.float32)
+    offsets = np.array([0, 2], dtype=np.uint64)
+    header = {
+        "DIMENSIONS": [10, 10, 10],
+        "VOXEL_TO_RASMM": np.eye(4).tolist(),
+        "NB_VERTICES": 2,
+        "NB_STREAMLINES": 1,
+    }
+
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        trx_path = os.path.join(tmp_dir, "test.trx")
+
+        # Build ZIP with extra bytes in local headers but not central directory
+        with open(trx_path, "wb") as f:
+            local_info = []
+            extra = b"\x00\x00\x04\x00TEST"  # 8-byte extra field
+
+            for name, data in [
+                ("header.json", json.dumps(header).encode()),
+                ("positions.3.float32", positions.tobytes()),
+                ("offsets.uint64", offsets.tobytes()),
+            ]:
+                offset = f.tell()
+                fname = name.encode()
+                crc = zipfile.crc32(data)
+                # Local header WITH extra field
+                f.write(
+                    struct.pack(
+                        "<4sHHHHHIIIHH",
+                        b"PK\x03\x04",
+                        20,
+                        0,
+                        0,
+                        0,
+                        0,
+                        crc,
+                        len(data),
+                        len(data),
+                        len(fname),
+                        len(extra),
+                    )
+                )
+                f.write(fname)
+                f.write(extra)
+                f.write(data)
+                local_info.append((name, offset, crc, len(data)))
+
+            cd_start = f.tell()
+            for name, offset, crc, size in local_info:
+                fname = name.encode()
+                # Central directory WITHOUT extra field (mismatch!)
+                f.write(
+                    struct.pack(
+                        "<4sHHHHHHIIIHHHHHII",
+                        b"PK\x01\x02",
+                        20,
+                        20,
+                        0,
+                        0,
+                        0,
+                        0,
+                        crc,
+                        size,
+                        size,
+                        len(fname),
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        offset,
+                    )
+                )
+                f.write(fname)
+
+            # End of central directory
+            f.write(
+                struct.pack(
+                    "<4sHHHHIIH",
+                    b"PK\x05\x06",
+                    0,
+                    0,
+                    3,
+                    3,
+                    f.tell() - cd_start,
+                    cd_start,
+                    0,
+                )
+            )
+
+        trx = tmm.load_from_zip(trx_path)
+        np.testing.assert_array_almost_equal(trx.streamlines._data, positions)
+        assert trx.header["NB_VERTICES"] == 2
+        assert trx.header["NB_STREAMLINES"] == 1
+
+        trx.close()
 
 
 def test_endianness_roundtrip():

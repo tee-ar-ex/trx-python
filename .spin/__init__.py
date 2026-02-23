@@ -1,1 +1,1 @@
-# Spin commands package
+"""Spin commands package."""

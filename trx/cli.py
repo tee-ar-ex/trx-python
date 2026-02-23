@@ -13,7 +13,7 @@ import typer
 from typing_extensions import Annotated
 
 from trx.io import load, save
-from trx.trx_file_memmap import TrxFile, concatenate
+from trx.trx_file_memmap import TrxFile, concatenate, load as load_trx
 from trx.workflows import (
     convert_dsi_studio,
     convert_tractogram,
@@ -26,7 +26,7 @@ from trx.workflows import (
 )
 
 app = typer.Typer(
-    name="tff",
+    name="trx",
     help="TRX File Format Tools - CLI for brain tractography data manipulation.",
     add_completion=False,
     rich_markup_mode="rich",
@@ -109,6 +109,28 @@ def concatenate_tractograms(
 
     If the data_per_point or data_per_streamline is not the same for all
     tractograms, the data must be deleted first using the appropriate flags.
+
+    Parameters
+    ----------
+    in_tractograms : list of Path
+        Input tractogram files (.trk, .tck, .vtk, .fib, .dpy, .trx).
+    out_tractogram : Path
+        Output filename for the concatenated tractogram.
+    delete_dpv : bool, optional
+        Delete ``data_per_vertex`` if metadata differ across inputs.
+    delete_dps : bool, optional
+        Delete ``data_per_streamline`` if metadata differ across inputs.
+    delete_groups : bool, optional
+        Delete groups when metadata differ across inputs.
+    reference : Path or None, optional
+        Reference anatomy for tck/vtk/fib/dpy inputs.
+    force : bool, optional
+        Overwrite output if it already exists.
+
+    Returns
+    -------
+    None
+        Writes the concatenated tractogram to ``out_tractogram``.
     """
     _check_overwrite(out_tractogram, force)
 
@@ -185,6 +207,26 @@ def convert(
 
     Supports conversion of .tck, .trk, .fib, .vtk, .trx and .dpy files.
     TCK files always need a reference NIFTI file for conversion.
+
+    Parameters
+    ----------
+    in_tractogram : Path
+        Input tractogram file.
+    out_tractogram : Path
+        Output tractogram path.
+    reference : Path or None, optional
+        Reference anatomy required for some input formats.
+    positions_dtype : str, optional
+        Datatype for positions in TRX output.
+    offsets_dtype : str, optional
+        Datatype for offsets in TRX output.
+    force : bool, optional
+        Overwrite output if it already exists.
+
+    Returns
+    -------
+    None
+        Writes the converted tractogram to disk.
     """
     _check_overwrite(out_tractogram, force)
 
@@ -238,13 +280,27 @@ def convert_dsi(
         typer.Option("--force", "-f", help="Force overwriting of output files."),
     ] = False,
 ) -> None:
-    """Fix DSI-Studio TRK files for compatibility.
+    """Convert a DSI-Studio TRK file to TRX or TRK and fix space metadata.
 
-    This script fixes DSI-Studio TRK files (unknown space/convention) to make
-    them compatible with TrackVis, MI-Brain, and Dipy Horizon.
+    Parameters
+    ----------
+    in_dsi_tractogram : Path
+        Input DSI-Studio tractogram (.trk or .trk.gz).
+    in_dsi_fa : Path
+        FA volume used as reference (.nii.gz).
+    out_tractogram : Path
+        Output tractogram path (.trx or .trk).
+    remove_invalid : bool, optional
+        Remove streamlines outside the bounding box. Defaults to False.
+    keep_invalid : bool, optional
+        Keep streamlines outside the bounding box. Defaults to False.
+    force : bool, optional
+        Overwrite output if it already exists.
 
-    [bold yellow]WARNING:[/bold yellow] This script is experimental. DSI-Studio evolves
-    quickly and results may vary depending on the data and DSI-Studio version.
+    Returns
+    -------
+    None
+        Writes the converted tractogram to disk.
     """
     _check_overwrite(out_tractogram, force)
 
@@ -367,15 +423,48 @@ def generate(
         typer.Option("--force", "-f", help="Force overwriting of output files."),
     ] = False,
 ) -> None:
-    """Generate TRX file from raw data files.
+    """Generate a TRX file from raw data files.
 
     Create a TRX file from CSV, TXT, or NPY files by specifying positions,
     offsets, data_per_vertex, data_per_streamlines, groups, and data_per_group.
 
-    Each --dpv, --dps, --groups option requires FILE,DTYPE format.
-    Each --dpg option requires GROUP,FILE,DTYPE format.
+    Parameters
+    ----------
+    reference : Path
+        Reference anatomy (.nii or .nii.gz).
+    out_tractogram : Path
+        Output tractogram (.trk, .tck, .vtk, .fib, .dpy, .trx).
+    positions : Path or None, optional
+        Binary file with streamline coordinates (Nx3 .npy).
+    offsets : Path or None, optional
+        Binary file with streamline offsets (.npy).
+    positions_csv : Path or None, optional
+        CSV file with flattened streamline coordinates.
+    space : str, optional
+        Coordinate space. Non-default requires Dipy.
+    origin : str, optional
+        Coordinate origin. Non-default requires Dipy.
+    positions_dtype : str, optional
+        Datatype for positions.
+    offsets_dtype : str, optional
+        Datatype for offsets.
+    dpv : list of str or None, optional
+        Data per vertex entries as FILE,DTYPE pairs.
+    dps : list of str or None, optional
+        Data per streamline entries as FILE,DTYPE pairs.
+    groups : list of str or None, optional
+        Group entries as FILE,DTYPE pairs.
+    dpg : list of str or None, optional
+        Data per group entries as GROUP,FILE,DTYPE triplets.
+    verify_invalid : bool, optional
+        Verify positions are inside bounding box (requires Dipy).
+    force : bool, optional
+        Overwrite output if it already exists.
 
-    Valid DTYPEs: (u)int8, (u)int16, (u)int32, (u)int64, float16, float32, float64, bool
+    Returns
+    -------
+    None
+        Writes the generated tractogram to disk.
     """
     _check_overwrite(out_tractogram, force)
 
@@ -522,7 +611,31 @@ def manipulate_dtype(
     Change the data types of positions, offsets, data_per_vertex,
     data_per_streamline, groups, and data_per_group arrays.
 
-    Valid DTYPEs: (u)int8, (u)int16, (u)int32, (u)int64, float16, float32, float64, bool
+    Parameters
+    ----------
+    in_tractogram : Path
+        Input TRX file.
+    out_tractogram : Path
+        Output TRX file.
+    positions_dtype : str or None, optional
+        Target dtype for positions (float16, float32, float64).
+    offsets_dtype : str or None, optional
+        Target dtype for offsets (uint32, uint64).
+    dpv : list of str or None, optional
+        Data per vertex dtype overrides as NAME,DTYPE pairs.
+    dps : list of str or None, optional
+        Data per streamline dtype overrides as NAME,DTYPE pairs.
+    groups : list of str or None, optional
+        Group dtype overrides as NAME,DTYPE pairs.
+    dpg : list of str or None, optional
+        Data per group dtype overrides as GROUP,NAME,DTYPE triplets.
+    force : bool, optional
+        Overwrite output if it already exists.
+
+    Returns
+    -------
+    None
+        Writes the dtype-converted TRX file.
     """
     _check_overwrite(out_tractogram, force)
 
@@ -584,12 +697,21 @@ def compare(
         ),
     ] = None,
 ) -> None:
-    """Simple comparison of tractograms by subtracting coordinates.
+    """Compare two tractograms and report basic differences.
 
-    Does not account for shuffling of streamlines. Simple A-B operations.
+    Parameters
+    ----------
+    in_tractogram1 : Path
+        First tractogram file.
+    in_tractogram2 : Path
+        Second tractogram file.
+    reference : Path or None, optional
+        Reference anatomy for formats requiring it.
 
-    Differences below 1e-3 are expected for affines with large rotation/scaling.
-    Differences below 1e-6 are expected for isotropic data with small rotation.
+    Returns
+    -------
+    None
+        Prints comparison summary to stdout.
     """
     ref = str(reference) if reference else None
     tractogram_simple_compare([str(in_tractogram1), str(in_tractogram2)], ref)
@@ -637,13 +759,27 @@ def validate(
         typer.Option("--force", "-f", help="Force overwriting of output files."),
     ] = False,
 ) -> None:
-    """Validate TRX file and remove invalid streamlines.
+    """Validate a tractogram and optionally clean invalid/duplicate streamlines.
 
-    Removes streamlines that are out of the volume bounding box (in voxel space,
-    no negative coordinates or coordinates above volume dimensions).
+    Parameters
+    ----------
+    in_tractogram : Path
+        Input tractogram (.trk, .tck, .vtk, .fib, .dpy, .trx).
+    out_tractogram : Path or None, optional
+        Optional output tractogram with invalid streamlines removed.
+    remove_identical : bool, optional
+        Remove duplicate streamlines based on hashing precision.
+    precision : int, optional
+        Number of decimals when hashing streamline points.
+    reference : Path or None, optional
+        Reference anatomy for formats requiring it.
+    force : bool, optional
+        Overwrite output if it already exists.
 
-    Also removes streamlines with single or no points.
-    Use --remove-identical to remove duplicate streamlines based on precision.
+    Returns
+    -------
+    None
+        Prints validation summary and optionally writes cleaned output.
     """
     if out_tractogram:
         _check_overwrite(out_tractogram, force)
@@ -684,8 +820,15 @@ def verify_header(
 ) -> None:
     """Compare spatial attributes of input files.
 
-    Compares all input files against the first one for compatibility of
-    spatial attributes: affine, dimensions, voxel sizes, and voxel order.
+    Parameters
+    ----------
+    in_files : list of Path
+        Files to compare (.trk, .trx, .nii, .nii.gz).
+
+    Returns
+    -------
+    None
+        Prints compatibility results to stdout.
     """
     verify_header_compatibility([str(f) for f in in_files])
 
@@ -710,14 +853,130 @@ def visualize(
 ) -> None:
     """Display tractogram and density map with bounding box.
 
-    Shows the tractogram and its density map (computed from Dipy) in
-    rasmm, voxmm, and vox space with its bounding box.
+    Parameters
+    ----------
+    in_tractogram : Path
+        Input tractogram (.trk, .tck, .vtk, .fib, .dpy, .trx).
+    reference : Path
+        Reference anatomy (.nii or .nii.gz).
+    remove_invalid : bool, optional
+        Remove invalid streamlines to avoid density map crashes.
+
+    Returns
+    -------
+    None
+        Opens visualization windows when fury is available.
     """
     tractogram_visualize_overlap(
         str(in_tractogram),
         str(reference),
         remove_invalid,
     )
+
+
+def _format_size(size_bytes: int) -> str:
+    """Format byte size to human readable string.
+
+    Parameters
+    ----------
+    size_bytes : int
+        Size in bytes.
+
+    Returns
+    -------
+    str
+        Human readable size string (e.g., "1.5 MB").
+    """
+    for unit in ["B", "KB", "MB", "GB"]:
+        if size_bytes < 1024:
+            return f"{size_bytes:.1f} {unit}" if unit != "B" else f"{size_bytes} {unit}"
+        size_bytes /= 1024
+    return f"{size_bytes:.1f} TB"
+
+
+@app.command("info")
+def info(
+    in_tractogram: Annotated[
+        Path,
+        typer.Argument(help="Input TRX file."),
+    ],
+) -> None:
+    """Display detailed information about a TRX file.
+
+    Shows file size, compression status, header metadata (affine, dimensions,
+    voxel sizes), streamline/vertex counts, data keys (dpv, dps, dpg), groups,
+    and archive contents listing similar to ``unzip -l``.
+
+    Parameters
+    ----------
+    in_tractogram : Path
+        Input TRX file (.trx extension required).
+
+    Returns
+    -------
+    None
+        Prints TRX file information to stdout.
+
+    Examples
+    --------
+    $ trx info tractogram.trx
+    $ trx_info tractogram.trx
+    """
+    import zipfile
+
+    if not in_tractogram.exists():
+        typer.echo(
+            typer.style(f"Error: {in_tractogram} does not exist.", fg=typer.colors.RED),
+            err=True,
+        )
+        raise typer.Exit(code=1)
+
+    if in_tractogram.suffix.lower() != ".trx":
+        typer.echo(
+            typer.style(
+                f"Error: {in_tractogram.name} is not a TRX file. "
+                "Only .trx files are supported.",
+                fg=typer.colors.RED,
+            ),
+            err=True,
+        )
+        raise typer.Exit(code=1)
+
+    # Show archive info
+    file_size = in_tractogram.stat().st_size
+    typer.echo(f"File: {in_tractogram}")
+    typer.echo(f"Size: {_format_size(file_size)}")
+
+    with zipfile.ZipFile(str(in_tractogram), "r") as zf:
+        total_uncompressed = sum(info.file_size for info in zf.infolist())
+        is_compressed = any(info.compress_type != 0 for info in zf.infolist())
+        typer.echo(f"Entries: {len(zf.infolist())}")
+        typer.echo(f"Compressed: {'Yes' if is_compressed else 'No'}")
+        typer.echo(f"Uncompressed size: {_format_size(total_uncompressed)}")
+
+    typer.echo("")
+
+    # Show TRX content info
+    trx = load_trx(str(in_tractogram))
+    typer.echo(trx)
+
+    # Show file listing (unzip -l style)
+    typer.echo("\nArchive contents:")
+    typer.echo("  Length      Date    Time    Name")
+    typer.echo("---------  ---------- -----   ----")
+    with zipfile.ZipFile(str(in_tractogram), "r") as zf:
+        for zinfo in zf.infolist():
+            dt = zinfo.date_time
+            date_str = f"{dt[1]:02d}-{dt[2]:02d}-{dt[0]}"
+            time_str = f"{dt[3]:02d}:{dt[4]:02d}"
+            typer.echo(
+                f"{zinfo.file_size:>9}  {date_str} {time_str}   {zinfo.filename}"
+            )
+        num_files = len(zf.infolist())
+        typer.echo("---------                     -------")
+        typer.echo(f"{total_uncompressed:>9}                     {num_files} files")
+
+    trx.close()
 
 
 def main():
@@ -758,56 +1017,62 @@ def _create_standalone_app(command_func, name: str, help_text: str):
 
 concatenate_tractograms_cmd = _create_standalone_app(
     concatenate_tractograms,
-    "tff_concatenate_tractograms",
+    "trx_concatenate_tractograms",
     "Concatenate multiple tractograms into one.",
 )
 
 convert_dsi_cmd = _create_standalone_app(
     convert_dsi,
-    "tff_convert_dsi_studio",
+    "trx_convert_dsi_studio",
     "Fix DSI-Studio TRK files for compatibility.",
 )
 
 convert_cmd = _create_standalone_app(
     convert,
-    "tff_convert_tractogram",
+    "trx_convert_tractogram",
     "Convert tractograms between formats.",
 )
 
 generate_cmd = _create_standalone_app(
     generate,
-    "tff_generate_trx_from_scratch",
+    "trx_generate_from_scratch",
     "Generate TRX file from raw data files.",
 )
 
 manipulate_dtype_cmd = _create_standalone_app(
     manipulate_dtype,
-    "tff_manipulate_datatype",
+    "trx_manipulate_datatype",
     "Manipulate TRX file internal array data types.",
 )
 
 compare_cmd = _create_standalone_app(
     compare,
-    "tff_simple_compare",
+    "trx_simple_compare",
     "Simple comparison of tractograms by subtracting coordinates.",
 )
 
 validate_cmd = _create_standalone_app(
     validate,
-    "tff_validate_trx",
+    "trx_validate",
     "Validate TRX file and remove invalid streamlines.",
 )
 
 verify_header_cmd = _create_standalone_app(
     verify_header,
-    "tff_verify_header_compatibility",
+    "trx_verify_header_compatibility",
     "Compare spatial attributes of input files.",
 )
 
 visualize_cmd = _create_standalone_app(
     visualize,
-    "tff_visualize_overlap",
+    "trx_visualize_overlap",
     "Display tractogram and density map with bounding box.",
+)
+
+info_cmd = _create_standalone_app(
+    info,
+    "trx_info",
+    "Display information about a TRX file.",
 )
 
 
