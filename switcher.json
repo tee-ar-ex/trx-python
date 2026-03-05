@@ -5,6 +5,11 @@
         "url": "https://tee-ar-ex.github.io/trx-python/dev/"
     },
     {
+        "name": "0.4.0",
+        "version": "0.4.0",
+        "url": "https://tee-ar-ex.github.io/trx-python/0.4.0/"
+    },
+    {
         "name": "0.3",
         "version": "0.3",
         "url": "https://tee-ar-ex.github.io/trx-python/0.3/"
