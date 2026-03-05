@@ -124,17 +124,17 @@ Let's see what dpv data is available.
 
  .. code-block:: none
 
-    Data Per Vertex keys: ['color_y', 'color_z', 'color_x']
-
-      color_y:
-        Shape: (104, 1)
-        Dtype: float32
-        Sample values: [20. 20. 20.]
+    Data Per Vertex keys: ['color_z', 'color_y', 'color_x']
 
       color_z:
         Shape: (104, 1)
         Dtype: float32
         Sample values: [60. 60. 60.]
+
+      color_y:
+        Shape: (104, 1)
+        Dtype: float32
+        Sample values: [20. 20. 20.]
 
       color_x:
         Shape: (104, 1)
@@ -175,9 +175,9 @@ the dpv values for a specific streamline using the same indices.
 
  .. code-block:: none
 
-    DPV 'color_y' for first streamline:
+    DPV 'color_z' for first streamline:
       Shape: (8, 1)
-      Values: [20. 20. 20. 20. 20. 20. 20. 20.]
+      Values: [60. 60. 60. 60. 60. 60. 60. 60.]
 
 
 
