@@ -3,6 +3,29 @@ trx
 
 .. py:module:: trx
 
+.. autoapi-nested-parse::
+
+   
+   TRX file format for brain tractography data.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
 
 Submodules
 ----------
@@ -19,4 +42,17 @@ Submodules
    /autoapi/trx/viz/index
    /autoapi/trx/workflows/index
 
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   trx.__version__
+
+
+Package Contents
+----------------
+
+.. py:data:: __version__
 
