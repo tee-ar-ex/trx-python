@@ -26,6 +26,10 @@ To run these tutorials, you need:
 Each tutorial can be run as a Python script or in a Jupyter notebook.
 
 
+.. raw:: html
+
+  <div id='sg-tag-list' class='sphx-glr-tag-list'></div>
+
 
 .. raw:: html
 
