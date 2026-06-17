@@ -498,6 +498,107 @@ def test__ensure_little_endian_big_endian_input():
     assert result[0] == 0x12345678
 
 
+def test_load_zip64_with_extra_fields():
+    """Test loading ZIP64 files where both local and CD headers have extra fields.
+
+    Rust and other tools always write ZIP64 extended information (extra field
+    ID 0x0001, 20 bytes: 4-byte tag+size + 8-byte orig + 8-byte comp) in both
+    local file headers and central directory entries, even for small files.
+    This ensures the data offset is computed correctly by reading the local
+    header's extra_len rather than assuming a fixed layout.
+    """
+    positions = np.array([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]], dtype=np.float32)
+    offsets = np.array([0, 2], dtype=np.uint64)
+    header = {
+        "DIMENSIONS": [10, 10, 10],
+        "VOXEL_TO_RASMM": np.eye(4).tolist(),
+        "NB_VERTICES": 2,
+        "NB_STREAMLINES": 1,
+    }
+
+    def make_zip64_extra(orig_size, comp_size):
+        data = struct.pack("<QQ", orig_size, comp_size)
+        return struct.pack("<HH", 0x0001, len(data)) + data
+
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        trx_path = os.path.join(tmp_dir, "test_zip64.trx")
+
+        with open(trx_path, "wb") as f:
+            local_info = []
+
+            for name, data in [
+                ("header.json", json.dumps(header).encode()),
+                ("positions.3.float32", positions.astype("<f4").tobytes()),
+                ("offsets.uint64", offsets.astype("<u8").tobytes()),
+            ]:
+                offset = f.tell()
+                fname = name.encode()
+                crc = zipfile.crc32(data)
+                # ZIP64 extended info in local header (20 bytes)
+                extra = make_zip64_extra(len(data), len(data))
+                f.write(
+                    struct.pack(
+                        "<4sHHHHHIIIHH",
+                        b"PK\x03\x04",
+                        45,  # version needed: ZIP64
+                        0, 0, 0, 0,
+                        crc,
+                        len(data),
+                        len(data),
+                        len(fname),
+                        len(extra),
+                    )
+                )
+                f.write(fname)
+                f.write(extra)
+                f.write(data)
+                local_info.append((name, offset, crc, len(data)))
+
+            cd_start = f.tell()
+            for name, offset, crc, size in local_info:
+                fname = name.encode()
+                # ZIP64 extended info in central directory entry (20 bytes)
+                extra = make_zip64_extra(size, size)
+                f.write(
+                    struct.pack(
+                        "<4sHHHHHHIIIHHHHHII",
+                        b"PK\x01\x02",
+                        45,  # version made by: ZIP64
+                        45,  # version needed: ZIP64
+                        0, 0, 0, 0,
+                        crc,
+                        size,
+                        size,
+                        len(fname),
+                        len(extra),
+                        0, 0, 0, 0,
+                        offset,
+                    )
+                )
+                f.write(fname)
+                f.write(extra)
+
+            cd_size = f.tell() - cd_start
+            f.write(
+                struct.pack(
+                    "<4sHHHHIIH",
+                    b"PK\x05\x06",
+                    0, 0,
+                    len(local_info),
+                    len(local_info),
+                    cd_size,
+                    cd_start,
+                    0,
+                )
+            )
+
+        trx = tmm.load_from_zip(trx_path)
+        np.testing.assert_array_almost_equal(trx.streamlines._data, positions)
+        assert trx.header["NB_VERTICES"] == 2
+        assert trx.header["NB_STREAMLINES"] == 1
+        trx.close()
+
+
 def test_load_zip_with_local_header_extra_field():
     """Test loading ZIP where local header has extra field not in central dir.
 
