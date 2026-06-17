@@ -541,7 +541,10 @@ def test_load_zip64_with_extra_fields():
                         "<4sHHHHHIIIHH",
                         b"PK\x03\x04",
                         45,  # version needed: ZIP64
-                        0, 0, 0, 0,
+                        0,
+                        0,
+                        0,
+                        0,
                         crc,
                         len(data),
                         len(data),
@@ -565,13 +568,19 @@ def test_load_zip64_with_extra_fields():
                         b"PK\x01\x02",
                         45,  # version made by: ZIP64
                         45,  # version needed: ZIP64
-                        0, 0, 0, 0,
+                        0,
+                        0,
+                        0,
+                        0,
                         crc,
                         size,
                         size,
                         len(fname),
                         len(extra),
-                        0, 0, 0, 0,
+                        0,
+                        0,
+                        0,
+                        0,
                         offset,
                     )
                 )
@@ -583,7 +592,8 @@ def test_load_zip64_with_extra_fields():
                 struct.pack(
                     "<4sHHHHIIH",
                     b"PK\x05\x06",
-                    0, 0,
+                    0,
+                    0,
                     len(local_info),
                     len(local_info),
                     cd_size,
