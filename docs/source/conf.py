@@ -14,6 +14,7 @@
 # import os
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
+import warnings
 import os
 from datetime import datetime as dt
 
@@ -67,7 +68,6 @@ extensions = [
 
 # Suppress known deprecation warnings from dependencies
 # astroid 4.x deprecation - will be fixed when sphinx-autoapi updates for astroid 5.x
-import warnings
 warnings.filterwarnings(
     'ignore',
     message="importing .* from 'astroid' is deprecated",
@@ -180,9 +180,9 @@ _reference_urls = {
 
 # Sphinx gallery configuration
 sphinx_gallery_conf = {
-     'examples_dirs': '../../examples',
-     'gallery_dirs': 'auto_examples',
-     'within_subsection_order': 'NumberOfCodeLinesSortKey',
-     'reference_url': _validate_reference_urls(_reference_urls),
-     'default_thumb_file': os.path.join(os.path.dirname(__file__), '..', '_static', 'trx_logo.png'),
+    'examples_dirs': '../../examples',
+    'gallery_dirs': 'auto_examples',
+    'within_subsection_order': 'NumberOfCodeLinesSortKey',
+    'reference_url': _validate_reference_urls(_reference_urls),
+    'default_thumb_file': os.path.join(os.path.dirname(__file__), '..', '_static', 'trx_logo.png'),
 }

@@ -762,7 +762,7 @@ def _setup_groups_for_concatenation(
         count = 0
         for curr_trx in trx_list:
             curr_len = len(curr_trx.groups[group_key])
-            new_trx.groups[group_key][pos : pos + curr_len] = (
+            new_trx.groups[group_key][pos: pos + curr_len] = (
                 curr_trx.groups[group_key] + count
             )
             pos += curr_len
