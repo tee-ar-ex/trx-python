@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - extra_fields_testing
     tags:
       - "*"
 

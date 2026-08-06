@@ -2,7 +2,7 @@ name: Coverage
 
 on:
   push:
-    branches: [master]
+    branches: [master, extra_fields_testing]
   pull_request:
     branches: [master]
 
