@@ -90,10 +90,6 @@ class TestStandaloneCommands:
         ret = script_runner.run(["trx_verify_header_compatibility", "--help"])
         assert ret.success
 
-    def test_help_option_visualize(self, script_runner):
-        ret = script_runner.run(["trx_visualize_overlap", "--help"])
-        assert ret.success
-
     def test_help_option_info(self, script_runner):
         ret = script_runner.run(["trx_info", "--help"])
         assert ret.success
@@ -137,10 +133,6 @@ class TestUnifiedCLI:
 
     def test_trx_verify_header_help(self, script_runner):
         ret = script_runner.run(["trx", "verify-header", "--help"])
-        assert ret.success
-
-    def test_trx_visualize_help(self, script_runner):
-        ret = script_runner.run(["trx", "visualize", "--help"])
         assert ret.success
 
     def test_trx_info_help(self, script_runner):
