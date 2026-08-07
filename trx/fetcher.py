@@ -149,7 +149,7 @@ def fetch_data(files_dict, keys=None):  # noqa: C901
             url, expected_md5, expected_sha = file_entry
         full_path = os.path.join(trx_home, f)
 
-        logging.info("Downloading {} to {}".format(f, trx_home))
+        logging.info(f"Downloading {f} to {trx_home}")
         if not os.path.exists(full_path):
             urllib.request.urlretrieve(url, full_path)
 
