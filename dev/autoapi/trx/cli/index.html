@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>trx.cli &#8212; trx-python 0.4.1.dev14 documentation</title>
+    <title>trx.cli &#8212; trx-python 0.4.1.dev18 documentation</title>
   
   
   
@@ -44,7 +44,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
-    <script src="../../../_static/documentation_options.js?v=866dc946"></script>
+    <script src="../../../_static/documentation_options.js?v=598fe0ee"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/sg-tags.js?v=d80f6fa4"></script>
@@ -64,7 +64,7 @@
     <link rel="prev" title="trx" href="../index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.4.1.dev14" />
+  <meta name="docsearch:version" content="0.4.1.dev18" />
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -136,8 +136,8 @@
       
     
     
-    <img src="../../../_static/trx_logo.png" class="logo__image only-light" alt="trx-python 0.4.1.dev14 documentation - Home"/>
-    <img src="../../../_static/trx_logo.png" class="logo__image only-dark pst-js-only" alt="trx-python 0.4.1.dev14 documentation - Home"/>
+    <img src="../../../_static/trx_logo.png" class="logo__image only-light" alt="trx-python 0.4.1.dev18 documentation - Home"/>
+    <img src="../../../_static/trx_logo.png" class="logo__image only-dark pst-js-only" alt="trx-python 0.4.1.dev18 documentation - Home"/>
   
   
 </a></div>
@@ -400,7 +400,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../streamlines_ops/index.html">trx.streamlines_ops</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../trx_file_memmap/index.html">trx.trx_file_memmap</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../utils/index.html">trx.utils</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../viz/index.html">trx.viz</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../workflows/index.html">trx.workflows</a></li>
 </ul>
 </details></li>
@@ -502,10 +501,7 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#trx.cli.verify_header_cmd" title="trx.cli.verify_header_cmd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">verify_header_cmd</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#trx.cli.visualize_cmd" title="trx.cli.visualize_cmd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">visualize_cmd</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#trx.cli.info_cmd" title="trx.cli.info_cmd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">info_cmd</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#trx.cli.info_cmd" title="trx.cli.info_cmd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">info_cmd</span></code></a></p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -549,19 +545,16 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#trx.cli.verify_header" title="trx.cli.verify_header"><code class="xref py py-obj docutils literal notranslate"><span class="pre">verify_header</span></code></a>(]) → None)</p></td>
 <td><p>Compare spatial attributes of input files.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#trx.cli.visualize" title="trx.cli.visualize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">visualize</span></code></a>(], reference, typer.Argument], ...)</p></td>
-<td><p>Display tractogram and density map with bounding box.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#trx.cli._format_size" title="trx.cli._format_size"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_format_size</span></code></a>(→ str)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#trx.cli._format_size" title="trx.cli._format_size"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_format_size</span></code></a>(→ str)</p></td>
 <td><p>Format byte size to human readable string.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#trx.cli.info" title="trx.cli.info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">info</span></code></a>(]) → None)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.cli.info" title="trx.cli.info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">info</span></code></a>(]) → None)</p></td>
 <td><p>Display detailed information about a TRX file.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#trx.cli.main" title="trx.cli.main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">main</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#trx.cli.main" title="trx.cli.main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">main</span></code></a>()</p></td>
 <td><p>Entry point for the TRX CLI.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#trx.cli._create_standalone_app" title="trx.cli._create_standalone_app"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_create_standalone_app</span></code></a>(command_func, name, help_text)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.cli._create_standalone_app" title="trx.cli._create_standalone_app"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_create_standalone_app</span></code></a>(command_func, name, help_text)</p></td>
 <td><p>Create a standalone Typer app for a single command.</p></td>
 </tr>
 </tbody>
@@ -884,30 +877,6 @@ data_per_streamline, groups, and data_per_group arrays.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="trx.cli.visualize">
-<span class="sig-prename descclassname"><span class="pre">trx.cli.</span></span><span class="sig-name descname"><span class="pre">visualize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_tractogram</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Argument</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Input</span> <span class="pre">tractogram.</span> <span class="pre">Format:</span> <span class="pre">trk,</span> <span class="pre">tck,</span> <span class="pre">vtk,</span> <span class="pre">fib,</span> <span class="pre">dpy,</span> <span class="pre">trx.'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Argument</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Reference</span> <span class="pre">anatomy</span> <span class="pre">(.nii</span> <span class="pre">or</span> <span class="pre">.nii.gz).'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove_invalid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Option</span><span class="p"><span class="pre">(</span></span><span class="s"><span class="pre">'--remove-invalid'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Remove</span> <span class="pre">invalid</span> <span class="pre">streamlines</span> <span class="pre">to</span> <span class="pre">avoid</span> <span class="pre">density_map</span> <span class="pre">crash.'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/trx/cli.html#visualize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.cli.visualize" title="Link to this definition">#</a></dt>
-<dd><p>Display tractogram and density map with bounding box.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>in_tractogram</strong><span class="classifier">Path</span></dt><dd><p>Input tractogram (.trk, .tck, .vtk, .fib, .dpy, .trx).</p>
-</dd>
-<dt><strong>reference</strong><span class="classifier">Path</span></dt><dd><p>Reference anatomy (.nii or .nii.gz).</p>
-</dd>
-<dt><strong>remove_invalid</strong><span class="classifier">bool, optional</span></dt><dd><p>Remove invalid streamlines to avoid density map crashes.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>None</dt><dd><p>Opens visualization windows when fury is available.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="trx.cli._format_size">
 <span class="sig-prename descclassname"><span class="pre">trx.cli.</span></span><span class="sig-name descname"><span class="pre">_format_size</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size_bytes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../../_modules/trx/cli.html#_format_size"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.cli._format_size" title="Link to this definition">#</a></dt>
 <dd><p>Format byte size to human readable string.</p>
@@ -1024,11 +993,6 @@ $ trx_info tractogram.trx</p>
 <dd></dd></dl>
 
 <dl class="py data">
-<dt class="sig sig-object py" id="trx.cli.visualize_cmd">
-<span class="sig-prename descclassname"><span class="pre">trx.cli.</span></span><span class="sig-name descname"><span class="pre">visualize_cmd</span></span><a class="reference internal" href="../../../_modules/trx/cli.html#visualize_cmd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.cli.visualize_cmd" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py data">
 <dt class="sig sig-object py" id="trx.cli.info_cmd">
 <span class="sig-prename descclassname"><span class="pre">trx.cli.</span></span><span class="sig-name descname"><span class="pre">info_cmd</span></span><a class="reference internal" href="../../../_modules/trx/cli.html#info_cmd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.cli.info_cmd" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
@@ -1098,7 +1062,6 @@ $ trx_info tractogram.trx</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.cli.compare"><code class="docutils literal notranslate"><span class="pre">compare()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.cli.validate"><code class="docutils literal notranslate"><span class="pre">validate()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.cli.verify_header"><code class="docutils literal notranslate"><span class="pre">verify_header()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.cli.visualize"><code class="docutils literal notranslate"><span class="pre">visualize()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.cli._format_size"><code class="docutils literal notranslate"><span class="pre">_format_size()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.cli.info"><code class="docutils literal notranslate"><span class="pre">info()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.cli.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
@@ -1111,7 +1074,6 @@ $ trx_info tractogram.trx</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.cli.compare_cmd"><code class="docutils literal notranslate"><span class="pre">compare_cmd</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.cli.validate_cmd"><code class="docutils literal notranslate"><span class="pre">validate_cmd</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.cli.verify_header_cmd"><code class="docutils literal notranslate"><span class="pre">verify_header_cmd</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.cli.visualize_cmd"><code class="docutils literal notranslate"><span class="pre">visualize_cmd</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.cli.info_cmd"><code class="docutils literal notranslate"><span class="pre">info_cmd</span></code></a></li>
 </ul>
 </li>

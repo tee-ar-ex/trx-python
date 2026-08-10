@@ -27,7 +27,6 @@ Attributes
    trx.cli.compare_cmd
    trx.cli.validate_cmd
    trx.cli.verify_header_cmd
-   trx.cli.visualize_cmd
    trx.cli.info_cmd
 
 
@@ -47,7 +46,6 @@ Functions
    trx.cli.compare
    trx.cli.validate
    trx.cli.verify_header
-   trx.cli.visualize
    trx.cli._format_size
    trx.cli.info
    trx.cli.main
@@ -538,43 +536,6 @@ Module Contents
    ..
        !! processed by numpydoc !!
 
-.. py:function:: visualize(in_tractogram: Annotated[pathlib.Path, typer.Argument(help='Input tractogram. Format: trk, tck, vtk, fib, dpy, trx.')], reference: Annotated[pathlib.Path, typer.Argument(help='Reference anatomy (.nii or .nii.gz).')], remove_invalid: Annotated[bool, typer.Option('--remove-invalid', help='Remove invalid streamlines to avoid density_map crash.')] = False) -> None
-
-   
-   Display tractogram and density map with bounding box.
-
-
-   :Parameters:
-
-       **in_tractogram** : Path
-           Input tractogram (.trk, .tck, .vtk, .fib, .dpy, .trx).
-
-       **reference** : Path
-           Reference anatomy (.nii or .nii.gz).
-
-       **remove_invalid** : bool, optional
-           Remove invalid streamlines to avoid density map crashes.
-
-
-
-   :Returns:
-
-       None
-           Opens visualization windows when fury is available.
-
-
-
-
-
-
-
-
-
-
-
-   ..
-       !! processed by numpydoc !!
-
 .. py:function:: _format_size(size_bytes: int) -> str
 
    
@@ -719,8 +680,6 @@ Module Contents
 .. py:data:: validate_cmd
 
 .. py:data:: verify_header_cmd
-
-.. py:data:: visualize_cmd
 
 .. py:data:: info_cmd
 

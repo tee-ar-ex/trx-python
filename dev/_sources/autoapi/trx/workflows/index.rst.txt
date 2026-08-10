@@ -28,7 +28,6 @@ Functions
    trx.workflows.convert_tractogram
    trx.workflows.tractogram_simple_compare
    trx.workflows.verify_header_compatibility
-   trx.workflows.tractogram_visualize_overlap
    trx.workflows.validate_tractogram
    trx.workflows._load_streamlines_from_csv
    trx.workflows._load_streamlines_from_arrays
@@ -185,43 +184,6 @@ Module Contents
 
        None
            Prints compatibility results to stdout.
-
-
-
-
-
-
-
-
-
-
-
-   ..
-       !! processed by numpydoc !!
-
-.. py:function:: tractogram_visualize_overlap(in_tractogram, reference, remove_invalid=True)
-
-   
-   Visualize overlap between tractogram density maps in different spaces.
-
-
-   :Parameters:
-
-       **in_tractogram** : str
-           Input tractogram path.
-
-       **reference** : str
-           Reference anatomy (.nii or .nii.gz).
-
-       **remove_invalid** : bool, optional
-           Remove streamlines outside bounding box before visualization.
-
-
-
-   :Returns:
-
-       None
-           Opens interactive windows when fury is available.
 
 
 
