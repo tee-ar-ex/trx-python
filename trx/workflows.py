@@ -9,7 +9,6 @@ import logging
 import os
 import tempfile
 
-import nibabel as nib
 from nibabel.streamlines.array_sequence import ArraySequence
 import numpy as np
 
@@ -32,7 +31,6 @@ from trx.utils import (
     load_matrix_in_any_format,
     split_name_with_gz,
 )
-from trx.viz import display
 
 
 def convert_dsi_studio(
@@ -271,81 +269,6 @@ def verify_header_compatibility(in_files):
             all_valid = False
     if all_valid:
         print("All input files have compatible headers.")
-
-
-def tractogram_visualize_overlap(in_tractogram, reference, remove_invalid=True):
-    """Visualize overlap between tractogram density maps in different spaces.
-
-    Parameters
-    ----------
-    in_tractogram : str
-        Input tractogram path.
-    reference : str
-        Reference anatomy (.nii or .nii.gz).
-    remove_invalid : bool, optional
-        Remove streamlines outside bounding box before visualization.
-
-    Returns
-    -------
-    None
-        Opens interactive windows when fury is available.
-    """
-    if not dipy_available:
-        logging.error("Dipy library is missing, scripts are not available.")
-        return None
-    from dipy.io.stateful_tractogram import StatefulTractogram
-    from dipy.tracking.streamline import set_number_of_points
-    from dipy.tracking.utils import density_map
-
-    tractogram_obj = load(in_tractogram, reference)
-    if not isinstance(tractogram_obj, StatefulTractogram):
-        sft = tractogram_obj.to_sft()
-        tractogram_obj.close()
-    else:
-        sft = tractogram_obj
-    sft.streamlines._data = sft.streamlines._data.astype(float)
-
-    sft.data_per_point = None
-    sft.streamlines = set_number_of_points(sft.streamlines, 200)
-
-    if remove_invalid:
-        sft.remove_invalid_streamlines()
-
-    # Approach (1)
-    density_1 = density_map(sft.streamlines, sft.affine, sft.dimensions)
-    img = nib.load(reference)
-    display(
-        img.get_fdata(),
-        volume_affine=img.affine,
-        streamlines=sft.streamlines,
-        title="RASMM",
-    )
-
-    # Approach (2)
-    sft.to_vox()
-    density_2 = density_map(sft.streamlines, np.eye(4), sft.dimensions)
-
-    # Small difference due to casting of the affine as float32 or float64
-    diff = density_1 - density_2
-    print(
-        "Total difference of {} voxels with total value of {}".format(
-            np.count_nonzero(diff), np.sum(np.abs(diff))
-        )
-    )
-
-    display(img.get_fdata(), streamlines=sft.streamlines, title="VOX")
-
-    # Try VOXMM
-    sft.to_voxmm()
-    affine = np.eye(4)
-    affine[0:3, 0:3] *= sft.voxel_sizes
-
-    display(
-        img.get_fdata(),
-        volume_affine=affine,
-        streamlines=sft.streamlines,
-        title="VOXMM",
-    )
 
 
 def validate_tractogram(

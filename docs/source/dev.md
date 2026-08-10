@@ -268,7 +268,6 @@ trx-python/
 │   ├── streamlines_ops.py  # Streamline operations
 │   ├── trx_file_memmap.py  # Core TrxFile class
 │   ├── utils.py            # Utility functions
-│   ├── viz.py              # Visualization (optional)
 │   ├── workflows.py        # High-level workflows
 │   └── tests/              # Test suite
 ├── docs/                   # Documentation

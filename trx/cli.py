@@ -19,7 +19,6 @@ from trx.workflows import (
     generate_trx_from_scratch,
     manipulate_trx_datatype,
     tractogram_simple_compare,
-    tractogram_visualize_overlap,
     validate_tractogram,
     verify_header_compatibility,
 )
@@ -920,47 +919,6 @@ def verify_header(
     verify_header_compatibility([str(f) for f in in_files])
 
 
-@app.command("visualize")
-def visualize(
-    in_tractogram: Annotated[
-        Path,
-        typer.Argument(help="Input tractogram. Format: trk, tck, vtk, fib, dpy, trx."),
-    ],
-    reference: Annotated[
-        Path,
-        typer.Argument(help="Reference anatomy (.nii or .nii.gz)."),
-    ],
-    remove_invalid: Annotated[
-        bool,
-        typer.Option(
-            "--remove-invalid",
-            help="Remove invalid streamlines to avoid density_map crash.",
-        ),
-    ] = False,
-) -> None:
-    """Display tractogram and density map with bounding box.
-
-    Parameters
-    ----------
-    in_tractogram : Path
-        Input tractogram (.trk, .tck, .vtk, .fib, .dpy, .trx).
-    reference : Path
-        Reference anatomy (.nii or .nii.gz).
-    remove_invalid : bool, optional
-        Remove invalid streamlines to avoid density map crashes.
-
-    Returns
-    -------
-    None
-        Opens visualization windows when fury is available.
-    """
-    tractogram_visualize_overlap(
-        str(in_tractogram),
-        str(reference),
-        remove_invalid,
-    )
-
-
 def _format_size(size_bytes: int) -> str:
     """Format byte size to human readable string.
 
@@ -1148,12 +1106,6 @@ verify_header_cmd = _create_standalone_app(
     verify_header,
     "trx_verify_header_compatibility",
     "Compare spatial attributes of input files.",
-)
-
-visualize_cmd = _create_standalone_app(
-    visualize,
-    "trx_visualize_overlap",
-    "Display tractogram and density map with bounding box.",
 )
 
 info_cmd = _create_standalone_app(
