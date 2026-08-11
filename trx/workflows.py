@@ -78,7 +78,7 @@ def convert_dsi_studio(
     elif in_ext == ".trk":
         sft = load_tractogram(in_dsi_tractogram, "same", bbox_valid_check=False)
     else:
-        raise IOError("{} is not currently supported.".format(in_ext))
+        raise IOError(f"{in_ext} is not currently supported.")
 
     sft.to_vox()
     sft_fix = StatefulTractogram(
@@ -210,9 +210,8 @@ def tractogram_simple_compare(in_tractograms, reference):
         print("Matching tractograms in rasmm!")
     else:
         print(
-            "Average difference in rasmm of {}".format(
-                np.average(sft_1.streamlines._data - sft_2.streamlines._data, axis=0)
-            )
+            "Average difference in rasmm of "
+            f"{np.average(sft_1.streamlines._data - sft_2.streamlines._data, axis=0)}"
         )
 
     sft_1.to_voxmm()
@@ -221,9 +220,8 @@ def tractogram_simple_compare(in_tractograms, reference):
         print("Matching tractograms in voxmm!")
     else:
         print(
-            "Average difference in voxmm of {}".format(
-                np.average(sft_1.streamlines._data - sft_2.streamlines._data, axis=0)
-            )
+            "Average difference in voxmm of "
+            f"{np.average(sft_1.streamlines._data - sft_2.streamlines._data, axis=0)}"
         )
 
     sft_1.to_vox()
@@ -232,9 +230,8 @@ def tractogram_simple_compare(in_tractograms, reference):
         print("Matching tractograms in vox!")
     else:
         print(
-            "Average difference in vox of {}".format(
-                np.average(sft_1.streamlines._data - sft_2.streamlines._data, axis=0)
-            )
+            "Average difference in vox of "
+            f"{np.average(sft_1.streamlines._data - sft_2.streamlines._data, axis=0)}"
         )
 
 
@@ -258,14 +255,12 @@ def verify_header_compatibility(in_files):
     all_valid = True
     for filepath in in_files:
         if not os.path.isfile(filepath):
-            print("{} does not exist".format(filepath))
+            print(f"{filepath} does not exist")
         _, in_extension = split_name_with_gz(filepath)
         if in_extension not in [".trk", ".nii", ".nii.gz", ".trx"]:
-            raise IOError("{} does not have a supported extension".format(filepath))
+            raise IOError(f"{filepath} does not have a supported extension")
         if not is_header_compatible(in_files[0], filepath):
-            print(
-                "{} and {} do not have compatible header.".format(in_files[0], filepath)
-            )
+            print(f"{in_files[0]} and {filepath} do not have compatible header.")
             all_valid = False
     if all_valid:
         print("All input files have compatible headers.")
@@ -318,16 +313,12 @@ def validate_tractogram(
     invalid_coord_ind, _ = sft.remove_invalid_streamlines()
     tot_remove += len(invalid_coord_ind)
     logging.warning(
-        "Removed {} streamlines with invalid coordinates.".format(
-            len(invalid_coord_ind)
-        )
+        f"Removed {len(invalid_coord_ind)} streamlines with invalid coordinates."
     )
 
     indices = [i for i in range(len(sft)) if len(sft.streamlines[i]) <= 1]
     tot_remove = +len(indices)
-    logging.warning(
-        "Removed {} invalid streamlines (1 or 0 points).".format(len(indices))
-    )
+    logging.warning(f"Removed {len(indices)} invalid streamlines (1 or 0 points).")
 
     for i in np.setdiff1d(range(len(sft)), indices):
         norm = np.linalg.norm(np.diff(sft.streamlines[i], axis=0), axis=1)
@@ -337,9 +328,8 @@ def validate_tractogram(
 
     indices_val = np.setdiff1d(range(len(sft)), indices).astype(np.uint32)
     logging.warning(
-        "Removed {} invalid streamlines (overlapping points).".format(
-            ori_len - len(indices_val)
-        )
+        f"Removed {ori_len - len(indices_val)} invalid streamlines "
+        "(overlapping points)."
     )
     tot_remove += ori_len - len(indices_val)
 
@@ -349,9 +339,8 @@ def validate_tractogram(
         )
         indices_final = np.intersect1d(indices_val, indices_uniq).astype(np.uint32)
         logging.warning(
-            "Removed {} overlapping streamlines.".format(
-                ori_len - len(indices_final) - tot_remove
-            )
+            f"Removed {ori_len - len(indices_final) - tot_remove} "
+            "overlapping streamlines."
         )
 
         indices_final = np.intersect1d(indices_val, indices_uniq)
@@ -458,9 +447,7 @@ def _apply_spatial_transforms(
     sft = StatefulTractogram(streamlines, reference, space, origin)
     if verify_invalid:
         rem, _ = sft.remove_invalid_streamlines()
-        print(
-            "{} streamlines were removed becaused they were invalid.".format(len(rem))
-        )
+        print(f"{len(rem)} streamlines were removed because they were invalid.")
     sft.to_rasmm()
     sft.to_center()
     streamlines = sft.streamlines
@@ -509,11 +496,11 @@ def _write_streamline_data(tmp_dir_name, streamlines, positions_dtype, offsets_d
     offsets_dtype : str
         Datatype for offsets array.
     """
-    curr_filename = os.path.join(tmp_dir_name, "positions.3.{}".format(positions_dtype))
+    curr_filename = os.path.join(tmp_dir_name, f"positions.3.{positions_dtype}")
     positions = streamlines._data.astype(positions_dtype)
     tmm._ensure_little_endian(positions).tofile(curr_filename)
 
-    curr_filename = os.path.join(tmp_dir_name, "offsets.{}".format(offsets_dtype))
+    curr_filename = os.path.join(tmp_dir_name, f"offsets.{offsets_dtype}")
     offsets = streamlines._offsets.astype(offsets_dtype)
     tmm._ensure_little_endian(offsets).tofile(curr_filename)
 
@@ -572,15 +559,15 @@ def _write_data_array(tmp_dir_name, subdir_name, args, is_dpg=False):
     if curr_arr.shape == (1, 1):
         curr_arr = curr_arr.reshape((1,))
 
-    dim = "" if curr_arr.ndim == 1 else "{}.".format(curr_arr.shape[-1])
+    dim = "" if curr_arr.ndim == 1 else f"{curr_arr.shape[-1]}."
 
     if is_dpg:
         curr_filename = os.path.join(
-            tmp_dir_name, "dpg", args[0], "{}.{}{}".format(basename, dim, dtype)
+            tmp_dir_name, "dpg", args[0], f"{basename}.{dim}{dtype}"
         )
     else:
         curr_filename = os.path.join(
-            tmp_dir_name, subdir_name, "{}.{}{}".format(basename, dim, dtype)
+            tmp_dir_name, subdir_name, f"{basename}.{dim}{dtype}"
         )
 
     tmm._ensure_little_endian(curr_arr).tofile(curr_filename)

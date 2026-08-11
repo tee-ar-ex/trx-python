@@ -84,8 +84,8 @@ def md5sum(filename):
         Hexadecimal MD5 digest.
     """
     h = hashlib.md5()
-    with open(filename, "rb") as f:
-        for chunk in iter(lambda: f.read(128 * h.block_size), b""):
+    with open(filename, "rb") as file:
+        for chunk in iter(lambda: file.read(128 * h.block_size), b""):
             h.update(chunk)
     return h.hexdigest()
 
@@ -104,8 +104,8 @@ def sha256sum(filename):
         Hexadecimal SHA256 digest.
     """
     h = hashlib.sha256()
-    with open(filename, "rb") as f:
-        for chunk in iter(lambda: f.read(128 * h.block_size), b""):
+    with open(filename, "rb") as file:
+        for chunk in iter(lambda: file.read(128 * h.block_size), b""):
             h.update(chunk)
     return h.hexdigest()
 
@@ -140,23 +140,23 @@ def fetch_data(files_dict, keys=None):  # noqa: C901
     elif isinstance(keys, str):
         keys = [keys]
 
-    for f in keys:
-        file_entry = files_dict[f]
+    for fname in keys:
+        file_entry = files_dict[fname]
         if len(file_entry) == 2:
             url, expected_md5 = file_entry
             expected_sha = None
         else:
             url, expected_md5, expected_sha = file_entry
-        full_path = os.path.join(trx_home, f)
+        full_path = os.path.join(trx_home, fname)
 
-        logging.info("Downloading {} to {}".format(f, trx_home))
+        logging.info(f"Downloading {fname} to {trx_home}")
         if not os.path.exists(full_path):
             urllib.request.urlretrieve(url, full_path)
 
         actual_md5 = md5sum(full_path)
         if expected_md5 != actual_md5:
             raise ValueError(
-                f"Md5sum for {f} does not match. "
+                f"Md5sum for {fname} does not match. "
                 "Please remove the file to download it again: " + full_path
             )
 
@@ -164,10 +164,10 @@ def fetch_data(files_dict, keys=None):  # noqa: C901
             actual_sha = sha256sum(full_path)
             if expected_sha != actual_sha:
                 raise ValueError(
-                    f"SHA256 for {f} does not match. "
+                    f"SHA256 for {fname} does not match. "
                     "Please remove the file to download it again: " + full_path
                 )
 
-        if f.endswith(".zip"):
-            dst_dir = os.path.join(trx_home, f[:-4])
+        if fname.endswith(".zip"):
+            dst_dir = os.path.join(trx_home, fname[:-4])
             shutil.unpack_archive(full_path, extract_dir=dst_dir, format="zip")

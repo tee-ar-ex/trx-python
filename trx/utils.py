@@ -348,7 +348,7 @@ def load_matrix_in_any_format(filepath):
     elif ext == ".npy":
         data = np.load(filepath)
     else:
-        raise ValueError("Extension {} is not supported".format(ext))
+        raise ValueError(f"Extension {ext} is not supported")
 
     return data
 
@@ -489,15 +489,13 @@ def verify_trx_dtype(trx, dict_dtype):  # noqa: C901
         elif key == "dpv":
             for key_dpv in dict_dtype[key]:
                 if trx.data_per_vertex[key_dpv]._data.dtype != dict_dtype[key][key_dpv]:
-                    logging.warning(
-                        "Data per vertex ({}) dtype is different".format(key_dpv)
-                    )
+                    logging.warning(f"Data per vertex ({key_dpv}) dtype is different")
                     identical = False
         elif key == "dps":
             for key_dps in dict_dtype[key]:
                 if trx.data_per_streamline[key_dps].dtype != dict_dtype[key][key_dps]:
                     logging.warning(
-                        "Data per streamline ({}) dtype is different".format(key_dps)
+                        f"Data per streamline ({key_dps}) dtype is different"
                     )
                     identical = False
         elif key == "dpg":
@@ -508,7 +506,7 @@ def verify_trx_dtype(trx, dict_dtype):  # noqa: C901
                         != dict_dtype[key][key_group][key_dpg]
                     ):
                         logging.warning(
-                            "Data per group ({}) dtype is different".format(key_dpg)
+                            f"Data per group ({key_dpg}) dtype is different"
                         )
                         identical = False
         elif key == "groups":
@@ -517,9 +515,7 @@ def verify_trx_dtype(trx, dict_dtype):  # noqa: C901
                     trx.data_per_point[key_group]._data.dtype
                     != dict_dtype[key][key_group]
                 ):
-                    logging.warning(
-                        "Data per group ({}) dtype is different".format(key_group)
-                    )
+                    logging.warning(f"Data per group ({key_group}) dtype is different")
                     identical = False
 
     return identical
