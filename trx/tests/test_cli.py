@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Tests for CLI commands and workflow functions."""
 
+from contextlib import nullcontext
 import os
 import tempfile
 from types import SimpleNamespace
@@ -45,7 +46,7 @@ def test_create_temp_memmap_uses_reopenable_path(tmp_path):
     assert os.path.dirname(os.fspath(filename)) == os.fspath(tmp_path)
 
 
-def test_manipulate_trx_datatype_uses_reopenable_memmaps():
+def test_manipulate_trx_datatype_uses_reopenable_memmaps(tmp_path):
     trx = SimpleNamespace(
         streamlines=SimpleNamespace(
             _data=np.arange(6, dtype=np.float16).reshape((2, 3)),
@@ -61,6 +62,7 @@ def test_manipulate_trx_datatype_uses_reopenable_memmaps():
     trx.close = lambda: None
 
     with (
+        patch("trx.workflows.get_trx_tmp_dir", return_value=nullcontext(os.fspath(tmp_path))),
         patch("trx.workflows.tmm.load", return_value=trx),
         patch("trx.workflows.tmm.save") as mock_save,
         patch(
