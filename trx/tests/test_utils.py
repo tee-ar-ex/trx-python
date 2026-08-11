@@ -53,6 +53,8 @@ def test_close_or_delete_mmap_np_memmap():
         tmp_name = os.path.join(tmpdir, "test.mmap")
         mmap_arr = np.memmap(tmp_name, dtype="float32", mode="w+", shape=(10,))
         close_or_delete_mmap(mmap_arr)
+        assert mmap_arr._mmap.closed
+    assert not os.path.exists(tmp_name)
 
 
 def test_close_or_delete_mmap_array_sequence():
@@ -69,6 +71,11 @@ def test_close_or_delete_mmap_array_sequence():
         seq._lengths = np.array([2, 2, 2, 2, 2], dtype="uint32")
 
         close_or_delete_mmap(seq)
+        assert seq._data._mmap.closed
+        assert seq._offsets._mmap.closed
+
+    assert not os.path.exists(tmp1_name)
+    assert not os.path.exists(tmp2_name)
 
 
 def test_close_or_delete_mmap_with_mmap_attr():
