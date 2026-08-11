@@ -34,6 +34,22 @@ from trx.utils import (
 
 
 def _create_temp_memmap(tmp_dir_name, dtype, shape):
+    """Create a temporary numpy memmap array.
+
+    Parameters
+    ----------
+    tmp_dir_name : str
+        Directory to create the temporary file in.
+    dtype : np.dtype
+        Data type of the memmap array.
+    shape : tuple
+        Shape of the memmap array.
+
+    Returns
+    -------
+    np.memmap
+        The memory-mapped array.
+    """
     fd, filename = tempfile.mkstemp(dir=tmp_dir_name, suffix=".mmap")
     os.close(fd)
     return np.memmap(filename, dtype=dtype, mode="w+", shape=shape)

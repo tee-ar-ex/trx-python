@@ -21,8 +21,8 @@ except ImportError:
 
 from trx.fetcher import fetch_data, get_home, get_testing_files_dict
 import trx.trx_file_memmap as tmm
-from trx.workflows import _create_temp_memmap
 from trx.workflows import (
+    _create_temp_memmap,
     convert_dsi_studio,
     convert_tractogram,
     generate_trx_from_scratch,
@@ -53,16 +53,23 @@ def test_manipulate_trx_datatype_uses_reopenable_memmaps(tmp_path):
             _offsets=np.array([0, 3], dtype=np.uint64),
         ),
         data_per_vertex={
-            "mock_dpv": SimpleNamespace(_data=np.arange(6, dtype=np.uint8).reshape((2, 3)))
+            "mock_dpv": SimpleNamespace(
+                _data=np.arange(6, dtype=np.uint8).reshape((2, 3))
+            )
         },
         data_per_streamline={"mock_dps": np.array([1, 2], dtype=np.uint8)},
-        data_per_group={"mock_group": {"mock_dpg": np.array([1.0, 2.0], dtype=np.float32)}},
+        data_per_group={
+            "mock_group": {"mock_dpg": np.array([1.0, 2.0], dtype=np.float32)}
+        },
         groups={"mock_group": np.array([0, 1], dtype=np.int32)},
     )
     trx.close = lambda: None
 
     with (
-        patch("trx.workflows.get_trx_tmp_dir", return_value=nullcontext(os.fspath(tmp_path))),
+        patch(
+            "trx.workflows.get_trx_tmp_dir",
+            return_value=nullcontext(os.fspath(tmp_path)),
+        ),
         patch("trx.workflows.tmm.load", return_value=trx),
         patch("trx.workflows.tmm.save") as mock_save,
         patch(

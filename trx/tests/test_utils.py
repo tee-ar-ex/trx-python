@@ -290,8 +290,8 @@ def test_get_reference_info_wrapper_zero_affine():
     mock_header = MagicMock(spec=nib.Nifti1Header)
     mock_img.header = mock_header
     mock_header.get_best_affine.return_value = np.zeros((4, 4))
-    mock_header.__getitem__.side_effect = (
-        lambda x: [10, 10, 10] if x == "dim" else [1, 1, 1]
+    mock_header.__getitem__.side_effect = lambda x: (
+        [10, 10, 10] if x == "dim" else [1, 1, 1]
     )
 
     with pytest.raises(ValueError, match="Invalid affine, contains only zeros"):
