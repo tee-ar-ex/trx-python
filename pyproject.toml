@@ -39,6 +39,7 @@ dev = [
 ]
 doc = [
     "matplotlib",
+    "myst-parser",
     "numpydoc",
     "pydata-sphinx-theme >= 0.16.1",
     "sphinx >= 8.2.0",

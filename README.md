@@ -147,6 +147,10 @@ export TRX_TMPDIR=use_working_dir
 
 Temporary folders are automatically cleaned, but if the code crashes unexpectedly, ensure folders are deleted manually.
 
+## Troubleshooting
+
+If the `trx` command is not working as expected, run `trx --debug` to print diagnostic information about the Python interpreter, package location, and whether all required and optional dependencies are installed.
+
 ## Documentation
 
 Full documentation is available at https://tee-ar-ex.github.io/trx-python/

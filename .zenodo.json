@@ -1,0 +1,85 @@
+{
+    "upload_type": "software",
+    "title": "trx-python: A Python implementation of the TRX tractography file format",
+    "description": "trx-python is a Python implementation of the TRX file format for brain tractography data. TRX is a community-driven tractography file format designed to facilitate dataset exchange, interoperability, and state-of-the-art analyses, acting as a replacement for the myriad of existing formats. The library uses memory-mapped files to efficiently handle large neuroimaging datasets and provides a unified I/O interface supporting TRX, TRK, TCK, FIB, VTK, and DPY formats.",
+    "access_right": "open",
+    "license": "bsd-3-clause",
+    "language": "eng",
+    "keywords": [
+        "tractography",
+        "neuroimaging",
+        "diffusion MRI",
+        "white matter",
+        "brain connectivity",
+        "streamlines",
+        "connectome",
+        "file format",
+        "memory-mapped",
+        "nibabel",
+        "dipy"
+    ],
+    "creators": [
+        {
+            "name": "Rheault, François",
+            "affiliation": "Université de Sherbrooke",
+            "orcid": "0000-0002-0097-8004"
+        }
+    ],
+    "contributors": [
+        {
+            "name": "Rokem, Ariel",
+            "affiliation": "University of Washington",
+            "orcid": "0000-0003-0679-1985",
+            "type": "ProjectMember"
+        },
+        {
+            "name": "Koudoro, Serge",
+            "affiliation": "Indiana University Bloomington",
+            "orcid": "0000-0002-9819-9884",
+            "type": "ProjectMember"
+        },
+        {
+            "name": "Hayot-Sasson, Valérie",
+            "affiliation": "ÉTS Montréal",
+            "orcid": "0000-0002-4830-4535",
+            "type": "ProjectMember"
+        },
+        {
+            "name": "Sólon Heinsfeld, Anibal",
+            "affiliation": "University of Texas at Austin",
+            "orcid": "0000-0002-2050-0614",
+            "type": "ProjectMember"
+        },
+        {
+            "name": "Beasley, Benjamin A.",
+            "type": "Other"
+        },
+        {
+            "name": "Mollier, Étienne",
+            "affiliation": "Debian Project",
+            "type": "Other"
+        }
+    ],
+    "grants": [
+        {
+            "id": "10.13039/100000025::1R01MH126699"
+        }
+    ],
+    "related_identifiers": [
+        {
+            "identifier": "https://github.com/tee-ar-ex/trx-python",
+            "relation": "isSupplementTo",
+            "resource_type": "software"
+        },
+        {
+            "identifier": "https://tee-ar-ex.github.io/trx-python/",
+            "relation": "isDocumentedBy",
+            "resource_type": "publication-other"
+        }
+    ],
+    "communities": [
+        {
+            "identifier": "neuroscience"
+        }
+    ]
+}

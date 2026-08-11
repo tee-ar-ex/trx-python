@@ -82,20 +82,16 @@ def load_sft_with_reference(filepath, reference=None, bbox_check=True):
     _, ext = os.path.splitext(filepath)
     if ext == ".trk":
         if reference is not None and reference != "same":
-            logging.warning(
-                "Reference is discarded for this file format {}.".format(filepath)
-            )
+            logging.warning(f"Reference is discarded for this file format {filepath}.")
         sft = load_tractogram(filepath, "same", bbox_valid_check=bbox_check)
     elif ext in [".tck", ".fib", ".vtk", ".dpy"]:
         if reference is None or reference == "same":
-            raise IOError(
-                "--reference is required for this file format {}.".format(filepath)
-            )
+            raise IOError(f"--reference is required for this file format {filepath}.")
         else:
             sft = load_tractogram(filepath, reference, bbox_valid_check=bbox_check)
 
     else:
-        raise IOError("{} is an unsupported file format".format(filepath))
+        raise IOError(f"{filepath} is an unsupported file format")
 
     return sft
 

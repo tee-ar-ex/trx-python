@@ -15,6 +15,7 @@ jobs:
   build-sdist:
     name: Build sdist
     runs-on: ubuntu-latest
+    if: github.repository == 'tee-ar-ex/trx-python'
     steps:
       - uses: actions/checkout@v6
         with:
@@ -75,6 +76,7 @@ jobs:
           password: ${{ secrets.TEST_PYPI_API_TOKEN }}
           repository-url: https://test.pypi.org/legacy/
           verbose: true
+          skip-existing: true
 
   pypi-publish:
     runs-on: ubuntu-latest

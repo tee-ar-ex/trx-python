@@ -77,11 +77,33 @@ jobs:
         curl -sSL https://tee-ar-ex.github.io/trx-python/switcher.json -o switcher.json || echo '[]' > switcher.json
     - name: Update switcher.json with new version
       run: python tools/update_switcher.py switcher.json --version ${{ steps.get_version.outputs.VERSION }}
-    - name: Create root files (redirect + switcher.json)
+    - name: Deploy all release docs in a single push
       run: |
-        mkdir -p root_files
-        cp switcher.json root_files/
-        cat > root_files/index.html << 'EOF'
+        VERSION="${{ steps.get_version.outputs.VERSION }}"
+
+        # Configure git
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+        # Check out gh-pages into a temp folder
+        git fetch origin gh-pages
+        git worktree add gh-pages-out origin/gh-pages
+
+        # Update versioned folder
+        rm -rf "gh-pages-out/${VERSION}"
+        mkdir -p "gh-pages-out/${VERSION}"
+        cp -r docs/_build/html/. "gh-pages-out/${VERSION}/"
+
+        # Update stable folder
+        rm -rf gh-pages-out/stable
+        mkdir -p gh-pages-out/stable
+        cp -r docs/_build/html/. gh-pages-out/stable/
+
+        # Update switcher.json at root
+        cp switcher.json gh-pages-out/switcher.json
+
+        # Update root redirect index.html
+        cat > gh-pages-out/index.html << 'EOF'
         <!DOCTYPE html>
         <html lang="en">
         <head>
@@ -101,22 +123,10 @@ jobs:
         </body>
         </html>
         EOF
-    - name: Publish root files (redirect + switcher.json)
-      uses: JamesIves/github-pages-deploy-action@v4
-      with:
-        branch: gh-pages
-        folder: root_files
-        target-folder: .
-        clean: false
-    - name: Publish release docs to Github Pages
-      uses: JamesIves/github-pages-deploy-action@v4
-      with:
-        branch: gh-pages
-        folder: docs/_build/html
-        target-folder: ${{ steps.get_version.outputs.VERSION }}
-    - name: Publish stable docs to Github Pages
-      uses: JamesIves/github-pages-deploy-action@v4
-      with:
-        branch: gh-pages
-        folder: docs/_build/html
-        target-folder: stable
+
+        # Single commit and push
+        cd gh-pages-out
+        git add --all
+        git diff --cached --quiet && echo "No changes to deploy." && exit 0
+        git commit -m "Deploy docs for ${VERSION} 🚀"
+        git push origin HEAD:gh-pages

@@ -36,7 +36,7 @@ tmp_dir = get_trx_tmp_dir()
         (np.ones((1), dtype=np.float64), "mean_fa.float64", False),
     ],
 )
-def test__generate_filename_from_data(
+def test_generate_filename_from_data(
     arr, expected, value_error, filename="mean_fa.bit"
 ):
     if value_error:
@@ -60,7 +60,7 @@ def test__generate_filename_from_data(
         ),
     ],
 )
-def test__split_ext_with_dimensionality(filename, expected, value_error):
+def test_split_ext_with_dimensionality(filename, expected, value_error):
     if value_error:
         with pytest.raises(ValueError):
             assert tmm._split_ext_with_dimensionality(filename) == expected
@@ -83,7 +83,7 @@ def test__split_ext_with_dimensionality(filename, expected, value_error):
         ),
     ],
 )
-def test__compute_lengths(offsets, nb_vertices, expected):
+def test_compute_lengths(offsets, nb_vertices, expected):
     offsets = tmm._append_last_offsets(offsets, nb_vertices)
     lengths = tmm._compute_lengths(offsets=offsets)
     assert np.array_equal(lengths, expected)
@@ -99,7 +99,7 @@ def test__compute_lengths(offsets, nb_vertices, expected):
         (".txt", False),
     ],
 )
-def test__is_dtype_valid(ext, expected):
+def test_is_dtype_valid(ext, expected):
     assert tmm._is_dtype_valid(ext) == expected
 
 
@@ -114,7 +114,7 @@ def test__is_dtype_valid(ext, expected):
         (np.zeros((5), dtype=np.int16), 3, 3, -1),
     ],
 )
-def test__dichotomic_search(arr, l_bound, r_bound, expected):
+def test_dichotomic_search(arr, l_bound, r_bound, expected):
     end_idx = tmm._dichotomic_search(arr, l_bound=l_bound, r_bound=r_bound)
     assert end_idx == expected
 
@@ -126,7 +126,7 @@ def test__dichotomic_search(arr, l_bound, r_bound, expected):
         ("offsets.float32", False, None),
     ],
 )
-def test__create_memmap(basename, create, expected):
+def test_create_memmap(basename, create, expected):
     if create:
         with get_trx_tmp_dir() as dirname:
             filename = os.path.join(dirname, basename)
@@ -398,6 +398,26 @@ def test_trxfile_close():
     pass
 
 
+@pytest.mark.parametrize("path", [("small.trx")])
+def test_close_releases_mmap_from_zip(path):
+    """close() must release mmap handles even when loaded via load_from_zip()."""
+    path = os.path.join(get_home(), "memmap_test_data", path)
+    trx = tmm.load_from_zip(path)
+
+    assert trx._uncompressed_folder_handle is None
+
+    mmap_obj = trx.streamlines._data._mmap
+    assert mmap_obj is not None, "expected a live mmap before close()"
+    assert not mmap_obj.closed, "mmap should be open before close()"
+
+    trx.close()
+
+    assert mmap_obj.closed, (
+        "mmap is still open after close() — the mmap teardown was skipped "
+        "because _uncompressed_folder_handle was None"
+    )
+
+
 # Endianness tests for cross-platform compatibility (Issue #83)
 @pytest.mark.parametrize(
     "dtype_input,expected_byteorder",
@@ -425,7 +445,7 @@ def test_trxfile_close():
         (np.bool_, "|"),
     ],
 )
-def test__get_dtype_little_endian(dtype_input, expected_byteorder):
+def test_get_dtype_little_endian(dtype_input, expected_byteorder):
     """Test that _get_dtype_little_endian correctly converts dtypes."""
     result = tmm._get_dtype_little_endian(dtype_input)
     assert result.byteorder == expected_byteorder or (
@@ -444,7 +464,7 @@ def test__get_dtype_little_endian(dtype_input, expected_byteorder):
         (np.uint64, 0xDEADBEEFCAFEBABE),
     ],
 )
-def test__ensure_little_endian(dtype, test_value):
+def test_ensure_little_endian(dtype, test_value):
     """Test that _ensure_little_endian correctly converts arrays."""
     # Create array in native byte order
     arr = np.array([test_value], dtype=dtype)
@@ -462,7 +482,7 @@ def test__ensure_little_endian(dtype, test_value):
         assert result[0] == test_value
 
 
-def test__ensure_little_endian_big_endian_input():
+def test_ensure_little_endian_big_endian_input():
     """Test _ensure_little_endian with explicitly big-endian input."""
     # Create a big-endian array
     big_endian_dtype = np.dtype(">u4")
@@ -476,6 +496,117 @@ def test__ensure_little_endian_big_endian_input():
 
     # Value should be preserved
     assert result[0] == 0x12345678
+
+
+def test_load_zip64_with_extra_fields():
+    """Test loading ZIP64 files where both local and CD headers have extra fields.
+
+    Rust and other tools always write ZIP64 extended information (extra field
+    ID 0x0001, 20 bytes: 4-byte tag+size + 8-byte orig + 8-byte comp) in both
+    local file headers and central directory entries, even for small files.
+    This ensures the data offset is computed correctly by reading the local
+    header's extra_len rather than assuming a fixed layout.
+    """
+    positions = np.array([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]], dtype=np.float32)
+    offsets = np.array([0, 2], dtype=np.uint64)
+    header = {
+        "DIMENSIONS": [10, 10, 10],
+        "VOXEL_TO_RASMM": np.eye(4).tolist(),
+        "NB_VERTICES": 2,
+        "NB_STREAMLINES": 1,
+    }
+
+    def make_zip64_extra(orig_size, comp_size):
+        data = struct.pack("<QQ", orig_size, comp_size)
+        return struct.pack("<HH", 0x0001, len(data)) + data
+
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        trx_path = os.path.join(tmp_dir, "test_zip64.trx")
+
+        with open(trx_path, "wb") as f:
+            local_info = []
+
+            for name, data in [
+                ("header.json", json.dumps(header).encode()),
+                ("positions.3.float32", positions.astype("<f4").tobytes()),
+                ("offsets.uint64", offsets.astype("<u8").tobytes()),
+            ]:
+                offset = f.tell()
+                fname = name.encode()
+                crc = zipfile.crc32(data)
+                # ZIP64 extended info in local header (20 bytes)
+                extra = make_zip64_extra(len(data), len(data))
+                f.write(
+                    struct.pack(
+                        "<4sHHHHHIIIHH",
+                        b"PK\x03\x04",
+                        45,  # version needed: ZIP64
+                        0,
+                        0,
+                        0,
+                        0,
+                        crc,
+                        len(data),
+                        len(data),
+                        len(fname),
+                        len(extra),
+                    )
+                )
+                f.write(fname)
+                f.write(extra)
+                f.write(data)
+                local_info.append((name, offset, crc, len(data)))
+
+            cd_start = f.tell()
+            for name, offset, crc, size in local_info:
+                fname = name.encode()
+                # ZIP64 extended info in central directory entry (20 bytes)
+                extra = make_zip64_extra(size, size)
+                f.write(
+                    struct.pack(
+                        "<4sHHHHHHIIIHHHHHII",
+                        b"PK\x01\x02",
+                        45,  # version made by: ZIP64
+                        45,  # version needed: ZIP64
+                        0,
+                        0,
+                        0,
+                        0,
+                        crc,
+                        size,
+                        size,
+                        len(fname),
+                        len(extra),
+                        0,
+                        0,
+                        0,
+                        0,
+                        offset,
+                    )
+                )
+                f.write(fname)
+                f.write(extra)
+
+            cd_size = f.tell() - cd_start
+            f.write(
+                struct.pack(
+                    "<4sHHHHIIH",
+                    b"PK\x05\x06",
+                    0,
+                    0,
+                    len(local_info),
+                    len(local_info),
+                    cd_size,
+                    cd_start,
+                    0,
+                )
+            )
+
+        trx = tmm.load_from_zip(trx_path)
+        np.testing.assert_array_almost_equal(trx.streamlines._data, positions)
+        assert trx.header["NB_VERTICES"] == 2
+        assert trx.header["NB_STREAMLINES"] == 1
+        trx.close()
 
 
 def test_load_zip_with_local_header_extra_field():
@@ -505,8 +636,8 @@ def test_load_zip_with_local_header_extra_field():
 
             for name, data in [
                 ("header.json", json.dumps(header).encode()),
-                ("positions.3.float32", positions.tobytes()),
-                ("offsets.uint64", offsets.tobytes()),
+                ("positions.3.float32", positions.astype("<f4").tobytes()),
+                ("offsets.uint64", offsets.astype("<u8").tobytes()),
             ]:
                 offset = f.tell()
                 fname = name.encode()
