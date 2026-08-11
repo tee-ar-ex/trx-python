@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>trx.workflows &#8212; trx-python 0.4.1.dev22 documentation</title>
+    <title>trx.workflows &#8212; trx-python 0.4.1.dev25 documentation</title>
   
   
   
@@ -43,7 +43,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
-    <script src="../../_static/documentation_options.js?v=44ccad5e"></script>
+    <script src="../../_static/documentation_options.js?v=8f453d93"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/sg-tags.js?v=d80f6fa4"></script>
@@ -61,7 +61,7 @@
     <link rel="search" title="Search" href="../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.4.1.dev22" />
+  <meta name="docsearch:version" content="0.4.1.dev25" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -133,8 +133,8 @@
       
     
     
-    <img src="../../_static/trx_logo.png" class="logo__image only-light" alt="trx-python 0.4.1.dev22 documentation - Home"/>
-    <img src="../../_static/trx_logo.png" class="logo__image only-dark pst-js-only" alt="trx-python 0.4.1.dev22 documentation - Home"/>
+    <img src="../../_static/trx_logo.png" class="logo__image only-light" alt="trx-python 0.4.1.dev25 documentation - Home"/>
+    <img src="../../_static/trx_logo.png" class="logo__image only-dark pst-js-only" alt="trx-python 0.4.1.dev25 documentation - Home"/>
   
   
 </a></div>
@@ -518,7 +518,7 @@
     <span class="k">elif</span> <span class="n">in_ext</span> <span class="o">==</span> <span class="s2">&quot;.trk&quot;</span><span class="p">:</span>
         <span class="n">sft</span> <span class="o">=</span> <span class="n">load_tractogram</span><span class="p">(</span><span class="n">in_dsi_tractogram</span><span class="p">,</span> <span class="s2">&quot;same&quot;</span><span class="p">,</span> <span class="n">bbox_valid_check</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> is not currently supported.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">in_ext</span><span class="p">))</span>
+        <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">in_ext</span><span class="si">}</span><span class="s2"> is not currently supported.&quot;</span><span class="p">)</span>
 
     <span class="n">sft</span><span class="o">.</span><span class="n">to_vox</span><span class="p">()</span>
     <span class="n">sft_fix</span> <span class="o">=</span> <span class="n">StatefulTractogram</span><span class="p">(</span>
@@ -656,9 +656,8 @@
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Matching tractograms in rasmm!&quot;</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span>
-            <span class="s2">&quot;Average difference in rasmm of </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">sft_1</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span> <span class="o">-</span> <span class="n">sft_2</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-            <span class="p">)</span>
+            <span class="s2">&quot;Average difference in rasmm of &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">sft_1</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">sft_2</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="p">,</span><span class="w"> </span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="p">)</span>
 
     <span class="n">sft_1</span><span class="o">.</span><span class="n">to_voxmm</span><span class="p">()</span>
@@ -667,9 +666,8 @@
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Matching tractograms in voxmm!&quot;</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span>
-            <span class="s2">&quot;Average difference in voxmm of </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">sft_1</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span> <span class="o">-</span> <span class="n">sft_2</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-            <span class="p">)</span>
+            <span class="s2">&quot;Average difference in voxmm of &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">sft_1</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">sft_2</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="p">,</span><span class="w"> </span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="p">)</span>
 
     <span class="n">sft_1</span><span class="o">.</span><span class="n">to_vox</span><span class="p">()</span>
@@ -678,9 +676,8 @@
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Matching tractograms in vox!&quot;</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span>
-            <span class="s2">&quot;Average difference in vox of </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">sft_1</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span> <span class="o">-</span> <span class="n">sft_2</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-            <span class="p">)</span>
+            <span class="s2">&quot;Average difference in vox of &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">sft_1</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">sft_2</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="p">,</span><span class="w"> </span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="p">)</span></div>
 
 
@@ -707,14 +704,12 @@
     <span class="n">all_valid</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="k">for</span> <span class="n">filepath</span> <span class="ow">in</span> <span class="n">in_files</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> does not exist&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filepath</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">filepath</span><span class="si">}</span><span class="s2"> does not exist&quot;</span><span class="p">)</span>
         <span class="n">_</span><span class="p">,</span> <span class="n">in_extension</span> <span class="o">=</span> <span class="n">split_name_with_gz</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">in_extension</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;.trk&quot;</span><span class="p">,</span> <span class="s2">&quot;.nii&quot;</span><span class="p">,</span> <span class="s2">&quot;.nii.gz&quot;</span><span class="p">,</span> <span class="s2">&quot;.trx&quot;</span><span class="p">]:</span>
-            <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> does not have a supported extension&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filepath</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">filepath</span><span class="si">}</span><span class="s2"> does not have a supported extension&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">is_header_compatible</span><span class="p">(</span><span class="n">in_files</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">filepath</span><span class="p">):</span>
-            <span class="nb">print</span><span class="p">(</span>
-                <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> and </span><span class="si">{}</span><span class="s2"> do not have compatible header.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">in_files</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">filepath</span><span class="p">)</span>
-            <span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">in_files</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">filepath</span><span class="si">}</span><span class="s2"> do not have compatible header.&quot;</span><span class="p">)</span>
             <span class="n">all_valid</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="k">if</span> <span class="n">all_valid</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;All input files have compatible headers.&quot;</span><span class="p">)</span></div>
@@ -770,16 +765,12 @@
     <span class="n">invalid_coord_ind</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">sft</span><span class="o">.</span><span class="n">remove_invalid_streamlines</span><span class="p">()</span>
     <span class="n">tot_remove</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">invalid_coord_ind</span><span class="p">)</span>
     <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-        <span class="s2">&quot;Removed </span><span class="si">{}</span><span class="s2"> streamlines with invalid coordinates.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-            <span class="nb">len</span><span class="p">(</span><span class="n">invalid_coord_ind</span><span class="p">)</span>
-        <span class="p">)</span>
+        <span class="sa">f</span><span class="s2">&quot;Removed </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">invalid_coord_ind</span><span class="p">)</span><span class="si">}</span><span class="s2"> streamlines with invalid coordinates.&quot;</span>
     <span class="p">)</span>
 
     <span class="n">indices</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sft</span><span class="p">))</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sft</span><span class="o">.</span><span class="n">streamlines</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">]</span>
     <span class="n">tot_remove</span> <span class="o">=</span> <span class="o">+</span><span class="nb">len</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-        <span class="s2">&quot;Removed </span><span class="si">{}</span><span class="s2"> invalid streamlines (1 or 0 points).&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">indices</span><span class="p">))</span>
-    <span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Removed </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span><span class="si">}</span><span class="s2"> invalid streamlines (1 or 0 points).&quot;</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">setdiff1d</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sft</span><span class="p">)),</span> <span class="n">indices</span><span class="p">):</span>
         <span class="n">norm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">sft</span><span class="o">.</span><span class="n">streamlines</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -789,9 +780,8 @@
 
     <span class="n">indices_val</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">setdiff1d</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sft</span><span class="p">)),</span> <span class="n">indices</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">)</span>
     <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-        <span class="s2">&quot;Removed </span><span class="si">{}</span><span class="s2"> invalid streamlines (overlapping points).&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-            <span class="n">ori_len</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">indices_val</span><span class="p">)</span>
-        <span class="p">)</span>
+        <span class="sa">f</span><span class="s2">&quot;Removed </span><span class="si">{</span><span class="n">ori_len</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">indices_val</span><span class="p">)</span><span class="si">}</span><span class="s2"> invalid streamlines &quot;</span>
+        <span class="s2">&quot;(overlapping points).&quot;</span>
     <span class="p">)</span>
     <span class="n">tot_remove</span> <span class="o">+=</span> <span class="n">ori_len</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">indices_val</span><span class="p">)</span>
 
@@ -801,9 +791,8 @@
         <span class="p">)</span>
         <span class="n">indices_final</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">intersect1d</span><span class="p">(</span><span class="n">indices_val</span><span class="p">,</span> <span class="n">indices_uniq</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">)</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-            <span class="s2">&quot;Removed </span><span class="si">{}</span><span class="s2"> overlapping streamlines.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                <span class="n">ori_len</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">indices_final</span><span class="p">)</span> <span class="o">-</span> <span class="n">tot_remove</span>
-            <span class="p">)</span>
+            <span class="sa">f</span><span class="s2">&quot;Removed </span><span class="si">{</span><span class="n">ori_len</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">indices_final</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">tot_remove</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="s2">&quot;overlapping streamlines.&quot;</span>
         <span class="p">)</span>
 
         <span class="n">indices_final</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">intersect1d</span><span class="p">(</span><span class="n">indices_val</span><span class="p">,</span> <span class="n">indices_uniq</span><span class="p">)</span>
@@ -919,9 +908,7 @@
     <span class="n">sft</span> <span class="o">=</span> <span class="n">StatefulTractogram</span><span class="p">(</span><span class="n">streamlines</span><span class="p">,</span> <span class="n">reference</span><span class="p">,</span> <span class="n">space</span><span class="p">,</span> <span class="n">origin</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">verify_invalid</span><span class="p">:</span>
         <span class="n">rem</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">sft</span><span class="o">.</span><span class="n">remove_invalid_streamlines</span><span class="p">()</span>
-        <span class="nb">print</span><span class="p">(</span>
-            <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> streamlines were removed becaused they were invalid.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rem</span><span class="p">))</span>
-        <span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">rem</span><span class="p">)</span><span class="si">}</span><span class="s2"> streamlines were removed because they were invalid.&quot;</span><span class="p">)</span>
     <span class="n">sft</span><span class="o">.</span><span class="n">to_rasmm</span><span class="p">()</span>
     <span class="n">sft</span><span class="o">.</span><span class="n">to_center</span><span class="p">()</span>
     <span class="n">streamlines</span> <span class="o">=</span> <span class="n">sft</span><span class="o">.</span><span class="n">streamlines</span>
@@ -976,11 +963,11 @@
 <span class="sd">    offsets_dtype : str</span>
 <span class="sd">        Datatype for offsets array.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">curr_filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp_dir_name</span><span class="p">,</span> <span class="s2">&quot;positions.3.</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">positions_dtype</span><span class="p">))</span>
+    <span class="n">curr_filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp_dir_name</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;positions.3.</span><span class="si">{</span><span class="n">positions_dtype</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="n">positions</span> <span class="o">=</span> <span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">positions_dtype</span><span class="p">)</span>
     <span class="n">tmm</span><span class="o">.</span><span class="n">_ensure_little_endian</span><span class="p">(</span><span class="n">positions</span><span class="p">)</span><span class="o">.</span><span class="n">tofile</span><span class="p">(</span><span class="n">curr_filename</span><span class="p">)</span>
 
-    <span class="n">curr_filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp_dir_name</span><span class="p">,</span> <span class="s2">&quot;offsets.</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">offsets_dtype</span><span class="p">))</span>
+    <span class="n">curr_filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp_dir_name</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;offsets.</span><span class="si">{</span><span class="n">offsets_dtype</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="n">offsets</span> <span class="o">=</span> <span class="n">streamlines</span><span class="o">.</span><span class="n">_offsets</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">offsets_dtype</span><span class="p">)</span>
     <span class="n">tmm</span><span class="o">.</span><span class="n">_ensure_little_endian</span><span class="p">(</span><span class="n">offsets</span><span class="p">)</span><span class="o">.</span><span class="n">tofile</span><span class="p">(</span><span class="n">curr_filename</span><span class="p">)</span></div>
 
@@ -1045,15 +1032,15 @@
     <span class="k">if</span> <span class="n">curr_arr</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
         <span class="n">curr_arr</span> <span class="o">=</span> <span class="n">curr_arr</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,))</span>
 
-    <span class="n">dim</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="n">curr_arr</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">curr_arr</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">dim</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="n">curr_arr</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">curr_arr</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">.&quot;</span>
 
     <span class="k">if</span> <span class="n">is_dpg</span><span class="p">:</span>
         <span class="n">curr_filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-            <span class="n">tmp_dir_name</span><span class="p">,</span> <span class="s2">&quot;dpg&quot;</span><span class="p">,</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">.</span><span class="si">{}{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span> <span class="n">dim</span><span class="p">,</span> <span class="n">dtype</span><span class="p">)</span>
+            <span class="n">tmp_dir_name</span><span class="p">,</span> <span class="s2">&quot;dpg&quot;</span><span class="p">,</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">basename</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">dim</span><span class="si">}{</span><span class="n">dtype</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">curr_filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-            <span class="n">tmp_dir_name</span><span class="p">,</span> <span class="n">subdir_name</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">.</span><span class="si">{}{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span> <span class="n">dim</span><span class="p">,</span> <span class="n">dtype</span><span class="p">)</span>
+            <span class="n">tmp_dir_name</span><span class="p">,</span> <span class="n">subdir_name</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">basename</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">dim</span><span class="si">}{</span><span class="n">dtype</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="p">)</span>
 
     <span class="n">tmm</span><span class="o">.</span><span class="n">_ensure_little_endian</span><span class="p">(</span><span class="n">curr_arr</span><span class="p">)</span><span class="o">.</span><span class="n">tofile</span><span class="p">(</span><span class="n">curr_filename</span><span class="p">)</span></div>

@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>trx.io &#8212; trx-python 0.4.1.dev22 documentation</title>
+    <title>trx.io &#8212; trx-python 0.4.1.dev25 documentation</title>
   
   
   
@@ -43,7 +43,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
-    <script src="../../_static/documentation_options.js?v=44ccad5e"></script>
+    <script src="../../_static/documentation_options.js?v=8f453d93"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/sg-tags.js?v=d80f6fa4"></script>
@@ -61,7 +61,7 @@
     <link rel="search" title="Search" href="../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.4.1.dev22" />
+  <meta name="docsearch:version" content="0.4.1.dev25" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -133,8 +133,8 @@
       
     
     
-    <img src="../../_static/trx_logo.png" class="logo__image only-light" alt="trx-python 0.4.1.dev22 documentation - Home"/>
-    <img src="../../_static/trx_logo.png" class="logo__image only-dark pst-js-only" alt="trx-python 0.4.1.dev22 documentation - Home"/>
+    <img src="../../_static/trx_logo.png" class="logo__image only-light" alt="trx-python 0.4.1.dev25 documentation - Home"/>
+    <img src="../../_static/trx_logo.png" class="logo__image only-dark pst-js-only" alt="trx-python 0.4.1.dev25 documentation - Home"/>
   
   
 </a></div>
@@ -525,20 +525,16 @@
     <span class="n">_</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">ext</span> <span class="o">==</span> <span class="s2">&quot;.trk&quot;</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">reference</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">reference</span> <span class="o">!=</span> <span class="s2">&quot;same&quot;</span><span class="p">:</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-                <span class="s2">&quot;Reference is discarded for this file format </span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
-            <span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Reference is discarded for this file format </span><span class="si">{</span><span class="n">filepath</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
         <span class="n">sft</span> <span class="o">=</span> <span class="n">load_tractogram</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="s2">&quot;same&quot;</span><span class="p">,</span> <span class="n">bbox_valid_check</span><span class="o">=</span><span class="n">bbox_check</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">ext</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;.tck&quot;</span><span class="p">,</span> <span class="s2">&quot;.fib&quot;</span><span class="p">,</span> <span class="s2">&quot;.vtk&quot;</span><span class="p">,</span> <span class="s2">&quot;.dpy&quot;</span><span class="p">]:</span>
         <span class="k">if</span> <span class="n">reference</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">reference</span> <span class="o">==</span> <span class="s2">&quot;same&quot;</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span>
-                <span class="s2">&quot;--reference is required for this file format </span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
-            <span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;--reference is required for this file format </span><span class="si">{</span><span class="n">filepath</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">sft</span> <span class="o">=</span> <span class="n">load_tractogram</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">reference</span><span class="p">,</span> <span class="n">bbox_valid_check</span><span class="o">=</span><span class="n">bbox_check</span><span class="p">)</span>
 
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> is an unsupported file format&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filepath</span><span class="p">))</span>
+        <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">filepath</span><span class="si">}</span><span class="s2"> is an unsupported file format&quot;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">sft</span></div>
 
