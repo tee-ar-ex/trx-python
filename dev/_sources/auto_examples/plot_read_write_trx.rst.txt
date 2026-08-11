@@ -109,7 +109,7 @@ Let's look at what's inside our loaded file.
     VOX_ORDER: RAS
     streamline_count: 13
     vertex_count: 104
-    data_per_vertex keys: ['color_x', 'color_z', 'color_y']
+    data_per_vertex keys: ['color_y', 'color_x', 'color_z']
     data_per_streamline keys: ['random_coord']
     No group keys
     copy_safe: True
@@ -218,7 +218,7 @@ TRX files can contain additional data per vertex (dpv) and per streamline (dps).
 
  .. code-block:: none
 
-    Data per vertex (dpv) keys: ['color_x', 'color_z', 'color_y']
+    Data per vertex (dpv) keys: ['color_y', 'color_x', 'color_z']
     Data per streamline (dps) keys: ['random_coord']
     Groups: []
 
@@ -294,7 +294,7 @@ or uncompressed zip archive, or as a directory.
 
  .. code-block:: none
 
-    Saved TRX file to: /tmp/tmpza8yp5qi/output.trx
+    Saved TRX file to: /tmp/tmpe8hra8ia/output.trx
     File size: 3881 bytes
     Reloaded TRX has 13 streamlines
 
@@ -354,7 +354,7 @@ making it suitable for large tractography datasets.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.151 seconds)
+   **Total running time of the script:** (0 minutes 0.322 seconds)
 
 
 .. _sphx_glr_download_auto_examples_plot_read_write_trx.py:

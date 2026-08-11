@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Data Per Vertex and Data Per Streamline &#8212; trx-python 0.4.1.dev29 documentation</title>
+    <title>Data Per Vertex and Data Per Streamline &#8212; trx-python 0.4.1.dev31 documentation</title>
   
   
   
@@ -44,7 +44,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
-    <script src="../_static/documentation_options.js?v=50a7143b"></script>
+    <script src="../_static/documentation_options.js?v=17fbf770"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/sg-tags.js?v=d80f6fa4"></script>
@@ -64,7 +64,7 @@
     <link rel="prev" title="Working with Groups" href="plot_groups.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.4.1.dev29" />
+  <meta name="docsearch:version" content="0.4.1.dev31" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -136,8 +136,8 @@
       
     
     
-    <img src="../_static/trx_logo.png" class="logo__image only-light" alt="trx-python 0.4.1.dev29 documentation - Home"/>
-    <img src="../_static/trx_logo.png" class="logo__image only-dark pst-js-only" alt="trx-python 0.4.1.dev29 documentation - Home"/>
+    <img src="../_static/trx_logo.png" class="logo__image only-light" alt="trx-python 0.4.1.dev31 documentation - Home"/>
+    <img src="../_static/trx_logo.png" class="logo__image only-dark pst-js-only" alt="trx-python 0.4.1.dev31 documentation - Home"/>
   
   
 </a></div>
@@ -531,7 +531,12 @@ Total vertices: 104
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;    Sample values: </span><span class="si">{</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.memmap.html#numpy.memmap" title="numpy.memmap" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data</span><span class="o">.</span><span class="n">_data</span></a><span class="p">[:</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Data Per Vertex keys: [&#39;color_x&#39;, &#39;color_z&#39;, &#39;color_y&#39;]
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Data Per Vertex keys: [&#39;color_y&#39;, &#39;color_x&#39;, &#39;color_z&#39;]
+
+  color_y:
+    Shape: (104, 1)
+    Dtype: float32
+    Sample values: [20. 20. 20.]
 
   color_x:
     Shape: (104, 1)
@@ -542,11 +547,6 @@ Total vertices: 104
     Shape: (104, 1)
     Dtype: float32
     Sample values: [60. 60. 60.]
-
-  color_y:
-    Shape: (104, 1)
-    Dtype: float32
-    Sample values: [20. 20. 20.]
 </pre></div>
 </div>
 </section>
@@ -565,9 +565,9 @@ the dpv values for a specific streamline using the same indices.</p>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Values: </span><span class="si">{</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.memmap.html#numpy.memmap" title="numpy.memmap" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">first_streamline_dpv</span></a><span class="o">.</span><span class="n">flatten</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>DPV &#39;color_x&#39; for first streamline:
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>DPV &#39;color_y&#39; for first streamline:
   Shape: (8, 1)
-  Values: [220. 220. 220. 220. 220. 220. 220. 220.]
+  Values: [20. 20. 20. 20. 20. 20. 20. 20.]
 </pre></div>
 </div>
 </section>
