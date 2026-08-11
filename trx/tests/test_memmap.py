@@ -517,8 +517,8 @@ def test_load_zip64_with_extra_fields():
     }
 
     def make_zip64_extra(orig_size, comp_size):
-        data = struct.pack("<QQ", orig_size, comp_size)
-        return struct.pack("<HH", 0x0001, len(data)) + data
+        _data = struct.pack("<QQ", orig_size, comp_size)
+        return struct.pack("<HH", 0x0001, len(_data)) + _data
 
     with tempfile.TemporaryDirectory() as tmp_dir:
         trx_path = os.path.join(tmp_dir, "test_zip64.trx")
