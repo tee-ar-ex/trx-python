@@ -72,7 +72,7 @@ def load_sft_with_reference(filepath, reference=None, bbox_check=True, **kwargs)
     IOError
         If the file format is unsupported or a required reference is missing.
     """
-    if not dipy_available:
+    if not dipy_available:  # pragma: no cover
         logging.error(
             "Dipy library is missing, cannot use functions related "
             "to the StatefulTractogram."
@@ -151,7 +151,7 @@ def save(tractogram_obj, tractogram_filename, bbox_valid_check=False):
         The function writes to disk and returns ``None``. Returns ``None``
         immediately when ``dipy`` is unavailable.
     """
-    if not dipy_available:
+    if not dipy_available:  # pragma: no cover
         logging.error(
             "Dipy library is missing, cannot use functions related "
             "to the StatefulTractogram."

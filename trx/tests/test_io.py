@@ -14,14 +14,14 @@ try:
     from dipy.io.streamline import load_tractogram, save_tractogram
 
     dipy_available = True
-except ImportError:
+except ImportError:  # pragma: no cover
     dipy_available = False
 
 try:
     import fury  # noqa: F401
 
     fury_available = True
-except ImportError:
+except ImportError:  # pragma: no cover
     fury_available = False
 
 from trx.fetcher import fetch_data, get_home, get_testing_files_dict

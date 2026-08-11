@@ -34,7 +34,7 @@ try:
     from dipy.io.stateful_tractogram import Origin, Space, StatefulTractogram
 
     dipy_available = True
-except ImportError:
+except ImportError:  # pragma: no cover
     dipy_available = False
 
     class Space:
