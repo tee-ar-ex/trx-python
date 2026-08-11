@@ -49,16 +49,19 @@ except ImportError:  # pragma: no cover
 
 def test_close_or_delete_mmap_np_memmap():
     """Test close_or_delete_mmap with a numpy.memmap."""
-    with tempfile.NamedTemporaryFile() as tmp:
-        mmap_arr = np.memmap(tmp.name, dtype="float32", mode="w+", shape=(10,))
+    with tempfile.TemporaryDirectory() as tmpdir:
+        tmp_name = os.path.join(tmpdir, "test.mmap")
+        mmap_arr = np.memmap(tmp_name, dtype="float32", mode="w+", shape=(10,))
         close_or_delete_mmap(mmap_arr)
 
 
 def test_close_or_delete_mmap_array_sequence():
     """Test close_or_delete_mmap with an ArraySequence."""
-    with tempfile.NamedTemporaryFile() as tmp1, tempfile.NamedTemporaryFile() as tmp2:
-        data = np.memmap(tmp1.name, dtype="float32", mode="w+", shape=(10, 3))
-        offsets = np.memmap(tmp2.name, dtype="uint32", mode="w+", shape=(5,))
+    with tempfile.TemporaryDirectory() as tmpdir:
+        tmp1_name = os.path.join(tmpdir, "test1.mmap")
+        tmp2_name = os.path.join(tmpdir, "test2.mmap")
+        data = np.memmap(tmp1_name, dtype="float32", mode="w+", shape=(10, 3))
+        offsets = np.memmap(tmp2_name, dtype="uint32", mode="w+", shape=(5,))
 
         seq = ArraySequence()
         seq._data = data
