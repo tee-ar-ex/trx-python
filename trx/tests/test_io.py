@@ -2,6 +2,7 @@
 
 from copy import deepcopy
 import os
+import tempfile
 import zipfile
 
 import numpy as np
@@ -17,7 +18,7 @@ except ImportError:
     dipy_available = False
 
 from trx.fetcher import fetch_data, get_home, get_testing_files_dict
-from trx.io import load, save
+from trx.io import get_trx_tmp_dir, load, save
 import trx.trx_file_memmap as tmm
 from trx.trx_file_memmap import TrxFile
 
@@ -190,23 +191,53 @@ def test_close_tmp_files(path):
     assert not count
 
 
-@pytest.mark.parametrize("tmp_path", ["~", "use_working_dir"])
-def test_change_tmp_dir(tmp_path):
+@pytest.mark.parametrize(
+    "env_value, expected_parent_fn",
+    [
+        ("use_working_dir", os.getcwd),
+        (os.path.expanduser("~"), lambda: os.path.expanduser("~")),
+        (None, tempfile.gettempdir),
+    ],
+)
+def test_get_trx_tmp_dir(env_value, expected_parent_fn, monkeypatch):
+    if env_value is None:
+        monkeypatch.delenv("TRX_TMPDIR", raising=False)
+    else:
+        monkeypatch.setenv("TRX_TMPDIR", env_value)
+
+    td = get_trx_tmp_dir()
+    try:
+        assert os.path.dirname(td.name) == expected_parent_fn()
+        assert os.path.isdir(td.name)
+    finally:
+        td.cleanup()
+
+    assert not os.path.isdir(td.name)
+
+
+@pytest.mark.parametrize(
+    "trx_tmpdir_env, expected_parent",
+    [
+        ("use_working_dir", lambda: os.getcwd()),
+        (os.path.expanduser("~"), lambda: os.path.expanduser("~")),
+        (None, lambda: tempfile.gettempdir()),
+    ],
+)
+def test_change_tmp_dir(trx_tmpdir_env, expected_parent, monkeypatch):
+    """Integration test through tmm.load(path), assuming that it
+    eventually calls get_trx_tmp_dir()."""
     gs_dir = os.path.join(get_home(), "gold_standard")
     path = os.path.join(gs_dir, "gs.trx")
 
-    if tmp_path == "use_working_dir":
-        os.environ["TRX_TMPDIR"] = "use_working_dir"
+    if trx_tmpdir_env is None:
+        monkeypatch.delenv("TRX_TMPDIR", raising=False)
     else:
-        os.environ["TRX_TMPDIR"] = os.path.expanduser(tmp_path)
+        monkeypatch.setenv("TRX_TMPDIR", trx_tmpdir_env)
 
     trx = tmm.load(path)
     tmp_gs_dir = deepcopy(trx._uncompressed_folder_handle.name)
 
-    if tmp_path == "use_working_dir":
-        assert os.path.dirname(tmp_gs_dir) == os.getcwd()
-    else:
-        assert os.path.dirname(tmp_gs_dir) == os.path.expanduser(tmp_path)
+    assert os.path.dirname(tmp_gs_dir) == expected_parent()
 
     trx.close()
     assert not os.path.isdir(tmp_gs_dir)
