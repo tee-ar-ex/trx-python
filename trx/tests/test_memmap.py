@@ -387,7 +387,33 @@ def test_trxfile_getgroup():
 
 
 def test_trxfile_select():
-    pass
+    path = os.path.join(get_home(), "memmap_test_data", "small.trx")
+    trx = tmm.load(path)
+
+    assert len(trx.select([]).streamlines) == 0
+    assert len(trx.select([0]).streamlines) == 1
+
+    idx = list(range(10))
+    sub = trx.select(idx)
+    assert len(sub.streamlines) == len(idx)
+    assert not sub._copy_safe
+
+    trx.close()
+
+
+def test_save_after_select():
+    path = os.path.join(get_home(), "memmap_test_data", "small.trx")
+    trx = tmm.load(path)
+    sub = trx.select(list(range(5)))
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        out = os.path.join(tmp_dir, "sub.trx")
+        tmm.save(sub, out)
+        loaded = tmm.load(out)
+        assert len(loaded.streamlines) == 5
+        assert len(loaded.streamlines._data) == len(sub.streamlines.copy()._data)
+        loaded.close()
+    trx.close()
+
 
 
 def test_trxfile_to_memory():

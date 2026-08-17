@@ -1109,14 +1109,14 @@ class TrxFile:
 
             if not self._copy_safe:
                 to_dump = _append_last_offsets(
-                    self.streamlines.copy()._offsets, self.header["NB_VERTICES"]
+                    self.streamlines.copy()._offsets, tmp_header["NB_VERTICES"]
                 )
             else:
                 to_dump = _append_last_offsets(
                     self.streamlines._offsets, self.header["NB_VERTICES"]
                 )
             offsets_filename = _generate_filename_from_data(
-                self.streamlines._offsets, os.path.join(tmp_dir.name, "offsets")
+                to_dump, os.path.join(tmp_dir.name, "offsets")
             )
             _ensure_little_endian(to_dump).tofile(offsets_filename)
 
