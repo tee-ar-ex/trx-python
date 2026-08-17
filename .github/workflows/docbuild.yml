@@ -2,7 +2,7 @@ name: Documentation build
 
 on:
   push:
-    branches: [ master, extra_fields_testing ]
+    branches: [ master ]
     tags:
       - '*'
   pull_request:
