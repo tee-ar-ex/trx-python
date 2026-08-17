@@ -415,7 +415,6 @@ def test_save_after_select():
     trx.close()
 
 
-
 def test_trxfile_to_memory():
     pass
 

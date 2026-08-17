@@ -46,9 +46,7 @@ def get_trx_tmp_dir():
         return tempfile.TemporaryDirectory(dir=trx_tmp_dir, prefix="trx_")
 
 
-def load_sft_with_reference(
-    filepath, reference=None, bbox_check=True, from_space=None
-):
+def load_sft_with_reference(filepath, reference=None, bbox_check=True, from_space=None):
     """Load a tractogram as a StatefulTractogram with an explicit reference.
 
     Parameters
