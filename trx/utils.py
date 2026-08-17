@@ -31,8 +31,6 @@ def close_or_delete_mmap(obj):
         close_or_delete_mmap(obj._data)
         close_or_delete_mmap(obj._offsets)
         close_or_delete_mmap(obj._lengths)
-    elif isinstance(obj, np.memmap):
-        del obj
     else:
         logging.debug("Object to be close or deleted must be np.memmap")
 
