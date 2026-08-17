@@ -24,6 +24,7 @@ Functions
 
 .. autoapisummary::
 
+   trx.workflows._create_temp_memmap
    trx.workflows.convert_dsi_studio
    trx.workflows.convert_tractogram
    trx.workflows.tractogram_simple_compare
@@ -46,6 +47,43 @@ Module Contents
 .. py:data:: dipy_available
    :value: True
 
+
+.. py:function:: _create_temp_memmap(tmp_dir_name, dtype, shape)
+
+   
+   Create a temporary numpy memmap array.
+
+
+   :Parameters:
+
+       **tmp_dir_name** : str
+           Directory to create the temporary file in.
+
+       **dtype** : np.dtype
+           Data type of the memmap array.
+
+       **shape** : tuple
+           Shape of the memmap array.
+
+
+
+   :Returns:
+
+       np.memmap
+           The memory-mapped array.
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 
 .. py:function:: convert_dsi_studio(in_dsi_tractogram, in_dsi_fa, out_tractogram, remove_invalid=True, keep_invalid=False)
 

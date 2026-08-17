@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>trx.workflows &#8212; trx-python 0.4.1.dev31 documentation</title>
+    <title>trx.workflows &#8212; trx-python 0.4.1.dev47 documentation</title>
   
   
   
@@ -44,7 +44,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
-    <script src="../../../_static/documentation_options.js?v=17fbf770"></script>
+    <script src="../../../_static/documentation_options.js?v=9d14d439"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/sg-tags.js?v=d80f6fa4"></script>
@@ -63,7 +63,7 @@
     <link rel="prev" title="trx.utils" href="../utils/index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.4.1.dev31" />
+  <meta name="docsearch:version" content="0.4.1.dev47" />
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -135,8 +135,8 @@
       
     
     
-    <img src="../../../_static/trx_logo.png" class="logo__image only-light" alt="trx-python 0.4.1.dev31 documentation - Home"/>
-    <img src="../../../_static/trx_logo.png" class="logo__image only-dark pst-js-only" alt="trx-python 0.4.1.dev31 documentation - Home"/>
+    <img src="../../../_static/trx_logo.png" class="logo__image only-light" alt="trx-python 0.4.1.dev47 documentation - Home"/>
+    <img src="../../../_static/trx_logo.png" class="logo__image only-dark pst-js-only" alt="trx-python 0.4.1.dev47 documentation - Home"/>
   
   
 </a></div>
@@ -483,46 +483,49 @@
 <h2>Functions<a class="headerlink" href="#functions" title="Link to this heading">#</a></h2>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#trx.workflows.convert_dsi_studio" title="trx.workflows.convert_dsi_studio"><code class="xref py py-obj docutils literal notranslate"><span class="pre">convert_dsi_studio</span></code></a>(in_dsi_tractogram, in_dsi_fa, ...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.workflows._create_temp_memmap" title="trx.workflows._create_temp_memmap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_create_temp_memmap</span></code></a>(tmp_dir_name, dtype, shape)</p></td>
+<td><p>Create a temporary numpy memmap array.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#trx.workflows.convert_dsi_studio" title="trx.workflows.convert_dsi_studio"><code class="xref py py-obj docutils literal notranslate"><span class="pre">convert_dsi_studio</span></code></a>(in_dsi_tractogram, in_dsi_fa, ...)</p></td>
 <td><p>Convert a DSI-Studio TRK file to TRX, fixing space metadata.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#trx.workflows.convert_tractogram" title="trx.workflows.convert_tractogram"><code class="xref py py-obj docutils literal notranslate"><span class="pre">convert_tractogram</span></code></a>(in_tractogram, out_tractogram, ...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.workflows.convert_tractogram" title="trx.workflows.convert_tractogram"><code class="xref py py-obj docutils literal notranslate"><span class="pre">convert_tractogram</span></code></a>(in_tractogram, out_tractogram, ...)</p></td>
 <td><p>Convert tractograms between formats with dtype control.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#trx.workflows.tractogram_simple_compare" title="trx.workflows.tractogram_simple_compare"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tractogram_simple_compare</span></code></a>(in_tractograms, reference)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#trx.workflows.tractogram_simple_compare" title="trx.workflows.tractogram_simple_compare"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tractogram_simple_compare</span></code></a>(in_tractograms, reference)</p></td>
 <td><p>Compare tractograms against a reference and return a summary diff.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#trx.workflows.verify_header_compatibility" title="trx.workflows.verify_header_compatibility"><code class="xref py py-obj docutils literal notranslate"><span class="pre">verify_header_compatibility</span></code></a>(in_files)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.workflows.verify_header_compatibility" title="trx.workflows.verify_header_compatibility"><code class="xref py py-obj docutils literal notranslate"><span class="pre">verify_header_compatibility</span></code></a>(in_files)</p></td>
 <td><p>Verify that multiple tractogram headers are mutually compatible.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#trx.workflows.validate_tractogram" title="trx.workflows.validate_tractogram"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate_tractogram</span></code></a>(in_tractogram, reference, ...[, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#trx.workflows.validate_tractogram" title="trx.workflows.validate_tractogram"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate_tractogram</span></code></a>(in_tractogram, reference, ...[, ...])</p></td>
 <td><p>Validate a tractogram and optionally remove invalid/duplicate streamlines.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#trx.workflows._load_streamlines_from_csv" title="trx.workflows._load_streamlines_from_csv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_load_streamlines_from_csv</span></code></a>(positions_csv)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.workflows._load_streamlines_from_csv" title="trx.workflows._load_streamlines_from_csv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_load_streamlines_from_csv</span></code></a>(positions_csv)</p></td>
 <td><p>Load streamlines from a CSV file.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#trx.workflows._load_streamlines_from_arrays" title="trx.workflows._load_streamlines_from_arrays"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_load_streamlines_from_arrays</span></code></a>(positions, offsets)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#trx.workflows._load_streamlines_from_arrays" title="trx.workflows._load_streamlines_from_arrays"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_load_streamlines_from_arrays</span></code></a>(positions, offsets)</p></td>
 <td><p>Load streamlines from position and offset arrays.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#trx.workflows._apply_spatial_transforms" title="trx.workflows._apply_spatial_transforms"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_apply_spatial_transforms</span></code></a>(streamlines, reference, ...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.workflows._apply_spatial_transforms" title="trx.workflows._apply_spatial_transforms"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_apply_spatial_transforms</span></code></a>(streamlines, reference, ...)</p></td>
 <td><p>Apply spatial transforms and optionally remove invalid streamlines.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#trx.workflows._write_header" title="trx.workflows._write_header"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_write_header</span></code></a>(tmp_dir_name, reference, streamlines)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#trx.workflows._write_header" title="trx.workflows._write_header"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_write_header</span></code></a>(tmp_dir_name, reference, streamlines)</p></td>
 <td><p>Write TRX header file to a temporary directory.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#trx.workflows._write_streamline_data" title="trx.workflows._write_streamline_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_write_streamline_data</span></code></a>(tmp_dir_name, streamlines, ...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.workflows._write_streamline_data" title="trx.workflows._write_streamline_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_write_streamline_data</span></code></a>(tmp_dir_name, streamlines, ...)</p></td>
 <td><p>Write streamline position and offset data.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#trx.workflows._normalize_dtype" title="trx.workflows._normalize_dtype"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_normalize_dtype</span></code></a>(dtype_str)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#trx.workflows._normalize_dtype" title="trx.workflows._normalize_dtype"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_normalize_dtype</span></code></a>(dtype_str)</p></td>
 <td><p>Normalize dtype string format for file naming.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#trx.workflows._write_data_array" title="trx.workflows._write_data_array"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_write_data_array</span></code></a>(tmp_dir_name, subdir_name, args[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.workflows._write_data_array" title="trx.workflows._write_data_array"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_write_data_array</span></code></a>(tmp_dir_name, subdir_name, args[, ...])</p></td>
 <td><p>Write a data array (dpv/dps/group/dpg) to disk.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#trx.workflows.generate_trx_from_scratch" title="trx.workflows.generate_trx_from_scratch"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_trx_from_scratch</span></code></a>(reference, out_tractogram[, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#trx.workflows.generate_trx_from_scratch" title="trx.workflows.generate_trx_from_scratch"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_trx_from_scratch</span></code></a>(reference, out_tractogram[, ...])</p></td>
 <td><p>Generate TRX file from scratch using various input formats.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#trx.workflows.manipulate_trx_datatype" title="trx.workflows.manipulate_trx_datatype"><code class="xref py py-obj docutils literal notranslate"><span class="pre">manipulate_trx_datatype</span></code></a>(in_filename, out_filename, ...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.workflows.manipulate_trx_datatype" title="trx.workflows.manipulate_trx_datatype"><code class="xref py py-obj docutils literal notranslate"><span class="pre">manipulate_trx_datatype</span></code></a>(in_filename, out_filename, ...)</p></td>
 <td><p>Change dtype of positions, offsets, dpv, dps, dpg, and groups in a TRX.</p></td>
 </tr>
 </tbody>
@@ -535,6 +538,30 @@
 <dt class="sig sig-object py" id="trx.workflows.dipy_available">
 <span class="sig-prename descclassname"><span class="pre">trx.workflows.</span></span><span class="sig-name descname"><span class="pre">dipy_available</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></span><a class="reference internal" href="../../../_modules/trx/workflows.html#dipy_available"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.workflows.dipy_available" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trx.workflows._create_temp_memmap">
+<span class="sig-prename descclassname"><span class="pre">trx.workflows.</span></span><span class="sig-name descname"><span class="pre">_create_temp_memmap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tmp_dir_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/workflows.html#_create_temp_memmap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.workflows._create_temp_memmap" title="Link to this definition">#</a></dt>
+<dd><p>Create a temporary numpy memmap array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>tmp_dir_name</strong><span class="classifier">str</span></dt><dd><p>Directory to create the temporary file in.</p>
+</dd>
+<dt><strong>dtype</strong><span class="classifier">np.dtype</span></dt><dd><p>Data type of the memmap array.</p>
+</dd>
+<dt><strong>shape</strong><span class="classifier">tuple</span></dt><dd><p>Shape of the memmap array.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>np.memmap</dt><dd><p>The memory-mapped array.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="trx.workflows.convert_dsi_studio">
@@ -933,6 +960,7 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#functions">Functions</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-contents">Module Contents</a><ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.workflows.dipy_available"><code class="docutils literal notranslate"><span class="pre">dipy_available</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.workflows._create_temp_memmap"><code class="docutils literal notranslate"><span class="pre">_create_temp_memmap()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.workflows.convert_dsi_studio"><code class="docutils literal notranslate"><span class="pre">convert_dsi_studio()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.workflows.convert_tractogram"><code class="docutils literal notranslate"><span class="pre">convert_tractogram()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trx.workflows.tractogram_simple_compare"><code class="docutils literal notranslate"><span class="pre">tractogram_simple_compare()</span></code></a></li>

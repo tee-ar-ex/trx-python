@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Developer Guide &#8212; trx-python 0.4.1.dev31 documentation</title>
+    <title>Developer Guide &#8212; trx-python 0.4.1.dev47 documentation</title>
   
   
   
@@ -44,7 +44,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
-    <script src="_static/documentation_options.js?v=17fbf770"></script>
+    <script src="_static/documentation_options.js?v=9d14d439"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/sg-tags.js?v=d80f6fa4"></script>
@@ -64,7 +64,7 @@
     <link rel="prev" title="Data Per Vertex and Data Per Streamline" href="auto_examples/plot_dps_dpv.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.4.1.dev31" />
+  <meta name="docsearch:version" content="0.4.1.dev47" />
   
     
     <script src="_static/searchtools.js"></script>
@@ -136,8 +136,8 @@
       
     
     
-    <img src="_static/trx_logo.png" class="logo__image only-light" alt="trx-python 0.4.1.dev31 documentation - Home"/>
-    <img src="_static/trx_logo.png" class="logo__image only-dark pst-js-only" alt="trx-python 0.4.1.dev31 documentation - Home"/>
+    <img src="_static/trx_logo.png" class="logo__image only-light" alt="trx-python 0.4.1.dev47 documentation - Home"/>
+    <img src="_static/trx_logo.png" class="logo__image only-dark pst-js-only" alt="trx-python 0.4.1.dev47 documentation - Home"/>
   
   
 </a></div>
@@ -473,14 +473,14 @@
 <h3>Setting Up Your Environment<a class="headerlink" href="#setting-up-your-environment" title="Link to this heading">#</a></h3>
 <ol class="arabic">
 <li><p><strong>Clone the repository</strong>:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># If you&#39;re a contributor, fork first then clone your fork</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># If you're a contributor, fork first then clone your fork</span>
 git<span class="w"> </span>clone<span class="w"> </span>https://github.com/YOUR_USERNAME/trx-python.git
 <span class="nb">cd</span><span class="w"> </span>trx-python
 </pre></div>
 </div>
 </li>
 <li><p><strong>Install with all development dependencies</strong>:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;.[all]&quot;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">".[all]"</span>
 </pre></div>
 </div>
 <p>This installs:</p>
@@ -626,7 +626,7 @@ Data is cached in <code class="docutils literal notranslate"><span class="pre">~
     <span class="n">expected</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
     <span class="n">assert_array_equal</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">expected</span><span class="p">)</span>
 
-<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">skipif</span><span class="p">(</span><span class="ow">not</span> <span class="n">dipy_available</span><span class="p">,</span> <span class="n">reason</span><span class="o">=</span><span class="s2">&quot;Dipy required&quot;</span><span class="p">)</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">skipif</span><span class="p">(</span><span class="ow">not</span> <span class="n">dipy_available</span><span class="p">,</span> <span class="n">reason</span><span class="o">=</span><span class="s2">"Dipy required"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">test_with_dipy</span><span class="p">():</span>
     <span class="c1"># Test that requires dipy</span>
     <span class="k">pass</span>
@@ -667,7 +667,7 @@ spin<span class="w"> </span>docs<span class="w"> </span>--open
 <h3>NumPy Docstring Format<a class="headerlink" href="#numpy-docstring-format" title="Link to this heading">#</a></h3>
 <p>All functions and classes should be documented using NumPy-style docstrings:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">load</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">reference</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load a tractogram file.</span>
+<span class="w">    </span><span class="sd">"""Load a tractogram file.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -693,8 +693,8 @@ spin<span class="w"> </span>docs<span class="w"> </span>--open
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; from trx.io import load</span>
-<span class="sd">    &gt;&gt;&gt; trx = load(&quot;tractogram.trx&quot;)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    &gt;&gt;&gt; trx = load("tractogram.trx")</span>
+<span class="sd">    """</span>
     <span class="k">pass</span>
 </pre></div>
 </div>

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>trx.io &#8212; trx-python 0.4.1.dev31 documentation</title>
+    <title>trx.io &#8212; trx-python 0.4.1.dev47 documentation</title>
   
   
   
@@ -44,7 +44,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
-    <script src="../../../_static/documentation_options.js?v=17fbf770"></script>
+    <script src="../../../_static/documentation_options.js?v=9d14d439"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/sg-tags.js?v=d80f6fa4"></script>
@@ -64,7 +64,7 @@
     <link rel="prev" title="trx.fetcher" href="../fetcher/index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.4.1.dev31" />
+  <meta name="docsearch:version" content="0.4.1.dev47" />
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -136,8 +136,8 @@
       
     
     
-    <img src="../../../_static/trx_logo.png" class="logo__image only-light" alt="trx-python 0.4.1.dev31 documentation - Home"/>
-    <img src="../../../_static/trx_logo.png" class="logo__image only-dark pst-js-only" alt="trx-python 0.4.1.dev31 documentation - Home"/>
+    <img src="../../../_static/trx_logo.png" class="logo__image only-light" alt="trx-python 0.4.1.dev47 documentation - Home"/>
+    <img src="../../../_static/trx_logo.png" class="logo__image only-dark pst-js-only" alt="trx-python 0.4.1.dev47 documentation - Home"/>
   
   
 </a></div>
@@ -490,7 +490,7 @@
 <tr class="row-even"><td><p><a class="reference internal" href="#trx.io.load_sft_with_reference" title="trx.io.load_sft_with_reference"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_sft_with_reference</span></code></a>(filepath[, reference, bbox_check])</p></td>
 <td><p>Load a tractogram as a StatefulTractogram with an explicit reference.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#trx.io.load" title="trx.io.load"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load</span></code></a>(tractogram_filename, reference)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trx.io.load" title="trx.io.load"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load</span></code></a>(tractogram_filename, reference, **kwargs)</p></td>
 <td><p>Load a tractogram from disk and return a TRX or StatefulTractogram.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#trx.io.save" title="trx.io.save"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save</span></code></a>(tractogram_obj, tractogram_filename[, ...])</p></td>
@@ -528,7 +528,7 @@ configuration.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="trx.io.load_sft_with_reference">
-<span class="sig-prename descclassname"><span class="pre">trx.io.</span></span><span class="sig-name descname"><span class="pre">load_sft_with_reference</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bbox_check</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/io.html#load_sft_with_reference"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.io.load_sft_with_reference" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">trx.io.</span></span><span class="sig-name descname"><span class="pre">load_sft_with_reference</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bbox_check</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/io.html#load_sft_with_reference"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.io.load_sft_with_reference" title="Link to this definition">#</a></dt>
 <dd><p>Load a tractogram as a StatefulTractogram with an explicit reference.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -540,6 +540,8 @@ Pass <code class="docutils literal notranslate"><span class="pre">&quot;same&quo
 </dd>
 <dt><strong>bbox_check</strong><span class="classifier">bool, optional</span></dt><dd><p>If True, validate that streamlines lie within the reference bounding
 box. Defaults to True.</p>
+</dd>
+<dt><strong>**kwargs</strong></dt><dd><p>Additional keyword arguments passed to dipy’s load_tractogram.</p>
 </dd>
 </dl>
 </dd>
@@ -560,7 +562,7 @@ box. Defaults to True.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="trx.io.load">
-<span class="sig-prename descclassname"><span class="pre">trx.io.</span></span><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tractogram_filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/io.html#load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.io.load" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">trx.io.</span></span><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tractogram_filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/trx/io.html#load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.io.load" title="Link to this definition">#</a></dt>
 <dd><p>Load a tractogram from disk and return a TRX or StatefulTractogram.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -568,6 +570,8 @@ box. Defaults to True.</p>
 <dt><strong>tractogram_filename</strong><span class="classifier">str</span></dt><dd><p>Path to the input tractogram. TRX directories are supported.</p>
 </dd>
 <dt><strong>reference</strong><span class="classifier">str or nibabel.Nifti1Image</span></dt><dd><p>Reference image used for formats without embedded affine information.</p>
+</dd>
+<dt><strong>**kwargs</strong></dt><dd><p>Additional keyword arguments passed to dipy’s load_tractogram.</p>
 </dd>
 </dl>
 </dd>

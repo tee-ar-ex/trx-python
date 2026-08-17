@@ -69,7 +69,7 @@ Module Contents
    ..
        !! processed by numpydoc !!
 
-.. py:function:: load_sft_with_reference(filepath, reference=None, bbox_check=True)
+.. py:function:: load_sft_with_reference(filepath, reference=None, bbox_check=True, **kwargs)
 
    
    Load a tractogram as a StatefulTractogram with an explicit reference.
@@ -87,6 +87,9 @@ Module Contents
        **bbox_check** : bool, optional
            If True, validate that streamlines lie within the reference bounding
            box. Defaults to True.
+
+       **\*\*kwargs**
+           Additional keyword arguments passed to dipy's load_tractogram.
 
 
 
@@ -112,7 +115,7 @@ Module Contents
    ..
        !! processed by numpydoc !!
 
-.. py:function:: load(tractogram_filename, reference)
+.. py:function:: load(tractogram_filename, reference, **kwargs)
 
    
    Load a tractogram from disk and return a TRX or StatefulTractogram.
@@ -125,6 +128,9 @@ Module Contents
 
        **reference** : str or nibabel.Nifti1Image
            Reference image used for formats without embedded affine information.
+
+       **\*\*kwargs**
+           Additional keyword arguments passed to dipy's load_tractogram.
 
 
 

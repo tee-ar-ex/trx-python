@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>trx.cli &#8212; trx-python 0.4.1.dev31 documentation</title>
+    <title>trx.cli &#8212; trx-python 0.4.1.dev47 documentation</title>
   
   
   
@@ -43,7 +43,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
-    <script src="../../_static/documentation_options.js?v=17fbf770"></script>
+    <script src="../../_static/documentation_options.js?v=9d14d439"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/sg-tags.js?v=d80f6fa4"></script>
@@ -61,7 +61,7 @@
     <link rel="search" title="Search" href="../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.4.1.dev31" />
+  <meta name="docsearch:version" content="0.4.1.dev47" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -133,8 +133,8 @@
       
     
     
-    <img src="../../_static/trx_logo.png" class="logo__image only-light" alt="trx-python 0.4.1.dev31 documentation - Home"/>
-    <img src="../../_static/trx_logo.png" class="logo__image only-dark pst-js-only" alt="trx-python 0.4.1.dev31 documentation - Home"/>
+    <img src="../../_static/trx_logo.png" class="logo__image only-light" alt="trx-python 0.4.1.dev47 documentation - Home"/>
+    <img src="../../_static/trx_logo.png" class="logo__image only-dark pst-js-only" alt="trx-python 0.4.1.dev47 documentation - Home"/>
   
   
 </a></div>
@@ -434,11 +434,11 @@
                   
   <h1>Source code for trx.cli</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 <span class="sd">TRX Command Line Interface.</span>
 
 <span class="sd">This module provides a unified CLI for all TRX file format operations using Typer.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Annotated</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
@@ -462,13 +462,13 @@
 <div class="viewcode-block" id="_debug_callback">
 <a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli._debug_callback">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">_debug_callback</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Print environment and dependency diagnostics, then exit.</span>
+<span class="w">    </span><span class="sd">"""Print environment and dependency diagnostics, then exit.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    value : bool</span>
 <span class="sd">        Whether the ``--debug`` flag was passed.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
         <span class="k">return</span>
 
@@ -478,51 +478,51 @@
 
     <span class="kn">from</span><span class="w"> </span><span class="nn">trx</span><span class="w"> </span><span class="kn">import</span> <span class="n">__version__</span>
 
-    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s2">&quot;Environment diagnostics:&quot;</span><span class="p">)</span>
-    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Python executable : </span><span class="si">{</span><span class="n">sys</span><span class="o">.</span><span class="n">executable</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  sys.prefix        : </span><span class="si">{</span><span class="n">sys</span><span class="o">.</span><span class="n">prefix</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  trx-python version: </span><span class="si">{</span><span class="n">__version__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s2">"Environment diagnostics:"</span><span class="p">)</span>
+    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  Python executable : </span><span class="si">{</span><span class="n">sys</span><span class="o">.</span><span class="n">executable</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  sys.prefix        : </span><span class="si">{</span><span class="n">sys</span><span class="o">.</span><span class="n">prefix</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  trx-python version: </span><span class="si">{</span><span class="n">__version__</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
-    <span class="n">trx_spec</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">find_spec</span><span class="p">(</span><span class="s2">&quot;trx&quot;</span><span class="p">)</span>
+    <span class="n">trx_spec</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">find_spec</span><span class="p">(</span><span class="s2">"trx"</span><span class="p">)</span>
     <span class="n">trx_location</span> <span class="o">=</span> <span class="p">(</span>
         <span class="n">trx_spec</span><span class="o">.</span><span class="n">submodule_search_locations</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">trx_spec</span> <span class="ow">and</span> <span class="n">trx_spec</span><span class="o">.</span><span class="n">submodule_search_locations</span>
-        <span class="k">else</span> <span class="s2">&quot;unknown&quot;</span>
+        <span class="k">else</span> <span class="s2">"unknown"</span>
     <span class="p">)</span>
-    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  trx package       : </span><span class="si">{</span><span class="n">trx_location</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  trx package       : </span><span class="si">{</span><span class="n">trx_location</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
     <span class="c1"># Read required dependencies from package metadata</span>
     <span class="n">required_deps</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
 
-        <span class="k">for</span> <span class="n">req</span> <span class="ow">in</span> <span class="n">importlib</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">requires</span><span class="p">(</span><span class="s2">&quot;trx-python&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]:</span>
-            <span class="c1"># Skip optional / extra deps (they contain &quot;; extra ==&quot;)</span>
-            <span class="k">if</span> <span class="s2">&quot;extra ==&quot;</span> <span class="ow">in</span> <span class="n">req</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">req</span> <span class="ow">in</span> <span class="n">importlib</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">requires</span><span class="p">(</span><span class="s2">"trx-python"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]:</span>
+            <span class="c1"># Skip optional / extra deps (they contain "; extra ==")</span>
+            <span class="k">if</span> <span class="s2">"extra =="</span> <span class="ow">in</span> <span class="n">req</span><span class="p">:</span>
                 <span class="k">continue</span>
             <span class="c1"># Extract the package name (strip version specifiers like &gt;=, &lt;=, ~=)</span>
-            <span class="n">dep_name</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[&gt;=&lt;!~;\s]&quot;</span><span class="p">,</span> <span class="n">req</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">dep_name</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">r</span><span class="s2">"[&gt;=&lt;!~;\s]"</span><span class="p">,</span> <span class="n">req</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">required_deps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dep_name</span><span class="p">)</span>
     <span class="k">except</span> <span class="n">importlib</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">PackageNotFoundError</span><span class="p">:</span>
-        <span class="n">required_deps</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;deepdiff&quot;</span><span class="p">,</span> <span class="s2">&quot;nibabel&quot;</span><span class="p">,</span> <span class="s2">&quot;numpy&quot;</span><span class="p">,</span> <span class="s2">&quot;typer&quot;</span><span class="p">]</span>
+        <span class="n">required_deps</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"deepdiff"</span><span class="p">,</span> <span class="s2">"nibabel"</span><span class="p">,</span> <span class="s2">"numpy"</span><span class="p">,</span> <span class="s2">"typer"</span><span class="p">]</span>
 
-    <span class="n">optional_deps</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;dipy&quot;</span><span class="p">,</span> <span class="s2">&quot;fury&quot;</span><span class="p">,</span> <span class="s2">&quot;vtk&quot;</span><span class="p">]</span>
+    <span class="n">optional_deps</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"dipy"</span><span class="p">,</span> <span class="s2">"fury"</span><span class="p">,</span> <span class="s2">"vtk"</span><span class="p">]</span>
 
-    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Required dependencies:&quot;</span><span class="p">)</span>
+    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Required dependencies:"</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">dep</span> <span class="ow">in</span> <span class="n">required_deps</span><span class="p">:</span>
         <span class="n">spec</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">find_spec</span><span class="p">(</span><span class="n">dep</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">spec</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">dep</span><span class="si">:</span><span class="s2">12s</span><span class="si">}</span><span class="s2"> NOT FOUND&quot;</span><span class="p">)</span>
+            <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">dep</span><span class="si">:</span><span class="s2">12s</span><span class="si">}</span><span class="s2"> NOT FOUND"</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">dep</span><span class="si">:</span><span class="s2">12s</span><span class="si">}</span><span class="s2"> found&quot;</span><span class="p">)</span>
+            <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">dep</span><span class="si">:</span><span class="s2">12s</span><span class="si">}</span><span class="s2"> found"</span><span class="p">)</span>
 
-    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Optional dependencies:&quot;</span><span class="p">)</span>
+    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Optional dependencies:"</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">dep</span> <span class="ow">in</span> <span class="n">optional_deps</span><span class="p">:</span>
         <span class="n">spec</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">find_spec</span><span class="p">(</span><span class="n">dep</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">spec</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">dep</span><span class="si">:</span><span class="s2">12s</span><span class="si">}</span><span class="s2"> not found&quot;</span><span class="p">)</span>
+            <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">dep</span><span class="si">:</span><span class="s2">12s</span><span class="si">}</span><span class="s2"> not found"</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">dep</span><span class="si">:</span><span class="s2">12s</span><span class="si">}</span><span class="s2"> found&quot;</span><span class="p">)</span>
+            <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">dep</span><span class="si">:</span><span class="s2">12s</span><span class="si">}</span><span class="s2"> found"</span><span class="p">)</span>
 
     <span class="k">raise</span> <span class="n">typer</span><span class="o">.</span><span class="n">Exit</span><span class="p">()</span></div>
 
@@ -534,30 +534,30 @@
     <span class="n">_debug</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
         <span class="nb">bool</span><span class="p">,</span>
         <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
-            <span class="s2">&quot;--debug&quot;</span><span class="p">,</span>
-            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Print environment and dependency diagnostics.&quot;</span><span class="p">,</span>
+            <span class="s2">"--debug"</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">"Print environment and dependency diagnostics."</span><span class="p">,</span>
             <span class="n">callback</span><span class="o">=</span><span class="n">_debug_callback</span><span class="p">,</span>
             <span class="n">is_eager</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="p">),</span>
     <span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;TRX File Format Tools - CLI for brain tractography data manipulation.</span>
+<span class="w">    </span><span class="sd">"""TRX File Format Tools - CLI for brain tractography data manipulation.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    _debug : bool, optional</span>
 <span class="sd">        If True, print environment and dependency diagnostics and exit.</span>
-<span class="sd">    &quot;&quot;&quot;</span></div>
+<span class="sd">    """</span></div>
 
 
 
 <div class="viewcode-block" id="app">
 <a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli.app">[docs]</a>
 <span class="n">app</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Typer</span><span class="p">(</span>
-    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;trx&quot;</span><span class="p">,</span>
-    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;TRX File Format Tools - CLI for brain tractography data manipulation.&quot;</span><span class="p">,</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">"trx"</span><span class="p">,</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">"TRX File Format Tools - CLI for brain tractography data manipulation."</span><span class="p">,</span>
     <span class="n">add_completion</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="n">rich_markup_mode</span><span class="o">=</span><span class="s2">&quot;rich&quot;</span><span class="p">,</span>
+    <span class="n">rich_markup_mode</span><span class="o">=</span><span class="s2">"rich"</span><span class="p">,</span>
     <span class="n">callback</span><span class="o">=</span><span class="n">_main_callback</span><span class="p">,</span>
 <span class="p">)</span></div>
 
@@ -566,7 +566,7 @@
 <div class="viewcode-block" id="_check_overwrite">
 <a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli._check_overwrite">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">_check_overwrite</span><span class="p">(</span><span class="n">filepath</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if file exists and raise error if overwrite is not enabled.</span>
+<span class="w">    </span><span class="sd">"""Check if file exists and raise error if overwrite is not enabled.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -579,11 +579,11 @@
 <span class="sd">    ------</span>
 <span class="sd">    typer.Exit</span>
 <span class="sd">        If file exists and overwrite is False.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">filepath</span><span class="o">.</span><span class="n">is_file</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">overwrite</span><span class="p">:</span>
         <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span>
             <span class="n">typer</span><span class="o">.</span><span class="n">style</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">filepath</span><span class="si">}</span><span class="s2"> already exists. Use --force to overwrite.&quot;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">"Error: </span><span class="si">{</span><span class="n">filepath</span><span class="si">}</span><span class="s2"> already exists. Use --force to overwrite."</span><span class="p">,</span>
                 <span class="n">fg</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">RED</span><span class="p">,</span>
             <span class="p">),</span>
             <span class="n">err</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -592,55 +592,55 @@
 
 
 
-<span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s2">&quot;concatenate&quot;</span><span class="p">)</span>
+<span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s2">"concatenate"</span><span class="p">)</span>
 <div class="viewcode-block" id="concatenate_tractograms">
 <a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli.concatenate_tractograms">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">concatenate_tractograms</span><span class="p">(</span>
     <span class="n">in_tractograms</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
         <span class="n">List</span><span class="p">[</span><span class="n">Path</span><span class="p">],</span>
         <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span>
-            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Input tractogram files. Format: trk, tck, vtk, fib, dpy, trx.&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">"Input tractogram files. Format: trk, tck, vtk, fib, dpy, trx."</span><span class="p">,</span>
         <span class="p">),</span>
     <span class="p">],</span>
     <span class="n">out_tractogram</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
         <span class="n">Path</span><span class="p">,</span>
-        <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="n">help</span><span class="o">=</span><span class="s2">&quot;Output filename for the concatenated tractogram.&quot;</span><span class="p">),</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="n">help</span><span class="o">=</span><span class="s2">"Output filename for the concatenated tractogram."</span><span class="p">),</span>
     <span class="p">],</span>
     <span class="n">delete_dpv</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
         <span class="nb">bool</span><span class="p">,</span>
         <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
-            <span class="s2">&quot;--delete-dpv&quot;</span><span class="p">,</span>
-            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Delete data_per_vertex if not all inputs have the same metadata.&quot;</span><span class="p">,</span>
+            <span class="s2">"--delete-dpv"</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">"Delete data_per_vertex if not all inputs have the same metadata."</span><span class="p">,</span>
         <span class="p">),</span>
     <span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">delete_dps</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
         <span class="nb">bool</span><span class="p">,</span>
         <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
-            <span class="s2">&quot;--delete-dps&quot;</span><span class="p">,</span>
-            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Delete data_per_streamline if not all inputs have the same metadata.&quot;</span><span class="p">,</span>
+            <span class="s2">"--delete-dps"</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">"Delete data_per_streamline if not all inputs have the same metadata."</span><span class="p">,</span>
         <span class="p">),</span>
     <span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">delete_groups</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
         <span class="nb">bool</span><span class="p">,</span>
         <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
-            <span class="s2">&quot;--delete-groups&quot;</span><span class="p">,</span>
-            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Delete groups if not all inputs have the same metadata.&quot;</span><span class="p">,</span>
+            <span class="s2">"--delete-groups"</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">"Delete groups if not all inputs have the same metadata."</span><span class="p">,</span>
         <span class="p">),</span>
     <span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">reference</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
         <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">],</span>
         <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
-            <span class="s2">&quot;--reference&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;-r&quot;</span><span class="p">,</span>
-            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Reference anatomy for tck/vtk/fib/dpy files (.nii or .nii.gz).&quot;</span><span class="p">,</span>
+            <span class="s2">"--reference"</span><span class="p">,</span>
+            <span class="s2">"-r"</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">"Reference anatomy for tck/vtk/fib/dpy files (.nii or .nii.gz)."</span><span class="p">,</span>
         <span class="p">),</span>
     <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">force</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
         <span class="nb">bool</span><span class="p">,</span>
-        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="s2">&quot;--force&quot;</span><span class="p">,</span> <span class="s2">&quot;-f&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Force overwriting of output files.&quot;</span><span class="p">),</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="s2">"--force"</span><span class="p">,</span> <span class="s2">"-f"</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">"Force overwriting of output files."</span><span class="p">),</span>
     <span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Concatenate multiple tractograms into one.</span>
+<span class="w">    </span><span class="sd">"""Concatenate multiple tractograms into one.</span>
 
 <span class="sd">    If the data_per_point or data_per_streamline is not the same for all</span>
 <span class="sd">    tractograms, the data must be deleted first using the appropriate flags.</span>
@@ -666,7 +666,7 @@
 <span class="sd">    -------</span>
 <span class="sd">    None</span>
 <span class="sd">        Writes the concatenated tractogram to ``out_tractogram``.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">_check_overwrite</span><span class="p">(</span><span class="n">out_tractogram</span><span class="p">,</span> <span class="n">force</span><span class="p">)</span>
 
     <span class="n">ref</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">reference</span><span class="p">)</span> <span class="k">if</span> <span class="n">reference</span> <span class="k">else</span> <span class="kc">None</span>
@@ -694,54 +694,54 @@
 
     <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span>
         <span class="n">typer</span><span class="o">.</span><span class="n">style</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Successfully concatenated </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">in_tractograms</span><span class="p">)</span><span class="si">}</span><span class="s2"> tractograms &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;to </span><span class="si">{</span><span class="n">out_tractogram</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">"Successfully concatenated </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">in_tractograms</span><span class="p">)</span><span class="si">}</span><span class="s2"> tractograms "</span>
+            <span class="sa">f</span><span class="s2">"to </span><span class="si">{</span><span class="n">out_tractogram</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
             <span class="n">fg</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">GREEN</span><span class="p">,</span>
         <span class="p">)</span>
     <span class="p">)</span></div>
 
 
 
-<span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s2">&quot;convert&quot;</span><span class="p">)</span>
+<span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s2">"convert"</span><span class="p">)</span>
 <div class="viewcode-block" id="convert">
 <a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli.convert">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">convert</span><span class="p">(</span>
     <span class="n">in_tractogram</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
         <span class="n">Path</span><span class="p">,</span>
-        <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="n">help</span><span class="o">=</span><span class="s2">&quot;Input tractogram. Format: trk, tck, vtk, fib, dpy, trx.&quot;</span><span class="p">),</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="n">help</span><span class="o">=</span><span class="s2">"Input tractogram. Format: trk, tck, vtk, fib, dpy, trx."</span><span class="p">),</span>
     <span class="p">],</span>
     <span class="n">out_tractogram</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
         <span class="n">Path</span><span class="p">,</span>
-        <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="n">help</span><span class="o">=</span><span class="s2">&quot;Output tractogram. Format: trk, tck, vtk, fib, dpy, trx.&quot;</span><span class="p">),</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="n">help</span><span class="o">=</span><span class="s2">"Output tractogram. Format: trk, tck, vtk, fib, dpy, trx."</span><span class="p">),</span>
     <span class="p">],</span>
     <span class="n">reference</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
         <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">],</span>
         <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
-            <span class="s2">&quot;--reference&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;-r&quot;</span><span class="p">,</span>
-            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Reference anatomy for tck/vtk/fib/dpy files (.nii or .nii.gz).&quot;</span><span class="p">,</span>
+            <span class="s2">"--reference"</span><span class="p">,</span>
+            <span class="s2">"-r"</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">"Reference anatomy for tck/vtk/fib/dpy files (.nii or .nii.gz)."</span><span class="p">,</span>
         <span class="p">),</span>
     <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">positions_dtype</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
         <span class="nb">str</span><span class="p">,</span>
         <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
-            <span class="s2">&quot;--positions-dtype&quot;</span><span class="p">,</span>
-            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Datatype for positions in TRX output.&quot;</span><span class="p">,</span>
+            <span class="s2">"--positions-dtype"</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">"Datatype for positions in TRX output."</span><span class="p">,</span>
         <span class="p">),</span>
-    <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;float32&quot;</span><span class="p">,</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="s2">"float32"</span><span class="p">,</span>
     <span class="n">offsets_dtype</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
         <span class="nb">str</span><span class="p">,</span>
         <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
-            <span class="s2">&quot;--offsets-dtype&quot;</span><span class="p">,</span>
-            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Datatype for offsets in TRX output.&quot;</span><span class="p">,</span>
+            <span class="s2">"--offsets-dtype"</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">"Datatype for offsets in TRX output."</span><span class="p">,</span>
         <span class="p">),</span>
-    <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;uint64&quot;</span><span class="p">,</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="s2">"uint64"</span><span class="p">,</span>
     <span class="n">force</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
         <span class="nb">bool</span><span class="p">,</span>
-        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="s2">&quot;--force&quot;</span><span class="p">,</span> <span class="s2">&quot;-f&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Force overwriting of output files.&quot;</span><span class="p">),</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="s2">"--force"</span><span class="p">,</span> <span class="s2">"-f"</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">"Force overwriting of output files."</span><span class="p">),</span>
     <span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert tractograms between formats.</span>
+<span class="w">    </span><span class="sd">"""Convert tractograms between formats.</span>
 
 <span class="sd">    Supports conversion of .tck, .trk, .fib, .vtk, .trx and .dpy files.</span>
 <span class="sd">    TCK files always need a reference NIFTI file for conversion.</span>
@@ -765,7 +765,7 @@
 <span class="sd">    -------</span>
 <span class="sd">    None</span>
 <span class="sd">        Writes the converted tractogram to disk.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">_check_overwrite</span><span class="p">(</span><span class="n">out_tractogram</span><span class="p">,</span> <span class="n">force</span><span class="p">)</span>
 
     <span class="n">ref</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">reference</span><span class="p">)</span> <span class="k">if</span> <span class="n">reference</span> <span class="k">else</span> <span class="kc">None</span>
@@ -779,49 +779,49 @@
 
     <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span>
         <span class="n">typer</span><span class="o">.</span><span class="n">style</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Successfully converted </span><span class="si">{</span><span class="n">in_tractogram</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">out_tractogram</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">"Successfully converted </span><span class="si">{</span><span class="n">in_tractogram</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">out_tractogram</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
             <span class="n">fg</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">GREEN</span><span class="p">,</span>
         <span class="p">)</span>
     <span class="p">)</span></div>
 
 
 
-<span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s2">&quot;convert-dsi&quot;</span><span class="p">)</span>
+<span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s2">"convert-dsi"</span><span class="p">)</span>
 <div class="viewcode-block" id="convert_dsi">
 <a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli.convert_dsi">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">convert_dsi</span><span class="p">(</span>
     <span class="n">in_dsi_tractogram</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
         <span class="n">Path</span><span class="p">,</span>
-        <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="n">help</span><span class="o">=</span><span class="s2">&quot;Input tractogram from DSI Studio (.trk).&quot;</span><span class="p">),</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="n">help</span><span class="o">=</span><span class="s2">"Input tractogram from DSI Studio (.trk)."</span><span class="p">),</span>
     <span class="p">],</span>
     <span class="n">in_dsi_fa</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
         <span class="n">Path</span><span class="p">,</span>
-        <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="n">help</span><span class="o">=</span><span class="s2">&quot;Input FA from DSI Studio (.nii.gz).&quot;</span><span class="p">),</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="n">help</span><span class="o">=</span><span class="s2">"Input FA from DSI Studio (.nii.gz)."</span><span class="p">),</span>
     <span class="p">],</span>
     <span class="n">out_tractogram</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
         <span class="n">Path</span><span class="p">,</span>
-        <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="n">help</span><span class="o">=</span><span class="s2">&quot;Output tractogram file.&quot;</span><span class="p">),</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="n">help</span><span class="o">=</span><span class="s2">"Output tractogram file."</span><span class="p">),</span>
     <span class="p">],</span>
     <span class="n">remove_invalid</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
         <span class="nb">bool</span><span class="p">,</span>
         <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
-            <span class="s2">&quot;--remove-invalid&quot;</span><span class="p">,</span>
-            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Remove streamlines landing out of the bounding box.&quot;</span><span class="p">,</span>
+            <span class="s2">"--remove-invalid"</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">"Remove streamlines landing out of the bounding box."</span><span class="p">,</span>
         <span class="p">),</span>
     <span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">keep_invalid</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
         <span class="nb">bool</span><span class="p">,</span>
         <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
-            <span class="s2">&quot;--keep-invalid&quot;</span><span class="p">,</span>
-            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Keep streamlines landing out of the bounding box.&quot;</span><span class="p">,</span>
+            <span class="s2">"--keep-invalid"</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">"Keep streamlines landing out of the bounding box."</span><span class="p">,</span>
         <span class="p">),</span>
     <span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">force</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
         <span class="nb">bool</span><span class="p">,</span>
-        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="s2">&quot;--force&quot;</span><span class="p">,</span> <span class="s2">&quot;-f&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Force overwriting of output files.&quot;</span><span class="p">),</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="s2">"--force"</span><span class="p">,</span> <span class="s2">"-f"</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">"Force overwriting of output files."</span><span class="p">),</span>
     <span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a DSI-Studio TRK file to TRX or TRK and fix space metadata.</span>
+<span class="w">    </span><span class="sd">"""Convert a DSI-Studio TRK file to TRX or TRK and fix space metadata.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -842,13 +842,13 @@
 <span class="sd">    -------</span>
 <span class="sd">    None</span>
 <span class="sd">        Writes the converted tractogram to disk.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">_check_overwrite</span><span class="p">(</span><span class="n">out_tractogram</span><span class="p">,</span> <span class="n">force</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">remove_invalid</span> <span class="ow">and</span> <span class="n">keep_invalid</span><span class="p">:</span>
         <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span>
             <span class="n">typer</span><span class="o">.</span><span class="n">style</span><span class="p">(</span>
-                <span class="s2">&quot;Error: Cannot use both --remove-invalid and --keep-invalid.&quot;</span><span class="p">,</span>
+                <span class="s2">"Error: Cannot use both --remove-invalid and --keep-invalid."</span><span class="p">,</span>
                 <span class="n">fg</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">RED</span><span class="p">,</span>
             <span class="p">),</span>
             <span class="n">err</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -865,109 +865,109 @@
 
     <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span>
         <span class="n">typer</span><span class="o">.</span><span class="n">style</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Successfully converted DSI-Studio tractogram to </span><span class="si">{</span><span class="n">out_tractogram</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">"Successfully converted DSI-Studio tractogram to </span><span class="si">{</span><span class="n">out_tractogram</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
             <span class="n">fg</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">GREEN</span><span class="p">,</span>
         <span class="p">)</span>
     <span class="p">)</span></div>
 
 
 
-<span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s2">&quot;generate&quot;</span><span class="p">)</span>
+<span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s2">"generate"</span><span class="p">)</span>
 <div class="viewcode-block" id="generate">
 <a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli.generate">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">generate</span><span class="p">(</span>
     <span class="n">reference</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
         <span class="n">Path</span><span class="p">,</span>
-        <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="n">help</span><span class="o">=</span><span class="s2">&quot;Reference anatomy (.nii or .nii.gz).&quot;</span><span class="p">),</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="n">help</span><span class="o">=</span><span class="s2">"Reference anatomy (.nii or .nii.gz)."</span><span class="p">),</span>
     <span class="p">],</span>
     <span class="n">out_tractogram</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
         <span class="n">Path</span><span class="p">,</span>
-        <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="n">help</span><span class="o">=</span><span class="s2">&quot;Output tractogram. Format: trk, tck, vtk, fib, dpy, trx.&quot;</span><span class="p">),</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="n">help</span><span class="o">=</span><span class="s2">"Output tractogram. Format: trk, tck, vtk, fib, dpy, trx."</span><span class="p">),</span>
     <span class="p">],</span>
     <span class="n">positions</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
         <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">],</span>
         <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
-            <span class="s2">&quot;--positions&quot;</span><span class="p">,</span>
-            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Binary file with streamline coordinates (Nx3 .npy).&quot;</span><span class="p">,</span>
+            <span class="s2">"--positions"</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">"Binary file with streamline coordinates (Nx3 .npy)."</span><span class="p">,</span>
         <span class="p">),</span>
     <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">offsets</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
         <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">],</span>
         <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
-            <span class="s2">&quot;--offsets&quot;</span><span class="p">,</span>
-            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Binary file with streamline offsets (.npy).&quot;</span><span class="p">,</span>
+            <span class="s2">"--offsets"</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">"Binary file with streamline offsets (.npy)."</span><span class="p">,</span>
         <span class="p">),</span>
     <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">positions_csv</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
         <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">],</span>
         <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
-            <span class="s2">&quot;--positions-csv&quot;</span><span class="p">,</span>
-            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;CSV file with streamline coordinates (x1,y1,z1,x2,y2,z2,...).&quot;</span><span class="p">,</span>
+            <span class="s2">"--positions-csv"</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">"CSV file with streamline coordinates (x1,y1,z1,x2,y2,z2,...)."</span><span class="p">,</span>
         <span class="p">),</span>
     <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">space</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
         <span class="nb">str</span><span class="p">,</span>
         <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
-            <span class="s2">&quot;--space&quot;</span><span class="p">,</span>
-            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Coordinate space. Non-default requires Dipy.&quot;</span><span class="p">,</span>
+            <span class="s2">"--space"</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">"Coordinate space. Non-default requires Dipy."</span><span class="p">,</span>
         <span class="p">),</span>
-    <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;RASMM&quot;</span><span class="p">,</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="s2">"RASMM"</span><span class="p">,</span>
     <span class="n">origin</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
         <span class="nb">str</span><span class="p">,</span>
         <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
-            <span class="s2">&quot;--origin&quot;</span><span class="p">,</span>
-            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Coordinate origin. Non-default requires Dipy.&quot;</span><span class="p">,</span>
+            <span class="s2">"--origin"</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">"Coordinate origin. Non-default requires Dipy."</span><span class="p">,</span>
         <span class="p">),</span>
-    <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;NIFTI&quot;</span><span class="p">,</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="s2">"NIFTI"</span><span class="p">,</span>
     <span class="n">positions_dtype</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
         <span class="nb">str</span><span class="p">,</span>
-        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="s2">&quot;--positions-dtype&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Datatype for positions.&quot;</span><span class="p">),</span>
-    <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;float32&quot;</span><span class="p">,</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="s2">"--positions-dtype"</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">"Datatype for positions."</span><span class="p">),</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="s2">"float32"</span><span class="p">,</span>
     <span class="n">offsets_dtype</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
         <span class="nb">str</span><span class="p">,</span>
-        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="s2">&quot;--offsets-dtype&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Datatype for offsets.&quot;</span><span class="p">),</span>
-    <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;uint64&quot;</span><span class="p">,</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="s2">"--offsets-dtype"</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">"Datatype for offsets."</span><span class="p">),</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="s2">"uint64"</span><span class="p">,</span>
     <span class="n">dpv</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
         <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
         <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
-            <span class="s2">&quot;--dpv&quot;</span><span class="p">,</span>
-            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Data per vertex: FILE,DTYPE (e.g., color.npy,uint8).&quot;</span><span class="p">,</span>
+            <span class="s2">"--dpv"</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">"Data per vertex: FILE,DTYPE (e.g., color.npy,uint8)."</span><span class="p">,</span>
         <span class="p">),</span>
     <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">dps</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
         <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
         <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
-            <span class="s2">&quot;--dps&quot;</span><span class="p">,</span>
-            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Data per streamline: FILE,DTYPE (e.g., algo.npy,uint8).&quot;</span><span class="p">,</span>
+            <span class="s2">"--dps"</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">"Data per streamline: FILE,DTYPE (e.g., algo.npy,uint8)."</span><span class="p">,</span>
         <span class="p">),</span>
     <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">groups</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
         <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
         <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
-            <span class="s2">&quot;--groups&quot;</span><span class="p">,</span>
-            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Groups: FILE,DTYPE (e.g., AF_L.npy,int32).&quot;</span><span class="p">,</span>
+            <span class="s2">"--groups"</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">"Groups: FILE,DTYPE (e.g., AF_L.npy,int32)."</span><span class="p">,</span>
         <span class="p">),</span>
     <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">dpg</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
         <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
         <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
-            <span class="s2">&quot;--dpg&quot;</span><span class="p">,</span>
-            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Data per group: GROUP,FILE,DTYPE (e.g., AF_L,mean_fa.npy,float32).&quot;</span><span class="p">,</span>
+            <span class="s2">"--dpg"</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">"Data per group: GROUP,FILE,DTYPE (e.g., AF_L,mean_fa.npy,float32)."</span><span class="p">,</span>
         <span class="p">),</span>
     <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">verify_invalid</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
         <span class="nb">bool</span><span class="p">,</span>
         <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
-            <span class="s2">&quot;--verify-invalid&quot;</span><span class="p">,</span>
-            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Verify positions are valid (within bounding box). Requires Dipy.&quot;</span><span class="p">,</span>
+            <span class="s2">"--verify-invalid"</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">"Verify positions are valid (within bounding box). Requires Dipy."</span><span class="p">,</span>
         <span class="p">),</span>
     <span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">force</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
         <span class="nb">bool</span><span class="p">,</span>
-        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="s2">&quot;--force&quot;</span><span class="p">,</span> <span class="s2">&quot;-f&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Force overwriting of output files.&quot;</span><span class="p">),</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="s2">"--force"</span><span class="p">,</span> <span class="s2">"-f"</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">"Force overwriting of output files."</span><span class="p">),</span>
     <span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate a TRX file from raw data files.</span>
+<span class="w">    </span><span class="sd">"""Generate a TRX file from raw data files.</span>
 
 <span class="sd">    Create a TRX file from CSV, TXT, or NPY files by specifying positions,</span>
 <span class="sd">    offsets, data_per_vertex, data_per_streamlines, groups, and data_per_group.</span>
@@ -1009,15 +1009,15 @@
 <span class="sd">    -------</span>
 <span class="sd">    None</span>
 <span class="sd">        Writes the generated tractogram to disk.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">_check_overwrite</span><span class="p">(</span><span class="n">out_tractogram</span><span class="p">,</span> <span class="n">force</span><span class="p">)</span>
 
     <span class="c1"># Validate input combinations</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">positions</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">positions_csv</span><span class="p">:</span>
         <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span>
             <span class="n">typer</span><span class="o">.</span><span class="n">style</span><span class="p">(</span>
-                <span class="s2">&quot;Error: At least one positions option must be provided &quot;</span>
-                <span class="s2">&quot;(--positions or --positions-csv).&quot;</span><span class="p">,</span>
+                <span class="s2">"Error: At least one positions option must be provided "</span>
+                <span class="s2">"(--positions or --positions-csv)."</span><span class="p">,</span>
                 <span class="n">fg</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">RED</span><span class="p">,</span>
             <span class="p">),</span>
             <span class="n">err</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -1026,7 +1026,7 @@
     <span class="k">if</span> <span class="n">positions_csv</span> <span class="ow">and</span> <span class="n">positions</span><span class="p">:</span>
         <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span>
             <span class="n">typer</span><span class="o">.</span><span class="n">style</span><span class="p">(</span>
-                <span class="s2">&quot;Error: Cannot use both --positions and --positions-csv.&quot;</span><span class="p">,</span>
+                <span class="s2">"Error: Cannot use both --positions and --positions-csv."</span><span class="p">,</span>
                 <span class="n">fg</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">RED</span><span class="p">,</span>
             <span class="p">),</span>
             <span class="n">err</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -1035,7 +1035,7 @@
     <span class="k">if</span> <span class="n">positions</span> <span class="ow">and</span> <span class="n">offsets</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span>
             <span class="n">typer</span><span class="o">.</span><span class="n">style</span><span class="p">(</span>
-                <span class="s2">&quot;Error: --offsets must be provided if --positions is used.&quot;</span><span class="p">,</span>
+                <span class="s2">"Error: --offsets must be provided if --positions is used."</span><span class="p">,</span>
                 <span class="n">fg</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">RED</span><span class="p">,</span>
             <span class="p">),</span>
             <span class="n">err</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -1044,7 +1044,7 @@
     <span class="k">if</span> <span class="n">offsets</span> <span class="ow">and</span> <span class="n">positions</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span>
             <span class="n">typer</span><span class="o">.</span><span class="n">style</span><span class="p">(</span>
-                <span class="s2">&quot;Error: --positions must be provided if --offsets is used.&quot;</span><span class="p">,</span>
+                <span class="s2">"Error: --positions must be provided if --offsets is used."</span><span class="p">,</span>
                 <span class="n">fg</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">RED</span><span class="p">,</span>
             <span class="p">),</span>
             <span class="n">err</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -1054,19 +1054,19 @@
     <span class="c1"># Parse comma-separated arguments to tuples</span>
     <span class="n">dpv_list</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">if</span> <span class="n">dpv</span><span class="p">:</span>
-        <span class="n">dpv_list</span> <span class="o">=</span> <span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">))</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">dpv</span><span class="p">]</span>
+        <span class="n">dpv_list</span> <span class="o">=</span> <span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">","</span><span class="p">))</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">dpv</span><span class="p">]</span>
 
     <span class="n">dps_list</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">if</span> <span class="n">dps</span><span class="p">:</span>
-        <span class="n">dps_list</span> <span class="o">=</span> <span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">))</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">dps</span><span class="p">]</span>
+        <span class="n">dps_list</span> <span class="o">=</span> <span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">","</span><span class="p">))</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">dps</span><span class="p">]</span>
 
     <span class="n">groups_list</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">if</span> <span class="n">groups</span><span class="p">:</span>
-        <span class="n">groups_list</span> <span class="o">=</span> <span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">))</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">groups</span><span class="p">]</span>
+        <span class="n">groups_list</span> <span class="o">=</span> <span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">","</span><span class="p">))</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">groups</span><span class="p">]</span>
 
     <span class="n">dpg_list</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">if</span> <span class="n">dpg</span><span class="p">:</span>
-        <span class="n">dpg_list</span> <span class="o">=</span> <span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">))</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">dpg</span><span class="p">]</span>
+        <span class="n">dpg_list</span> <span class="o">=</span> <span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">","</span><span class="p">))</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">dpg</span><span class="p">]</span>
 
     <span class="n">generate_trx_from_scratch</span><span class="p">(</span>
         <span class="nb">str</span><span class="p">(</span><span class="n">reference</span><span class="p">),</span>
@@ -1087,73 +1087,73 @@
 
     <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span>
         <span class="n">typer</span><span class="o">.</span><span class="n">style</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Successfully generated </span><span class="si">{</span><span class="n">out_tractogram</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">"Successfully generated </span><span class="si">{</span><span class="n">out_tractogram</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
             <span class="n">fg</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">GREEN</span><span class="p">,</span>
         <span class="p">)</span>
     <span class="p">)</span></div>
 
 
 
-<span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s2">&quot;manipulate-dtype&quot;</span><span class="p">)</span>
+<span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s2">"manipulate-dtype"</span><span class="p">)</span>
 <div class="viewcode-block" id="manipulate_dtype">
 <a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli.manipulate_dtype">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">manipulate_dtype</span><span class="p">(</span>
     <span class="n">in_tractogram</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
         <span class="n">Path</span><span class="p">,</span>
-        <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="n">help</span><span class="o">=</span><span class="s2">&quot;Input TRX file.&quot;</span><span class="p">),</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="n">help</span><span class="o">=</span><span class="s2">"Input TRX file."</span><span class="p">),</span>
     <span class="p">],</span>
     <span class="n">out_tractogram</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
         <span class="n">Path</span><span class="p">,</span>
-        <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="n">help</span><span class="o">=</span><span class="s2">&quot;Output tractogram file.&quot;</span><span class="p">),</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="n">help</span><span class="o">=</span><span class="s2">"Output tractogram file."</span><span class="p">),</span>
     <span class="p">],</span>
     <span class="n">positions_dtype</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
         <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
         <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
-            <span class="s2">&quot;--positions-dtype&quot;</span><span class="p">,</span>
-            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Datatype for positions (float16, float32, float64).&quot;</span><span class="p">,</span>
+            <span class="s2">"--positions-dtype"</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">"Datatype for positions (float16, float32, float64)."</span><span class="p">,</span>
         <span class="p">),</span>
     <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">offsets_dtype</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
         <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
         <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
-            <span class="s2">&quot;--offsets-dtype&quot;</span><span class="p">,</span>
-            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Datatype for offsets (uint32, uint64).&quot;</span><span class="p">,</span>
+            <span class="s2">"--offsets-dtype"</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">"Datatype for offsets (uint32, uint64)."</span><span class="p">,</span>
         <span class="p">),</span>
     <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">dpv</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
         <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
         <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
-            <span class="s2">&quot;--dpv&quot;</span><span class="p">,</span>
-            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Data per vertex dtype: NAME,DTYPE (e.g., color_x,uint8).&quot;</span><span class="p">,</span>
+            <span class="s2">"--dpv"</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">"Data per vertex dtype: NAME,DTYPE (e.g., color_x,uint8)."</span><span class="p">,</span>
         <span class="p">),</span>
     <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">dps</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
         <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
         <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
-            <span class="s2">&quot;--dps&quot;</span><span class="p">,</span>
-            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Data per streamline dtype: NAME,DTYPE (e.g., algo,uint8).&quot;</span><span class="p">,</span>
+            <span class="s2">"--dps"</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">"Data per streamline dtype: NAME,DTYPE (e.g., algo,uint8)."</span><span class="p">,</span>
         <span class="p">),</span>
     <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">groups</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
         <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
         <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
-            <span class="s2">&quot;--groups&quot;</span><span class="p">,</span>
-            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Groups dtype: NAME,DTYPE (e.g., CC,uint64).&quot;</span><span class="p">,</span>
+            <span class="s2">"--groups"</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">"Groups dtype: NAME,DTYPE (e.g., CC,uint64)."</span><span class="p">,</span>
         <span class="p">),</span>
     <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">dpg</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
         <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
         <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
-            <span class="s2">&quot;--dpg&quot;</span><span class="p">,</span>
-            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Data per group dtype: GROUP,NAME,DTYPE (e.g., CC,mean_fa,float64).&quot;</span><span class="p">,</span>
+            <span class="s2">"--dpg"</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">"Data per group dtype: GROUP,NAME,DTYPE (e.g., CC,mean_fa,float64)."</span><span class="p">,</span>
         <span class="p">),</span>
     <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">force</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
         <span class="nb">bool</span><span class="p">,</span>
-        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="s2">&quot;--force&quot;</span><span class="p">,</span> <span class="s2">&quot;-f&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Force overwriting of output files.&quot;</span><span class="p">),</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="s2">"--force"</span><span class="p">,</span> <span class="s2">"-f"</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">"Force overwriting of output files."</span><span class="p">),</span>
     <span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># noqa: C901</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Manipulate TRX file internal array data types.</span>
+<span class="w">    </span><span class="sd">"""Manipulate TRX file internal array data types.</span>
 
 <span class="sd">    Change the data types of positions, offsets, data_per_vertex,</span>
 <span class="sd">    data_per_streamline, groups, and data_per_group arrays.</span>
@@ -1183,71 +1183,71 @@
 <span class="sd">    -------</span>
 <span class="sd">    None</span>
 <span class="sd">        Writes the dtype-converted TRX file.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">_check_overwrite</span><span class="p">(</span><span class="n">out_tractogram</span><span class="p">,</span> <span class="n">force</span><span class="p">)</span>
 
     <span class="n">dtype_dict</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">if</span> <span class="n">positions_dtype</span><span class="p">:</span>
-        <span class="n">dtype_dict</span><span class="p">[</span><span class="s2">&quot;positions&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">positions_dtype</span><span class="p">)</span>
+        <span class="n">dtype_dict</span><span class="p">[</span><span class="s2">"positions"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">positions_dtype</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">offsets_dtype</span><span class="p">:</span>
-        <span class="n">dtype_dict</span><span class="p">[</span><span class="s2">&quot;offsets&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">offsets_dtype</span><span class="p">)</span>
+        <span class="n">dtype_dict</span><span class="p">[</span><span class="s2">"offsets"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">offsets_dtype</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">dpv</span><span class="p">:</span>
-        <span class="n">dtype_dict</span><span class="p">[</span><span class="s2">&quot;dpv&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">dtype_dict</span><span class="p">[</span><span class="s2">"dpv"</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">dpv</span><span class="p">:</span>
-            <span class="n">name</span><span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
-            <span class="n">dtype_dict</span><span class="p">[</span><span class="s2">&quot;dpv&quot;</span><span class="p">][</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
+            <span class="n">name</span><span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">","</span><span class="p">)</span>
+            <span class="n">dtype_dict</span><span class="p">[</span><span class="s2">"dpv"</span><span class="p">][</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">dps</span><span class="p">:</span>
-        <span class="n">dtype_dict</span><span class="p">[</span><span class="s2">&quot;dps&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">dtype_dict</span><span class="p">[</span><span class="s2">"dps"</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">dps</span><span class="p">:</span>
-            <span class="n">name</span><span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
-            <span class="n">dtype_dict</span><span class="p">[</span><span class="s2">&quot;dps&quot;</span><span class="p">][</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
+            <span class="n">name</span><span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">","</span><span class="p">)</span>
+            <span class="n">dtype_dict</span><span class="p">[</span><span class="s2">"dps"</span><span class="p">][</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">groups</span><span class="p">:</span>
-        <span class="n">dtype_dict</span><span class="p">[</span><span class="s2">&quot;groups&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">dtype_dict</span><span class="p">[</span><span class="s2">"groups"</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">groups</span><span class="p">:</span>
-            <span class="n">name</span><span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
-            <span class="n">dtype_dict</span><span class="p">[</span><span class="s2">&quot;groups&quot;</span><span class="p">][</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
+            <span class="n">name</span><span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">","</span><span class="p">)</span>
+            <span class="n">dtype_dict</span><span class="p">[</span><span class="s2">"groups"</span><span class="p">][</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">dpg</span><span class="p">:</span>
-        <span class="n">dtype_dict</span><span class="p">[</span><span class="s2">&quot;dpg&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">dtype_dict</span><span class="p">[</span><span class="s2">"dpg"</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">dpg</span><span class="p">:</span>
-            <span class="n">parts</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+            <span class="n">parts</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">","</span><span class="p">)</span>
             <span class="n">group</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">parts</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-            <span class="k">if</span> <span class="n">group</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dtype_dict</span><span class="p">[</span><span class="s2">&quot;dpg&quot;</span><span class="p">]:</span>
-                <span class="n">dtype_dict</span><span class="p">[</span><span class="s2">&quot;dpg&quot;</span><span class="p">][</span><span class="n">group</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
-            <span class="n">dtype_dict</span><span class="p">[</span><span class="s2">&quot;dpg&quot;</span><span class="p">][</span><span class="n">group</span><span class="p">][</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">group</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dtype_dict</span><span class="p">[</span><span class="s2">"dpg"</span><span class="p">]:</span>
+                <span class="n">dtype_dict</span><span class="p">[</span><span class="s2">"dpg"</span><span class="p">][</span><span class="n">group</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">dtype_dict</span><span class="p">[</span><span class="s2">"dpg"</span><span class="p">][</span><span class="n">group</span><span class="p">][</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
 
     <span class="n">manipulate_trx_datatype</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">in_tractogram</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">out_tractogram</span><span class="p">),</span> <span class="n">dtype_dict</span><span class="p">)</span>
 
     <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span>
         <span class="n">typer</span><span class="o">.</span><span class="n">style</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Successfully manipulated datatypes and saved to </span><span class="si">{</span><span class="n">out_tractogram</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">"Successfully manipulated datatypes and saved to </span><span class="si">{</span><span class="n">out_tractogram</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
             <span class="n">fg</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">GREEN</span><span class="p">,</span>
         <span class="p">)</span>
     <span class="p">)</span></div>
 
 
 
-<span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s2">&quot;compare&quot;</span><span class="p">)</span>
+<span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s2">"compare"</span><span class="p">)</span>
 <div class="viewcode-block" id="compare">
 <a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli.compare">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">compare</span><span class="p">(</span>
     <span class="n">in_tractogram1</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
         <span class="n">Path</span><span class="p">,</span>
-        <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="n">help</span><span class="o">=</span><span class="s2">&quot;First tractogram file.&quot;</span><span class="p">),</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="n">help</span><span class="o">=</span><span class="s2">"First tractogram file."</span><span class="p">),</span>
     <span class="p">],</span>
     <span class="n">in_tractogram2</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
         <span class="n">Path</span><span class="p">,</span>
-        <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="n">help</span><span class="o">=</span><span class="s2">&quot;Second tractogram file.&quot;</span><span class="p">),</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="n">help</span><span class="o">=</span><span class="s2">"Second tractogram file."</span><span class="p">),</span>
     <span class="p">],</span>
     <span class="n">reference</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
         <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">],</span>
         <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
-            <span class="s2">&quot;--reference&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;-r&quot;</span><span class="p">,</span>
-            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Reference anatomy for tck/vtk/fib/dpy files (.nii or .nii.gz).&quot;</span><span class="p">,</span>
+            <span class="s2">"--reference"</span><span class="p">,</span>
+            <span class="s2">"-r"</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">"Reference anatomy for tck/vtk/fib/dpy files (.nii or .nii.gz)."</span><span class="p">,</span>
         <span class="p">),</span>
     <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compare two tractograms and report basic differences.</span>
+<span class="w">    </span><span class="sd">"""Compare two tractograms and report basic differences.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -1262,57 +1262,57 @@
 <span class="sd">    -------</span>
 <span class="sd">    None</span>
 <span class="sd">        Prints comparison summary to stdout.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">ref</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">reference</span><span class="p">)</span> <span class="k">if</span> <span class="n">reference</span> <span class="k">else</span> <span class="kc">None</span>
     <span class="n">tractogram_simple_compare</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">in_tractogram1</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">in_tractogram2</span><span class="p">)],</span> <span class="n">ref</span><span class="p">)</span></div>
 
 
 
-<span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s2">&quot;validate&quot;</span><span class="p">)</span>
+<span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s2">"validate"</span><span class="p">)</span>
 <div class="viewcode-block" id="validate">
 <a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli.validate">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">validate</span><span class="p">(</span>
     <span class="n">in_tractogram</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
         <span class="n">Path</span><span class="p">,</span>
-        <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="n">help</span><span class="o">=</span><span class="s2">&quot;Input tractogram. Format: trk, tck, vtk, fib, dpy, trx.&quot;</span><span class="p">),</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="n">help</span><span class="o">=</span><span class="s2">"Input tractogram. Format: trk, tck, vtk, fib, dpy, trx."</span><span class="p">),</span>
     <span class="p">],</span>
     <span class="n">out_tractogram</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
         <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">],</span>
         <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
-            <span class="s2">&quot;--out&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;-o&quot;</span><span class="p">,</span>
-            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Output tractogram after removing invalid streamlines.&quot;</span><span class="p">,</span>
+            <span class="s2">"--out"</span><span class="p">,</span>
+            <span class="s2">"-o"</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">"Output tractogram after removing invalid streamlines."</span><span class="p">,</span>
         <span class="p">),</span>
     <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">remove_identical</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
         <span class="nb">bool</span><span class="p">,</span>
         <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
-            <span class="s2">&quot;--remove-identical&quot;</span><span class="p">,</span>
-            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Remove identical streamlines from the set.&quot;</span><span class="p">,</span>
+            <span class="s2">"--remove-identical"</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">"Remove identical streamlines from the set."</span><span class="p">,</span>
         <span class="p">),</span>
     <span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">precision</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
         <span class="nb">int</span><span class="p">,</span>
         <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
-            <span class="s2">&quot;--precision&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;-p&quot;</span><span class="p">,</span>
-            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Number of decimals when hashing streamline points.&quot;</span><span class="p">,</span>
+            <span class="s2">"--precision"</span><span class="p">,</span>
+            <span class="s2">"-p"</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">"Number of decimals when hashing streamline points."</span><span class="p">,</span>
         <span class="p">),</span>
     <span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
     <span class="n">reference</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
         <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">],</span>
         <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
-            <span class="s2">&quot;--reference&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;-r&quot;</span><span class="p">,</span>
-            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Reference anatomy for tck/vtk/fib/dpy files (.nii or .nii.gz).&quot;</span><span class="p">,</span>
+            <span class="s2">"--reference"</span><span class="p">,</span>
+            <span class="s2">"-r"</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">"Reference anatomy for tck/vtk/fib/dpy files (.nii or .nii.gz)."</span><span class="p">,</span>
         <span class="p">),</span>
     <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">force</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
         <span class="nb">bool</span><span class="p">,</span>
-        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="s2">&quot;--force&quot;</span><span class="p">,</span> <span class="s2">&quot;-f&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Force overwriting of output files.&quot;</span><span class="p">),</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="s2">"--force"</span><span class="p">,</span> <span class="s2">"-f"</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">"Force overwriting of output files."</span><span class="p">),</span>
     <span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Validate a tractogram and optionally clean invalid/duplicate streamlines.</span>
+<span class="w">    </span><span class="sd">"""Validate a tractogram and optionally clean invalid/duplicate streamlines.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -1333,7 +1333,7 @@
 <span class="sd">    -------</span>
 <span class="sd">    None</span>
 <span class="sd">        Prints validation summary and optionally writes cleaned output.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">out_tractogram</span><span class="p">:</span>
         <span class="n">_check_overwrite</span><span class="p">(</span><span class="n">out_tractogram</span><span class="p">,</span> <span class="n">force</span><span class="p">)</span>
 
@@ -1351,30 +1351,30 @@
     <span class="k">if</span> <span class="n">out_tractogram</span><span class="p">:</span>
         <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span>
             <span class="n">typer</span><span class="o">.</span><span class="n">style</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Validation complete. Output saved to </span><span class="si">{</span><span class="n">out_tractogram</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">"Validation complete. Output saved to </span><span class="si">{</span><span class="n">out_tractogram</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
                 <span class="n">fg</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">GREEN</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span>
             <span class="n">typer</span><span class="o">.</span><span class="n">style</span><span class="p">(</span>
-                <span class="s2">&quot;Validation complete.&quot;</span><span class="p">,</span>
+                <span class="s2">"Validation complete."</span><span class="p">,</span>
                 <span class="n">fg</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">GREEN</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="p">)</span></div>
 
 
 
-<span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s2">&quot;verify-header&quot;</span><span class="p">)</span>
+<span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s2">"verify-header"</span><span class="p">)</span>
 <div class="viewcode-block" id="verify_header">
 <a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli.verify_header">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">verify_header</span><span class="p">(</span>
     <span class="n">in_files</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
         <span class="n">List</span><span class="p">[</span><span class="n">Path</span><span class="p">],</span>
-        <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="n">help</span><span class="o">=</span><span class="s2">&quot;Files to compare (trk, trx, and nii).&quot;</span><span class="p">),</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="n">help</span><span class="o">=</span><span class="s2">"Files to compare (trk, trx, and nii)."</span><span class="p">),</span>
     <span class="p">],</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compare spatial attributes of input files.</span>
+<span class="w">    </span><span class="sd">"""Compare spatial attributes of input files.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -1385,7 +1385,7 @@
 <span class="sd">    -------</span>
 <span class="sd">    None</span>
 <span class="sd">        Prints compatibility results to stdout.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">verify_header_compatibility</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">in_files</span><span class="p">])</span></div>
 
 
@@ -1393,7 +1393,7 @@
 <div class="viewcode-block" id="_format_size">
 <a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli._format_size">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">_format_size</span><span class="p">(</span><span class="n">size_bytes</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Format byte size to human readable string.</span>
+<span class="w">    </span><span class="sd">"""Format byte size to human readable string.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -1403,26 +1403,26 @@
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    str</span>
-<span class="sd">        Human readable size string (e.g., &quot;1.5 MB&quot;).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="s2">&quot;KB&quot;</span><span class="p">,</span> <span class="s2">&quot;MB&quot;</span><span class="p">,</span> <span class="s2">&quot;GB&quot;</span><span class="p">]:</span>
+<span class="sd">        Human readable size string (e.g., "1.5 MB").</span>
+<span class="sd">    """</span>
+    <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"B"</span><span class="p">,</span> <span class="s2">"KB"</span><span class="p">,</span> <span class="s2">"MB"</span><span class="p">,</span> <span class="s2">"GB"</span><span class="p">]:</span>
         <span class="k">if</span> <span class="n">size_bytes</span> <span class="o">&lt;</span> <span class="mi">1024</span><span class="p">:</span>
-            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">size_bytes</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">unit</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="n">unit</span> <span class="o">!=</span> <span class="s2">&quot;B&quot;</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">size_bytes</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">unit</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">size_bytes</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">unit</span><span class="si">}</span><span class="s2">"</span> <span class="k">if</span> <span class="n">unit</span> <span class="o">!=</span> <span class="s2">"B"</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">size_bytes</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">unit</span><span class="si">}</span><span class="s2">"</span>
         <span class="n">size_bytes</span> <span class="o">/=</span> <span class="mi">1024</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">size_bytes</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> TB&quot;</span></div>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">size_bytes</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> TB"</span></div>
 
 
 
-<span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s2">&quot;info&quot;</span><span class="p">)</span>
+<span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s2">"info"</span><span class="p">)</span>
 <div class="viewcode-block" id="info">
 <a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli.info">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">info</span><span class="p">(</span>
     <span class="n">in_tractogram</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
         <span class="n">Path</span><span class="p">,</span>
-        <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="n">help</span><span class="o">=</span><span class="s2">&quot;Input TRX file.&quot;</span><span class="p">),</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="n">help</span><span class="o">=</span><span class="s2">"Input TRX file."</span><span class="p">),</span>
     <span class="p">],</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Display detailed information about a TRX file.</span>
+<span class="w">    </span><span class="sd">"""Display detailed information about a TRX file.</span>
 
 <span class="sd">    Shows file size, compression status, header metadata (affine, dimensions,</span>
 <span class="sd">    voxel sizes), streamline/vertex counts, data keys (dpv, dps, dpg), groups,</span>
@@ -1442,21 +1442,21 @@
 <span class="sd">    --------</span>
 <span class="sd">    $ trx info tractogram.trx</span>
 <span class="sd">    $ trx_info tractogram.trx</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">zipfile</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">in_tractogram</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
         <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span>
-            <span class="n">typer</span><span class="o">.</span><span class="n">style</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">in_tractogram</span><span class="si">}</span><span class="s2"> does not exist.&quot;</span><span class="p">,</span> <span class="n">fg</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">RED</span><span class="p">),</span>
+            <span class="n">typer</span><span class="o">.</span><span class="n">style</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Error: </span><span class="si">{</span><span class="n">in_tractogram</span><span class="si">}</span><span class="s2"> does not exist."</span><span class="p">,</span> <span class="n">fg</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">RED</span><span class="p">),</span>
             <span class="n">err</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">raise</span> <span class="n">typer</span><span class="o">.</span><span class="n">Exit</span><span class="p">(</span><span class="n">code</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">in_tractogram</span><span class="o">.</span><span class="n">suffix</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;.trx&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">in_tractogram</span><span class="o">.</span><span class="n">suffix</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">".trx"</span><span class="p">:</span>
         <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span>
             <span class="n">typer</span><span class="o">.</span><span class="n">style</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">in_tractogram</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> is not a TRX file. &quot;</span>
-                <span class="s2">&quot;Only .trx files are supported.&quot;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">"Error: </span><span class="si">{</span><span class="n">in_tractogram</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> is not a TRX file. "</span>
+                <span class="s2">"Only .trx files are supported."</span><span class="p">,</span>
                 <span class="n">fg</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">RED</span><span class="p">,</span>
             <span class="p">),</span>
             <span class="n">err</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -1465,37 +1465,37 @@
 
     <span class="c1"># Show archive info</span>
     <span class="n">file_size</span> <span class="o">=</span> <span class="n">in_tractogram</span><span class="o">.</span><span class="n">stat</span><span class="p">()</span><span class="o">.</span><span class="n">st_size</span>
-    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;File: </span><span class="si">{</span><span class="n">in_tractogram</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Size: </span><span class="si">{</span><span class="n">_format_size</span><span class="p">(</span><span class="n">file_size</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">"File: </span><span class="si">{</span><span class="n">in_tractogram</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Size: </span><span class="si">{</span><span class="n">_format_size</span><span class="p">(</span><span class="n">file_size</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
-    <span class="k">with</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">in_tractogram</span><span class="p">),</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">zf</span><span class="p">:</span>
+    <span class="k">with</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">in_tractogram</span><span class="p">),</span> <span class="s2">"r"</span><span class="p">)</span> <span class="k">as</span> <span class="n">zf</span><span class="p">:</span>
         <span class="n">total_uncompressed</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">info</span><span class="o">.</span><span class="n">file_size</span> <span class="k">for</span> <span class="n">info</span> <span class="ow">in</span> <span class="n">zf</span><span class="o">.</span><span class="n">infolist</span><span class="p">())</span>
         <span class="n">is_compressed</span> <span class="o">=</span> <span class="nb">any</span><span class="p">(</span><span class="n">info</span><span class="o">.</span><span class="n">compress_type</span> <span class="o">!=</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">info</span> <span class="ow">in</span> <span class="n">zf</span><span class="o">.</span><span class="n">infolist</span><span class="p">())</span>
-        <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Entries: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">zf</span><span class="o">.</span><span class="n">infolist</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Compressed: </span><span class="si">{</span><span class="s1">&#39;Yes&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">is_compressed</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;No&#39;</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Uncompressed size: </span><span class="si">{</span><span class="n">_format_size</span><span class="p">(</span><span class="n">total_uncompressed</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Entries: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">zf</span><span class="o">.</span><span class="n">infolist</span><span class="p">())</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Compressed: </span><span class="si">{</span><span class="s1">'Yes'</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">is_compressed</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">'No'</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Uncompressed size: </span><span class="si">{</span><span class="n">_format_size</span><span class="p">(</span><span class="n">total_uncompressed</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
-    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span>
 
     <span class="c1"># Show TRX content info</span>
     <span class="n">trx</span> <span class="o">=</span> <span class="n">load_trx</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">in_tractogram</span><span class="p">))</span>
     <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="n">trx</span><span class="p">)</span>
 
     <span class="c1"># Show file listing (unzip -l style)</span>
-    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Archive contents:&quot;</span><span class="p">)</span>
-    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s2">&quot;  Length      Date    Time    Name&quot;</span><span class="p">)</span>
-    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s2">&quot;---------  ---------- -----   ----&quot;</span><span class="p">)</span>
-    <span class="k">with</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">in_tractogram</span><span class="p">),</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">zf</span><span class="p">:</span>
+    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Archive contents:"</span><span class="p">)</span>
+    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s2">"  Length      Date    Time    Name"</span><span class="p">)</span>
+    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s2">"---------  ---------- -----   ----"</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">in_tractogram</span><span class="p">),</span> <span class="s2">"r"</span><span class="p">)</span> <span class="k">as</span> <span class="n">zf</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">zinfo</span> <span class="ow">in</span> <span class="n">zf</span><span class="o">.</span><span class="n">infolist</span><span class="p">():</span>
             <span class="n">dt</span> <span class="o">=</span> <span class="n">zinfo</span><span class="o">.</span><span class="n">date_time</span>
-            <span class="n">date_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dt</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">02d</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">dt</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">:</span><span class="s2">02d</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">dt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="n">time_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dt</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="si">:</span><span class="s2">02d</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">dt</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="si">:</span><span class="s2">02d</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">date_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">dt</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">02d</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">dt</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">:</span><span class="s2">02d</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">dt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span>
+            <span class="n">time_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">dt</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="si">:</span><span class="s2">02d</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">dt</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="si">:</span><span class="s2">02d</span><span class="si">}</span><span class="s2">"</span>
             <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">zinfo</span><span class="o">.</span><span class="n">file_size</span><span class="si">:</span><span class="s2">&gt;9</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">date_str</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">time_str</span><span class="si">}</span><span class="s2">   </span><span class="si">{</span><span class="n">zinfo</span><span class="o">.</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">zinfo</span><span class="o">.</span><span class="n">file_size</span><span class="si">:</span><span class="s2">&gt;9</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">date_str</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">time_str</span><span class="si">}</span><span class="s2">   </span><span class="si">{</span><span class="n">zinfo</span><span class="o">.</span><span class="n">filename</span><span class="si">}</span><span class="s2">"</span>
             <span class="p">)</span>
         <span class="n">num_files</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">zf</span><span class="o">.</span><span class="n">infolist</span><span class="p">())</span>
-        <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s2">&quot;---------                     -------&quot;</span><span class="p">)</span>
-        <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">total_uncompressed</span><span class="si">:</span><span class="s2">&gt;9</span><span class="si">}</span><span class="s2">                     </span><span class="si">{</span><span class="n">num_files</span><span class="si">}</span><span class="s2"> files&quot;</span><span class="p">)</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s2">"---------                     -------"</span><span class="p">)</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">total_uncompressed</span><span class="si">:</span><span class="s2">&gt;9</span><span class="si">}</span><span class="s2">                     </span><span class="si">{</span><span class="n">num_files</span><span class="si">}</span><span class="s2"> files"</span><span class="p">)</span>
 
     <span class="n">trx</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
@@ -1504,7 +1504,7 @@
 <div class="viewcode-block" id="main">
 <a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli.main">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Entry point for the TRX CLI.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Entry point for the TRX CLI."""</span>
     <span class="n">app</span><span class="p">()</span></div>
 
 
@@ -1516,7 +1516,7 @@
 <div class="viewcode-block" id="_create_standalone_app">
 <a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli._create_standalone_app">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">_create_standalone_app</span><span class="p">(</span><span class="n">command_func</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">help_text</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a standalone Typer app for a single command.</span>
+<span class="w">    </span><span class="sd">"""Create a standalone Typer app for a single command.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -1531,12 +1531,12 @@
 <span class="sd">    -------</span>
 <span class="sd">    callable</span>
 <span class="sd">        Entry point function.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">standalone</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Typer</span><span class="p">(</span>
         <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
         <span class="n">help</span><span class="o">=</span><span class="n">help_text</span><span class="p">,</span>
         <span class="n">add_completion</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">rich_markup_mode</span><span class="o">=</span><span class="s2">&quot;rich&quot;</span><span class="p">,</span>
+        <span class="n">rich_markup_mode</span><span class="o">=</span><span class="s2">"rich"</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">standalone</span><span class="o">.</span><span class="n">command</span><span class="p">()(</span><span class="n">command_func</span><span class="p">)</span>
     <span class="k">return</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">standalone</span><span class="p">()</span></div>
@@ -1547,8 +1547,8 @@
 <a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli.concatenate_tractograms_cmd">[docs]</a>
 <span class="n">concatenate_tractograms_cmd</span> <span class="o">=</span> <span class="n">_create_standalone_app</span><span class="p">(</span>
     <span class="n">concatenate_tractograms</span><span class="p">,</span>
-    <span class="s2">&quot;trx_concatenate_tractograms&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;Concatenate multiple tractograms into one.&quot;</span><span class="p">,</span>
+    <span class="s2">"trx_concatenate_tractograms"</span><span class="p">,</span>
+    <span class="s2">"Concatenate multiple tractograms into one."</span><span class="p">,</span>
 <span class="p">)</span></div>
 
 
@@ -1556,8 +1556,8 @@
 <a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli.convert_dsi_cmd">[docs]</a>
 <span class="n">convert_dsi_cmd</span> <span class="o">=</span> <span class="n">_create_standalone_app</span><span class="p">(</span>
     <span class="n">convert_dsi</span><span class="p">,</span>
-    <span class="s2">&quot;trx_convert_dsi_studio&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;Fix DSI-Studio TRK files for compatibility.&quot;</span><span class="p">,</span>
+    <span class="s2">"trx_convert_dsi_studio"</span><span class="p">,</span>
+    <span class="s2">"Fix DSI-Studio TRK files for compatibility."</span><span class="p">,</span>
 <span class="p">)</span></div>
 
 
@@ -1565,8 +1565,8 @@
 <a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli.convert_cmd">[docs]</a>
 <span class="n">convert_cmd</span> <span class="o">=</span> <span class="n">_create_standalone_app</span><span class="p">(</span>
     <span class="n">convert</span><span class="p">,</span>
-    <span class="s2">&quot;trx_convert_tractogram&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;Convert tractograms between formats.&quot;</span><span class="p">,</span>
+    <span class="s2">"trx_convert_tractogram"</span><span class="p">,</span>
+    <span class="s2">"Convert tractograms between formats."</span><span class="p">,</span>
 <span class="p">)</span></div>
 
 
@@ -1574,8 +1574,8 @@
 <a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli.generate_cmd">[docs]</a>
 <span class="n">generate_cmd</span> <span class="o">=</span> <span class="n">_create_standalone_app</span><span class="p">(</span>
     <span class="n">generate</span><span class="p">,</span>
-    <span class="s2">&quot;trx_generate_from_scratch&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;Generate TRX file from raw data files.&quot;</span><span class="p">,</span>
+    <span class="s2">"trx_generate_from_scratch"</span><span class="p">,</span>
+    <span class="s2">"Generate TRX file from raw data files."</span><span class="p">,</span>
 <span class="p">)</span></div>
 
 
@@ -1583,8 +1583,8 @@
 <a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli.manipulate_dtype_cmd">[docs]</a>
 <span class="n">manipulate_dtype_cmd</span> <span class="o">=</span> <span class="n">_create_standalone_app</span><span class="p">(</span>
     <span class="n">manipulate_dtype</span><span class="p">,</span>
-    <span class="s2">&quot;trx_manipulate_datatype&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;Manipulate TRX file internal array data types.&quot;</span><span class="p">,</span>
+    <span class="s2">"trx_manipulate_datatype"</span><span class="p">,</span>
+    <span class="s2">"Manipulate TRX file internal array data types."</span><span class="p">,</span>
 <span class="p">)</span></div>
 
 
@@ -1592,8 +1592,8 @@
 <a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli.compare_cmd">[docs]</a>
 <span class="n">compare_cmd</span> <span class="o">=</span> <span class="n">_create_standalone_app</span><span class="p">(</span>
     <span class="n">compare</span><span class="p">,</span>
-    <span class="s2">&quot;trx_simple_compare&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;Simple comparison of tractograms by subtracting coordinates.&quot;</span><span class="p">,</span>
+    <span class="s2">"trx_simple_compare"</span><span class="p">,</span>
+    <span class="s2">"Simple comparison of tractograms by subtracting coordinates."</span><span class="p">,</span>
 <span class="p">)</span></div>
 
 
@@ -1601,8 +1601,8 @@
 <a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli.validate_cmd">[docs]</a>
 <span class="n">validate_cmd</span> <span class="o">=</span> <span class="n">_create_standalone_app</span><span class="p">(</span>
     <span class="n">validate</span><span class="p">,</span>
-    <span class="s2">&quot;trx_validate&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;Validate TRX file and remove invalid streamlines.&quot;</span><span class="p">,</span>
+    <span class="s2">"trx_validate"</span><span class="p">,</span>
+    <span class="s2">"Validate TRX file and remove invalid streamlines."</span><span class="p">,</span>
 <span class="p">)</span></div>
 
 
@@ -1610,8 +1610,8 @@
 <a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli.verify_header_cmd">[docs]</a>
 <span class="n">verify_header_cmd</span> <span class="o">=</span> <span class="n">_create_standalone_app</span><span class="p">(</span>
     <span class="n">verify_header</span><span class="p">,</span>
-    <span class="s2">&quot;trx_verify_header_compatibility&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;Compare spatial attributes of input files.&quot;</span><span class="p">,</span>
+    <span class="s2">"trx_verify_header_compatibility"</span><span class="p">,</span>
+    <span class="s2">"Compare spatial attributes of input files."</span><span class="p">,</span>
 <span class="p">)</span></div>
 
 
@@ -1619,13 +1619,13 @@
 <a class="viewcode-back" href="../../autoapi/trx/cli/index.html#trx.cli.info_cmd">[docs]</a>
 <span class="n">info_cmd</span> <span class="o">=</span> <span class="n">_create_standalone_app</span><span class="p">(</span>
     <span class="n">info</span><span class="p">,</span>
-    <span class="s2">&quot;trx_info&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;Display information about a TRX file.&quot;</span><span class="p">,</span>
+    <span class="s2">"trx_info"</span><span class="p">,</span>
+    <span class="s2">"Display information about a TRX file."</span><span class="p">,</span>
 <span class="p">)</span></div>
 
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">main</span><span class="p">()</span>
 </pre></div>
 

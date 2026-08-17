@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>trx.fetcher &#8212; trx-python 0.4.1.dev31 documentation</title>
+    <title>trx.fetcher &#8212; trx-python 0.4.1.dev47 documentation</title>
   
   
   
@@ -43,7 +43,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
-    <script src="../../_static/documentation_options.js?v=17fbf770"></script>
+    <script src="../../_static/documentation_options.js?v=9d14d439"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/sg-tags.js?v=d80f6fa4"></script>
@@ -61,7 +61,7 @@
     <link rel="search" title="Search" href="../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.4.1.dev31" />
+  <meta name="docsearch:version" content="0.4.1.dev47" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -133,8 +133,8 @@
       
     
     
-    <img src="../../_static/trx_logo.png" class="logo__image only-light" alt="trx-python 0.4.1.dev31 documentation - Home"/>
-    <img src="../../_static/trx_logo.png" class="logo__image only-dark pst-js-only" alt="trx-python 0.4.1.dev31 documentation - Home"/>
+    <img src="../../_static/trx_logo.png" class="logo__image only-light" alt="trx-python 0.4.1.dev47 documentation - Home"/>
+    <img src="../../_static/trx_logo.png" class="logo__image only-dark pst-js-only" alt="trx-python 0.4.1.dev47 documentation - Home"/>
   
   
 </a></div>
@@ -434,7 +434,7 @@
                   
   <h1>Source code for trx.fetcher</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot;Test data management for downloading and verifying test assets.&quot;&quot;&quot;</span>
+<span class="sd">"""Test data management for downloading and verifying test assets."""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">hashlib</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
@@ -444,24 +444,24 @@
 
 <div class="viewcode-block" id="TEST_DATA_REPO">
 <a class="viewcode-back" href="../../autoapi/trx/fetcher/index.html#trx.fetcher.TEST_DATA_REPO">[docs]</a>
-<span class="n">TEST_DATA_REPO</span> <span class="o">=</span> <span class="s2">&quot;tee-ar-ex/trx-test-data&quot;</span></div>
+<span class="n">TEST_DATA_REPO</span> <span class="o">=</span> <span class="s2">"tee-ar-ex/trx-test-data"</span></div>
 
 <div class="viewcode-block" id="TEST_DATA_TAG">
 <a class="viewcode-back" href="../../autoapi/trx/fetcher/index.html#trx.fetcher.TEST_DATA_TAG">[docs]</a>
-<span class="n">TEST_DATA_TAG</span> <span class="o">=</span> <span class="s2">&quot;v0.1.0&quot;</span></div>
+<span class="n">TEST_DATA_TAG</span> <span class="o">=</span> <span class="s2">"v0.1.0"</span></div>
 
 <span class="c1"># GitHub release API entrypoint for metadata (asset list, sizes, etc.).</span>
 <div class="viewcode-block" id="TEST_DATA_API_URL">
 <a class="viewcode-back" href="../../autoapi/trx/fetcher/index.html#trx.fetcher.TEST_DATA_API_URL">[docs]</a>
 <span class="n">TEST_DATA_API_URL</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="sa">f</span><span class="s2">&quot;https://api.github.com/repos/</span><span class="si">{</span><span class="n">TEST_DATA_REPO</span><span class="si">}</span><span class="s2">/releases/tags/</span><span class="si">{</span><span class="n">TEST_DATA_TAG</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="sa">f</span><span class="s2">"https://api.github.com/repos/</span><span class="si">{</span><span class="n">TEST_DATA_REPO</span><span class="si">}</span><span class="s2">/releases/tags/</span><span class="si">{</span><span class="n">TEST_DATA_TAG</span><span class="si">}</span><span class="s2">"</span>
 <span class="p">)</span></div>
 
 <span class="c1"># Direct download base for release assets.</span>
 <div class="viewcode-block" id="TEST_DATA_BASE_URL">
 <a class="viewcode-back" href="../../autoapi/trx/fetcher/index.html#trx.fetcher.TEST_DATA_BASE_URL">[docs]</a>
 <span class="n">TEST_DATA_BASE_URL</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="sa">f</span><span class="s2">&quot;https://github.com/</span><span class="si">{</span><span class="n">TEST_DATA_REPO</span><span class="si">}</span><span class="s2">/releases/download/</span><span class="si">{</span><span class="n">TEST_DATA_TAG</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="sa">f</span><span class="s2">"https://github.com/</span><span class="si">{</span><span class="n">TEST_DATA_REPO</span><span class="si">}</span><span class="s2">/releases/download/</span><span class="si">{</span><span class="n">TEST_DATA_TAG</span><span class="si">}</span><span class="s2">"</span>
 <span class="p">)</span></div>
 
 
@@ -469,17 +469,17 @@
 <div class="viewcode-block" id="get_home">
 <a class="viewcode-back" href="../../autoapi/trx/fetcher/index.html#trx.fetcher.get_home">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_home</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a user-writeable file-system location to put files.</span>
+<span class="w">    </span><span class="sd">"""Return a user-writeable file-system location to put files.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    str</span>
 <span class="sd">        Path to the TRX home directory.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="s2">&quot;TRX_HOME&quot;</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
-        <span class="n">trx_home</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;TRX_HOME&quot;</span><span class="p">]</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="s2">"TRX_HOME"</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
+        <span class="n">trx_home</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"TRX_HOME"</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">trx_home</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~&quot;</span><span class="p">),</span> <span class="s2">&quot;.tee_ar_ex&quot;</span><span class="p">)</span>
+        <span class="n">trx_home</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">"~"</span><span class="p">),</span> <span class="s2">".tee_ar_ex"</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">trx_home</span></div>
 
 
@@ -487,7 +487,7 @@
 <div class="viewcode-block" id="get_testing_files_dict">
 <a class="viewcode-back" href="../../autoapi/trx/fetcher/index.html#trx.fetcher.get_testing_files_dict">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_testing_files_dict</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return dictionary linking zip file to their GitHub release URL and checksums.</span>
+<span class="w">    </span><span class="sd">"""Return dictionary linking zip file to their GitHub release URL and checksums.</span>
 
 <span class="sd">    Assets are hosted under the v0.1.0 release of tee-ar-ex/trx-test-data.</span>
 <span class="sd">    If URLs change, check TEST_DATA_API_URL to discover the latest asset</span>
@@ -497,27 +497,27 @@
 <span class="sd">    -------</span>
 <span class="sd">    dict</span>
 <span class="sd">        Mapping of filenames to (url, md5, sha256) tuples.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="p">{</span>
-        <span class="s2">&quot;DSI.zip&quot;</span><span class="p">:</span> <span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">TEST_DATA_BASE_URL</span><span class="si">}</span><span class="s2">/DSI.zip&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;b847f053fc694d55d935c0be0e5268f7&quot;</span><span class="p">,</span>  <span class="c1"># md5</span>
-            <span class="s2">&quot;1b09ce8b4b47b2600336c558fdba7051218296e8440e737364f2c4b8ebae666c&quot;</span><span class="p">,</span>
+        <span class="s2">"DSI.zip"</span><span class="p">:</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">TEST_DATA_BASE_URL</span><span class="si">}</span><span class="s2">/DSI.zip"</span><span class="p">,</span>
+            <span class="s2">"b847f053fc694d55d935c0be0e5268f7"</span><span class="p">,</span>  <span class="c1"># md5</span>
+            <span class="s2">"1b09ce8b4b47b2600336c558fdba7051218296e8440e737364f2c4b8ebae666c"</span><span class="p">,</span>
         <span class="p">),</span>
-        <span class="s2">&quot;memmap_test_data.zip&quot;</span><span class="p">:</span> <span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">TEST_DATA_BASE_URL</span><span class="si">}</span><span class="s2">/memmap_test_data.zip&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;03f7651a0f9e3eeabee9aed0ad5f69e1&quot;</span><span class="p">,</span>  <span class="c1"># md5</span>
-            <span class="s2">&quot;98ba89d7a9a7baa2d37956a0a591dce9bb4581bd01296ad5a596706ee90a52ef&quot;</span><span class="p">,</span>
+        <span class="s2">"memmap_test_data.zip"</span><span class="p">:</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">TEST_DATA_BASE_URL</span><span class="si">}</span><span class="s2">/memmap_test_data.zip"</span><span class="p">,</span>
+            <span class="s2">"03f7651a0f9e3eeabee9aed0ad5f69e1"</span><span class="p">,</span>  <span class="c1"># md5</span>
+            <span class="s2">"98ba89d7a9a7baa2d37956a0a591dce9bb4581bd01296ad5a596706ee90a52ef"</span><span class="p">,</span>
         <span class="p">),</span>
-        <span class="s2">&quot;trx_from_scratch.zip&quot;</span><span class="p">:</span> <span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">TEST_DATA_BASE_URL</span><span class="si">}</span><span class="s2">/trx_from_scratch.zip&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;d9f220a095ce7f027772fcd9451a2ee5&quot;</span><span class="p">,</span>  <span class="c1"># md5</span>
-            <span class="s2">&quot;f98ab6da6a6065527fde4b0b6aa40f07583e925d952182e9bbd0febd55c0f6b2&quot;</span><span class="p">,</span>
+        <span class="s2">"trx_from_scratch.zip"</span><span class="p">:</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">TEST_DATA_BASE_URL</span><span class="si">}</span><span class="s2">/trx_from_scratch.zip"</span><span class="p">,</span>
+            <span class="s2">"d9f220a095ce7f027772fcd9451a2ee5"</span><span class="p">,</span>  <span class="c1"># md5</span>
+            <span class="s2">"f98ab6da6a6065527fde4b0b6aa40f07583e925d952182e9bbd0febd55c0f6b2"</span><span class="p">,</span>
         <span class="p">),</span>
-        <span class="s2">&quot;gold_standard.zip&quot;</span><span class="p">:</span> <span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">TEST_DATA_BASE_URL</span><span class="si">}</span><span class="s2">/gold_standard.zip&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;57e3f9951fe77245684ede8688af3ae8&quot;</span><span class="p">,</span>  <span class="c1"># md5</span>
-            <span class="s2">&quot;35a0b633560cc2b0d8ecda885aa72d06385499e0cd1ca11a956b0904c3358f01&quot;</span><span class="p">,</span>
+        <span class="s2">"gold_standard.zip"</span><span class="p">:</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">TEST_DATA_BASE_URL</span><span class="si">}</span><span class="s2">/gold_standard.zip"</span><span class="p">,</span>
+            <span class="s2">"57e3f9951fe77245684ede8688af3ae8"</span><span class="p">,</span>  <span class="c1"># md5</span>
+            <span class="s2">"35a0b633560cc2b0d8ecda885aa72d06385499e0cd1ca11a956b0904c3358f01"</span><span class="p">,</span>
         <span class="p">),</span>
     <span class="p">}</span></div>
 
@@ -526,7 +526,7 @@
 <div class="viewcode-block" id="md5sum">
 <a class="viewcode-back" href="../../autoapi/trx/fetcher/index.html#trx.fetcher.md5sum">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">md5sum</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the MD5 checksum of a file.</span>
+<span class="w">    </span><span class="sd">"""Compute the MD5 checksum of a file.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -537,10 +537,10 @@
 <span class="sd">    -------</span>
 <span class="sd">    str</span>
 <span class="sd">        Hexadecimal MD5 digest.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">h</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">()</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="nb">iter</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">128</span> <span class="o">*</span> <span class="n">h</span><span class="o">.</span><span class="n">block_size</span><span class="p">),</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">"rb"</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="nb">iter</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">128</span> <span class="o">*</span> <span class="n">h</span><span class="o">.</span><span class="n">block_size</span><span class="p">),</span> <span class="sa">b</span><span class="s2">""</span><span class="p">):</span>
             <span class="n">h</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">h</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span></div>
 
@@ -549,7 +549,7 @@
 <div class="viewcode-block" id="sha256sum">
 <a class="viewcode-back" href="../../autoapi/trx/fetcher/index.html#trx.fetcher.sha256sum">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">sha256sum</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the SHA256 checksum of a file.</span>
+<span class="w">    </span><span class="sd">"""Compute the SHA256 checksum of a file.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -560,10 +560,10 @@
 <span class="sd">    -------</span>
 <span class="sd">    str</span>
 <span class="sd">        Hexadecimal SHA256 digest.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">h</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">()</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="nb">iter</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">128</span> <span class="o">*</span> <span class="n">h</span><span class="o">.</span><span class="n">block_size</span><span class="p">),</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">"rb"</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="nb">iter</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">128</span> <span class="o">*</span> <span class="n">h</span><span class="o">.</span><span class="n">block_size</span><span class="p">),</span> <span class="sa">b</span><span class="s2">""</span><span class="p">):</span>
             <span class="n">h</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">h</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span></div>
 
@@ -572,7 +572,7 @@
 <div class="viewcode-block" id="fetch_data">
 <a class="viewcode-back" href="../../autoapi/trx/fetcher/index.html#trx.fetcher.fetch_data">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">fetch_data</span><span class="p">(</span><span class="n">files_dict</span><span class="p">,</span> <span class="n">keys</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>  <span class="c1"># noqa: C901</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Download files to folder and check their md5 checksums.</span>
+<span class="w">    </span><span class="sd">"""Download files to folder and check their md5 checksums.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -590,7 +590,7 @@
 <span class="sd">    ValueError</span>
 <span class="sd">        Raises if the md5 checksum of the file does not match the expected</span>
 <span class="sd">        value. The downloaded file is not deleted when this error is raised.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">trx_home</span> <span class="o">=</span> <span class="n">get_home</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">trx_home</span><span class="p">):</span>
@@ -610,28 +610,28 @@
             <span class="n">url</span><span class="p">,</span> <span class="n">expected_md5</span><span class="p">,</span> <span class="n">expected_sha</span> <span class="o">=</span> <span class="n">file_entry</span>
         <span class="n">full_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">trx_home</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
 
-        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Downloading </span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">trx_home</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Downloading </span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">trx_home</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">full_path</span><span class="p">):</span>
             <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlretrieve</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">full_path</span><span class="p">)</span>
 
         <span class="n">actual_md5</span> <span class="o">=</span> <span class="n">md5sum</span><span class="p">(</span><span class="n">full_path</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">expected_md5</span> <span class="o">!=</span> <span class="n">actual_md5</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Md5sum for </span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2"> does not match. &quot;</span>
-                <span class="s2">&quot;Please remove the file to download it again: &quot;</span> <span class="o">+</span> <span class="n">full_path</span>
+                <span class="sa">f</span><span class="s2">"Md5sum for </span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2"> does not match. "</span>
+                <span class="s2">"Please remove the file to download it again: "</span> <span class="o">+</span> <span class="n">full_path</span>
             <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">expected_sha</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">actual_sha</span> <span class="o">=</span> <span class="n">sha256sum</span><span class="p">(</span><span class="n">full_path</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">expected_sha</span> <span class="o">!=</span> <span class="n">actual_sha</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;SHA256 for </span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2"> does not match. &quot;</span>
-                    <span class="s2">&quot;Please remove the file to download it again: &quot;</span> <span class="o">+</span> <span class="n">full_path</span>
+                    <span class="sa">f</span><span class="s2">"SHA256 for </span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2"> does not match. "</span>
+                    <span class="s2">"Please remove the file to download it again: "</span> <span class="o">+</span> <span class="n">full_path</span>
                 <span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">fname</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.zip&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">fname</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">".zip"</span><span class="p">):</span>
             <span class="n">dst_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">trx_home</span><span class="p">,</span> <span class="n">fname</span><span class="p">[:</span><span class="o">-</span><span class="mi">4</span><span class="p">])</span>
-            <span class="n">shutil</span><span class="o">.</span><span class="n">unpack_archive</span><span class="p">(</span><span class="n">full_path</span><span class="p">,</span> <span class="n">extract_dir</span><span class="o">=</span><span class="n">dst_dir</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;zip&quot;</span><span class="p">)</span></div>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">unpack_archive</span><span class="p">(</span><span class="n">full_path</span><span class="p">,</span> <span class="n">extract_dir</span><span class="o">=</span><span class="n">dst_dir</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">"zip"</span><span class="p">)</span></div>
 
 </pre></div>
 

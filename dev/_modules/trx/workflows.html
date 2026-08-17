@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>trx.workflows &#8212; trx-python 0.4.1.dev31 documentation</title>
+    <title>trx.workflows &#8212; trx-python 0.4.1.dev47 documentation</title>
   
   
   
@@ -43,7 +43,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
-    <script src="../../_static/documentation_options.js?v=17fbf770"></script>
+    <script src="../../_static/documentation_options.js?v=9d14d439"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/sg-tags.js?v=d80f6fa4"></script>
@@ -61,7 +61,7 @@
     <link rel="search" title="Search" href="../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.4.1.dev31" />
+  <meta name="docsearch:version" content="0.4.1.dev47" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -133,8 +133,8 @@
       
     
     
-    <img src="../../_static/trx_logo.png" class="logo__image only-light" alt="trx-python 0.4.1.dev31 documentation - Home"/>
-    <img src="../../_static/trx_logo.png" class="logo__image only-dark pst-js-only" alt="trx-python 0.4.1.dev31 documentation - Home"/>
+    <img src="../../_static/trx_logo.png" class="logo__image only-light" alt="trx-python 0.4.1.dev47 documentation - Home"/>
+    <img src="../../_static/trx_logo.png" class="logo__image only-dark pst-js-only" alt="trx-python 0.4.1.dev47 documentation - Home"/>
   
   
 </a></div>
@@ -434,7 +434,7 @@
                   
   <h1>Source code for trx.workflows</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot;High-level processing workflows for tractogram operations.&quot;&quot;&quot;</span>
+<span class="sd">"""High-level processing workflows for tractogram operations."""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
@@ -471,6 +471,31 @@
 <span class="p">)</span>
 
 
+<div class="viewcode-block" id="_create_temp_memmap">
+<a class="viewcode-back" href="../../autoapi/trx/workflows/index.html#trx.workflows._create_temp_memmap">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">_create_temp_memmap</span><span class="p">(</span><span class="n">tmp_dir_name</span><span class="p">,</span> <span class="n">dtype</span><span class="p">,</span> <span class="n">shape</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Create a temporary numpy memmap array.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    tmp_dir_name : str</span>
+<span class="sd">        Directory to create the temporary file in.</span>
+<span class="sd">    dtype : np.dtype</span>
+<span class="sd">        Data type of the memmap array.</span>
+<span class="sd">    shape : tuple</span>
+<span class="sd">        Shape of the memmap array.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    np.memmap</span>
+<span class="sd">        The memory-mapped array.</span>
+<span class="sd">    """</span>
+    <span class="n">fd</span><span class="p">,</span> <span class="n">filename</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkstemp</span><span class="p">(</span><span class="nb">dir</span><span class="o">=</span><span class="n">tmp_dir_name</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">".mmap"</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">memmap</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"w+"</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">shape</span><span class="p">)</span></div>
+
+
+
 <div class="viewcode-block" id="convert_dsi_studio">
 <a class="viewcode-back" href="../../autoapi/trx/workflows/index.html#trx.workflows.convert_dsi_studio">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">convert_dsi_studio</span><span class="p">(</span>
@@ -480,7 +505,7 @@
     <span class="n">remove_invalid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">keep_invalid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a DSI-Studio TRK file to TRX, fixing space metadata.</span>
+<span class="w">    </span><span class="sd">"""Convert a DSI-Studio TRK file to TRX, fixing space metadata.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -499,9 +524,9 @@
 <span class="sd">    -------</span>
 <span class="sd">    None</span>
 <span class="sd">        Writes the converted tractogram to disk.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">dipy_available</span><span class="p">:</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Dipy library is missing, scripts are not available.&quot;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">"Dipy library is missing, scripts are not available."</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">dipy.io.stateful_tractogram</span><span class="w"> </span><span class="kn">import</span> <span class="n">Space</span><span class="p">,</span> <span class="n">StatefulTractogram</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">dipy.io.streamline</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_tractogram</span><span class="p">,</span> <span class="n">save_tractogram</span>
@@ -509,16 +534,16 @@
     <span class="n">in_ext</span> <span class="o">=</span> <span class="n">split_name_with_gz</span><span class="p">(</span><span class="n">in_dsi_tractogram</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">out_ext</span> <span class="o">=</span> <span class="n">split_name_with_gz</span><span class="p">(</span><span class="n">out_tractogram</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
 
-    <span class="k">if</span> <span class="n">in_ext</span> <span class="o">==</span> <span class="s2">&quot;.trk.gz&quot;</span><span class="p">:</span>
-        <span class="k">with</span> <span class="n">gzip</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">in_dsi_tractogram</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f_in</span><span class="p">:</span>
-            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;tmp.trk&quot;</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f_out</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">in_ext</span> <span class="o">==</span> <span class="s2">".trk.gz"</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">gzip</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">in_dsi_tractogram</span><span class="p">,</span> <span class="s2">"rb"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f_in</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">"tmp.trk"</span><span class="p">,</span> <span class="s2">"wb"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f_out</span><span class="p">:</span>
                 <span class="n">f_out</span><span class="o">.</span><span class="n">writelines</span><span class="p">(</span><span class="n">f_in</span><span class="p">)</span>
-                <span class="n">sft</span> <span class="o">=</span> <span class="n">load_tractogram</span><span class="p">(</span><span class="s2">&quot;tmp.trk&quot;</span><span class="p">,</span> <span class="s2">&quot;same&quot;</span><span class="p">,</span> <span class="n">bbox_valid_check</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">&quot;tmp.trk&quot;</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">in_ext</span> <span class="o">==</span> <span class="s2">&quot;.trk&quot;</span><span class="p">:</span>
-        <span class="n">sft</span> <span class="o">=</span> <span class="n">load_tractogram</span><span class="p">(</span><span class="n">in_dsi_tractogram</span><span class="p">,</span> <span class="s2">&quot;same&quot;</span><span class="p">,</span> <span class="n">bbox_valid_check</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                <span class="n">sft</span> <span class="o">=</span> <span class="n">load_tractogram</span><span class="p">(</span><span class="s2">"tmp.trk"</span><span class="p">,</span> <span class="s2">"same"</span><span class="p">,</span> <span class="n">bbox_valid_check</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">"tmp.trk"</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">in_ext</span> <span class="o">==</span> <span class="s2">".trk"</span><span class="p">:</span>
+        <span class="n">sft</span> <span class="o">=</span> <span class="n">load_tractogram</span><span class="p">(</span><span class="n">in_dsi_tractogram</span><span class="p">,</span> <span class="s2">"same"</span><span class="p">,</span> <span class="n">bbox_valid_check</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">in_ext</span><span class="si">}</span><span class="s2"> is not currently supported.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">in_ext</span><span class="si">}</span><span class="s2"> is not currently supported."</span><span class="p">)</span>
 
     <span class="n">sft</span><span class="o">.</span><span class="n">to_vox</span><span class="p">()</span>
     <span class="n">sft_fix</span> <span class="o">=</span> <span class="n">StatefulTractogram</span><span class="p">(</span>
@@ -529,7 +554,7 @@
         <span class="n">data_per_streamline</span><span class="o">=</span><span class="n">sft</span><span class="o">.</span><span class="n">data_per_streamline</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">sft_fix</span><span class="o">.</span><span class="n">to_vox</span><span class="p">()</span>
-    <span class="n">flip_axis</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">]</span>
+    <span class="n">flip_axis</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"x"</span><span class="p">,</span> <span class="s2">"y"</span><span class="p">]</span>
     <span class="n">sft_fix</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span> <span class="o">-=</span> <span class="n">get_axis_shift_vector</span><span class="p">(</span><span class="n">flip_axis</span><span class="p">)</span>
     <span class="n">sft_flip</span> <span class="o">=</span> <span class="n">flip_sft</span><span class="p">(</span><span class="n">sft_fix</span><span class="p">,</span> <span class="n">flip_axis</span><span class="p">)</span>
 
@@ -539,7 +564,7 @@
     <span class="k">if</span> <span class="n">remove_invalid</span><span class="p">:</span>
         <span class="n">sft_flip</span><span class="o">.</span><span class="n">remove_invalid_streamlines</span><span class="p">()</span>
 
-    <span class="k">if</span> <span class="n">out_ext</span> <span class="o">!=</span> <span class="s2">&quot;.trx&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">out_ext</span> <span class="o">!=</span> <span class="s2">".trx"</span><span class="p">:</span>
         <span class="n">save_tractogram</span><span class="p">(</span><span class="n">sft_flip</span><span class="p">,</span> <span class="n">out_tractogram</span><span class="p">,</span> <span class="n">bbox_valid_check</span><span class="o">=</span><span class="ow">not</span> <span class="n">keep_invalid</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">trx</span> <span class="o">=</span> <span class="n">tmm</span><span class="o">.</span><span class="n">TrxFile</span><span class="o">.</span><span class="n">from_sft</span><span class="p">(</span><span class="n">sft_flip</span><span class="p">)</span>
@@ -553,10 +578,10 @@
     <span class="n">in_tractogram</span><span class="p">,</span>
     <span class="n">out_tractogram</span><span class="p">,</span>
     <span class="n">reference</span><span class="p">,</span>
-    <span class="n">pos_dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">,</span>
-    <span class="n">offsets_dtype</span><span class="o">=</span><span class="s2">&quot;uint32&quot;</span><span class="p">,</span>
+    <span class="n">pos_dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">,</span>
+    <span class="n">offsets_dtype</span><span class="o">=</span><span class="s2">"uint32"</span><span class="p">,</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert tractograms between formats with dtype control.</span>
+<span class="w">    </span><span class="sd">"""Convert tractograms between formats with dtype control.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -575,9 +600,9 @@
 <span class="sd">    -------</span>
 <span class="sd">    None</span>
 <span class="sd">        Writes the converted tractogram to disk.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">dipy_available</span><span class="p">:</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Dipy library is missing, scripts are not available.&quot;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">"Dipy library is missing, scripts are not available."</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">dipy.io.streamline</span><span class="w"> </span><span class="kn">import</span> <span class="n">save_tractogram</span>
 
@@ -585,20 +610,20 @@
     <span class="n">out_ext</span> <span class="o">=</span> <span class="n">split_name_with_gz</span><span class="p">(</span><span class="n">out_tractogram</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="n">in_ext</span> <span class="o">==</span> <span class="n">out_ext</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s2">&quot;Input and output cannot be of the same file format.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s2">"Input and output cannot be of the same file format."</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">in_ext</span> <span class="o">!=</span> <span class="s2">&quot;.trx&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">in_ext</span> <span class="o">!=</span> <span class="s2">".trx"</span><span class="p">:</span>
         <span class="n">sft</span> <span class="o">=</span> <span class="n">load_sft_with_reference</span><span class="p">(</span><span class="n">in_tractogram</span><span class="p">,</span> <span class="n">reference</span><span class="p">,</span> <span class="n">bbox_check</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">trx</span> <span class="o">=</span> <span class="n">tmm</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">in_tractogram</span><span class="p">)</span>
         <span class="n">sft</span> <span class="o">=</span> <span class="n">trx</span><span class="o">.</span><span class="n">to_sft</span><span class="p">()</span>
         <span class="n">trx</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
-    <span class="k">if</span> <span class="n">out_ext</span> <span class="o">!=</span> <span class="s2">&quot;.trx&quot;</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">out_ext</span> <span class="o">==</span> <span class="s2">&quot;.vtk&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">out_ext</span> <span class="o">!=</span> <span class="s2">".trx"</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">out_ext</span> <span class="o">==</span> <span class="s2">".vtk"</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">sft</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="n">pos_dtype</span><span class="p">:</span>
                 <span class="n">sft</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">sft</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">pos_dtype</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">offsets_dtype</span> <span class="o">==</span> <span class="s2">&quot;uint64&quot;</span> <span class="ow">or</span> <span class="n">offsets_dtype</span> <span class="o">==</span> <span class="s2">&quot;uint32&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">offsets_dtype</span> <span class="o">==</span> <span class="s2">"uint64"</span> <span class="ow">or</span> <span class="n">offsets_dtype</span> <span class="o">==</span> <span class="s2">"uint32"</span><span class="p">:</span>
                 <span class="n">offsets_dtype</span> <span class="o">=</span> <span class="n">offsets_dtype</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
             <span class="k">if</span> <span class="n">sft</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_offsets</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="n">offsets_dtype</span><span class="p">:</span>
                 <span class="n">sft</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_offsets</span> <span class="o">=</span> <span class="n">sft</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_offsets</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span>
@@ -619,7 +644,7 @@
 <div class="viewcode-block" id="tractogram_simple_compare">
 <a class="viewcode-back" href="../../autoapi/trx/workflows/index.html#trx.workflows.tractogram_simple_compare">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">tractogram_simple_compare</span><span class="p">(</span><span class="n">in_tractograms</span><span class="p">,</span> <span class="n">reference</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compare tractograms against a reference and return a summary diff.</span>
+<span class="w">    </span><span class="sd">"""Compare tractograms against a reference and return a summary diff.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -632,9 +657,9 @@
 <span class="sd">    -------</span>
 <span class="sd">    dict</span>
 <span class="sd">        Dictionary capturing differences across tractograms.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">dipy_available</span><span class="p">:</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Dipy library is missing, scripts are not available.&quot;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">"Dipy library is missing, scripts are not available."</span><span class="p">)</span>
         <span class="k">return</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">dipy.io.stateful_tractogram</span><span class="w"> </span><span class="kn">import</span> <span class="n">StatefulTractogram</span>
 
@@ -653,31 +678,31 @@
         <span class="n">sft_2</span> <span class="o">=</span> <span class="n">tractogram_obj</span>
 
     <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">sft_1</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="p">,</span> <span class="n">sft_2</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">0.001</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Matching tractograms in rasmm!&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Matching tractograms in rasmm!"</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span>
-            <span class="s2">&quot;Average difference in rasmm of &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">sft_1</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">sft_2</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="p">,</span><span class="w"> </span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="s2">"Average difference in rasmm of "</span>
+            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">sft_1</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">sft_2</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="p">,</span><span class="w"> </span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
         <span class="p">)</span>
 
     <span class="n">sft_1</span><span class="o">.</span><span class="n">to_voxmm</span><span class="p">()</span>
     <span class="n">sft_2</span><span class="o">.</span><span class="n">to_voxmm</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">sft_1</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="p">,</span> <span class="n">sft_2</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">0.001</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Matching tractograms in voxmm!&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Matching tractograms in voxmm!"</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span>
-            <span class="s2">&quot;Average difference in voxmm of &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">sft_1</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">sft_2</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="p">,</span><span class="w"> </span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="s2">"Average difference in voxmm of "</span>
+            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">sft_1</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">sft_2</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="p">,</span><span class="w"> </span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
         <span class="p">)</span>
 
     <span class="n">sft_1</span><span class="o">.</span><span class="n">to_vox</span><span class="p">()</span>
     <span class="n">sft_2</span><span class="o">.</span><span class="n">to_vox</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">sft_1</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="p">,</span> <span class="n">sft_2</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">0.001</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Matching tractograms in vox!&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Matching tractograms in vox!"</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span>
-            <span class="s2">&quot;Average difference in vox of &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">sft_1</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">sft_2</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="p">,</span><span class="w"> </span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="s2">"Average difference in vox of "</span>
+            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">sft_1</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">sft_2</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="p">,</span><span class="w"> </span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
         <span class="p">)</span></div>
 
 
@@ -685,7 +710,7 @@
 <div class="viewcode-block" id="verify_header_compatibility">
 <a class="viewcode-back" href="../../autoapi/trx/workflows/index.html#trx.workflows.verify_header_compatibility">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">verify_header_compatibility</span><span class="p">(</span><span class="n">in_files</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Verify that multiple tractogram headers are mutually compatible.</span>
+<span class="w">    </span><span class="sd">"""Verify that multiple tractogram headers are mutually compatible.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -696,23 +721,23 @@
 <span class="sd">    -------</span>
 <span class="sd">    None</span>
 <span class="sd">        Prints compatibility results to stdout.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">dipy_available</span><span class="p">:</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Dipy library is missing, scripts are not available.&quot;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">"Dipy library is missing, scripts are not available."</span><span class="p">)</span>
         <span class="k">return</span>
 
     <span class="n">all_valid</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="k">for</span> <span class="n">filepath</span> <span class="ow">in</span> <span class="n">in_files</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">filepath</span><span class="si">}</span><span class="s2"> does not exist&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">filepath</span><span class="si">}</span><span class="s2"> does not exist"</span><span class="p">)</span>
         <span class="n">_</span><span class="p">,</span> <span class="n">in_extension</span> <span class="o">=</span> <span class="n">split_name_with_gz</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">in_extension</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;.trk&quot;</span><span class="p">,</span> <span class="s2">&quot;.nii&quot;</span><span class="p">,</span> <span class="s2">&quot;.nii.gz&quot;</span><span class="p">,</span> <span class="s2">&quot;.trx&quot;</span><span class="p">]:</span>
-            <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">filepath</span><span class="si">}</span><span class="s2"> does not have a supported extension&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">in_extension</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">".trk"</span><span class="p">,</span> <span class="s2">".nii"</span><span class="p">,</span> <span class="s2">".nii.gz"</span><span class="p">,</span> <span class="s2">".trx"</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">filepath</span><span class="si">}</span><span class="s2"> does not have a supported extension"</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">is_header_compatible</span><span class="p">(</span><span class="n">in_files</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">filepath</span><span class="p">):</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">in_files</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">filepath</span><span class="si">}</span><span class="s2"> do not have compatible header.&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">in_files</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">filepath</span><span class="si">}</span><span class="s2"> do not have compatible header."</span><span class="p">)</span>
             <span class="n">all_valid</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="k">if</span> <span class="n">all_valid</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;All input files have compatible headers.&quot;</span><span class="p">)</span></div>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"All input files have compatible headers."</span><span class="p">)</span></div>
 
 
 
@@ -725,7 +750,7 @@
     <span class="n">remove_identical_streamlines</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">precision</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Validate a tractogram and optionally remove invalid/duplicate streamlines.</span>
+<span class="w">    </span><span class="sd">"""Validate a tractogram and optionally remove invalid/duplicate streamlines.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -744,9 +769,9 @@
 <span class="sd">    -------</span>
 <span class="sd">    None</span>
 <span class="sd">        Prints warnings and optionally writes a cleaned tractogram.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">dipy_available</span><span class="p">:</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Dipy library is missing, scripts are not available.&quot;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">"Dipy library is missing, scripts are not available."</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">dipy.io.stateful_tractogram</span><span class="w"> </span><span class="kn">import</span> <span class="n">StatefulTractogram</span>
 
@@ -765,12 +790,12 @@
     <span class="n">invalid_coord_ind</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">sft</span><span class="o">.</span><span class="n">remove_invalid_streamlines</span><span class="p">()</span>
     <span class="n">tot_remove</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">invalid_coord_ind</span><span class="p">)</span>
     <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-        <span class="sa">f</span><span class="s2">&quot;Removed </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">invalid_coord_ind</span><span class="p">)</span><span class="si">}</span><span class="s2"> streamlines with invalid coordinates.&quot;</span>
+        <span class="sa">f</span><span class="s2">"Removed </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">invalid_coord_ind</span><span class="p">)</span><span class="si">}</span><span class="s2"> streamlines with invalid coordinates."</span>
     <span class="p">)</span>
 
     <span class="n">indices</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sft</span><span class="p">))</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sft</span><span class="o">.</span><span class="n">streamlines</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">]</span>
     <span class="n">tot_remove</span> <span class="o">=</span> <span class="o">+</span><span class="nb">len</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Removed </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span><span class="si">}</span><span class="s2"> invalid streamlines (1 or 0 points).&quot;</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Removed </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span><span class="si">}</span><span class="s2"> invalid streamlines (1 or 0 points)."</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">setdiff1d</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sft</span><span class="p">)),</span> <span class="n">indices</span><span class="p">):</span>
         <span class="n">norm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">sft</span><span class="o">.</span><span class="n">streamlines</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -780,8 +805,8 @@
 
     <span class="n">indices_val</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">setdiff1d</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sft</span><span class="p">)),</span> <span class="n">indices</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">)</span>
     <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-        <span class="sa">f</span><span class="s2">&quot;Removed </span><span class="si">{</span><span class="n">ori_len</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">indices_val</span><span class="p">)</span><span class="si">}</span><span class="s2"> invalid streamlines &quot;</span>
-        <span class="s2">&quot;(overlapping points).&quot;</span>
+        <span class="sa">f</span><span class="s2">"Removed </span><span class="si">{</span><span class="n">ori_len</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">indices_val</span><span class="p">)</span><span class="si">}</span><span class="s2"> invalid streamlines "</span>
+        <span class="s2">"(overlapping points)."</span>
     <span class="p">)</span>
     <span class="n">tot_remove</span> <span class="o">+=</span> <span class="n">ori_len</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">indices_val</span><span class="p">)</span>
 
@@ -791,8 +816,8 @@
         <span class="p">)</span>
         <span class="n">indices_final</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">intersect1d</span><span class="p">(</span><span class="n">indices_val</span><span class="p">,</span> <span class="n">indices_uniq</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">)</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Removed </span><span class="si">{</span><span class="n">ori_len</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">indices_final</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">tot_remove</span><span class="si">}</span><span class="s2"> &quot;</span>
-            <span class="s2">&quot;overlapping streamlines.&quot;</span>
+            <span class="sa">f</span><span class="s2">"Removed </span><span class="si">{</span><span class="n">ori_len</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">indices_final</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">tot_remove</span><span class="si">}</span><span class="s2"> "</span>
+            <span class="s2">"overlapping streamlines."</span>
         <span class="p">)</span>
 
         <span class="n">indices_final</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">intersect1d</span><span class="p">(</span><span class="n">indices_val</span><span class="p">,</span> <span class="n">indices_uniq</span><span class="p">)</span>
@@ -819,7 +844,7 @@
 <div class="viewcode-block" id="_load_streamlines_from_csv">
 <a class="viewcode-back" href="../../autoapi/trx/workflows/index.html#trx.workflows._load_streamlines_from_csv">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">_load_streamlines_from_csv</span><span class="p">(</span><span class="n">positions_csv</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load streamlines from a CSV file.</span>
+<span class="w">    </span><span class="sd">"""Load streamlines from a CSV file.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -830,8 +855,8 @@
 <span class="sd">    -------</span>
 <span class="sd">    nibabel.streamlines.ArraySequence class instance</span>
 <span class="sd">        Streamlines reconstructed from the CSV rows.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">positions_csv</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<span class="sd">    """</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">positions_csv</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">""</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
         <span class="n">data</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">reader</span><span class="p">)</span>
         <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">//</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
@@ -842,7 +867,7 @@
 <div class="viewcode-block" id="_load_streamlines_from_arrays">
 <a class="viewcode-back" href="../../autoapi/trx/workflows/index.html#trx.workflows._load_streamlines_from_arrays">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">_load_streamlines_from_arrays</span><span class="p">(</span><span class="n">positions</span><span class="p">,</span> <span class="n">offsets</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load streamlines from position and offset arrays.</span>
+<span class="w">    </span><span class="sd">"""Load streamlines from position and offset arrays.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -855,7 +880,7 @@
 <span class="sd">    -------</span>
 <span class="sd">    tuple</span>
 <span class="sd">        (ArraySequence, np.ndarray) of streamlines and offsets.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">positions</span> <span class="o">=</span> <span class="n">load_matrix_in_any_format</span><span class="p">(</span><span class="n">positions</span><span class="p">)</span>
     <span class="n">offsets</span> <span class="o">=</span> <span class="n">load_matrix_in_any_format</span><span class="p">(</span><span class="n">offsets</span><span class="p">)</span>
     <span class="n">lengths</span> <span class="o">=</span> <span class="n">tmm</span><span class="o">.</span><span class="n">_compute_lengths</span><span class="p">(</span><span class="n">offsets</span><span class="p">)</span>
@@ -872,7 +897,7 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">_apply_spatial_transforms</span><span class="p">(</span>
     <span class="n">streamlines</span><span class="p">,</span> <span class="n">reference</span><span class="p">,</span> <span class="n">space_str</span><span class="p">,</span> <span class="n">origin_str</span><span class="p">,</span> <span class="n">verify_invalid</span><span class="p">,</span> <span class="n">offsets</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Apply spatial transforms and optionally remove invalid streamlines.</span>
+<span class="w">    </span><span class="sd">"""Apply spatial transforms and optionally remove invalid streamlines.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -881,9 +906,9 @@
 <span class="sd">    reference : str</span>
 <span class="sd">        Reference anatomy used for space/origin.</span>
 <span class="sd">    space_str : str</span>
-<span class="sd">        Desired space (e.g., \&quot;rasmm\&quot;).</span>
+<span class="sd">        Desired space (e.g., \"rasmm\").</span>
 <span class="sd">    origin_str : str</span>
-<span class="sd">        Desired origin (e.g., \&quot;nifti\&quot;).</span>
+<span class="sd">        Desired origin (e.g., \"nifti\").</span>
 <span class="sd">    verify_invalid : bool</span>
 <span class="sd">        Remove streamlines outside bounding box when True.</span>
 <span class="sd">    offsets : np.ndarray</span>
@@ -893,12 +918,12 @@
 <span class="sd">    -------</span>
 <span class="sd">    ArraySequence class instance or None</span>
 <span class="sd">        Transformed streamlines, or None if dipy is unavailable.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">dipy_available</span><span class="p">:</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
-            <span class="s2">&quot;Dipy library is missing, advanced options &quot;</span>
-            <span class="s2">&quot;related to spatial transforms and invalid &quot;</span>
-            <span class="s2">&quot;streamlines are not available.&quot;</span>
+            <span class="s2">"Dipy library is missing, advanced options "</span>
+            <span class="s2">"related to spatial transforms and invalid "</span>
+            <span class="s2">"streamlines are not available."</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span>
 
@@ -908,7 +933,7 @@
     <span class="n">sft</span> <span class="o">=</span> <span class="n">StatefulTractogram</span><span class="p">(</span><span class="n">streamlines</span><span class="p">,</span> <span class="n">reference</span><span class="p">,</span> <span class="n">space</span><span class="p">,</span> <span class="n">origin</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">verify_invalid</span><span class="p">:</span>
         <span class="n">rem</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">sft</span><span class="o">.</span><span class="n">remove_invalid_streamlines</span><span class="p">()</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">rem</span><span class="p">)</span><span class="si">}</span><span class="s2"> streamlines were removed because they were invalid.&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">rem</span><span class="p">)</span><span class="si">}</span><span class="s2"> streamlines were removed because they were invalid."</span><span class="p">)</span>
     <span class="n">sft</span><span class="o">.</span><span class="n">to_rasmm</span><span class="p">()</span>
     <span class="n">sft</span><span class="o">.</span><span class="n">to_center</span><span class="p">()</span>
     <span class="n">streamlines</span> <span class="o">=</span> <span class="n">sft</span><span class="o">.</span><span class="n">streamlines</span>
@@ -920,7 +945,7 @@
 <div class="viewcode-block" id="_write_header">
 <a class="viewcode-back" href="../../autoapi/trx/workflows/index.html#trx.workflows._write_header">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">_write_header</span><span class="p">(</span><span class="n">tmp_dir_name</span><span class="p">,</span> <span class="n">reference</span><span class="p">,</span> <span class="n">streamlines</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Write TRX header file to a temporary directory.</span>
+<span class="w">    </span><span class="sd">"""Write TRX header file to a temporary directory.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -930,19 +955,19 @@
 <span class="sd">        Reference anatomy used to derive affine and dimensions.</span>
 <span class="sd">    streamlines : ArraySequence class instance</span>
 <span class="sd">        Streamlines whose counts populate the header.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">affine</span><span class="p">,</span> <span class="n">dimensions</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_reference_info_wrapper</span><span class="p">(</span><span class="n">reference</span><span class="p">)</span>
     <span class="n">header</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;DIMENSIONS&quot;</span><span class="p">:</span> <span class="n">dimensions</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
-        <span class="s2">&quot;VOXEL_TO_RASMM&quot;</span><span class="p">:</span> <span class="n">affine</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
-        <span class="s2">&quot;NB_VERTICES&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="p">),</span>
-        <span class="s2">&quot;NB_STREAMLINES&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">streamlines</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s2">"DIMENSIONS"</span><span class="p">:</span> <span class="n">dimensions</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+        <span class="s2">"VOXEL_TO_RASMM"</span><span class="p">:</span> <span class="n">affine</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+        <span class="s2">"NB_VERTICES"</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="p">),</span>
+        <span class="s2">"NB_STREAMLINES"</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">streamlines</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
     <span class="p">}</span>
 
-    <span class="k">if</span> <span class="n">header</span><span class="p">[</span><span class="s2">&quot;NB_STREAMLINES&quot;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s2">&quot;To use this script, you need at least 2streamlines.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">header</span><span class="p">[</span><span class="s2">"NB_STREAMLINES"</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s2">"To use this script, you need at least 2streamlines."</span><span class="p">)</span>
 
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp_dir_name</span><span class="p">,</span> <span class="s2">&quot;header.json&quot;</span><span class="p">),</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">out_json</span><span class="p">:</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp_dir_name</span><span class="p">,</span> <span class="s2">"header.json"</span><span class="p">),</span> <span class="s2">"w"</span><span class="p">)</span> <span class="k">as</span> <span class="n">out_json</span><span class="p">:</span>
         <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">header</span><span class="p">,</span> <span class="n">out_json</span><span class="p">)</span></div>
 
 
@@ -950,7 +975,7 @@
 <div class="viewcode-block" id="_write_streamline_data">
 <a class="viewcode-back" href="../../autoapi/trx/workflows/index.html#trx.workflows._write_streamline_data">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">_write_streamline_data</span><span class="p">(</span><span class="n">tmp_dir_name</span><span class="p">,</span> <span class="n">streamlines</span><span class="p">,</span> <span class="n">positions_dtype</span><span class="p">,</span> <span class="n">offsets_dtype</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Write streamline position and offset data.</span>
+<span class="w">    </span><span class="sd">"""Write streamline position and offset data.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -962,12 +987,12 @@
 <span class="sd">        Datatype for positions array.</span>
 <span class="sd">    offsets_dtype : str</span>
 <span class="sd">        Datatype for offsets array.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">curr_filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp_dir_name</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;positions.3.</span><span class="si">{</span><span class="n">positions_dtype</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="sd">    """</span>
+    <span class="n">curr_filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp_dir_name</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"positions.3.</span><span class="si">{</span><span class="n">positions_dtype</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
     <span class="n">positions</span> <span class="o">=</span> <span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">positions_dtype</span><span class="p">)</span>
     <span class="n">tmm</span><span class="o">.</span><span class="n">_ensure_little_endian</span><span class="p">(</span><span class="n">positions</span><span class="p">)</span><span class="o">.</span><span class="n">tofile</span><span class="p">(</span><span class="n">curr_filename</span><span class="p">)</span>
 
-    <span class="n">curr_filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp_dir_name</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;offsets.</span><span class="si">{</span><span class="n">offsets_dtype</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">curr_filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp_dir_name</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"offsets.</span><span class="si">{</span><span class="n">offsets_dtype</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
     <span class="n">offsets</span> <span class="o">=</span> <span class="n">streamlines</span><span class="o">.</span><span class="n">_offsets</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">offsets_dtype</span><span class="p">)</span>
     <span class="n">tmm</span><span class="o">.</span><span class="n">_ensure_little_endian</span><span class="p">(</span><span class="n">offsets</span><span class="p">)</span><span class="o">.</span><span class="n">tofile</span><span class="p">(</span><span class="n">curr_filename</span><span class="p">)</span></div>
 
@@ -976,26 +1001,26 @@
 <div class="viewcode-block" id="_normalize_dtype">
 <a class="viewcode-back" href="../../autoapi/trx/workflows/index.html#trx.workflows._normalize_dtype">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">_normalize_dtype</span><span class="p">(</span><span class="n">dtype_str</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Normalize dtype string format for file naming.</span>
+<span class="w">    </span><span class="sd">"""Normalize dtype string format for file naming.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    dtype_str : str</span>
-<span class="sd">        Input dtype string (e.g., \&quot;bool\&quot;, \&quot;float32\&quot;).</span>
+<span class="sd">        Input dtype string (e.g., \"bool\", \"float32\").</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    str</span>
 <span class="sd">        Normalized dtype string where ``bool`` is mapped to ``bit``.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="s2">&quot;bit&quot;</span> <span class="k">if</span> <span class="n">dtype_str</span> <span class="o">==</span> <span class="s2">&quot;bool&quot;</span> <span class="k">else</span> <span class="n">dtype_str</span></div>
+<span class="sd">    """</span>
+    <span class="k">return</span> <span class="s2">"bit"</span> <span class="k">if</span> <span class="n">dtype_str</span> <span class="o">==</span> <span class="s2">"bool"</span> <span class="k">else</span> <span class="n">dtype_str</span></div>
 
 
 
 <div class="viewcode-block" id="_write_data_array">
 <a class="viewcode-back" href="../../autoapi/trx/workflows/index.html#trx.workflows._write_data_array">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">_write_data_array</span><span class="p">(</span><span class="n">tmp_dir_name</span><span class="p">,</span> <span class="n">subdir_name</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">is_dpg</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Write a data array (dpv/dps/group/dpg) to disk.</span>
+<span class="w">    </span><span class="sd">"""Write a data array (dpv/dps/group/dpg) to disk.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -1012,12 +1037,12 @@
 <span class="sd">    -------</span>
 <span class="sd">    None</span>
 <span class="sd">        Writes the array to disk.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">is_dpg</span><span class="p">:</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp_dir_name</span><span class="p">,</span> <span class="s2">&quot;dpg&quot;</span><span class="p">,</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp_dir_name</span><span class="p">,</span> <span class="s2">"dpg"</span><span class="p">,</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">curr_arr</span> <span class="o">=</span> <span class="n">load_matrix_in_any_format</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
         <span class="n">basename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">])[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="n">dtype_str</span> <span class="o">=</span> <span class="n">_normalize_dtype</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">if</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;bool&quot;</span> <span class="k">else</span> <span class="s2">&quot;bit&quot;</span>
+        <span class="n">dtype_str</span> <span class="o">=</span> <span class="n">_normalize_dtype</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">if</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">"bool"</span> <span class="k">else</span> <span class="s2">"bit"</span>
         <span class="n">dtype</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp_dir_name</span><span class="p">,</span> <span class="n">subdir_name</span><span class="p">),</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -1027,20 +1052,20 @@
         <span class="n">dtype</span> <span class="o">=</span> <span class="n">dtype_str</span>
 
     <span class="k">if</span> <span class="n">curr_arr</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s2">&quot;Maximum of 2 dimensions for dpv/dps/dpg.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s2">"Maximum of 2 dimensions for dpv/dps/dpg."</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">curr_arr</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
         <span class="n">curr_arr</span> <span class="o">=</span> <span class="n">curr_arr</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,))</span>
 
-    <span class="n">dim</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="n">curr_arr</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">curr_arr</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">.&quot;</span>
+    <span class="n">dim</span> <span class="o">=</span> <span class="s2">""</span> <span class="k">if</span> <span class="n">curr_arr</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">curr_arr</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">."</span>
 
     <span class="k">if</span> <span class="n">is_dpg</span><span class="p">:</span>
         <span class="n">curr_filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-            <span class="n">tmp_dir_name</span><span class="p">,</span> <span class="s2">&quot;dpg&quot;</span><span class="p">,</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">basename</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">dim</span><span class="si">}{</span><span class="n">dtype</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">tmp_dir_name</span><span class="p">,</span> <span class="s2">"dpg"</span><span class="p">,</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">basename</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">dim</span><span class="si">}{</span><span class="n">dtype</span><span class="si">}</span><span class="s2">"</span>
         <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">curr_filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-            <span class="n">tmp_dir_name</span><span class="p">,</span> <span class="n">subdir_name</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">basename</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">dim</span><span class="si">}{</span><span class="n">dtype</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">tmp_dir_name</span><span class="p">,</span> <span class="n">subdir_name</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">basename</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">dim</span><span class="si">}{</span><span class="n">dtype</span><span class="si">}</span><span class="s2">"</span>
         <span class="p">)</span>
 
     <span class="n">tmm</span><span class="o">.</span><span class="n">_ensure_little_endian</span><span class="p">(</span><span class="n">curr_arr</span><span class="p">)</span><span class="o">.</span><span class="n">tofile</span><span class="p">(</span><span class="n">curr_filename</span><span class="p">)</span></div>
@@ -1055,17 +1080,17 @@
     <span class="n">positions_csv</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">positions</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">offsets</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="n">positions_dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">,</span>
-    <span class="n">offsets_dtype</span><span class="o">=</span><span class="s2">&quot;uint64&quot;</span><span class="p">,</span>
-    <span class="n">space_str</span><span class="o">=</span><span class="s2">&quot;rasmm&quot;</span><span class="p">,</span>
-    <span class="n">origin_str</span><span class="o">=</span><span class="s2">&quot;nifti&quot;</span><span class="p">,</span>
+    <span class="n">positions_dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">,</span>
+    <span class="n">offsets_dtype</span><span class="o">=</span><span class="s2">"uint64"</span><span class="p">,</span>
+    <span class="n">space_str</span><span class="o">=</span><span class="s2">"rasmm"</span><span class="p">,</span>
+    <span class="n">origin_str</span><span class="o">=</span><span class="s2">"nifti"</span><span class="p">,</span>
     <span class="n">verify_invalid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">dpv</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">dps</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">groups</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">dpg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate TRX file from scratch using various input formats.</span>
+<span class="w">    </span><span class="sd">"""Generate TRX file from scratch using various input formats.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -1102,7 +1127,7 @@
 <span class="sd">    -------</span>
 <span class="sd">    None</span>
 <span class="sd">        Writes the generated TRX file to disk.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">dpv</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">dpv</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">if</span> <span class="n">dps</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -1120,8 +1145,8 @@
             <span class="n">streamlines</span><span class="p">,</span> <span class="n">offsets</span> <span class="o">=</span> <span class="n">_load_streamlines_from_arrays</span><span class="p">(</span><span class="n">positions</span><span class="p">,</span> <span class="n">offsets</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="p">(</span>
-            <span class="n">space_str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;rasmm&quot;</span>
-            <span class="ow">or</span> <span class="n">origin_str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;nifti&quot;</span>
+            <span class="n">space_str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">"rasmm"</span>
+            <span class="ow">or</span> <span class="n">origin_str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">"nifti"</span>
             <span class="ow">or</span> <span class="n">verify_invalid</span>
         <span class="p">):</span>
             <span class="n">streamlines</span> <span class="o">=</span> <span class="n">_apply_spatial_transforms</span><span class="p">(</span>
@@ -1137,19 +1162,19 @@
 
         <span class="k">if</span> <span class="n">dpv</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">dpv</span><span class="p">:</span>
-                <span class="n">_write_data_array</span><span class="p">(</span><span class="n">tmp_dir_name</span><span class="p">,</span> <span class="s2">&quot;dpv&quot;</span><span class="p">,</span> <span class="n">arg</span><span class="p">)</span>
+                <span class="n">_write_data_array</span><span class="p">(</span><span class="n">tmp_dir_name</span><span class="p">,</span> <span class="s2">"dpv"</span><span class="p">,</span> <span class="n">arg</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">dps</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">dps</span><span class="p">:</span>
-                <span class="n">_write_data_array</span><span class="p">(</span><span class="n">tmp_dir_name</span><span class="p">,</span> <span class="s2">&quot;dps&quot;</span><span class="p">,</span> <span class="n">arg</span><span class="p">)</span>
+                <span class="n">_write_data_array</span><span class="p">(</span><span class="n">tmp_dir_name</span><span class="p">,</span> <span class="s2">"dps"</span><span class="p">,</span> <span class="n">arg</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">groups</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">groups</span><span class="p">:</span>
-                <span class="n">_write_data_array</span><span class="p">(</span><span class="n">tmp_dir_name</span><span class="p">,</span> <span class="s2">&quot;groups&quot;</span><span class="p">,</span> <span class="n">arg</span><span class="p">)</span>
+                <span class="n">_write_data_array</span><span class="p">(</span><span class="n">tmp_dir_name</span><span class="p">,</span> <span class="s2">"groups"</span><span class="p">,</span> <span class="n">arg</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">dpg</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">dpg</span><span class="p">:</span>
-                <span class="n">_write_data_array</span><span class="p">(</span><span class="n">tmp_dir_name</span><span class="p">,</span> <span class="s2">&quot;dpg&quot;</span><span class="p">,</span> <span class="n">arg</span><span class="p">,</span> <span class="n">is_dpg</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">_write_data_array</span><span class="p">(</span><span class="n">tmp_dir_name</span><span class="p">,</span> <span class="s2">"dpg"</span><span class="p">,</span> <span class="n">arg</span><span class="p">,</span> <span class="n">is_dpg</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="n">trx</span> <span class="o">=</span> <span class="n">tmm</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">tmp_dir_name</span><span class="p">)</span>
         <span class="n">tmm</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">trx</span><span class="p">,</span> <span class="n">out_tractogram</span><span class="p">)</span>
@@ -1160,7 +1185,7 @@
 <div class="viewcode-block" id="manipulate_trx_datatype">
 <a class="viewcode-back" href="../../autoapi/trx/workflows/index.html#trx.workflows.manipulate_trx_datatype">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">manipulate_trx_datatype</span><span class="p">(</span><span class="n">in_filename</span><span class="p">,</span> <span class="n">out_filename</span><span class="p">,</span> <span class="n">dict_dtype</span><span class="p">):</span>  <span class="c1"># noqa: C901</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Change dtype of positions, offsets, dpv, dps, dpg, and groups in a TRX.</span>
+<span class="w">    </span><span class="sd">"""Change dtype of positions, offsets, dpv, dps, dpg, and groups in a TRX.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -1175,74 +1200,65 @@
 <span class="sd">    -------</span>
 <span class="sd">    None</span>
 <span class="sd">        Writes the converted TRX to ``out_filename``.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">trx</span> <span class="o">=</span> <span class="n">tmm</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">in_filename</span><span class="p">)</span>
 
     <span class="c1"># For each key in dict_dtype, we create a new memmap with the new dtype</span>
     <span class="c1"># and we copy the data from the old memmap to the new one.</span>
-    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">dict_dtype</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;positions&quot;</span><span class="p">:</span>
-            <span class="n">tmp_mm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">memmap</span><span class="p">(</span>
-                <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">(),</span>
-                <span class="n">dtype</span><span class="o">=</span><span class="n">dict_dtype</span><span class="p">[</span><span class="n">key</span><span class="p">],</span>
-                <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;w+&quot;</span><span class="p">,</span>
-                <span class="n">shape</span><span class="o">=</span><span class="n">trx</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
-            <span class="p">)</span>
-            <span class="n">tmp_mm</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">trx</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="p">[:]</span>
-            <span class="n">trx</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">tmp_mm</span>
-        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;offsets&quot;</span><span class="p">:</span>
-            <span class="n">tmp_mm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">memmap</span><span class="p">(</span>
-                <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">(),</span>
-                <span class="n">dtype</span><span class="o">=</span><span class="n">dict_dtype</span><span class="p">[</span><span class="n">key</span><span class="p">],</span>
-                <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;w+&quot;</span><span class="p">,</span>
-                <span class="n">shape</span><span class="o">=</span><span class="n">trx</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_offsets</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
-            <span class="p">)</span>
-            <span class="n">tmp_mm</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">trx</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_offsets</span><span class="p">[:]</span>
-            <span class="n">trx</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_offsets</span> <span class="o">=</span> <span class="n">tmp_mm</span>
-        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;dpv&quot;</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">key_dpv</span> <span class="ow">in</span> <span class="n">dict_dtype</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span>
-                <span class="n">tmp_mm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">memmap</span><span class="p">(</span>
-                    <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">(),</span>
-                    <span class="n">dtype</span><span class="o">=</span><span class="n">dict_dtype</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">key_dpv</span><span class="p">],</span>
-                    <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;w+&quot;</span><span class="p">,</span>
-                    <span class="n">shape</span><span class="o">=</span><span class="n">trx</span><span class="o">.</span><span class="n">data_per_vertex</span><span class="p">[</span><span class="n">key_dpv</span><span class="p">]</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
+    <span class="k">with</span> <span class="n">get_trx_tmp_dir</span><span class="p">()</span> <span class="k">as</span> <span class="n">tmp_dir_name</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">dict_dtype</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"positions"</span><span class="p">:</span>
+                <span class="n">tmp_mm</span> <span class="o">=</span> <span class="n">_create_temp_memmap</span><span class="p">(</span>
+                    <span class="n">tmp_dir_name</span><span class="p">,</span> <span class="n">dict_dtype</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">trx</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">shape</span>
                 <span class="p">)</span>
-                <span class="n">tmp_mm</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">trx</span><span class="o">.</span><span class="n">data_per_vertex</span><span class="p">[</span><span class="n">key_dpv</span><span class="p">]</span><span class="o">.</span><span class="n">_data</span><span class="p">[:]</span>
-                <span class="n">trx</span><span class="o">.</span><span class="n">data_per_vertex</span><span class="p">[</span><span class="n">key_dpv</span><span class="p">]</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">tmp_mm</span>
-        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;dps&quot;</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">key_dps</span> <span class="ow">in</span> <span class="n">dict_dtype</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span>
-                <span class="n">tmp_mm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">memmap</span><span class="p">(</span>
-                    <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">(),</span>
-                    <span class="n">dtype</span><span class="o">=</span><span class="n">dict_dtype</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">key_dps</span><span class="p">],</span>
-                    <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;w+&quot;</span><span class="p">,</span>
-                    <span class="n">shape</span><span class="o">=</span><span class="n">trx</span><span class="o">.</span><span class="n">data_per_streamline</span><span class="p">[</span><span class="n">key_dps</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
+                <span class="n">tmp_mm</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">trx</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="p">[:]</span>
+                <span class="n">trx</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">tmp_mm</span>
+            <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"offsets"</span><span class="p">:</span>
+                <span class="n">tmp_mm</span> <span class="o">=</span> <span class="n">_create_temp_memmap</span><span class="p">(</span>
+                    <span class="n">tmp_dir_name</span><span class="p">,</span> <span class="n">dict_dtype</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">trx</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_offsets</span><span class="o">.</span><span class="n">shape</span>
                 <span class="p">)</span>
-                <span class="n">tmp_mm</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">trx</span><span class="o">.</span><span class="n">data_per_streamline</span><span class="p">[</span><span class="n">key_dps</span><span class="p">][:]</span>
-                <span class="n">trx</span><span class="o">.</span><span class="n">data_per_streamline</span><span class="p">[</span><span class="n">key_dps</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp_mm</span>
-        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;dpg&quot;</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">key_group</span> <span class="ow">in</span> <span class="n">dict_dtype</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span>
-                <span class="k">for</span> <span class="n">key_dpg</span> <span class="ow">in</span> <span class="n">dict_dtype</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">key_group</span><span class="p">]:</span>
-                    <span class="n">tmp_mm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">memmap</span><span class="p">(</span>
-                        <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">(),</span>
-                        <span class="n">dtype</span><span class="o">=</span><span class="n">dict_dtype</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">key_group</span><span class="p">][</span><span class="n">key_dpg</span><span class="p">],</span>
-                        <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;w+&quot;</span><span class="p">,</span>
-                        <span class="n">shape</span><span class="o">=</span><span class="n">trx</span><span class="o">.</span><span class="n">data_per_group</span><span class="p">[</span><span class="n">key_group</span><span class="p">][</span><span class="n">key_dpg</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
+                <span class="n">tmp_mm</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">trx</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_offsets</span><span class="p">[:]</span>
+                <span class="n">trx</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_offsets</span> <span class="o">=</span> <span class="n">tmp_mm</span>
+            <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"dpv"</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">key_dpv</span> <span class="ow">in</span> <span class="n">dict_dtype</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span>
+                    <span class="n">tmp_mm</span> <span class="o">=</span> <span class="n">_create_temp_memmap</span><span class="p">(</span>
+                        <span class="n">tmp_dir_name</span><span class="p">,</span>
+                        <span class="n">dict_dtype</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">key_dpv</span><span class="p">],</span>
+                        <span class="n">trx</span><span class="o">.</span><span class="n">data_per_vertex</span><span class="p">[</span><span class="n">key_dpv</span><span class="p">]</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
                     <span class="p">)</span>
-                    <span class="n">tmp_mm</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">trx</span><span class="o">.</span><span class="n">data_per_group</span><span class="p">[</span><span class="n">key_group</span><span class="p">][</span><span class="n">key_dpg</span><span class="p">][:]</span>
-                    <span class="n">trx</span><span class="o">.</span><span class="n">data_per_group</span><span class="p">[</span><span class="n">key_group</span><span class="p">][</span><span class="n">key_dpg</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp_mm</span>
-        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;groups&quot;</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">key_group</span> <span class="ow">in</span> <span class="n">dict_dtype</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span>
-                <span class="n">tmp_mm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">memmap</span><span class="p">(</span>
-                    <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">(),</span>
-                    <span class="n">dtype</span><span class="o">=</span><span class="n">dict_dtype</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">key_group</span><span class="p">],</span>
-                    <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;w+&quot;</span><span class="p">,</span>
-                    <span class="n">shape</span><span class="o">=</span><span class="n">trx</span><span class="o">.</span><span class="n">groups</span><span class="p">[</span><span class="n">key_group</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
-                <span class="p">)</span>
-                <span class="n">tmp_mm</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">trx</span><span class="o">.</span><span class="n">groups</span><span class="p">[</span><span class="n">key_group</span><span class="p">][:]</span>
-                <span class="n">trx</span><span class="o">.</span><span class="n">groups</span><span class="p">[</span><span class="n">key_group</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp_mm</span>
+                    <span class="n">tmp_mm</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">trx</span><span class="o">.</span><span class="n">data_per_vertex</span><span class="p">[</span><span class="n">key_dpv</span><span class="p">]</span><span class="o">.</span><span class="n">_data</span><span class="p">[:]</span>
+                    <span class="n">trx</span><span class="o">.</span><span class="n">data_per_vertex</span><span class="p">[</span><span class="n">key_dpv</span><span class="p">]</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">tmp_mm</span>
+            <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"dps"</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">key_dps</span> <span class="ow">in</span> <span class="n">dict_dtype</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span>
+                    <span class="n">tmp_mm</span> <span class="o">=</span> <span class="n">_create_temp_memmap</span><span class="p">(</span>
+                        <span class="n">tmp_dir_name</span><span class="p">,</span>
+                        <span class="n">dict_dtype</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">key_dps</span><span class="p">],</span>
+                        <span class="n">trx</span><span class="o">.</span><span class="n">data_per_streamline</span><span class="p">[</span><span class="n">key_dps</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="n">tmp_mm</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">trx</span><span class="o">.</span><span class="n">data_per_streamline</span><span class="p">[</span><span class="n">key_dps</span><span class="p">][:]</span>
+                    <span class="n">trx</span><span class="o">.</span><span class="n">data_per_streamline</span><span class="p">[</span><span class="n">key_dps</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp_mm</span>
+            <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"dpg"</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">key_group</span> <span class="ow">in</span> <span class="n">dict_dtype</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span>
+                    <span class="k">for</span> <span class="n">key_dpg</span> <span class="ow">in</span> <span class="n">dict_dtype</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">key_group</span><span class="p">]:</span>
+                        <span class="n">tmp_mm</span> <span class="o">=</span> <span class="n">_create_temp_memmap</span><span class="p">(</span>
+                            <span class="n">tmp_dir_name</span><span class="p">,</span>
+                            <span class="n">dict_dtype</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">key_group</span><span class="p">][</span><span class="n">key_dpg</span><span class="p">],</span>
+                            <span class="n">trx</span><span class="o">.</span><span class="n">data_per_group</span><span class="p">[</span><span class="n">key_group</span><span class="p">][</span><span class="n">key_dpg</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
+                        <span class="p">)</span>
+                        <span class="n">tmp_mm</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">trx</span><span class="o">.</span><span class="n">data_per_group</span><span class="p">[</span><span class="n">key_group</span><span class="p">][</span><span class="n">key_dpg</span><span class="p">][:]</span>
+                        <span class="n">trx</span><span class="o">.</span><span class="n">data_per_group</span><span class="p">[</span><span class="n">key_group</span><span class="p">][</span><span class="n">key_dpg</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp_mm</span>
+            <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"groups"</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">key_group</span> <span class="ow">in</span> <span class="n">dict_dtype</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span>
+                    <span class="n">tmp_mm</span> <span class="o">=</span> <span class="n">_create_temp_memmap</span><span class="p">(</span>
+                        <span class="n">tmp_dir_name</span><span class="p">,</span>
+                        <span class="n">dict_dtype</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">key_group</span><span class="p">],</span>
+                        <span class="n">trx</span><span class="o">.</span><span class="n">groups</span><span class="p">[</span><span class="n">key_group</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="n">tmp_mm</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">trx</span><span class="o">.</span><span class="n">groups</span><span class="p">[</span><span class="n">key_group</span><span class="p">][:]</span>
+                    <span class="n">trx</span><span class="o">.</span><span class="n">groups</span><span class="p">[</span><span class="n">key_group</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp_mm</span>
 
-    <span class="n">tmm</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">trx</span><span class="p">,</span> <span class="n">out_filename</span><span class="p">)</span>
-    <span class="n">trx</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+        <span class="n">tmm</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">trx</span><span class="p">,</span> <span class="n">out_filename</span><span class="p">)</span>
+        <span class="n">trx</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
 </pre></div>
 

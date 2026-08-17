@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>trx.io &#8212; trx-python 0.4.1.dev31 documentation</title>
+    <title>trx.io &#8212; trx-python 0.4.1.dev47 documentation</title>
   
   
   
@@ -43,7 +43,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
-    <script src="../../_static/documentation_options.js?v=17fbf770"></script>
+    <script src="../../_static/documentation_options.js?v=9d14d439"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/sg-tags.js?v=d80f6fa4"></script>
@@ -61,7 +61,7 @@
     <link rel="search" title="Search" href="../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.4.1.dev31" />
+  <meta name="docsearch:version" content="0.4.1.dev47" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -133,8 +133,8 @@
       
     
     
-    <img src="../../_static/trx_logo.png" class="logo__image only-light" alt="trx-python 0.4.1.dev31 documentation - Home"/>
-    <img src="../../_static/trx_logo.png" class="logo__image only-dark pst-js-only" alt="trx-python 0.4.1.dev31 documentation - Home"/>
+    <img src="../../_static/trx_logo.png" class="logo__image only-light" alt="trx-python 0.4.1.dev47 documentation - Home"/>
+    <img src="../../_static/trx_logo.png" class="logo__image only-dark pst-js-only" alt="trx-python 0.4.1.dev47 documentation - Home"/>
   
   
 </a></div>
@@ -434,7 +434,7 @@
                   
   <h1>Source code for trx.io</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot;Unified I/O interface for tractogram file formats.&quot;&quot;&quot;</span>
+<span class="sd">"""Unified I/O interface for tractogram file formats."""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
@@ -457,9 +457,9 @@
 <div class="viewcode-block" id="get_trx_tmp_dir">
 <a class="viewcode-back" href="../../autoapi/trx/io/index.html#trx.io.get_trx_tmp_dir">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_trx_tmp_dir</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a temporary directory honoring the ``TRX_TMPDIR`` setting.</span>
+<span class="w">    </span><span class="sd">"""Return a temporary directory honoring the ``TRX_TMPDIR`` setting.</span>
 
-<span class="sd">    When the ``TRX_TMPDIR`` environment variable is set to ``&quot;use_working_dir&quot;``</span>
+<span class="sd">    When the ``TRX_TMPDIR`` environment variable is set to ``"use_working_dir"``</span>
 <span class="sd">    the current working directory is used. Otherwise, the value of</span>
 <span class="sd">    ``TRX_TMPDIR`` is used directly. If the variable is not set, the system</span>
 <span class="sd">    temporary directory is used.</span>
@@ -469,28 +469,28 @@
 <span class="sd">    tempfile.TemporaryDirectory</span>
 <span class="sd">        Context-managed temporary directory placed according to the environment</span>
 <span class="sd">        configuration.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;TRX_TMPDIR&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;TRX_TMPDIR&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;use_working_dir&quot;</span><span class="p">:</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">"TRX_TMPDIR"</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">"TRX_TMPDIR"</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"use_working_dir"</span><span class="p">:</span>
             <span class="n">trx_tmp_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">trx_tmp_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;TRX_TMPDIR&quot;</span><span class="p">)</span>
+            <span class="n">trx_tmp_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">"TRX_TMPDIR"</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">trx_tmp_dir</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">gettempdir</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">10</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">(</span>
-            <span class="nb">dir</span><span class="o">=</span><span class="n">trx_tmp_dir</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;trx_&quot;</span><span class="p">,</span> <span class="n">ignore_cleanup_errors</span><span class="o">=</span><span class="kc">True</span>
+            <span class="nb">dir</span><span class="o">=</span><span class="n">trx_tmp_dir</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">"trx_"</span><span class="p">,</span> <span class="n">ignore_cleanup_errors</span><span class="o">=</span><span class="kc">True</span>
         <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">(</span><span class="nb">dir</span><span class="o">=</span><span class="n">trx_tmp_dir</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;trx_&quot;</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">(</span><span class="nb">dir</span><span class="o">=</span><span class="n">trx_tmp_dir</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">"trx_"</span><span class="p">)</span></div>
 
 
 
 <div class="viewcode-block" id="load_sft_with_reference">
 <a class="viewcode-back" href="../../autoapi/trx/io/index.html#trx.io.load_sft_with_reference">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">load_sft_with_reference</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">reference</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bbox_check</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load a tractogram as a StatefulTractogram with an explicit reference.</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">load_sft_with_reference</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">reference</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bbox_check</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Load a tractogram as a StatefulTractogram with an explicit reference.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -498,10 +498,12 @@
 <span class="sd">        Path to the tractogram file (.trk, .tck, .fib, .vtk, .dpy).</span>
 <span class="sd">    reference : str or nibabel.Nifti1Image, optional</span>
 <span class="sd">        Reference image used for formats without embedded affine information.</span>
-<span class="sd">        Pass ``&quot;same&quot;`` to reuse the header embedded in .trk files.</span>
+<span class="sd">        Pass ``"same"`` to reuse the header embedded in .trk files.</span>
 <span class="sd">    bbox_check : bool, optional</span>
 <span class="sd">        If True, validate that streamlines lie within the reference bounding</span>
 <span class="sd">        box. Defaults to True.</span>
+<span class="sd">    **kwargs</span>
+<span class="sd">        Additional keyword arguments passed to dipy's load_tractogram.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -512,29 +514,31 @@
 <span class="sd">    ------</span>
 <span class="sd">    IOError</span>
 <span class="sd">        If the file format is unsupported or a required reference is missing.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">dipy_available</span><span class="p">:</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">dipy_available</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
-            <span class="s2">&quot;Dipy library is missing, cannot use functions related &quot;</span>
-            <span class="s2">&quot;to the StatefulTractogram.&quot;</span>
+            <span class="s2">"Dipy library is missing, cannot use functions related "</span>
+            <span class="s2">"to the StatefulTractogram."</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">dipy.io.streamline</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_tractogram</span>
 
     <span class="c1"># Force the usage of --reference for all file formats without an header</span>
     <span class="n">_</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">ext</span> <span class="o">==</span> <span class="s2">&quot;.trk&quot;</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">reference</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">reference</span> <span class="o">!=</span> <span class="s2">&quot;same&quot;</span><span class="p">:</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Reference is discarded for this file format </span><span class="si">{</span><span class="n">filepath</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
-        <span class="n">sft</span> <span class="o">=</span> <span class="n">load_tractogram</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="s2">&quot;same&quot;</span><span class="p">,</span> <span class="n">bbox_valid_check</span><span class="o">=</span><span class="n">bbox_check</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">ext</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;.tck&quot;</span><span class="p">,</span> <span class="s2">&quot;.fib&quot;</span><span class="p">,</span> <span class="s2">&quot;.vtk&quot;</span><span class="p">,</span> <span class="s2">&quot;.dpy&quot;</span><span class="p">]:</span>
-        <span class="k">if</span> <span class="n">reference</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">reference</span> <span class="o">==</span> <span class="s2">&quot;same&quot;</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;--reference is required for this file format </span><span class="si">{</span><span class="n">filepath</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">ext</span> <span class="o">==</span> <span class="s2">".trk"</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">reference</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">reference</span> <span class="o">!=</span> <span class="s2">"same"</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Reference is discarded for this file format </span><span class="si">{</span><span class="n">filepath</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
+        <span class="n">sft</span> <span class="o">=</span> <span class="n">load_tractogram</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="s2">"same"</span><span class="p">,</span> <span class="n">bbox_valid_check</span><span class="o">=</span><span class="n">bbox_check</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">ext</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">".tck"</span><span class="p">,</span> <span class="s2">".fib"</span><span class="p">,</span> <span class="s2">".vtk"</span><span class="p">,</span> <span class="s2">".dpy"</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">reference</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">reference</span> <span class="o">==</span> <span class="s2">"same"</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"--reference is required for this file format </span><span class="si">{</span><span class="n">filepath</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">sft</span> <span class="o">=</span> <span class="n">load_tractogram</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">reference</span><span class="p">,</span> <span class="n">bbox_valid_check</span><span class="o">=</span><span class="n">bbox_check</span><span class="p">)</span>
+            <span class="n">sft</span> <span class="o">=</span> <span class="n">load_tractogram</span><span class="p">(</span>
+                <span class="n">filepath</span><span class="p">,</span> <span class="n">reference</span><span class="p">,</span> <span class="n">bbox_valid_check</span><span class="o">=</span><span class="n">bbox_check</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
 
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">filepath</span><span class="si">}</span><span class="s2"> is an unsupported file format&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">filepath</span><span class="si">}</span><span class="s2"> is an unsupported file format"</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">sft</span></div>
 
@@ -542,8 +546,8 @@
 
 <div class="viewcode-block" id="load">
 <a class="viewcode-back" href="../../autoapi/trx/io/index.html#trx.io.load">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">load</span><span class="p">(</span><span class="n">tractogram_filename</span><span class="p">,</span> <span class="n">reference</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load a tractogram from disk and return a TRX or StatefulTractogram.</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">load</span><span class="p">(</span><span class="n">tractogram_filename</span><span class="p">,</span> <span class="n">reference</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Load a tractogram from disk and return a TRX or StatefulTractogram.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -551,18 +555,20 @@
 <span class="sd">        Path to the input tractogram. TRX directories are supported.</span>
 <span class="sd">    reference : str or nibabel.Nifti1Image</span>
 <span class="sd">        Reference image used for formats without embedded affine information.</span>
+<span class="sd">    **kwargs</span>
+<span class="sd">        Additional keyword arguments passed to dipy's load_tractogram.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    TrxFile or StatefulTractogram</span>
 <span class="sd">        TRX file handle for ``.trx`` inputs, otherwise a StatefulTractogram.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">trx.trx_file_memmap</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tmm</span>
 
     <span class="n">in_ext</span> <span class="o">=</span> <span class="n">split_name_with_gz</span><span class="p">(</span><span class="n">tractogram_filename</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
-    <span class="k">if</span> <span class="n">in_ext</span> <span class="o">!=</span> <span class="s2">&quot;.trx&quot;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">tractogram_filename</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">in_ext</span> <span class="o">!=</span> <span class="s2">".trx"</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">tractogram_filename</span><span class="p">):</span>
         <span class="n">tractogram_obj</span> <span class="o">=</span> <span class="n">load_sft_with_reference</span><span class="p">(</span>
-            <span class="n">tractogram_filename</span><span class="p">,</span> <span class="n">reference</span><span class="p">,</span> <span class="n">bbox_check</span><span class="o">=</span><span class="kc">False</span>
+            <span class="n">tractogram_filename</span><span class="p">,</span> <span class="n">reference</span><span class="p">,</span> <span class="n">bbox_check</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
         <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">tractogram_obj</span> <span class="o">=</span> <span class="n">tmm</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">tractogram_filename</span><span class="p">)</span>
@@ -574,7 +580,7 @@
 <div class="viewcode-block" id="save">
 <a class="viewcode-back" href="../../autoapi/trx/io/index.html#trx.io.save">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="n">tractogram_obj</span><span class="p">,</span> <span class="n">tractogram_filename</span><span class="p">,</span> <span class="n">bbox_valid_check</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Save a tractogram object to disk.</span>
+<span class="w">    </span><span class="sd">"""Save a tractogram object to disk.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -593,11 +599,11 @@
 <span class="sd">    None</span>
 <span class="sd">        The function writes to disk and returns ``None``. Returns ``None``</span>
 <span class="sd">        immediately when ``dipy`` is unavailable.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">dipy_available</span><span class="p">:</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">dipy_available</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
-            <span class="s2">&quot;Dipy library is missing, cannot use functions related &quot;</span>
-            <span class="s2">&quot;to the StatefulTractogram.&quot;</span>
+            <span class="s2">"Dipy library is missing, cannot use functions related "</span>
+            <span class="s2">"to the StatefulTractogram."</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">dipy.io.stateful_tractogram</span><span class="w"> </span><span class="kn">import</span> <span class="n">StatefulTractogram</span>
@@ -607,7 +613,7 @@
 
     <span class="n">out_ext</span> <span class="o">=</span> <span class="n">split_name_with_gz</span><span class="p">(</span><span class="n">tractogram_filename</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
 
-    <span class="k">if</span> <span class="n">out_ext</span> <span class="o">!=</span> <span class="s2">&quot;.trx&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">out_ext</span> <span class="o">!=</span> <span class="s2">".trx"</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tractogram_obj</span><span class="p">,</span> <span class="n">StatefulTractogram</span><span class="p">):</span>
             <span class="n">tractogram_obj</span> <span class="o">=</span> <span class="n">tractogram_obj</span><span class="o">.</span><span class="n">to_sft</span><span class="p">()</span>
         <span class="n">save_tractogram</span><span class="p">(</span>

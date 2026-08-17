@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Reading and Writing TRX Files &#8212; trx-python 0.4.1.dev31 documentation</title>
+    <title>Reading and Writing TRX Files &#8212; trx-python 0.4.1.dev47 documentation</title>
   
   
   
@@ -44,7 +44,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
-    <script src="../_static/documentation_options.js?v=17fbf770"></script>
+    <script src="../_static/documentation_options.js?v=9d14d439"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/sg-tags.js?v=d80f6fa4"></script>
@@ -64,7 +64,7 @@
     <link rel="prev" title="Tutorials" href="index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.4.1.dev31" />
+  <meta name="docsearch:version" content="0.4.1.dev47" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -136,8 +136,8 @@
       
     
     
-    <img src="../_static/trx_logo.png" class="logo__image only-light" alt="trx-python 0.4.1.dev31 documentation - Home"/>
-    <img src="../_static/trx_logo.png" class="logo__image only-dark pst-js-only" alt="trx-python 0.4.1.dev31 documentation - Home"/>
+    <img src="../_static/trx_logo.png" class="logo__image only-light" alt="trx-python 0.4.1.dev47 documentation - Home"/>
+    <img src="../_static/trx_logo.png" class="logo__image only-dark pst-js-only" alt="trx-python 0.4.1.dev47 documentation - Home"/>
   
   
 </a></div>
@@ -485,14 +485,14 @@ some test data.</p>
 <span class="kn">from</span><span class="w"> </span><span class="nn">trx.trx_file_memmap</span><span class="w"> </span><span class="kn">import</span> <span class="n">load</span><span class="p">,</span> <span class="n">save</span>
 
 <span class="c1"># Download test data</span>
-<span class="n">fetch_data</span><span class="p">(</span><span class="n">get_testing_files_dict</span><span class="p">(),</span> <span class="n">keys</span><span class="o">=</span><span class="s2">&quot;gold_standard.zip&quot;</span><span class="p">)</span>
+<span class="n">fetch_data</span><span class="p">(</span><span class="n">get_testing_files_dict</span><span class="p">(),</span> <span class="n">keys</span><span class="o">=</span><span class="s2">"gold_standard.zip"</span><span class="p">)</span>
 <span class="n">trx_home</span> <span class="o">=</span> <span class="n">get_home</span><span class="p">()</span>
-<span class="n">trx_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">trx_home</span><span class="p">,</span> <span class="s2">&quot;gold_standard&quot;</span><span class="p">,</span> <span class="s2">&quot;gs.trx&quot;</span><span class="p">)</span>
+<span class="n">trx_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">trx_home</span><span class="p">,</span> <span class="s2">"gold_standard"</span><span class="p">,</span> <span class="s2">"gs.trx"</span><span class="p">)</span>
 
 <span class="c1"># Load the TRX file</span>
 <span class="n">trx</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="n">trx_path</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;TRX file loaded successfully!&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"TRX file loaded successfully!"</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>TRX file loaded successfully!
@@ -517,18 +517,18 @@ VOX_SIZES: [4.00 2.00 1.00]
 VOX_ORDER: RAS
 streamline_count: 13
 vertex_count: 104
-data_per_vertex keys: [&#39;color_y&#39;, &#39;color_x&#39;, &#39;color_z&#39;]
-data_per_streamline keys: [&#39;random_coord&#39;]
+data_per_vertex keys: ['color_x', 'color_z', 'color_y']
+data_per_streamline keys: ['random_coord']
 No group keys
 copy_safe: True
 </pre></div>
 </div>
 <p>The header contains essential metadata about the tractogram:</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Header information:&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Number of streamlines: </span><span class="si">{</span><span class="n">trx</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;NB_STREAMLINES&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Number of vertices: </span><span class="si">{</span><span class="n">trx</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;NB_VERTICES&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Image dimensions: </span><span class="si">{</span><span class="n">trx</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;DIMENSIONS&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Voxel to RASMM affine:</span><span class="se">\n</span><span class="si">{</span><span class="n">trx</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;VOXEL_TO_RASMM&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">"Header information:"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  Number of streamlines: </span><span class="si">{</span><span class="n">trx</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">'NB_STREAMLINES'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  Number of vertices: </span><span class="si">{</span><span class="n">trx</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">'NB_VERTICES'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  Image dimensions: </span><span class="si">{</span><span class="n">trx</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">'DIMENSIONS'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  Voxel to RASMM affine:</span><span class="se">\n</span><span class="si">{</span><span class="n">trx</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">'VOXEL_TO_RASMM'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Header information:
@@ -547,13 +547,13 @@ copy_safe: True
 <h2>Accessing streamlines<a class="headerlink" href="#accessing-streamlines" title="Link to this heading">#</a></h2>
 <p>Streamlines are the core data in a TRX file. Each streamline is a sequence
 of 3D points representing a fiber tract in the brain.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of streamlines: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">trx</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total number of vertices: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.memmap.html#numpy.memmap" title="numpy.memmap" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">trx</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span></a><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Number of streamlines: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">trx</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Total number of vertices: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.memmap.html#numpy.memmap" title="numpy.memmap" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">trx</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span></a><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
 <span class="c1"># Access the first streamline</span>
 <a href="https://numpy.org/doc/stable/reference/generated/numpy.memmap.html#numpy.memmap" title="numpy.memmap" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">first_streamline</span></a> <span class="o">=</span> <span class="n">trx</span><span class="o">.</span><span class="n">streamlines</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">First streamline has </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.memmap.html#numpy.memmap" title="numpy.memmap" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">first_streamline</span></a><span class="p">)</span><span class="si">}</span><span class="s2"> points&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;First 3 points of the first streamline:</span><span class="se">\n</span><span class="si">{</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.memmap.html#numpy.memmap" title="numpy.memmap" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">first_streamline</span></a><span class="p">[:</span><span class="mi">3</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">First streamline has </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.memmap.html#numpy.memmap" title="numpy.memmap" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">first_streamline</span></a><span class="p">)</span><span class="si">}</span><span class="s2"> points"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"First 3 points of the first streamline:</span><span class="se">\n</span><span class="si">{</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.memmap.html#numpy.memmap" title="numpy.memmap" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">first_streamline</span></a><span class="p">[:</span><span class="mi">3</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Number of streamlines: 13
@@ -570,13 +570,13 @@ First 3 points of the first streamline:
 <section id="accessing-metadata">
 <h2>Accessing metadata<a class="headerlink" href="#accessing-metadata" title="Link to this heading">#</a></h2>
 <p>TRX files can contain additional data per vertex (dpv) and per streamline (dps).</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Data per vertex (dpv) keys:&quot;</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">trx</span><span class="o">.</span><span class="n">data_per_vertex</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Data per streamline (dps) keys:&quot;</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">trx</span><span class="o">.</span><span class="n">data_per_streamline</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Groups:&quot;</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">trx</span><span class="o">.</span><span class="n">groups</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">"Data per vertex (dpv) keys:"</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">trx</span><span class="o">.</span><span class="n">data_per_vertex</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Data per streamline (dps) keys:"</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">trx</span><span class="o">.</span><span class="n">data_per_streamline</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Groups:"</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">trx</span><span class="o">.</span><span class="n">groups</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Data per vertex (dpv) keys: [&#39;color_y&#39;, &#39;color_x&#39;, &#39;color_z&#39;]
-Data per streamline (dps) keys: [&#39;random_coord&#39;]
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Data per vertex (dpv) keys: ['color_x', 'color_z', 'color_y']
+Data per streamline (dps) keys: ['random_coord']
 Groups: []
 </pre></div>
 </div>
@@ -586,13 +586,13 @@ Groups: []
 <p>You can easily select a subset of streamlines using indices or slicing.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Select first 5 streamlines</span>
 <span class="n">subset</span> <span class="o">=</span> <span class="n">trx</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Subset has </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">subset</span><span class="p">)</span><span class="si">}</span><span class="s2"> streamlines&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Subset has </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">subset</span><span class="p">)</span><span class="si">}</span><span class="s2"> streamlines"</span><span class="p">)</span>
 
 <span class="c1"># Select specific streamlines by indices (ensure indices are valid)</span>
 <span class="n">max_idx</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">trx</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
 <span class="n">indices</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">max_idx</span><span class="p">),</span> <span class="nb">min</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">max_idx</span><span class="p">)]</span>
 <span class="n">selected</span> <span class="o">=</span> <span class="n">trx</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Selected </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">selected</span><span class="p">)</span><span class="si">}</span><span class="s2"> streamlines&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Selected </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">selected</span><span class="p">)</span><span class="si">}</span><span class="s2"> streamlines"</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Subset has 5 streamlines
@@ -607,17 +607,17 @@ Selected 3 streamlines
 or uncompressed zip archive, or as a directory.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">tmpdir</span><span class="p">:</span>
     <span class="c1"># Save as TRX file (zip archive)</span>
-    <span class="n">output_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmpdir</span><span class="p">,</span> <span class="s2">&quot;output.trx&quot;</span><span class="p">)</span>
+    <span class="n">output_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmpdir</span><span class="p">,</span> <span class="s2">"output.trx"</span><span class="p">)</span>
     <span class="n">save</span><span class="p">(</span><span class="n">trx</span><span class="p">,</span> <span class="n">output_path</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Saved TRX file to: </span><span class="si">{</span><span class="n">output_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;File size: </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">output_path</span><span class="p">)</span><span class="si">}</span><span class="s2"> bytes&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Saved TRX file to: </span><span class="si">{</span><span class="n">output_path</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"File size: </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">output_path</span><span class="p">)</span><span class="si">}</span><span class="s2"> bytes"</span><span class="p">)</span>
 
     <span class="c1"># Reload to verify</span>
     <span class="n">reloaded</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="n">output_path</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Reloaded TRX has </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">reloaded</span><span class="p">)</span><span class="si">}</span><span class="s2"> streamlines&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Reloaded TRX has </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">reloaded</span><span class="p">)</span><span class="si">}</span><span class="s2"> streamlines"</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Saved TRX file to: /tmp/tmpe8hra8ia/output.trx
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Saved TRX file to: /tmp/tmp026oq9ai/output.trx
 File size: 3881 bytes
 Reloaded TRX has 13 streamlines
 </pre></div>
@@ -630,8 +630,8 @@ preserving the spatial reference information.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a deepcopy of the loaded TRX file</span>
 <span class="n">trx_copy</span> <span class="o">=</span> <span class="n">trx</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">()</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Created copy with </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">trx_copy</span><span class="p">)</span><span class="si">}</span><span class="s2"> streamlines&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Header preserved: DIMENSIONS = </span><span class="si">{</span><span class="n">trx_copy</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;DIMENSIONS&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Created copy with </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">trx_copy</span><span class="p">)</span><span class="si">}</span><span class="s2"> streamlines"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Header preserved: DIMENSIONS = </span><span class="si">{</span><span class="n">trx_copy</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">'DIMENSIONS'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Created copy with 13 streamlines
@@ -652,7 +652,7 @@ Header preserved: DIMENSIONS = [ 5 10 20]
 </ul>
 <p>The TRX format is designed for memory efficiency through memory-mapping,
 making it suitable for large tractography datasets.</p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.322 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.309 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-read-write-trx-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/8949d0a4562bd0eba677e15ce697c59b/plot_read_write_trx.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_read_write_trx.ipynb</span></code></a></p>

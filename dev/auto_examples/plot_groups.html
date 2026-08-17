@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Working with Groups &#8212; trx-python 0.4.1.dev31 documentation</title>
+    <title>Working with Groups &#8212; trx-python 0.4.1.dev47 documentation</title>
   
   
   
@@ -44,7 +44,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
-    <script src="../_static/documentation_options.js?v=17fbf770"></script>
+    <script src="../_static/documentation_options.js?v=9d14d439"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/sg-tags.js?v=d80f6fa4"></script>
@@ -64,7 +64,7 @@
     <link rel="prev" title="Reading and Writing TRX Files" href="plot_read_write_trx.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.4.1.dev31" />
+  <meta name="docsearch:version" content="0.4.1.dev47" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -136,8 +136,8 @@
       
     
     
-    <img src="../_static/trx_logo.png" class="logo__image only-light" alt="trx-python 0.4.1.dev31 documentation - Home"/>
-    <img src="../_static/trx_logo.png" class="logo__image only-dark pst-js-only" alt="trx-python 0.4.1.dev31 documentation - Home"/>
+    <img src="../_static/trx_logo.png" class="logo__image only-light" alt="trx-python 0.4.1.dev47 documentation - Home"/>
+    <img src="../_static/trx_logo.png" class="logo__image only-dark pst-js-only" alt="trx-python 0.4.1.dev47 documentation - Home"/>
   
   
 </a></div>
@@ -495,14 +495,14 @@ Corpus Callosum), clustering results, or connectivity-based groupings.</p>
 <span class="kn">from</span><span class="w"> </span><span class="nn">trx.trx_file_memmap</span><span class="w"> </span><span class="kn">import</span> <span class="n">load</span>
 
 <span class="c1"># Download test data</span>
-<span class="n">fetch_data</span><span class="p">(</span><span class="n">get_testing_files_dict</span><span class="p">(),</span> <span class="n">keys</span><span class="o">=</span><span class="s2">&quot;gold_standard.zip&quot;</span><span class="p">)</span>
+<span class="n">fetch_data</span><span class="p">(</span><span class="n">get_testing_files_dict</span><span class="p">(),</span> <span class="n">keys</span><span class="o">=</span><span class="s2">"gold_standard.zip"</span><span class="p">)</span>
 <span class="n">trx_home</span> <span class="o">=</span> <span class="n">get_home</span><span class="p">()</span>
-<span class="n">trx_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">trx_home</span><span class="p">,</span> <span class="s2">&quot;gold_standard&quot;</span><span class="p">,</span> <span class="s2">&quot;gs.trx&quot;</span><span class="p">)</span>
+<span class="n">trx_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">trx_home</span><span class="p">,</span> <span class="s2">"gold_standard"</span><span class="p">,</span> <span class="s2">"gs.trx"</span><span class="p">)</span>
 
 <span class="c1"># Load the TRX file</span>
 <span class="n">trx</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="n">trx_path</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loaded TRX with </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">trx</span><span class="p">)</span><span class="si">}</span><span class="s2"> streamlines&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Loaded TRX with </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">trx</span><span class="p">)</span><span class="si">}</span><span class="s2"> streamlines"</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Loaded TRX with 13 streamlines
@@ -513,10 +513,10 @@ Corpus Callosum), clustering results, or connectivity-based groupings.</p>
 <h2>Accessing groups<a class="headerlink" href="#accessing-groups" title="Link to this heading">#</a></h2>
 <p>Groups are stored as a dictionary where keys are group names and values
 are numpy arrays of streamline indices.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Available groups: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">trx</span><span class="o">.</span><span class="n">groups</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Available groups: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">trx</span><span class="o">.</span><span class="n">groups</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
 <span class="c1"># Check the number of groups</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of groups: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">trx</span><span class="o">.</span><span class="n">groups</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Number of groups: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">trx</span><span class="o">.</span><span class="n">groups</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Available groups: []
@@ -525,7 +525,7 @@ Number of groups: 0
 </div>
 <p>Let’s examine the groups in more detail:</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">group_name</span><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">indices</span></a> <span class="ow">in</span> <span class="n">trx</span><span class="o">.</span><span class="n">groups</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">group_name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">indices</span></a><span class="p">)</span><span class="si">}</span><span class="s2"> streamlines&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">group_name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">indices</span></a><span class="p">)</span><span class="si">}</span><span class="s2"> streamlines"</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -539,13 +539,13 @@ the <code class="docutils literal notranslate"><span class="pre">get_group()</sp
 
     <span class="c1"># Extract the group as a new TrxFile</span>
     <span class="n">group_trx</span> <span class="o">=</span> <span class="n">trx</span><span class="o">.</span><span class="n">get_group</span><span class="p">(</span><span class="n">first_group</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Extracted group &#39;</span><span class="si">{</span><span class="n">first_group</span><span class="si">}</span><span class="s2">&#39; with </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">group_trx</span><span class="p">)</span><span class="si">}</span><span class="s2"> streamlines&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Extracted group '</span><span class="si">{</span><span class="n">first_group</span><span class="si">}</span><span class="s2">' with </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">group_trx</span><span class="p">)</span><span class="si">}</span><span class="s2"> streamlines"</span><span class="p">)</span>
 
     <span class="c1"># You can also access the raw indices</span>
     <span class="n">group_indices</span> <span class="o">=</span> <span class="n">trx</span><span class="o">.</span><span class="n">groups</span><span class="p">[</span><span class="n">first_group</span><span class="p">]</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Raw indices (first 10): </span><span class="si">{</span><span class="n">group_indices</span><span class="p">[:</span><span class="mi">10</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Raw indices (first 10): </span><span class="si">{</span><span class="n">group_indices</span><span class="p">[:</span><span class="mi">10</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 <span class="k">else</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No groups available in this file&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"No groups available in this file"</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>No groups available in this file
@@ -562,7 +562,7 @@ the <code class="docutils literal notranslate"><span class="pre">get_group()</sp
 
     <span class="c1"># Select streamlines using indices</span>
     <span class="n">selected</span> <span class="o">=</span> <span class="n">trx</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">indices</span></a><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>  <span class="c1"># Select first 5 from the group</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Selected </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">selected</span><span class="p">)</span><span class="si">}</span><span class="s2"> streamlines from group &#39;</span><span class="si">{</span><span class="n">first_group</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Selected </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">selected</span><span class="p">)</span><span class="si">}</span><span class="s2"> streamlines from group '</span><span class="si">{</span><span class="n">first_group</span><span class="si">}</span><span class="s2">'"</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -571,12 +571,12 @@ the <code class="docutils literal notranslate"><span class="pre">get_group()</sp
 <p>Groups can have associated metadata stored in <code class="docutils literal notranslate"><span class="pre">data_per_group</span></code> (dpg).
 This is useful for storing group-level statistics like mean FA, volume,
 or color codes.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Data per group keys: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">trx</span><span class="o">.</span><span class="n">data_per_group</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Data per group keys: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">trx</span><span class="o">.</span><span class="n">data_per_group</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
 <span class="c1"># Check what metadata is available for each group</span>
 <span class="k">for</span> <span class="n">group_name</span> <span class="ow">in</span> <span class="n">trx</span><span class="o">.</span><span class="n">data_per_group</span><span class="p">:</span>
     <span class="n">dpg_keys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">trx</span><span class="o">.</span><span class="n">data_per_group</span><span class="p">[</span><span class="n">group_name</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">group_name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">dpg_keys</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">group_name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">dpg_keys</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Data per group keys: []
@@ -589,18 +589,18 @@ or color codes.</p>
 Here’s an example of how groups work conceptually.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example: Create conceptual groups for 10 streamlines</span>
 <span class="n">example_groups</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;bundle_A&quot;</span><span class="p">:</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.array.html#numpy.array" title="numpy.array" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">array</span></a><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.uint32" title="numpy.uint32" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">np</span><span class="o">.</span><span class="n">uint32</span></a><span class="p">),</span>
-    <span class="s2">&quot;bundle_B&quot;</span><span class="p">:</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.array.html#numpy.array" title="numpy.array" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">array</span></a><span class="p">([</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.uint32" title="numpy.uint32" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">np</span><span class="o">.</span><span class="n">uint32</span></a><span class="p">),</span>
-    <span class="s2">&quot;overlapping&quot;</span><span class="p">:</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.array.html#numpy.array" title="numpy.array" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">array</span></a><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.uint32" title="numpy.uint32" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">np</span><span class="o">.</span><span class="n">uint32</span></a><span class="p">),</span>  <span class="c1"># Overlaps with A and B</span>
+    <span class="s2">"bundle_A"</span><span class="p">:</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.array.html#numpy.array" title="numpy.array" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">array</span></a><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.uint32" title="numpy.uint32" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">np</span><span class="o">.</span><span class="n">uint32</span></a><span class="p">),</span>
+    <span class="s2">"bundle_B"</span><span class="p">:</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.array.html#numpy.array" title="numpy.array" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">array</span></a><span class="p">([</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.uint32" title="numpy.uint32" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">np</span><span class="o">.</span><span class="n">uint32</span></a><span class="p">),</span>
+    <span class="s2">"overlapping"</span><span class="p">:</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.array.html#numpy.array" title="numpy.array" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">array</span></a><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.uint32" title="numpy.uint32" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">np</span><span class="o">.</span><span class="n">uint32</span></a><span class="p">),</span>  <span class="c1"># Overlaps with A and B</span>
 <span class="p">}</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Example groups:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Example groups:"</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">indices</span></a> <span class="ow">in</span> <span class="n">example_groups</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: streamlines </span><span class="si">{</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">indices</span></a><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: streamlines </span><span class="si">{</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">indices</span></a><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
 <span class="c1"># Note: Streamline 3 is in both bundle_A and overlapping</span>
 <span class="c1"># Note: Streamlines 4, 5 are in both bundle_B and overlapping</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Overlapping groups are allowed in TRX!&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Overlapping groups are allowed in TRX!"</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Example groups:
@@ -636,15 +636,15 @@ and then analyze or visualize specific bundles.</p>
     <span class="n">group_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">trx</span><span class="o">.</span><span class="n">groups</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 
     <span class="c1"># Report statistics for each group</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Group statistics:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Group statistics:"</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">group_name</span> <span class="ow">in</span> <span class="n">group_names</span><span class="p">:</span>
         <span class="n">group_trx</span> <span class="o">=</span> <span class="n">trx</span><span class="o">.</span><span class="n">get_group</span><span class="p">(</span><span class="n">group_name</span><span class="p">)</span>
         <span class="n">total_points</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">group_trx</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="p">)</span>
         <span class="n">avg_length</span> <span class="o">=</span> <span class="n">total_points</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">group_trx</span><span class="p">)</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">group_trx</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">group_name</span><span class="si">}</span><span class="s2">:&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;    - Streamlines: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">group_trx</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;    - Total points: </span><span class="si">{</span><span class="n">total_points</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;    - Avg points per streamline: </span><span class="si">{</span><span class="n">avg_length</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">group_name</span><span class="si">}</span><span class="s2">:"</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"    - Streamlines: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">group_trx</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"    - Total points: </span><span class="si">{</span><span class="n">total_points</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"    - Avg points per streamline: </span><span class="si">{</span><span class="n">avg_length</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -660,7 +660,7 @@ and then analyze or visualize specific bundles.</p>
 </ul>
 <p>Groups are a powerful feature of the TRX format that enable efficient
 organization and retrieval of streamline subsets without data duplication.</p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.008 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.006 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-groups-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/d6077c281058dc90f37cc05a618276cc/plot_groups.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_groups.ipynb</span></code></a></p>
