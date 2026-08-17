@@ -61,10 +61,20 @@ extensions = [
     'sphinx.ext.githubpages',
     'sphinx.ext.autosummary',
     'autoapi.extension',
+    'myst_parser',
     'numpydoc',
     'sphinx_gallery.gen_gallery',
     'sphinx_design',
 ]
+
+myst_enable_extensions = [
+    "colon_fence",
+    "deflist",
+    "fieldlist",
+    "html_image",
+    "tasklist",
+]
+myst_heading_anchors = 3
 
 # Suppress known deprecation warnings from dependencies
 # astroid 4.x deprecation - will be fixed when sphinx-autoapi updates for astroid 5.x
@@ -94,7 +104,6 @@ html_theme = "pydata_sphinx_theme"
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['../_static']
-html_logo = "../_static/trx_logo.png"
 
 html_sidebars = {
     "scripts": [],
@@ -125,6 +134,11 @@ html_theme_options = {
     # Show table of contents on each page (section navigation)
     "secondary_sidebar_items": ["page-toc", "edit-this-page", "sourcelink"],
     "show_toc_level": 2,
+    "logo": {
+        "image_light": "../_static/trx_logo.png",
+        "image_dark": "../_static/trx_logo.png",
+        "link": "https://tee-ar-ex.github.io",
+},
 }
 
 

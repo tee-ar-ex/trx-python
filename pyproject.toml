@@ -33,12 +33,17 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+utils = [
+    "dipy",
+    "fury >= 0.10.0, < 2.0.0"
+]
 dev = [
     "spin >= 0.13",
     "setuptools_scm",
 ]
 doc = [
     "matplotlib",
+    "myst-parser",
     "numpydoc",
     "pydata-sphinx-theme >= 0.16.1",
     "sphinx >= 8.2.0",
@@ -58,6 +63,7 @@ test = [
     "pytest-cov",
 ]
 all = [
+    "trx-python[utils]",
     "trx-python[dev]",
     "trx-python[doc]",
     "trx-python[style]",
