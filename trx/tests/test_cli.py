@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 """Tests for CLI commands and workflow functions."""
 
+from contextlib import nullcontext
 import os
 import tempfile
+from types import SimpleNamespace
+from unittest.mock import patch
 
 from deepdiff import DeepDiff
 import numpy as np
@@ -19,6 +22,7 @@ except ImportError:
 from trx.fetcher import fetch_data, get_home, get_testing_files_dict
 import trx.trx_file_memmap as tmm
 from trx.workflows import (
+    _create_temp_memmap,
     convert_dsi_studio,
     convert_tractogram,
     generate_trx_from_scratch,
@@ -31,6 +35,70 @@ fetch_data(
     get_testing_files_dict(),
     keys=["DSI.zip", "trx_from_scratch.zip", "gold_standard.zip"],
 )
+
+
+def test_create_temp_memmap_uses_reopenable_path(tmp_path):
+    with patch("trx.workflows.np.memmap") as mock_memmap:
+        _create_temp_memmap(tmp_path, np.dtype("float32"), (10,))
+
+    filename = mock_memmap.call_args.args[0]
+    assert isinstance(filename, (str, os.PathLike))
+    assert os.path.dirname(os.fspath(filename)) == os.fspath(tmp_path)
+
+
+def test_manipulate_trx_datatype_uses_reopenable_memmaps(tmp_path):
+    trx = SimpleNamespace(
+        streamlines=SimpleNamespace(
+            _data=np.arange(6, dtype=np.float16).reshape((2, 3)),
+            _offsets=np.array([0, 3], dtype=np.uint64),
+        ),
+        data_per_vertex={
+            "mock_dpv": SimpleNamespace(
+                _data=np.arange(6, dtype=np.uint8).reshape((2, 3))
+            )
+        },
+        data_per_streamline={"mock_dps": np.array([1, 2], dtype=np.uint8)},
+        data_per_group={
+            "mock_group": {"mock_dpg": np.array([1.0, 2.0], dtype=np.float32)}
+        },
+        groups={"mock_group": np.array([0, 1], dtype=np.int32)},
+    )
+    trx.close = lambda: None
+
+    with (
+        patch(
+            "trx.workflows.get_trx_tmp_dir",
+            return_value=nullcontext(os.fspath(tmp_path)),
+        ),
+        patch("trx.workflows.tmm.load", return_value=trx),
+        patch("trx.workflows.tmm.save") as mock_save,
+        patch(
+            "trx.workflows.tempfile.NamedTemporaryFile",
+            side_effect=AssertionError(
+                "NamedTemporaryFile should not be used for writable memmaps"
+            ),
+        ),
+    ):
+        manipulate_trx_datatype(
+            "in.trx",
+            "out.trx",
+            {
+                "positions": np.dtype("float32"),
+                "offsets": np.dtype("uint32"),
+                "dpv": {"mock_dpv": np.dtype("uint16")},
+                "dps": {"mock_dps": np.dtype("float32")},
+                "dpg": {"mock_group": {"mock_dpg": np.dtype("float64")}},
+                "groups": {"mock_group": np.dtype("uint16")},
+            },
+        )
+
+    assert trx.streamlines._data.dtype == np.dtype("float32")
+    assert trx.streamlines._offsets.dtype == np.dtype("uint32")
+    assert trx.data_per_vertex["mock_dpv"]._data.dtype == np.dtype("uint16")
+    assert trx.data_per_streamline["mock_dps"].dtype == np.dtype("float32")
+    assert trx.data_per_group["mock_group"]["mock_dpg"].dtype == np.dtype("float64")
+    assert trx.groups["mock_group"].dtype == np.dtype("uint16")
+    mock_save.assert_called_once_with(trx, "out.trx")
 
 
 def _normalize_dtype_dict(dtype_dict):
@@ -469,7 +537,13 @@ class TestWorkflowFunctions:
             }
 
             out_gen_path = os.path.join(tmp_dir, "generated.trx")
-            manipulate_trx_datatype(expected_trx, out_gen_path, generated_dtype)
+            with patch(
+                "trx.workflows.tempfile.NamedTemporaryFile",
+                side_effect=AssertionError(
+                    "NamedTemporaryFile should not be used for writable memmaps"
+                ),
+            ):
+                manipulate_trx_datatype(expected_trx, out_gen_path, generated_dtype)
             trx = tmm.load(out_gen_path)
             assert (
                 DeepDiff(
