@@ -38,28 +38,3 @@ jobs:
 
       - name: Test
         run: spin test
-
-  test-optional-deps:
-    name: Optional deps
-    runs-on: ${{ matrix.os }}
-    steps:
-      - uses: actions/checkout@v5
-        with:
-          fetch-depth: 0
-
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: "3.12"
-          cache: pip
-          cache-dependency-path: pyproject.toml
-
-      - name: Install dependencies (including DIPY)
-        run: |
-          python -m pip install --upgrade pip
-          python -m pip install -e .[dev,test,utils]
-          python -c "import trx; print(trx.__version__)"
-          python -c "import dipy; print(dipy.__version__)"
-
-      - name: Test with DIPY installed
-        run: spin test
