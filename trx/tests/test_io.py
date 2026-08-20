@@ -14,15 +14,8 @@ try:
     from dipy.io.streamline import load_tractogram, save_tractogram
 
     dipy_available = True
-except ImportError:  # pragma: no cover
+except ImportError:
     dipy_available = False
-
-try:
-    import fury  # noqa: F401
-
-    fury_available = True
-except ImportError:  # pragma: no cover
-    fury_available = False
 
 from trx.fetcher import fetch_data, get_home, get_testing_files_dict
 from trx.io import load, save
@@ -35,8 +28,6 @@ fetch_data(get_testing_files_dict(), keys=["gold_standard.zip"])
 @pytest.mark.parametrize("path", [("gs.trk"), ("gs.tck"), ("gs.vtk")])
 @pytest.mark.skipif(not dipy_available, reason="Dipy is not installed.")
 def test_seq_ops_sft(path):
-    if path.endswith(".vtk") and not fury_available:
-        pytest.skip("fury is not installed")
     with TemporaryDirectory() as tmp_dir:
         gs_dir = os.path.join(get_home(), "gold_standard")
         path = os.path.join(tmp_dir, path)
@@ -65,17 +56,13 @@ def test_seq_ops_trx():
 @pytest.mark.parametrize("path", [("gs.trx"), ("gs.trk"), ("gs.tck"), ("gs.vtk")])
 @pytest.mark.skipif(not dipy_available, reason="Dipy is not installed.")
 def test_load_vox(path):
-    if path.endswith(".vtk") and not fury_available:
-        pytest.skip("fury is not installed")
+    from dipy.io.stateful_tractogram import Space
+
     gs_dir = os.path.join(get_home(), "gold_standard")
     path = os.path.join(gs_dir, path)
     coord = np.loadtxt(os.path.join(get_home(), "gold_standard", "gs_vox_space.txt"))
-    if path.endswith(".vtk"):
-        from dipy.io.stateful_tractogram import Space
-
-        obj = load(path, os.path.join(gs_dir, "gs.nii"), from_space=Space.LPSMM)
-    else:
-        obj = load(path, os.path.join(gs_dir, "gs.nii"))
+    from_space = Space.LPSMM if path.endswith("gs.vtk") else None
+    obj = load(path, os.path.join(gs_dir, "gs.nii"), from_space=from_space)
 
     sft = obj.to_sft() if isinstance(obj, TrxFile) else obj
     sft.to_vox()
@@ -88,17 +75,13 @@ def test_load_vox(path):
 @pytest.mark.parametrize("path", [("gs.trx"), ("gs.trk"), ("gs.tck"), ("gs.vtk")])
 @pytest.mark.skipif(not dipy_available, reason="Dipy is not installed.")
 def test_load_voxmm(path):
-    if path.endswith(".vtk") and not fury_available:
-        pytest.skip("fury is not installed")
+    from dipy.io.stateful_tractogram import Space
+
     gs_dir = os.path.join(get_home(), "gold_standard")
     path = os.path.join(gs_dir, path)
     coord = np.loadtxt(os.path.join(get_home(), "gold_standard", "gs_voxmm_space.txt"))
-    if path.endswith(".vtk"):
-        from dipy.io.stateful_tractogram import Space
-
-        obj = load(path, os.path.join(gs_dir, "gs.nii"), from_space=Space.LPSMM)
-    else:
-        obj = load(path, os.path.join(gs_dir, "gs.nii"))
+    from_space = Space.LPSMM if path.endswith("gs.vtk") else None
+    obj = load(path, os.path.join(gs_dir, "gs.nii"), from_space=from_space)
 
     sft = obj.to_sft() if isinstance(obj, TrxFile) else obj
     sft.to_voxmm()
