@@ -69,7 +69,7 @@ Module Contents
    ..
        !! processed by numpydoc !!
 
-.. py:function:: load_sft_with_reference(filepath, reference=None, bbox_check=True, **kwargs)
+.. py:function:: load_sft_with_reference(filepath, reference=None, bbox_check=True, from_space=None)
 
    
    Load a tractogram as a StatefulTractogram with an explicit reference.
@@ -88,8 +88,8 @@ Module Contents
            If True, validate that streamlines lie within the reference bounding
            box. Defaults to True.
 
-       **\*\*kwargs**
-           Additional keyword arguments passed to dipy's load_tractogram.
+       **from_space** : dipy.io.stateful_tractogram.Space, optional
+           Space to which the tractogram was transformed before saving.
 
 
 
@@ -115,7 +115,7 @@ Module Contents
    ..
        !! processed by numpydoc !!
 
-.. py:function:: load(tractogram_filename, reference, **kwargs)
+.. py:function:: load(tractogram_filename, reference=None, from_space=None)
 
    
    Load a tractogram from disk and return a TRX or StatefulTractogram.
@@ -126,11 +126,11 @@ Module Contents
        **tractogram_filename** : str
            Path to the input tractogram. TRX directories are supported.
 
-       **reference** : str or nibabel.Nifti1Image
+       **reference** : str or nibabel.Nifti1Image, optional
            Reference image used for formats without embedded affine information.
 
-       **\*\*kwargs**
-           Additional keyword arguments passed to dipy's load_tractogram.
+       **from_space** : dipy.io.stateful_tractogram.Space, optional
+           Space to which the tractogram was transformed before saving.
 
 
 
