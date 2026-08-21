@@ -2,7 +2,7 @@
 
 from copy import deepcopy
 import os
-from tempfile import TemporaryDirectory
+import tempfile
 import zipfile
 
 import numpy as np
@@ -18,7 +18,7 @@ except ImportError:
     dipy_available = False
 
 from trx.fetcher import fetch_data, get_home, get_testing_files_dict
-from trx.io import load, save
+from trx.io import get_trx_tmp_dir, load, save
 import trx.trx_file_memmap as tmm
 from trx.trx_file_memmap import TrxFile
 
@@ -27,30 +27,28 @@ fetch_data(get_testing_files_dict(), keys=["gold_standard.zip"])
 
 @pytest.mark.parametrize("path", ["gs.trk", "gs.tck", "gs.vtk"])
 @pytest.mark.skipif(not dipy_available, reason="Dipy is not installed.")
-def test_seq_ops_sft(path):
-    with TemporaryDirectory() as tmp_dir:
-        gs_dir = os.path.join(get_home(), "gold_standard")
-        path = os.path.join(tmp_dir, path)
+def test_seq_ops_sft(tmp_path, path):
+    gs_dir = os.path.join(get_home(), "gold_standard")
+    path = os.path.join(tmp_path, path)
 
-        obj = load(os.path.join(gs_dir, "gs.trx"), os.path.join(gs_dir, "gs.nii"))
-        sft_1 = obj.to_sft()
-        save_tractogram(sft_1, path)
-        obj.close()
-        save_tractogram(sft_1, os.path.join(tmp_dir, "tmp.trk"))
+    obj = load(os.path.join(gs_dir, "gs.trx"), os.path.join(gs_dir, "gs.nii"))
+    sft_1 = obj.to_sft()
+    save_tractogram(sft_1, path)
+    obj.close()
+    save_tractogram(sft_1, os.path.join(tmp_path, "tmp.trk"))
 
-        _ = load_tractogram(os.path.join(tmp_dir, "tmp.trk"), "same")
+    _ = load_tractogram(os.path.join(tmp_path, "tmp.trk"), "same")
 
 
-def test_seq_ops_trx():
-    with TemporaryDirectory() as tmp_dir:
-        gs_dir = os.path.join(get_home(), "gold_standard")
-        path = os.path.join(gs_dir, "gs.trx")
+def test_seq_ops_trx(tmp_path):
+    gs_dir = os.path.join(get_home(), "gold_standard")
+    path = os.path.join(gs_dir, "gs.trx")
 
-        trx_1 = tmm.load(path)
-        tmm.save(trx_1, os.path.join(tmp_dir, "tmp.trx"))
-        trx_1.close()
-        trx_2 = tmm.load(os.path.join(tmp_dir, "tmp.trx"))
-        trx_2.close()
+    trx_1 = tmm.load(path)
+    tmm.save(trx_1, os.path.join(tmp_path, "tmp.trx"))
+    trx_1.close()
+    trx_2 = tmm.load(os.path.join(tmp_path, "tmp.trx"))
+    trx_2.close()
 
 
 @pytest.mark.parametrize("path", ["gs.trx", "gs.trk", "gs.tck", "gs.vtk"])
@@ -93,28 +91,25 @@ def test_load_voxmm(path):
 
 @pytest.mark.parametrize("path", ["gs.trk", "gs.trx", "gs_fldr.trx"])
 @pytest.mark.skipif(not dipy_available, reason="Dipy is not installed.")
-def test_multi_load_save_rasmm(path):
-    with TemporaryDirectory() as tmp_gs_dir:
-        gs_dir = os.path.join(get_home(), "gold_standard")
-        basename, ext = os.path.splitext(path)
+def test_multi_load_save_rasmm(tmp_path, path):
+    gs_dir = os.path.join(get_home(), "gold_standard")
+    basename, ext = os.path.splitext(path)
 
-        path = os.path.join(gs_dir, path)
-        coord = np.loadtxt(
-            os.path.join(get_home(), "gold_standard", "gs_rasmm_space.txt")
-        )
+    path = os.path.join(gs_dir, path)
+    coord = np.loadtxt(os.path.join(get_home(), "gold_standard", "gs_rasmm_space.txt"))
 
-        obj = load(path, os.path.join(gs_dir, "gs.nii"))
-        for i in range(3):
-            out_path = os.path.join(tmp_gs_dir, f"{basename}_tmp{i}_{ext}")
-            save(obj, out_path)
+    obj = load(path, os.path.join(gs_dir, "gs.nii"))
+    for i in range(3):
+        out_path = os.path.join(tmp_path, f"{basename}_tmp{i}_{ext}")
+        save(obj, out_path)
 
-            if isinstance(obj, TrxFile):
-                obj.close()
-            obj = load(out_path, os.path.join(gs_dir, "gs.nii"))
-
-        assert_allclose(obj.streamlines._data, coord, rtol=1e-04, atol=1e-06)
         if isinstance(obj, TrxFile):
             obj.close()
+        obj = load(out_path, os.path.join(gs_dir, "gs.nii"))
+
+    assert_allclose(obj.streamlines._data, coord, rtol=1e-04, atol=1e-06)
+    if isinstance(obj, TrxFile):
+        obj.close()
 
 
 @pytest.mark.parametrize("path", ["gs.trx", "gs_fldr.trx"])
@@ -196,23 +191,53 @@ def test_close_tmp_files(path):
     assert not count
 
 
-@pytest.mark.parametrize("tmp_path", ["~", "use_working_dir"])
-def test_change_tmp_dir(tmp_path):
+@pytest.mark.parametrize(
+    "env_value, expected_parent_fn",
+    [
+        ("use_working_dir", os.getcwd),
+        (os.path.expanduser("~"), lambda: os.path.expanduser("~")),
+        (None, tempfile.gettempdir),
+    ],
+)
+def test_get_trx_tmp_dir(env_value, expected_parent_fn, monkeypatch):
+    if env_value is None:
+        monkeypatch.delenv("TRX_TMPDIR", raising=False)
+    else:
+        monkeypatch.setenv("TRX_TMPDIR", env_value)
+
+    td = get_trx_tmp_dir()
+    try:
+        assert os.path.dirname(td.name) == expected_parent_fn()
+        assert os.path.isdir(td.name)
+    finally:
+        td.cleanup()
+
+    assert not os.path.isdir(td.name)
+
+
+@pytest.mark.parametrize(
+    "trx_tmpdir_env, expected_parent",
+    [
+        ("use_working_dir", lambda: os.getcwd()),
+        (os.path.expanduser("~"), lambda: os.path.expanduser("~")),
+        (None, lambda: tempfile.gettempdir()),
+    ],
+)
+def test_change_tmp_dir(trx_tmpdir_env, expected_parent, monkeypatch):
+    """Integration test through tmm.load(path), assuming that it
+    eventually calls get_trx_tmp_dir()."""
     gs_dir = os.path.join(get_home(), "gold_standard")
     path = os.path.join(gs_dir, "gs.trx")
 
-    if tmp_path == "use_working_dir":
-        os.environ["TRX_TMPDIR"] = "use_working_dir"
+    if trx_tmpdir_env is None:
+        monkeypatch.delenv("TRX_TMPDIR", raising=False)
     else:
-        os.environ["TRX_TMPDIR"] = os.path.expanduser(tmp_path)
+        monkeypatch.setenv("TRX_TMPDIR", trx_tmpdir_env)
 
     trx = tmm.load(path)
     tmp_gs_dir = deepcopy(trx._uncompressed_folder_handle.name)
 
-    if tmp_path == "use_working_dir":
-        assert os.path.dirname(tmp_gs_dir) == os.getcwd()
-    else:
-        assert os.path.dirname(tmp_gs_dir) == os.path.expanduser(tmp_path)
+    assert os.path.dirname(tmp_gs_dir) == expected_parent()
 
     trx.close()
     assert not os.path.isdir(tmp_gs_dir)

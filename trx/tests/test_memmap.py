@@ -3,7 +3,6 @@
 import json
 import os
 import struct
-import tempfile
 import zipfile
 
 from nibabel.streamlines import LazyTractogram
@@ -23,7 +22,6 @@ from trx.io import get_trx_tmp_dir
 import trx.trx_file_memmap as tmm
 
 fetch_data(get_testing_files_dict(), keys=["memmap_test_data.zip"])
-tmp_dir = get_trx_tmp_dir()
 
 
 @pytest.mark.parametrize(
@@ -344,38 +342,37 @@ def test_copy_fixed_arrays_from():
     pass
 
 
-def test_initialize_empty_trx():
+def test_initialize_empty_trx(tmp_path):
     """Test creating, saving, and loading an empty TRX file."""
     trx = tmm.TrxFile()
     assert trx.header["NB_STREAMLINES"] == 0
     assert trx.header["NB_VERTICES"] == 0
     assert len(trx.streamlines) == 0
 
-    with tempfile.TemporaryDirectory() as tmp_dir:
-        out_path = os.path.join(tmp_dir, "empty.trx")
-        tmm.save(trx, out_path)
+    out_path = os.path.join(tmp_path, "empty.trx")
+    tmm.save(trx, out_path)
 
-        assert os.path.exists(out_path)
-        file_size = os.path.getsize(out_path)
-        assert file_size < 500  # Should be very small, just header.json in zip
+    assert os.path.exists(out_path)
+    file_size = os.path.getsize(out_path)
+    assert file_size < 500  # Should be very small, just header.json in zip
 
-        with zipfile.ZipFile(out_path, "r") as zf:
-            filenames = [info.filename for info in zf.filelist]
-            assert "header.json" in filenames
-            positions_files = [f for f in filenames if f.startswith("positions")]
-            offsets_files = [f for f in filenames if f.startswith("offsets")]
-            assert len(positions_files) == 0
-            assert len(offsets_files) == 0
+    with zipfile.ZipFile(out_path, "r") as zf:
+        filenames = [info.filename for info in zf.filelist]
+        assert "header.json" in filenames
+        positions_files = [f for f in filenames if f.startswith("positions")]
+        offsets_files = [f for f in filenames if f.startswith("offsets")]
+        assert len(positions_files) == 0
+        assert len(offsets_files) == 0
 
-        loaded_trx = tmm.load(out_path)
-        assert loaded_trx.header["NB_STREAMLINES"] == 0
-        assert loaded_trx.header["NB_VERTICES"] == 0
-        assert len(loaded_trx.streamlines) == 0
-        assert len(loaded_trx.groups) == 0
-        assert len(loaded_trx.data_per_streamline) == 0
-        assert len(loaded_trx.data_per_vertex) == 0
-        assert len(loaded_trx.data_per_group) == 0
-        loaded_trx.close()
+    loaded_trx = tmm.load(out_path)
+    assert loaded_trx.header["NB_STREAMLINES"] == 0
+    assert loaded_trx.header["NB_VERTICES"] == 0
+    assert len(loaded_trx.streamlines) == 0
+    assert len(loaded_trx.groups) == 0
+    assert len(loaded_trx.data_per_streamline) == 0
+    assert len(loaded_trx.data_per_vertex) == 0
+    assert len(loaded_trx.data_per_group) == 0
+    loaded_trx.close()
 
 
 def test_create_trx_from_pointer():
@@ -401,17 +398,16 @@ def test_trxfile_select():
     trx.close()
 
 
-def test_save_after_select():
+def test_save_after_select(tmp_path):
     path = os.path.join(get_home(), "memmap_test_data", "small.trx")
     trx = tmm.load(path)
     sub = trx.select(list(range(5)))
-    with tempfile.TemporaryDirectory() as tmp_dir:
-        out = os.path.join(tmp_dir, "sub.trx")
-        tmm.save(sub, out)
-        loaded = tmm.load(out)
-        assert len(loaded.streamlines) == 5
-        assert len(loaded.streamlines._data) == len(sub.streamlines.copy()._data)
-        loaded.close()
+    out = os.path.join(tmp_path, "sub.trx")
+    tmm.save(sub, out)
+    loaded = tmm.load(out)
+    assert len(loaded.streamlines) == 5
+    assert len(loaded.streamlines._data) == len(sub.streamlines.copy()._data)
+    loaded.close()
     trx.close()
 
 
@@ -523,7 +519,7 @@ def test_ensure_little_endian_big_endian_input():
     assert result[0] == 0x12345678
 
 
-def test_load_zip64_with_extra_fields():
+def test_load_zip64_with_extra_fields(tmp_path):
     """Test loading ZIP64 files where both local and CD headers have extra fields.
 
     Rust and other tools always write ZIP64 extended information (extra field
@@ -532,6 +528,7 @@ def test_load_zip64_with_extra_fields():
     This ensures the data offset is computed correctly by reading the local
     header's extra_len rather than assuming a fixed layout.
     """
+
     positions = np.array([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]], dtype=np.float32)
     offsets = np.array([0, 2], dtype=np.uint64)
     header = {
@@ -545,96 +542,95 @@ def test_load_zip64_with_extra_fields():
         _data = struct.pack("<QQ", orig_size, comp_size)
         return struct.pack("<HH", 0x0001, len(_data)) + _data
 
-    with tempfile.TemporaryDirectory() as tmp_dir:
-        trx_path = os.path.join(tmp_dir, "test_zip64.trx")
+    trx_path = os.path.join(str(tmp_path), "test_zip64.trx")
 
-        with open(trx_path, "wb") as f:
-            local_info = []
+    with open(trx_path, "wb") as f:
+        local_info = []
 
-            for name, data in [
-                ("header.json", json.dumps(header).encode()),
-                ("positions.3.float32", positions.astype("<f4").tobytes()),
-                ("offsets.uint64", offsets.astype("<u8").tobytes()),
-            ]:
-                offset = f.tell()
-                fname = name.encode()
-                crc = zipfile.crc32(data)
-                # ZIP64 extended info in local header (20 bytes)
-                extra = make_zip64_extra(len(data), len(data))
-                f.write(
-                    struct.pack(
-                        "<4sHHHHHIIIHH",
-                        b"PK\x03\x04",
-                        45,  # version needed: ZIP64
-                        0,
-                        0,
-                        0,
-                        0,
-                        crc,
-                        len(data),
-                        len(data),
-                        len(fname),
-                        len(extra),
-                    )
-                )
-                f.write(fname)
-                f.write(extra)
-                f.write(data)
-                local_info.append((name, offset, crc, len(data)))
-
-            cd_start = f.tell()
-            for name, offset, crc, size in local_info:
-                fname = name.encode()
-                # ZIP64 extended info in central directory entry (20 bytes)
-                extra = make_zip64_extra(size, size)
-                f.write(
-                    struct.pack(
-                        "<4sHHHHHHIIIHHHHHII",
-                        b"PK\x01\x02",
-                        45,  # version made by: ZIP64
-                        45,  # version needed: ZIP64
-                        0,
-                        0,
-                        0,
-                        0,
-                        crc,
-                        size,
-                        size,
-                        len(fname),
-                        len(extra),
-                        0,
-                        0,
-                        0,
-                        0,
-                        offset,
-                    )
-                )
-                f.write(fname)
-                f.write(extra)
-
-            cd_size = f.tell() - cd_start
+        for name, data in [
+            ("header.json", json.dumps(header).encode()),
+            ("positions.3.float32", positions.astype("<f4").tobytes()),
+            ("offsets.uint64", offsets.astype("<u8").tobytes()),
+        ]:
+            offset = f.tell()
+            fname = name.encode()
+            crc = zipfile.crc32(data)
+            # ZIP64 extended info in local header (20 bytes)
+            extra = make_zip64_extra(len(data), len(data))
             f.write(
                 struct.pack(
-                    "<4sHHHHIIH",
-                    b"PK\x05\x06",
+                    "<4sHHHHHIIIHH",
+                    b"PK\x03\x04",
+                    45,  # version needed: ZIP64
                     0,
                     0,
-                    len(local_info),
-                    len(local_info),
-                    cd_size,
-                    cd_start,
                     0,
+                    0,
+                    crc,
+                    len(data),
+                    len(data),
+                    len(fname),
+                    len(extra),
                 )
             )
+            f.write(fname)
+            f.write(extra)
+            f.write(data)
+            local_info.append((name, offset, crc, len(data)))
 
-        trx = tmm.load_from_zip(trx_path)
-        np.testing.assert_array_almost_equal(trx.streamlines._data, positions)
-        assert trx.header["NB_VERTICES"] == 2
-        assert trx.header["NB_STREAMLINES"] == 1
-        trx.close()
+        cd_start = f.tell()
+        for name, offset, crc, size in local_info:
+            fname = name.encode()
+            # ZIP64 extended info in central directory entry (20 bytes)
+            extra = make_zip64_extra(size, size)
+            f.write(
+                struct.pack(
+                    "<4sHHHHHHIIIHHHHHII",
+                    b"PK\x01\x02",
+                    45,  # version made by: ZIP64
+                    45,  # version needed: ZIP64
+                    0,
+                    0,
+                    0,
+                    0,
+                    crc,
+                    size,
+                    size,
+                    len(fname),
+                    len(extra),
+                    0,
+                    0,
+                    0,
+                    0,
+                    offset,
+                )
+            )
+            f.write(fname)
+            f.write(extra)
+
+        cd_size = f.tell() - cd_start
+        f.write(
+            struct.pack(
+                "<4sHHHHIIH",
+                b"PK\x05\x06",
+                0,
+                0,
+                len(local_info),
+                len(local_info),
+                cd_size,
+                cd_start,
+                0,
+            )
+        )
+
+    trx = tmm.load_from_zip(trx_path)
+    np.testing.assert_array_almost_equal(trx.streamlines._data, positions)
+    assert trx.header["NB_VERTICES"] == 2
+    assert trx.header["NB_STREAMLINES"] == 1
+    trx.close()
 
 
-def test_load_zip_with_local_header_extra_field():
+def test_load_zip_with_local_header_extra_field(tmp_path):
     """Test loading ZIP where local header has extra field not in central dir.
 
     Regression test for a bug where zip_info.FileHeader() was used to calculate
@@ -651,93 +647,92 @@ def test_load_zip_with_local_header_extra_field():
         "NB_STREAMLINES": 1,
     }
 
-    with tempfile.TemporaryDirectory() as tmp_dir:
-        trx_path = os.path.join(tmp_dir, "test.trx")
+    trx_path = os.path.join(tmp_path, "test.trx")
 
-        # Build ZIP with extra bytes in local headers but not central directory
-        with open(trx_path, "wb") as f:
-            local_info = []
-            extra = b"\x00\x00\x04\x00TEST"  # 8-byte extra field
+    # Build ZIP with extra bytes in local headers but not central directory
+    with open(trx_path, "wb") as f:
+        local_info = []
+        extra = b"\x00\x00\x04\x00TEST"  # 8-byte extra field
 
-            for name, data in [
-                ("header.json", json.dumps(header).encode()),
-                ("positions.3.float32", positions.astype("<f4").tobytes()),
-                ("offsets.uint64", offsets.astype("<u8").tobytes()),
-            ]:
-                offset = f.tell()
-                fname = name.encode()
-                crc = zipfile.crc32(data)
-                # Local header WITH extra field
-                f.write(
-                    struct.pack(
-                        "<4sHHHHHIIIHH",
-                        b"PK\x03\x04",
-                        20,
-                        0,
-                        0,
-                        0,
-                        0,
-                        crc,
-                        len(data),
-                        len(data),
-                        len(fname),
-                        len(extra),
-                    )
-                )
-                f.write(fname)
-                f.write(extra)
-                f.write(data)
-                local_info.append((name, offset, crc, len(data)))
-
-            cd_start = f.tell()
-            for name, offset, crc, size in local_info:
-                fname = name.encode()
-                # Central directory WITHOUT extra field (mismatch!)
-                f.write(
-                    struct.pack(
-                        "<4sHHHHHHIIIHHHHHII",
-                        b"PK\x01\x02",
-                        20,
-                        20,
-                        0,
-                        0,
-                        0,
-                        0,
-                        crc,
-                        size,
-                        size,
-                        len(fname),
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        offset,
-                    )
-                )
-                f.write(fname)
-
-            # End of central directory
+        for name, data in [
+            ("header.json", json.dumps(header).encode()),
+            ("positions.3.float32", positions.astype("<f4").tobytes()),
+            ("offsets.uint64", offsets.astype("<u8").tobytes()),
+        ]:
+            offset = f.tell()
+            fname = name.encode()
+            crc = zipfile.crc32(data)
+            # Local header WITH extra field
             f.write(
                 struct.pack(
-                    "<4sHHHHIIH",
-                    b"PK\x05\x06",
+                    "<4sHHHHHIIIHH",
+                    b"PK\x03\x04",
+                    20,
                     0,
                     0,
-                    3,
-                    3,
-                    f.tell() - cd_start,
-                    cd_start,
                     0,
+                    0,
+                    crc,
+                    len(data),
+                    len(data),
+                    len(fname),
+                    len(extra),
                 )
             )
+            f.write(fname)
+            f.write(extra)
+            f.write(data)
+            local_info.append((name, offset, crc, len(data)))
 
-        trx = tmm.load_from_zip(trx_path)
-        np.testing.assert_array_almost_equal(trx.streamlines._data, positions)
-        assert trx.header["NB_VERTICES"] == 2
-        assert trx.header["NB_STREAMLINES"] == 1
+        cd_start = f.tell()
+        for name, offset, crc, size in local_info:
+            fname = name.encode()
+            # Central directory WITHOUT extra field (mismatch!)
+            f.write(
+                struct.pack(
+                    "<4sHHHHHHIIIHHHHHII",
+                    b"PK\x01\x02",
+                    20,
+                    20,
+                    0,
+                    0,
+                    0,
+                    0,
+                    crc,
+                    size,
+                    size,
+                    len(fname),
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    offset,
+                )
+            )
+            f.write(fname)
 
-        trx.close()
+        # End of central directory
+        f.write(
+            struct.pack(
+                "<4sHHHHIIH",
+                b"PK\x05\x06",
+                0,
+                0,
+                3,
+                3,
+                f.tell() - cd_start,
+                cd_start,
+                0,
+            )
+        )
+
+    trx = tmm.load_from_zip(trx_path)
+    np.testing.assert_array_almost_equal(trx.streamlines._data, positions)
+    assert trx.header["NB_VERTICES"] == 2
+    assert trx.header["NB_STREAMLINES"] == 1
+
+    trx.close()
 
 
 def test_endianness_roundtrip():
