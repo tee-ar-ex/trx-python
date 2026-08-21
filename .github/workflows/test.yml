@@ -17,7 +17,10 @@ jobs:
       fail-fast: false
       matrix:
         python-version: ["3.11", "3.12", "3.13"]
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: &os-matrix
+          - ubuntu-latest
+          - windows-latest
+          - macos-latest
     steps:
       - uses: actions/checkout@v5
         with:
@@ -40,8 +43,12 @@ jobs:
         run: spin test
 
   test-optional-deps:
-    name: Optional deps
+    name: Optional deps • Python ${{ matrix.python-version }} • ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        python-version: ["3.12"]
+        os: *os-matrix
     steps:
       - uses: actions/checkout@v5
         with:
@@ -50,7 +57,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
-          python-version: "3.12"
+          python-version: ${{ matrix.python-version }}
           cache: pip
           cache-dependency-path: pyproject.toml
 
