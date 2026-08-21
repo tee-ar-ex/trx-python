@@ -167,19 +167,19 @@ def test_load(path, check_dpg, value_error):
         assert isinstance(tmm.load(input_obj=path, check_dpg=check_dpg), tmm.TrxFile)
 
 
-@pytest.mark.parametrize("path", [("small.trx")])
+@pytest.mark.parametrize("path", ["small.trx"])
 def test_load_zip(path):
     path = os.path.join(get_home(), "memmap_test_data", path)
     assert isinstance(tmm.load_from_zip(path), tmm.TrxFile)
 
 
-@pytest.mark.parametrize("path", [("small_fldr.trx")])
+@pytest.mark.parametrize("path", ["small_fldr.trx"])
 def test_load_directory(path):
     path = os.path.join(get_home(), "memmap_test_data", path)
     assert isinstance(tmm.load_from_directory(path), tmm.TrxFile)
 
 
-@pytest.mark.parametrize("path", [("small.trx")])
+@pytest.mark.parametrize("path", ["small.trx"])
 def test_concatenate(path):
     path = os.path.join(get_home(), "memmap_test_data", path)
     trx1 = tmm.load(path)
@@ -192,7 +192,7 @@ def test_concatenate(path):
     concat.close()
 
 
-@pytest.mark.parametrize("path", [("small.trx")])
+@pytest.mark.parametrize("path", ["small.trx"])
 def test_resize(path):
     path = os.path.join(get_home(), "memmap_test_data", path)
     trx1 = tmm.load(path)
@@ -423,7 +423,7 @@ def test_trxfile_close():
     pass
 
 
-@pytest.mark.parametrize("path", [("small.trx")])
+@pytest.mark.parametrize("path", ["small.trx"])
 def test_close_releases_mmap_from_zip(path):
     """close() must release mmap handles even when loaded via load_from_zip()."""
     path = os.path.join(get_home(), "memmap_test_data", path)

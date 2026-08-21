@@ -25,7 +25,7 @@ from trx.trx_file_memmap import TrxFile
 fetch_data(get_testing_files_dict(), keys=["gold_standard.zip"])
 
 
-@pytest.mark.parametrize("path", [("gs.trk"), ("gs.tck"), ("gs.vtk")])
+@pytest.mark.parametrize("path", ["gs.trk", "gs.tck", "gs.vtk"])
 @pytest.mark.skipif(not dipy_available, reason="Dipy is not installed.")
 def test_seq_ops_sft(path):
     with TemporaryDirectory() as tmp_dir:
@@ -53,7 +53,7 @@ def test_seq_ops_trx():
         trx_2.close()
 
 
-@pytest.mark.parametrize("path", [("gs.trx"), ("gs.trk"), ("gs.tck"), ("gs.vtk")])
+@pytest.mark.parametrize("path", ["gs.trx", "gs.trk", "gs.tck", "gs.vtk"])
 @pytest.mark.skipif(not dipy_available, reason="Dipy is not installed.")
 def test_load_vox(path):
     from dipy.io.stateful_tractogram import Space
@@ -72,7 +72,7 @@ def test_load_vox(path):
         obj.close()
 
 
-@pytest.mark.parametrize("path", [("gs.trx"), ("gs.trk"), ("gs.tck"), ("gs.vtk")])
+@pytest.mark.parametrize("path", ["gs.trx", "gs.trk", "gs.tck", "gs.vtk"])
 @pytest.mark.skipif(not dipy_available, reason="Dipy is not installed.")
 def test_load_voxmm(path):
     from dipy.io.stateful_tractogram import Space
@@ -91,7 +91,7 @@ def test_load_voxmm(path):
         obj.close()
 
 
-@pytest.mark.parametrize("path", [("gs.trk"), ("gs.trx"), ("gs_fldr.trx")])
+@pytest.mark.parametrize("path", ["gs.trk", "gs.trx", "gs_fldr.trx"])
 @pytest.mark.skipif(not dipy_available, reason="Dipy is not installed.")
 def test_multi_load_save_rasmm(path):
     with TemporaryDirectory() as tmp_gs_dir:
@@ -117,7 +117,7 @@ def test_multi_load_save_rasmm(path):
             obj.close()
 
 
-@pytest.mark.parametrize("path", [("gs.trx"), ("gs_fldr.trx")])
+@pytest.mark.parametrize("path", ["gs.trx", "gs_fldr.trx"])
 @pytest.mark.skipif(not dipy_available, reason="Dipy is not installed.")
 def test_delete_tmp_gs_dir(path):
     gs_dir = os.path.join(get_home(), "gold_standard")
@@ -158,7 +158,7 @@ def test_delete_tmp_gs_dir(path):
     trx3.close()
 
 
-@pytest.mark.parametrize("path", [("gs.trx")])
+@pytest.mark.parametrize("path", ["gs.trx"])
 @pytest.mark.skipif(not dipy_available, reason="Dipy is not installed.")
 def test_close_tmp_files(path):
     gs_dir = os.path.join(get_home(), "gold_standard")
@@ -196,7 +196,7 @@ def test_close_tmp_files(path):
     assert not count
 
 
-@pytest.mark.parametrize("tmp_path", [("~"), ("use_working_dir")])
+@pytest.mark.parametrize("tmp_path", ["~", "use_working_dir"])
 def test_change_tmp_dir(tmp_path):
     gs_dir = os.path.join(get_home(), "gold_standard")
     path = os.path.join(gs_dir, "gs.trx")
@@ -218,7 +218,7 @@ def test_change_tmp_dir(tmp_path):
     assert not os.path.isdir(tmp_gs_dir)
 
 
-@pytest.mark.parametrize("path", [("gs.trx"), ("gs_fldr.trx")])
+@pytest.mark.parametrize("path", ["gs.trx", "gs_fldr.trx"])
 def test_complete_dir_from_trx(path):
     gs_dir = os.path.join(get_home(), "gold_standard")
     path = os.path.join(gs_dir, path)
