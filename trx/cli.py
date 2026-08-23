@@ -993,8 +993,8 @@ def info(
     typer.echo(f"Size: {_format_size(file_size)}")
 
     with zipfile.ZipFile(str(in_tractogram), "r") as zf:
-        total_uncompressed = sum(info.file_size for info in zf.infolist())
-        is_compressed = any(info.compress_type != 0 for info in zf.infolist())
+        total_uncompressed = sum(_info.file_size for _info in zf.infolist())
+        is_compressed = any(_info.compress_type != 0 for _info in zf.infolist())
         typer.echo(f"Entries: {len(zf.infolist())}")
         typer.echo(f"Compressed: {'Yes' if is_compressed else 'No'}")
         typer.echo(f"Uncompressed size: {_format_size(total_uncompressed)}")

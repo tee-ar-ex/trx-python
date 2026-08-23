@@ -213,12 +213,12 @@ def lint(fix):
     default=False,
     help="Open documentation in browser after building",
 )
-def docs(clean, open_browser):
+def docs(_clean, open_browser):
     """Build documentation using Sphinx.
 
     Parameters
     ----------
-    clean : bool
+    _clean : bool
         If True, clean build directory before building.
     open_browser : bool
         If True, open documentation in browser after building.
@@ -227,7 +227,7 @@ def docs(clean, open_browser):
 
     docs_dir = "docs"
 
-    if clean:
+    if _clean:
         click.echo("Cleaning build directory...")
         build_dir = os.path.join(docs_dir, "_build")
         if os.path.exists(build_dir):
