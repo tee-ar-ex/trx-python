@@ -106,9 +106,8 @@ html_theme = "pydata_sphinx_theme"
 html_static_path = ['../_static']
 
 html_sidebars = {
-    "scripts": [],
-    "trx_specifications": [],
-}
+    "**": ["sidebar-nav-bs.html", "implementation-links.html"],
+    }
 
 html_theme_options = {
     "icon_links": [
