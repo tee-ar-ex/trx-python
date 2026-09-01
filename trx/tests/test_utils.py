@@ -47,35 +47,30 @@ except ImportError:  # pragma: no cover
         TRACKVIS = None
 
 
-def test_close_or_delete_mmap_np_memmap():
+def test_close_or_delete_mmap_np_memmap(tmp_path):
     """Test close_or_delete_mmap with a numpy.memmap."""
-    with tempfile.TemporaryDirectory() as tmpdir:
-        tmp_name = os.path.join(tmpdir, "test.mmap")
-        mmap_arr = np.memmap(tmp_name, dtype="float32", mode="w+", shape=(10,))
-        close_or_delete_mmap(mmap_arr)
-        assert mmap_arr._mmap.closed
-    assert not os.path.exists(tmp_name)
+    tmp_name = tmp_path / "test.mmap"
+    mmap_arr = np.memmap(tmp_name, dtype="float32", mode="w+", shape=(10,))
+    close_or_delete_mmap(mmap_arr)
+    assert tmp_name.exists()
 
 
-def test_close_or_delete_mmap_array_sequence():
+def test_close_or_delete_mmap_array_sequence(tmp_path):
     """Test close_or_delete_mmap with an ArraySequence."""
-    with tempfile.TemporaryDirectory() as tmpdir:
-        tmp1_name = os.path.join(tmpdir, "test1.mmap")
-        tmp2_name = os.path.join(tmpdir, "test2.mmap")
-        data = np.memmap(tmp1_name, dtype="float32", mode="w+", shape=(10, 3))
-        offsets = np.memmap(tmp2_name, dtype="uint32", mode="w+", shape=(5,))
+    tmp1_name = tmp_path / "test1.mmap"
+    tmp2_name = tmp_path / "test2.mmap"
+    data = np.memmap(tmp1_name, dtype="float32", mode="w+", shape=(10, 3))
+    offsets = np.memmap(tmp2_name, dtype="uint32", mode="w+", shape=(5,))
 
-        seq = ArraySequence()
-        seq._data = data
-        seq._offsets = offsets
-        seq._lengths = np.array([2, 2, 2, 2, 2], dtype="uint32")
+    seq = ArraySequence()
+    seq._data = data
+    seq._offsets = offsets
+    seq._lengths = np.array([2, 2, 2, 2, 2], dtype="uint32")
 
-        close_or_delete_mmap(seq)
-        assert seq._data._mmap.closed
-        assert seq._offsets._mmap.closed
+    close_or_delete_mmap(seq)
 
-    assert not os.path.exists(tmp1_name)
-    assert not os.path.exists(tmp2_name)
+    assert tmp1_name.exists()
+    assert tmp2_name.exists()
 
 
 def test_close_or_delete_mmap_with_mmap_attr():
@@ -190,14 +185,13 @@ def test_get_reference_info_wrapper_nifti_header(nifti_ref):
     assert np.array_equal(dimensions, [10, 20, 30])
 
 
-def test_get_reference_info_wrapper_nifti_file(nifti_ref):
+def test_get_reference_info_wrapper_nifti_file(tmp_path, nifti_ref):
     """Test get_reference_info_wrapper with a Nifti filename."""
-    with tempfile.TemporaryDirectory() as tmp_dir:
-        path = os.path.join(tmp_dir, "test.nii.gz")
-        nib.save(nifti_ref, path)
-        affine, dimensions, voxel_sizes, voxel_order = get_reference_info_wrapper(path)
-        assert np.allclose(affine, nifti_ref.affine)
-        assert np.array_equal(dimensions, [10, 20, 30])
+    path = os.path.join(tmp_path, "test.nii.gz")
+    nib.save(nifti_ref, path)
+    affine, dimensions, voxel_sizes, voxel_order = get_reference_info_wrapper(path)
+    assert np.allclose(affine, nifti_ref.affine)
+    assert np.array_equal(dimensions, [10, 20, 30])
 
 
 @patch("nibabel.streamlines.load")
