@@ -13,6 +13,7 @@ tractography in the Pythonprogramming language.
 
 ```{toctree}
 :maxdepth: 2
+installation
 scripts
 dev
 autoapi/index
