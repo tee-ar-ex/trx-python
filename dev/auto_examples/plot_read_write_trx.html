@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Reading and Writing TRX Files &#8212; trx-python 0.4.1.dev72 documentation</title>
+    <title>Reading and Writing TRX Files &#8212; trx-python 0.4.1.dev78 documentation</title>
   
   
   
@@ -44,7 +44,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="../_static/documentation_options.js?v=684d3a4b"></script>
+    <script src="../_static/documentation_options.js?v=d85e0737"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/sg-tags.js?v=d80f6fa4"></script>
@@ -60,11 +60,9 @@
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Working with Groups" href="plot_groups.html" />
-    <link rel="prev" title="Tutorials" href="index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.4.1.dev72" />
+  <meta name="docsearch:version" content="0.4.1.dev78" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -136,8 +134,8 @@
       
     
     
-    <img src="../_static/trx_logo.png" class="logo__image only-light" alt="trx-python 0.4.1.dev72 documentation - Home"/>
-    <img src="../_static/trx_logo.png" class="logo__image only-dark pst-js-only" alt="trx-python 0.4.1.dev72 documentation - Home"/>
+    <img src="../_static/trx_logo.png" class="logo__image only-light" alt="trx-python 0.4.1.dev78 documentation - Home"/>
+    <img src="../_static/trx_logo.png" class="logo__image only-dark pst-js-only" alt="trx-python 0.4.1.dev78 documentation - Home"/>
   
   
 </a></div>
@@ -173,8 +171,8 @@
   <ul class="bd-navbar-elements navbar-nav">
     
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../trx_specifications.html">
-    TRX File Format Specifications
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installing trx-python
   </a>
 </li>
 
@@ -182,13 +180,6 @@
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../scripts.html">
     Command-line Interface
-  </a>
-</li>
-
-
-<li class="nav-item current active">
-  <a class="nav-link nav-internal" href="index.html">
-    Tutorials
   </a>
 </li>
 
@@ -302,8 +293,8 @@
   <ul class="bd-navbar-elements navbar-nav">
     
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../trx_specifications.html">
-    TRX File Format Specifications
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installing trx-python
   </a>
 </li>
 
@@ -311,13 +302,6 @@
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../scripts.html">
     Command-line Interface
-  </a>
-</li>
-
-
-<li class="nav-item current active">
-  <a class="nav-link nav-internal" href="index.html">
-    Tutorials
   </a>
 </li>
 
@@ -385,12 +369,7 @@
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Reading and Writing TRX Files</a></li>
-<li class="toctree-l1"><a class="reference internal" href="plot_groups.html">Working with Groups</a></li>
-<li class="toctree-l1"><a class="reference internal" href="plot_dps_dpv.html">Data Per Vertex and Data Per Streamline</a></li>
-</ul>
-</div>
+  <div class="bd-toc-item navbar-nav"></div>
 </nav></div>
         <div class="sidebar-primary-item"><div class="sidebar-implementation-links">
   <h3>TRX specification and implementations</h3>
@@ -440,9 +419,6 @@
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    
-    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Tutorials</a></li>
-    
     <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Reading and Writing TRX Files</span></li>
   </ul>
 </nav>
@@ -621,7 +597,7 @@ or uncompressed zip archive, or as a directory.</p>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Reloaded TRX has </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">reloaded</span><span class="p">)</span><span class="si">}</span><span class="s2"> streamlines"</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Saved TRX file to: /tmp/tmp9n8rhp4r/output.trx
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Saved TRX file to: /tmp/tmpvlsyxje8/output.trx
 File size: 3881 bytes
 Reloaded TRX has 13 streamlines
 </pre></div>
@@ -656,7 +632,7 @@ Header preserved: DIMENSIONS = [ 5 10 20]
 </ul>
 <p>The TRX format is designed for memory efficiency through memory-mapping,
 making it suitable for large tractography datasets.</p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.263 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.268 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-read-write-trx-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/8949d0a4562bd0eba677e15ce697c59b/plot_read_write_trx.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_read_write_trx.ipynb</span></code></a></p>
@@ -682,24 +658,6 @@ making it suitable for large tractography datasets.</p>
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
-    <a class="left-prev"
-       href="index.html"
-       title="previous page">
-      <i class="fa-solid fa-angle-left"></i>
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Tutorials</p>
-      </div>
-    </a>
-    <a class="right-next"
-       href="plot_groups.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Working with Groups</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
-    </a>
 </div>
                 </footer>
               
