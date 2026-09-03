@@ -124,7 +124,12 @@ Let's see what dpv data is available.
 
  .. code-block:: none
 
-    Data Per Vertex keys: ['color_x', 'color_z', 'color_y']
+    Data Per Vertex keys: ['color_y', 'color_x', 'color_z']
+
+      color_y:
+        Shape: (104, 1)
+        Dtype: float32
+        Sample values: [20. 20. 20.]
 
       color_x:
         Shape: (104, 1)
@@ -135,11 +140,6 @@ Let's see what dpv data is available.
         Shape: (104, 1)
         Dtype: float32
         Sample values: [60. 60. 60.]
-
-      color_y:
-        Shape: (104, 1)
-        Dtype: float32
-        Sample values: [20. 20. 20.]
 
 
 
@@ -175,9 +175,9 @@ the dpv values for a specific streamline using the same indices.
 
  .. code-block:: none
 
-    DPV 'color_x' for first streamline:
+    DPV 'color_y' for first streamline:
       Shape: (8, 1)
-      Values: [220. 220. 220. 220. 220. 220. 220. 220.]
+      Values: [20. 20. 20. 20. 20. 20. 20. 20.]
 
 
 
@@ -395,7 +395,7 @@ you to attach any kind of information to vertices or streamlines.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.006 seconds)
+   **Total running time of the script:** (0 minutes 0.008 seconds)
 
 
 .. _sphx_glr_download_auto_examples_plot_dps_dpv.py:
