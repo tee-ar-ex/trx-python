@@ -28,15 +28,9 @@ if version is None:
     except ImportError:
         version = "dev"
 
-# Normalize version for switcher matching
-# Remove .devX suffix for matching against switcher.json
-version_match = version.split('.dev')[0] if '.dev' in version else version
-if version_match == version and 'dev' not in version:
-    # This is a release version
-    pass
-else:
-    # Development version - match against "dev"
-    version_match = "dev"
+# Development builds all share the single "dev" entry in switcher.json;
+# releases match their own entry.
+version_match = "dev" if "dev" in version else version
 
 # -- Project information -----------------------------------------------------
 
