@@ -7,6 +7,7 @@ on:
       - '*'
   pull_request:
     branches: [ master ]
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -72,35 +73,39 @@ jobs:
     - name: Get version from tag
       id: get_version
       run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
-    - name: Fetch existing switcher.json from gh-pages
+    - name: Check out gh-pages into a worktree
       run: |
-        curl -sSL https://tee-ar-ex.github.io/trx-python/switcher.json -o switcher.json || echo '[]' > switcher.json
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git fetch origin gh-pages
+        git worktree add gh-pages-out origin/gh-pages
+    # Read switcher.json from the worktree rather than the published site: Pages
+    # serves it through a CDN cache, so two tags pushed in quick succession can
+    # otherwise be built from a stale copy and drop an entry.
     - name: Update switcher.json with new version
-      run: python tools/update_switcher.py switcher.json --version ${{ steps.get_version.outputs.VERSION }}
+      id: switcher
+      run: |
+        python tools/update_switcher.py gh-pages-out/switcher.json \
+          --version "${{ steps.get_version.outputs.VERSION }}" \
+          --github-output "$GITHUB_OUTPUT"
     - name: Deploy all release docs in a single push
       run: |
         VERSION="${{ steps.get_version.outputs.VERSION }}"
-
-        # Configure git
-        git config --global user.name "github-actions[bot]"
-        git config --global user.email "github-actions[bot]@users.noreply.github.com"
-
-        # Check out gh-pages into a temp folder
-        git fetch origin gh-pages
-        git worktree add gh-pages-out origin/gh-pages
 
         # Update versioned folder
         rm -rf "gh-pages-out/${VERSION}"
         mkdir -p "gh-pages-out/${VERSION}"
         cp -r docs/_build/html/. "gh-pages-out/${VERSION}/"
 
-        # Update stable folder
-        rm -rf gh-pages-out/stable
-        mkdir -p gh-pages-out/stable
-        cp -r docs/_build/html/. gh-pages-out/stable/
-
-        # Update switcher.json at root
-        cp switcher.json gh-pages-out/switcher.json
+        # Only the newest release owns the stable alias, so that a backport tag
+        # published after a newer release does not demote it.
+        if [ "${{ steps.switcher.outputs.is_latest }}" = "true" ]; then
+          rm -rf gh-pages-out/stable
+          mkdir -p gh-pages-out/stable
+          cp -r docs/_build/html/. gh-pages-out/stable/
+        else
+          echo "${VERSION} is not the latest release; leaving stable/ untouched."
+        fi
 
         # Update root redirect index.html
         cat > gh-pages-out/index.html << 'EOF'
@@ -129,4 +134,37 @@ jobs:
         git add --all
         git diff --cached --quiet && echo "No changes to deploy." && exit 0
         git commit -m "Deploy docs for ${VERSION} 🚀"
+        git push origin HEAD:gh-pages
+
+  rebuild-switcher:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' && github.repository == 'tee-ar-ex/trx-python'
+    steps:
+    - uses: actions/checkout@v5
+    - name: Check out gh-pages into a worktree
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git fetch origin gh-pages
+        git worktree add gh-pages-out origin/gh-pages
+    # The version list comes from the folders actually published on gh-pages, not
+    # from git tags: older tags predate the versioned docs and have no folder, so
+    # listing them would produce dead switcher links.
+    - name: Rebuild switcher.json from published version folders
+      run: |
+        args=""
+        for path in gh-pages-out/*/; do
+          folder=$(basename "$path")
+          case "$folder" in
+            [0-9]*) args="$args --version $folder" ;;
+          esac
+        done
+        echo "Rebuilding switcher from:$args"
+        python tools/update_switcher.py gh-pages-out/switcher.json --rebuild $args
+    - name: Commit and push switcher.json
+      run: |
+        cd gh-pages-out
+        git add switcher.json
+        git diff --cached --quiet && echo "switcher.json already up to date." && exit 0
+        git commit -m "Rebuild docs version switcher"
         git push origin HEAD:gh-pages
