@@ -2,11 +2,11 @@ name: Documentation build
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
     tags:
       - '*'
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
   workflow_dispatch:
 
 permissions:
@@ -46,7 +46,7 @@ jobs:
   deploy-dev:
     needs: build
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/master' && github.repository == 'tee-ar-ex/trx-python'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'tee-ar-ex/trx-python'
     steps:
     - uses: actions/checkout@v5
     - uses: actions/download-artifact@v4
