@@ -2,7 +2,7 @@
 
 [![Tests](https://github.com/tee-ar-ex/trx-python/actions/workflows/test.yml/badge.svg)](https://github.com/tee-ar-ex/trx-python/actions/workflows/test.yml)
 [![Code Format](https://github.com/tee-ar-ex/trx-python/actions/workflows/codeformat.yml/badge.svg)](https://github.com/tee-ar-ex/trx-python/actions/workflows/codeformat.yml)
-[![codecov](https://codecov.io/gh/tee-ar-ex/trx-python/branch/master/graph/badge.svg)](https://codecov.io/gh/tee-ar-ex/trx-python)
+[![codecov](https://codecov.io/gh/tee-ar-ex/trx-python/branch/main/graph/badge.svg)](https://codecov.io/gh/tee-ar-ex/trx-python)
 [![PyPI version](https://badge.fury.io/py/trx-python.svg)](https://badge.fury.io/py/trx-python)
 
 A Python implementation of the TRX file format for tractography data.
