@@ -1,20 +1,28 @@
 # TRX in Python
 
-This software library implements the TRX file format for
-tractography in the Pythonprogramming language.
+This software library implements the [TRX file format](https://tee-ar-ex.github.io) for
+tractography in the Python programming language.
 
-## Getting Started
+::::{grid} 2
+:::{grid-item-card} Getting Started
+```{toctree}
+:maxdepth: 1
+installation
+auto_examples/index
+```
+:::
 
-1. **Understand the format**: To understand the TRX file structure and learn Why TRX, please refer to the [TRX homepage](https://tee-ar-ex.github.io).
-2. **Installation** To install the library, follow the instructions in the {doc}`installation` documentation page.
-3. **Learn by example**: Follow our {doc}`auto_examples/index` to learn how to read, write, and manipulate TRX files
-4. **Use the CLI tools**: Check out the {doc}`scripts` documentation for command-line operations
+:::{grid-item-card} User Guide
+```{toctree}
+:maxdepth: 1
+scripts
+autoapi/index
+```
+:::
+::::
 
 
 ```{toctree}
 :maxdepth: 2
-installation
-scripts
 dev
-autoapi/index
 ```
