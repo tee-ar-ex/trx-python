@@ -91,7 +91,7 @@ spin docs       # Build documentation
    git push origin my-feature-branch
    ```
 
-2. **Open a Pull Request** on GitHub against the `master` branch
+2. **Open a Pull Request** on GitHub against the `main` branch
 
 3. **Describe your changes** in the PR description:
 
