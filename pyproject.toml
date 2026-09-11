@@ -34,7 +34,7 @@ dependencies = [
 
 [project.optional-dependencies]
 utils = [
-    "dipy",
+    "dipy >= 1.12",
     "fury >= 0.10.0, < 2.0.0"
 ]
 dev = [

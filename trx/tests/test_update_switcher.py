@@ -8,7 +8,7 @@ import sys
 
 import pytest
 
-TOOLS_DIR = Path(__file__).resolve().parents[2] / "tools"
+TOOLS_DIR = Path(__file__).resolve().parent.parent.parent / "tools"
 SCRIPT = TOOLS_DIR / "update_switcher.py"
 
 
