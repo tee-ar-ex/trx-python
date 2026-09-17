@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Reading and Writing TRX Files &#8212; trx-python 0.5.1.dev6 documentation</title>
+    <title>Reading and Writing TRX Files &#8212; trx-python 0.5.1.dev10 documentation</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=fd6457a4" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=c83e6b79" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
@@ -44,7 +44,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="../_static/documentation_options.js?v=4eaf8003"></script>
+    <script src="../_static/documentation_options.js?v=076781fa"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/sg-tags.js?v=d80f6fa4"></script>
@@ -64,7 +64,7 @@
     <link rel="prev" title="Tutorials" href="index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.5.1.dev6" />
+  <meta name="docsearch:version" content="0.5.1.dev10" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -136,8 +136,8 @@
       
     
     
-    <img src="../_static/trx_logo.png" class="logo__image only-light" alt="trx-python 0.5.1.dev6 documentation - Home"/>
-    <img src="../_static/trx_logo.png" class="logo__image only-dark pst-js-only" alt="trx-python 0.5.1.dev6 documentation - Home"/>
+    <img src="../_static/trx_logo.png" class="logo__image only-light" alt="trx-python 0.5.1.dev10 documentation - Home"/>
+    <img src="../_static/trx_logo.png" class="logo__image only-dark pst-js-only" alt="trx-python 0.5.1.dev10 documentation - Home"/>
   
   
 </a></div>
@@ -482,23 +482,22 @@ of brain fiber tract streamline data.</p>
 <h2>Loading a TRX file<a class="headerlink" href="#loading-a-trx-file" title="Link to this heading">#</a></h2>
 <p>Let’s start by loading an existing TRX file. First, we need to download
 some test data.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">tempfile</span>
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">trx.fetcher</span><span class="w"> </span><span class="kn">import</span> <span class="n">fetch_data</span><span class="p">,</span> <span class="n">get_home</span><span class="p">,</span> <span class="n">get_testing_files_dict</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">trx.trx_file_memmap</span><span class="w"> </span><span class="kn">import</span> <span class="n">load</span><span class="p">,</span> <span class="n">save</span>
-
-<span class="c1"># Download test data</span>
-<span class="n">fetch_data</span><span class="p">(</span><span class="n">get_testing_files_dict</span><span class="p">(),</span> <span class="n">keys</span><span class="o">=</span><span class="s2">"gold_standard.zip"</span><span class="p">)</span>
-<span class="n">trx_home</span> <span class="o">=</span> <span class="n">get_home</span><span class="p">()</span>
-<span class="n">trx_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">trx_home</span><span class="p">,</span> <span class="s2">"gold_standard"</span><span class="p">,</span> <span class="s2">"gs.trx"</span><span class="p">)</span>
-
-<span class="c1"># Load the TRX file</span>
-<span class="n">trx</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="n">trx_path</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">"TRX file loaded successfully!"</span><span class="p">)</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="kn">import</span><span class="w"> </span><span class="nn">os</span><span class="w">
+</span><span class="kn">import</span><span class="w"> </span><span class="nn">tempfile</span><span class="w">
+</span><span class="w">
+</span><span class="kn">from</span><span class="w"> </span><a class="sphx-glr-backref-module-trx-trx_file_memmap sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap.TrxFile" title="trx.trx_file_memmap.TrxFile"><span class="nn">trx</span></a><span class="nn">.</span><span class="nn">fetcher</span><span class="w"> </span><span class="kn">import</span> <a class="sphx-glr-backref-module-trx-fetcher sphx-glr-backref-type-py-function reference internal" href="../autoapi/trx/fetcher/index.html#trx.fetcher.fetch_data" title="trx.fetcher.fetch_data"><span class="n">fetch_data</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-trx-fetcher sphx-glr-backref-type-py-function reference internal" href="../autoapi/trx/fetcher/index.html#trx.fetcher.get_home" title="trx.fetcher.get_home"><span class="n">get_home</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-trx-fetcher sphx-glr-backref-type-py-function reference internal" href="../autoapi/trx/fetcher/index.html#trx.fetcher.get_testing_files_dict" title="trx.fetcher.get_testing_files_dict"><span class="n">get_testing_files_dict</span></a><span class="w">
+</span><span class="kn">from</span><span class="w"> </span><a class="sphx-glr-backref-module-trx-trx_file_memmap sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap.TrxFile" title="trx.trx_file_memmap.TrxFile"><span class="nn">trx</span></a><span class="nn">.</span><span class="nn">trx_file_memmap</span><span class="w"> </span><span class="kn">import</span> <a class="sphx-glr-backref-module-trx-trx_file_memmap sphx-glr-backref-type-py-function reference internal" href="../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap.load" title="trx.trx_file_memmap.load"><span class="n">load</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-trx-trx_file_memmap sphx-glr-backref-type-py-function reference internal" href="../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap.save" title="trx.trx_file_memmap.save"><span class="n">save</span></a><span class="w">
+</span><span class="w">
+</span><span class="c1"># Download test data</span><span class="w">
+</span><a class="sphx-glr-backref-module-trx-fetcher sphx-glr-backref-type-py-function reference internal" href="../autoapi/trx/fetcher/index.html#trx.fetcher.fetch_data" title="trx.fetcher.fetch_data"><span class="n">fetch_data</span></a><span class="p">(</span><a class="sphx-glr-backref-module-trx-fetcher sphx-glr-backref-type-py-function reference internal" href="../autoapi/trx/fetcher/index.html#trx.fetcher.get_testing_files_dict" title="trx.fetcher.get_testing_files_dict"><span class="n">get_testing_files_dict</span></a><span class="p">(</span><span class="p">)</span><span class="p">,</span> <span class="n">keys</span><span class="o">=</span><span class="s2">&quot;</span><span class="s2">gold_standard.zip</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span><span class="n">trx_home</span> <span class="o">=</span> <a class="sphx-glr-backref-module-trx-fetcher sphx-glr-backref-type-py-function reference internal" href="../autoapi/trx/fetcher/index.html#trx.fetcher.get_home" title="trx.fetcher.get_home"><span class="n">get_home</span></a><span class="p">(</span><span class="p">)</span><span class="w">
+</span><span class="n">trx_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">trx_home</span><span class="p">,</span> <span class="s2">&quot;</span><span class="s2">gold_standard</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="s2">gs.trx</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="c1"># Load the TRX file</span><span class="w">
+</span><a class="sphx-glr-backref-module-trx-trx_file_memmap sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap.TrxFile" title="trx.trx_file_memmap.TrxFile"><span class="n">trx</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-trx-trx_file_memmap sphx-glr-backref-type-py-function reference internal" href="../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap.load" title="trx.trx_file_memmap.load"><span class="n">load</span></a><span class="p">(</span><span class="n">trx_path</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="s2">TRX file loaded successfully!</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>TRX file loaded successfully!
 </pre></div>
 </div>
@@ -507,10 +506,9 @@ some test data.</p>
 <h2>Inspecting TRX file contents<a class="headerlink" href="#inspecting-trx-file-contents" title="Link to this heading">#</a></h2>
 <p>The TrxFile object has several key attributes that you can inspect.
 Let’s look at what’s inside our loaded file.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Print a summary of the TRX file</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">trx</span><span class="p">)</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="c1"># Print a summary of the TRX file</span><span class="w">
+</span><span class="nb">print</span><span class="p">(</span><a class="sphx-glr-backref-module-trx-trx_file_memmap sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap.TrxFile" title="trx.trx_file_memmap.TrxFile"><span class="n">trx</span></a><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>VOXEL_TO_RASMM:
 [[3.969615 -0.245576 0.007596 12.082228]
  [0.491151 1.969615 -0.122788 22.164438]
@@ -528,13 +526,12 @@ copy_safe: True
 </pre></div>
 </div>
 <p>The header contains essential metadata about the tractogram:</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">"Header information:"</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  Number of streamlines: </span><span class="si">{</span><span class="n">trx</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">'NB_STREAMLINES'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  Number of vertices: </span><span class="si">{</span><span class="n">trx</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">'NB_VERTICES'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  Image dimensions: </span><span class="si">{</span><span class="n">trx</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">'DIMENSIONS'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  Voxel to RASMM affine:</span><span class="se">\n</span><span class="si">{</span><span class="n">trx</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">'VOXEL_TO_RASMM'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="s2">Header information:</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="s2">  Number of streamlines: </span><span class="si">{</span><a class="sphx-glr-backref-module-trx-trx_file_memmap sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap.TrxFile" title="trx.trx_file_memmap.TrxFile"><span class="n">trx</span></a><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">'</span><span class="s1">NB_STREAMLINES</span><span class="s1">'</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="s2">  Number of vertices: </span><span class="si">{</span><a class="sphx-glr-backref-module-trx-trx_file_memmap sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap.TrxFile" title="trx.trx_file_memmap.TrxFile"><span class="n">trx</span></a><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">'</span><span class="s1">NB_VERTICES</span><span class="s1">'</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="s2">  Image dimensions: </span><span class="si">{</span><a class="sphx-glr-backref-module-trx-trx_file_memmap sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap.TrxFile" title="trx.trx_file_memmap.TrxFile"><span class="n">trx</span></a><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">'</span><span class="s1">DIMENSIONS</span><span class="s1">'</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="s2">  Voxel to RASMM affine:</span><span class="se">\n</span><span class="si">{</span><a class="sphx-glr-backref-module-trx-trx_file_memmap sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap.TrxFile" title="trx.trx_file_memmap.TrxFile"><span class="n">trx</span></a><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">'</span><span class="s1">VOXEL_TO_RASMM</span><span class="s1">'</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Header information:
   Number of streamlines: 13
   Number of vertices: 104
@@ -551,15 +548,14 @@ copy_safe: True
 <h2>Accessing streamlines<a class="headerlink" href="#accessing-streamlines" title="Link to this heading">#</a></h2>
 <p>Streamlines are the core data in a TRX file. Each streamline is a sequence
 of 3D points representing a fiber tract in the brain.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Number of streamlines: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">trx</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Total number of vertices: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.memmap.html#numpy.memmap" title="numpy.memmap" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">trx</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span></a><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-
-<span class="c1"># Access the first streamline</span>
-<a href="https://numpy.org/doc/stable/reference/generated/numpy.memmap.html#numpy.memmap" title="numpy.memmap" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">first_streamline</span></a> <span class="o">=</span> <span class="n">trx</span><span class="o">.</span><span class="n">streamlines</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">First streamline has </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.memmap.html#numpy.memmap" title="numpy.memmap" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">first_streamline</span></a><span class="p">)</span><span class="si">}</span><span class="s2"> points"</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"First 3 points of the first streamline:</span><span class="se">\n</span><span class="si">{</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.memmap.html#numpy.memmap" title="numpy.memmap" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">first_streamline</span></a><span class="p">[:</span><span class="mi">3</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="s2">Number of streamlines: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><a class="sphx-glr-backref-module-trx-trx_file_memmap sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap.TrxFile" title="trx.trx_file_memmap.TrxFile"><span class="n">trx</span></a><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="s2">Total number of vertices: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><a class="sphx-glr-backref-module-trx-trx_file_memmap sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap.TrxFile" title="trx.trx_file_memmap.TrxFile"><span class="n">trx</span></a><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="c1"># Access the first streamline</span><span class="w">
+</span><span class="n">first_streamline</span> <span class="o">=</span> <a class="sphx-glr-backref-module-trx-trx_file_memmap sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap.TrxFile" title="trx.trx_file_memmap.TrxFile"><span class="n">trx</span></a><span class="o">.</span><span class="n">streamlines</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w">
+</span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">First streamline has </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">first_streamline</span><span class="p">)</span><span class="si">}</span><span class="s2"> points</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="s2">First 3 points of the first streamline:</span><span class="se">\n</span><span class="si">{</span><span class="n">first_streamline</span><span class="p">[</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Number of streamlines: 13
 Total number of vertices: 104
 
@@ -574,11 +570,10 @@ First 3 points of the first streamline:
 <section id="accessing-metadata">
 <h2>Accessing metadata<a class="headerlink" href="#accessing-metadata" title="Link to this heading">#</a></h2>
 <p>TRX files can contain additional data per vertex (dpv) and per streamline (dps).</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">"Data per vertex (dpv) keys:"</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">trx</span><span class="o">.</span><span class="n">data_per_vertex</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Data per streamline (dps) keys:"</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">trx</span><span class="o">.</span><span class="n">data_per_streamline</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Groups:"</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">trx</span><span class="o">.</span><span class="n">groups</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="s2">Data per vertex (dpv) keys:</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><a class="sphx-glr-backref-module-trx-trx_file_memmap sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap.TrxFile" title="trx.trx_file_memmap.TrxFile"><span class="n">trx</span></a><span class="o">.</span><span class="n">data_per_vertex</span><span class="o">.</span><span class="n">keys</span><span class="p">(</span><span class="p">)</span><span class="p">)</span><span class="p">)</span><span class="w">
+</span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="s2">Data per streamline (dps) keys:</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><a class="sphx-glr-backref-module-trx-trx_file_memmap sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap.TrxFile" title="trx.trx_file_memmap.TrxFile"><span class="n">trx</span></a><span class="o">.</span><span class="n">data_per_streamline</span><span class="o">.</span><span class="n">keys</span><span class="p">(</span><span class="p">)</span><span class="p">)</span><span class="p">)</span><span class="w">
+</span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="s2">Groups:</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><a class="sphx-glr-backref-module-trx-trx_file_memmap sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap.TrxFile" title="trx.trx_file_memmap.TrxFile"><span class="n">trx</span></a><span class="o">.</span><span class="n">groups</span><span class="o">.</span><span class="n">keys</span><span class="p">(</span><span class="p">)</span><span class="p">)</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Data per vertex (dpv) keys: ['color_y', 'color_x', 'color_z']
 Data per streamline (dps) keys: ['random_coord']
 Groups: []
@@ -588,17 +583,16 @@ Groups: []
 <section id="selecting-a-subset-of-streamlines">
 <h2>Selecting a subset of streamlines<a class="headerlink" href="#selecting-a-subset-of-streamlines" title="Link to this heading">#</a></h2>
 <p>You can easily select a subset of streamlines using indices or slicing.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Select first 5 streamlines</span>
-<span class="n">subset</span> <span class="o">=</span> <span class="n">trx</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Subset has </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">subset</span><span class="p">)</span><span class="si">}</span><span class="s2"> streamlines"</span><span class="p">)</span>
-
-<span class="c1"># Select specific streamlines by indices (ensure indices are valid)</span>
-<span class="n">max_idx</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">trx</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
-<span class="n">indices</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">max_idx</span><span class="p">),</span> <span class="nb">min</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">max_idx</span><span class="p">)]</span>
-<span class="n">selected</span> <span class="o">=</span> <span class="n">trx</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Selected </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">selected</span><span class="p">)</span><span class="si">}</span><span class="s2"> streamlines"</span><span class="p">)</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="c1"># Select first 5 streamlines</span><span class="w">
+</span><a class="sphx-glr-backref-module-trx-trx_file_memmap sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap.TrxFile" title="trx.trx_file_memmap.TrxFile"><span class="n">subset</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-trx-trx_file_memmap sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap.TrxFile" title="trx.trx_file_memmap.TrxFile"><span class="n">trx</span></a><span class="p">[</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span><span class="w">
+</span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="s2">Subset has </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><a class="sphx-glr-backref-module-trx-trx_file_memmap sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap.TrxFile" title="trx.trx_file_memmap.TrxFile"><span class="n">subset</span></a><span class="p">)</span><span class="si">}</span><span class="s2"> streamlines</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="c1"># Select specific streamlines by indices (ensure indices are valid)</span><span class="w">
+</span><span class="n">max_idx</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><a class="sphx-glr-backref-module-trx-trx_file_memmap sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap.TrxFile" title="trx.trx_file_memmap.TrxFile"><span class="n">trx</span></a><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="w">
+</span><span class="n">indices</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">max_idx</span><span class="p">)</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">max_idx</span><span class="p">)</span><span class="p">]</span><span class="w">
+</span><a class="sphx-glr-backref-module-trx-trx_file_memmap sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap.TrxFile" title="trx.trx_file_memmap.TrxFile"><span class="n">selected</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-trx-trx_file_memmap sphx-glr-backref-type-py-method reference internal" href="../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap.TrxFile.select" title="trx.trx_file_memmap.TrxFile.select"><span class="n">trx</span><span class="o">.</span><span class="n">select</span></a><span class="p">(</span><span class="n">indices</span><span class="p">)</span><span class="w">
+</span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="s2">Selected </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><a class="sphx-glr-backref-module-trx-trx_file_memmap sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap.TrxFile" title="trx.trx_file_memmap.TrxFile"><span class="n">selected</span></a><span class="p">)</span><span class="si">}</span><span class="s2"> streamlines</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Subset has 5 streamlines
 WARNING:root:Keeping dpg despite affecting the group items.
 Selected 3 streamlines
@@ -609,19 +603,18 @@ Selected 3 streamlines
 <h2>Saving a TRX file<a class="headerlink" href="#saving-a-trx-file" title="Link to this heading">#</a></h2>
 <p>You can save a TRX file back to disk. The file can be saved as a compressed
 or uncompressed zip archive, or as a directory.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">tmpdir</span><span class="p">:</span>
-    <span class="c1"># Save as TRX file (zip archive)</span>
-    <span class="n">output_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmpdir</span><span class="p">,</span> <span class="s2">"output.trx"</span><span class="p">)</span>
-    <span class="n">save</span><span class="p">(</span><span class="n">trx</span><span class="p">,</span> <span class="n">output_path</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Saved TRX file to: </span><span class="si">{</span><span class="n">output_path</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"File size: </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">output_path</span><span class="p">)</span><span class="si">}</span><span class="s2"> bytes"</span><span class="p">)</span>
-
-    <span class="c1"># Reload to verify</span>
-    <span class="n">reloaded</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="n">output_path</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Reloaded TRX has </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">reloaded</span><span class="p">)</span><span class="si">}</span><span class="s2"> streamlines"</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Saved TRX file to: /tmp/tmp7jttwflf/output.trx
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">(</span><span class="p">)</span> <span class="k">as</span> <span class="n">tmpdir</span><span class="p">:</span><span class="w">
+</span>    <span class="c1"># Save as TRX file (zip archive)</span><span class="w">
+</span>    <span class="n">output_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmpdir</span><span class="p">,</span> <span class="s2">&quot;</span><span class="s2">output.trx</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span>    <a class="sphx-glr-backref-module-trx-trx_file_memmap sphx-glr-backref-type-py-function reference internal" href="../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap.save" title="trx.trx_file_memmap.save"><span class="n">save</span></a><span class="p">(</span><a class="sphx-glr-backref-module-trx-trx_file_memmap sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap.TrxFile" title="trx.trx_file_memmap.TrxFile"><span class="n">trx</span></a><span class="p">,</span> <span class="n">output_path</span><span class="p">)</span><span class="w">
+</span>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="s2">Saved TRX file to: </span><span class="si">{</span><span class="n">output_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="s2">File size: </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">output_path</span><span class="p">)</span><span class="si">}</span><span class="s2"> bytes</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span>    <span class="c1"># Reload to verify</span><span class="w">
+</span>    <a class="sphx-glr-backref-module-trx-trx_file_memmap sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap.TrxFile" title="trx.trx_file_memmap.TrxFile"><span class="n">reloaded</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-trx-trx_file_memmap sphx-glr-backref-type-py-function reference internal" href="../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap.load" title="trx.trx_file_memmap.load"><span class="n">load</span></a><span class="p">(</span><span class="n">output_path</span><span class="p">)</span><span class="w">
+</span>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="s2">Reloaded TRX has </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><a class="sphx-glr-backref-module-trx-trx_file_memmap sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap.TrxFile" title="trx.trx_file_memmap.TrxFile"><span class="n">reloaded</span></a><span class="p">)</span><span class="si">}</span><span class="s2"> streamlines</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Saved TRX file to: /tmp/tmpf9qc5cb_/output.trx
 File size: 3881 bytes
 Reloaded TRX has 13 streamlines
 </pre></div>
@@ -631,13 +624,12 @@ Reloaded TRX has 13 streamlines
 <h2>Creating a TRX file from an existing one<a class="headerlink" href="#creating-a-trx-file-from-an-existing-one" title="Link to this heading">#</a></h2>
 <p>A common workflow is to create a new TRX file based on an existing one,
 preserving the spatial reference information.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a deepcopy of the loaded TRX file</span>
-<span class="n">trx_copy</span> <span class="o">=</span> <span class="n">trx</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">()</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Created copy with </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">trx_copy</span><span class="p">)</span><span class="si">}</span><span class="s2"> streamlines"</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Header preserved: DIMENSIONS = </span><span class="si">{</span><span class="n">trx_copy</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">'DIMENSIONS'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="c1"># Create a deepcopy of the loaded TRX file</span><span class="w">
+</span><a class="sphx-glr-backref-module-trx-trx_file_memmap sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap.TrxFile" title="trx.trx_file_memmap.TrxFile"><span class="n">trx_copy</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-trx-trx_file_memmap sphx-glr-backref-type-py-method reference internal" href="../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap.TrxFile.deepcopy" title="trx.trx_file_memmap.TrxFile.deepcopy"><span class="n">trx</span><span class="o">.</span><span class="n">deepcopy</span></a><span class="p">(</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="s2">Created copy with </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><a class="sphx-glr-backref-module-trx-trx_file_memmap sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap.TrxFile" title="trx.trx_file_memmap.TrxFile"><span class="n">trx_copy</span></a><span class="p">)</span><span class="si">}</span><span class="s2"> streamlines</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="s2">Header preserved: DIMENSIONS = </span><span class="si">{</span><a class="sphx-glr-backref-module-trx-trx_file_memmap sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap.TrxFile" title="trx.trx_file_memmap.TrxFile"><span class="n">trx_copy</span></a><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">'</span><span class="s1">DIMENSIONS</span><span class="s1">'</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Created copy with 13 streamlines
 Header preserved: DIMENSIONS = [ 5 10 20]
 </pre></div>
@@ -656,7 +648,7 @@ Header preserved: DIMENSIONS = [ 5 10 20]
 </ul>
 <p>The TRX format is designed for memory efficiency through memory-mapping,
 making it suitable for large tractography datasets.</p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.286 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.150 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-read-write-trx-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/8949d0a4562bd0eba677e15ce697c59b/plot_read_write_trx.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_read_write_trx.ipynb</span></code></a></p>
