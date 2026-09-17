@@ -137,7 +137,7 @@ html_theme_options = {
 
 autoapi_type = 'python'
 autoapi_dirs = ['../../trx']
-autoapi_ignore = ['*test*', '*version*']
+autoapi_ignore = ['*test*', '*version*', '*tools*']
 
 
 def _validate_reference_urls(urls, timeout=5):

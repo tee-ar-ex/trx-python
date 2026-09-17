@@ -85,7 +85,7 @@ jobs:
     - name: Update switcher.json with new version
       id: switcher
       run: |
-        python tools/update_switcher.py gh-pages-out/switcher.json \
+        python trx/tools/update_switcher.py gh-pages-out/switcher.json \
           --version "${{ steps.get_version.outputs.VERSION }}" \
           --github-output "$GITHUB_OUTPUT"
     - name: Deploy all release docs in a single push
@@ -160,7 +160,7 @@ jobs:
           esac
         done
         echo "Rebuilding switcher from:$args"
-        python tools/update_switcher.py gh-pages-out/switcher.json --rebuild $args
+        python trx/tools/update_switcher.py gh-pages-out/switcher.json --rebuild $args
     - name: Commit and push switcher.json
       run: |
         cd gh-pages-out
