@@ -1,0 +1,13 @@
+[
+    {
+        "name": "dev",
+        "version": "dev",
+        "url": "https://tee-ar-ex.github.io/trx-python/dev/"
+    },
+    {
+        "name": "stable",
+        "version": "stable",
+        "url": "https://tee-ar-ex.github.io/trx-python/stable/",
+        "preferred": true
+    }
+]
