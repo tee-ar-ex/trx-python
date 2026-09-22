@@ -36,7 +36,7 @@ trx_home = get_home()
 trx_path = os.path.join(trx_home, "gold_standard", "gs.trx")
 
 # Load the TRX file
-trx = load(trx_path)
+tgm = load(trx_path)
 
 print("TRX file loaded successfully!")
 
@@ -48,16 +48,16 @@ print("TRX file loaded successfully!")
 # Let's look at what's inside our loaded file.
 
 # Print a summary of the TRX file
-print(trx)
+print(tgm)
 
 # %%
 # The header contains essential metadata about the tractogram:
 
 print("Header information:")
-print(f"  Number of streamlines: {trx.header['NB_STREAMLINES']}")
-print(f"  Number of vertices: {trx.header['NB_VERTICES']}")
-print(f"  Image dimensions: {trx.header['DIMENSIONS']}")
-print(f"  Voxel to RASMM affine:\n{trx.header['VOXEL_TO_RASMM']}")
+print(f"  Number of streamlines: {tgm.header['NB_STREAMLINES']}")
+print(f"  Number of vertices: {tgm.header['NB_VERTICES']}")
+print(f"  Image dimensions: {tgm.header['DIMENSIONS']}")
+print(f"  Voxel to RASMM affine:\n{tgm.header['VOXEL_TO_RASMM']}")
 
 # %%
 # Accessing streamlines
@@ -66,11 +66,11 @@ print(f"  Voxel to RASMM affine:\n{trx.header['VOXEL_TO_RASMM']}")
 # Streamlines are the core data in a TRX file. Each streamline is a sequence
 # of 3D points representing a fiber tract in the brain.
 
-print(f"Number of streamlines: {len(trx)}")
-print(f"Total number of vertices: {len(trx.streamlines._data)}")
+print(f"Number of streamlines: {len(tgm)}")
+print(f"Total number of vertices: {len(tgm.streamlines._data)}")
 
 # Access the first streamline
-first_streamline = trx.streamlines[0]
+first_streamline = tgm.streamlines[0]
 print(f"\nFirst streamline has {len(first_streamline)} points")
 print(f"First 3 points of the first streamline:\n{first_streamline[:3]}")
 
@@ -80,9 +80,9 @@ print(f"First 3 points of the first streamline:\n{first_streamline[:3]}")
 #
 # TRX files can contain additional data per vertex (dpv) and per streamline (dps).
 
-print("Data per vertex (dpv) keys:", list(trx.data_per_vertex.keys()))
-print("Data per streamline (dps) keys:", list(trx.data_per_streamline.keys()))
-print("Groups:", list(trx.groups.keys()))
+print("Data per vertex (dpv) keys:", list(tgm.data_per_vertex.keys()))
+print("Data per streamline (dps) keys:", list(tgm.data_per_streamline.keys()))
+print("Groups:", list(tgm.groups.keys()))
 
 # %%
 # Selecting a subset of streamlines
@@ -91,13 +91,13 @@ print("Groups:", list(trx.groups.keys()))
 # You can easily select a subset of streamlines using indices or slicing.
 
 # Select first 5 streamlines
-subset = trx[:5]
+subset = tgm[:5]
 print(f"Subset has {len(subset)} streamlines")
 
 # Select specific streamlines by indices (ensure indices are valid)
-max_idx = len(trx) - 1
+max_idx = len(tgm) - 1
 indices = [0, min(2, max_idx), min(5, max_idx)]
-selected = trx.select(indices)
+selected = tgm.select(indices)
 print(f"Selected {len(selected)} streamlines")
 
 # %%
@@ -110,7 +110,7 @@ print(f"Selected {len(selected)} streamlines")
 with tempfile.TemporaryDirectory() as tmpdir:
     # Save as TRX file (zip archive)
     output_path = os.path.join(tmpdir, "output.trx")
-    save(trx, output_path)
+    save(tgm, output_path)
     print(f"Saved TRX file to: {output_path}")
     print(f"File size: {os.path.getsize(output_path)} bytes")
 
@@ -126,10 +126,10 @@ with tempfile.TemporaryDirectory() as tmpdir:
 # preserving the spatial reference information.
 
 # Create a deepcopy of the loaded TRX file
-trx_copy = trx.deepcopy()
+tgm_copy = tgm.deepcopy()
 
-print(f"Created copy with {len(trx_copy)} streamlines")
-print(f"Header preserved: DIMENSIONS = {trx_copy.header['DIMENSIONS']}")
+print(f"Created copy with {len(tgm_copy)} streamlines")
+print(f"Header preserved: DIMENSIONS = {tgm_copy.header['DIMENSIONS']}")
 
 # %%
 # Summary

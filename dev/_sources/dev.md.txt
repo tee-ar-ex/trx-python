@@ -251,7 +251,7 @@ def load(filename, reference=None):
     Examples
     --------
     >>> from trx.io import load
-    >>> trx = load("tractogram.trx")
+    >>> tgm = load("tractogram.trx")
     """
     pass
 ```

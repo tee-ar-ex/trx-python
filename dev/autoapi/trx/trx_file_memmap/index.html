@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>trx.trx_file_memmap &#8212; trx-python 0.5.1.dev10 documentation</title>
+    <title>trx.trx_file_memmap &#8212; trx-python 0.7.dev2 documentation</title>
   
   
   
@@ -44,7 +44,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="../../../_static/documentation_options.js?v=076781fa"></script>
+    <script src="../../../_static/documentation_options.js?v=a87be308"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/sg-tags.js?v=d80f6fa4"></script>
@@ -64,7 +64,7 @@
     <link rel="prev" title="trx.streamlines_ops" href="../streamlines_ops/index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.5.1.dev10" />
+  <meta name="docsearch:version" content="0.7.dev2" />
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -136,8 +136,8 @@
       
     
     
-    <img src="../../../_static/trx_logo.png" class="logo__image only-light" alt="trx-python 0.5.1.dev10 documentation - Home"/>
-    <img src="../../../_static/trx_logo.png" class="logo__image only-dark pst-js-only" alt="trx-python 0.5.1.dev10 documentation - Home"/>
+    <img src="../../../_static/trx_logo.png" class="logo__image only-light" alt="trx-python 0.7.dev2 documentation - Home"/>
+    <img src="../../../_static/trx_logo.png" class="logo__image only-dark pst-js-only" alt="trx-python 0.7.dev2 documentation - Home"/>
   
   
 </a></div>
@@ -1066,12 +1066,12 @@ Default is False.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="trx.trx_file_memmap.save">
-<span class="sig-prename descclassname"><span class="pre">trx.trx_file_memmap.</span></span><span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#trx.trx_file_memmap.TrxFile" title="trx.trx_file_memmap.TrxFile"><span class="pre">TrxFile</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compression_standard</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">zipfile.ZIP_STORED</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/trx/trx_file_memmap.html#save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.trx_file_memmap.save" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">trx.trx_file_memmap.</span></span><span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tgm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#trx.trx_file_memmap.TrxFile" title="trx.trx_file_memmap.TrxFile"><span class="pre">TrxFile</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compression_standard</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">zipfile.ZIP_STORED</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/trx/trx_file_memmap.html#save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.trx_file_memmap.save" title="Link to this definition">#</a></dt>
 <dd><p>Save a TrxFile (compressed or not).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>trx</strong><span class="classifier">TrxFile</span></dt><dd><p>The TrxFile to save.</p>
+<dt><strong>tgm</strong><span class="classifier">TrxFile</span></dt><dd><p>The TrxFile to save.</p>
 </dd>
 <dt><strong>filename</strong><span class="classifier">str</span></dt><dd><p>The path to save the TrxFile to.</p>
 </dd>
@@ -1224,12 +1224,12 @@ streamline and the total length of all the streamlines.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="trx.trx_file_memmap.TrxFile._copy_fixed_arrays_from">
-<span class="sig-name descname"><span class="pre">_copy_fixed_arrays_from</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#trx.trx_file_memmap.TrxFile" title="trx.trx_file_memmap.TrxFile"><span class="pre">TrxFile</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strs_start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pts_start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nb_strs_to_copy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/trx/trx_file_memmap.html#TrxFile._copy_fixed_arrays_from"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.trx_file_memmap.TrxFile._copy_fixed_arrays_from" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">_copy_fixed_arrays_from</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tgm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#trx.trx_file_memmap.TrxFile" title="trx.trx_file_memmap.TrxFile"><span class="pre">TrxFile</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strs_start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pts_start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nb_strs_to_copy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/trx/trx_file_memmap.html#TrxFile._copy_fixed_arrays_from"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.trx_file_memmap.TrxFile._copy_fixed_arrays_from" title="Link to this definition">#</a></dt>
 <dd><p>Fill a TrxFile using another and start indexes (preallocation).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>trx</strong><span class="classifier">TrxFile</span></dt><dd><p>TrxFile to copy data from.</p>
+<dt><strong>tgm</strong><span class="classifier">TrxFile</span></dt><dd><p>TrxFile to copy data from.</p>
 </dd>
 <dt><strong>strs_start</strong><span class="classifier">int, optional</span></dt><dd><p>The start index of the streamline. Default is 0.</p>
 </dd>
@@ -1358,12 +1358,12 @@ TrxFile disk file/folder.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="trx.trx_file_memmap.TrxFile._append_trx">
-<span class="sig-name descname"><span class="pre">_append_trx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#trx.trx_file_memmap.TrxFile" title="trx.trx_file_memmap.TrxFile"><span class="pre">TrxFile</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_buffer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/trx/trx_file_memmap.html#TrxFile._append_trx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.trx_file_memmap.TrxFile._append_trx" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">_append_trx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tgm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#trx.trx_file_memmap.TrxFile" title="trx.trx_file_memmap.TrxFile"><span class="pre">TrxFile</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_buffer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/trx/trx_file_memmap.html#TrxFile._append_trx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trx.trx_file_memmap.TrxFile._append_trx" title="Link to this definition">#</a></dt>
 <dd><p>Append a TrxFile to another (with buffer support).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>trx</strong><span class="classifier">TrxFile</span></dt><dd><p>The TrxFile to append to the current TrxFile.</p>
+<dt><strong>tgm</strong><span class="classifier">TrxFile</span></dt><dd><p>The TrxFile to append to the current TrxFile.</p>
 </dd>
 <dt><strong>extra_buffer</strong><span class="classifier">int, optional</span></dt><dd><p>The additional buffer space required to append data. Default is 0.</p>
 </dd>

@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>trx.trx_file_memmap &#8212; trx-python 0.5.1.dev10 documentation</title>
+    <title>trx.trx_file_memmap &#8212; trx-python 0.7.dev2 documentation</title>
   
   
   
@@ -43,7 +43,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="../../_static/documentation_options.js?v=076781fa"></script>
+    <script src="../../_static/documentation_options.js?v=a87be308"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/sg-tags.js?v=d80f6fa4"></script>
@@ -61,7 +61,7 @@
     <link rel="search" title="Search" href="../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.5.1.dev10" />
+  <meta name="docsearch:version" content="0.7.dev2" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -133,8 +133,8 @@
       
     
     
-    <img src="../../_static/trx_logo.png" class="logo__image only-light" alt="trx-python 0.5.1.dev10 documentation - Home"/>
-    <img src="../../_static/trx_logo.png" class="logo__image only-dark pst-js-only" alt="trx-python 0.5.1.dev10 documentation - Home"/>
+    <img src="../../_static/trx_logo.png" class="logo__image only-light" alt="trx-python 0.7.dev2 documentation - Home"/>
+    <img src="../../_static/trx_logo.png" class="logo__image only-dark pst-js-only" alt="trx-python 0.7.dev2 documentation - Home"/>
   
   
 </a></div>
@@ -830,24 +830,24 @@
             <span class="k">with</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">input_obj</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">)</span> <span class="k">as</span> <span class="n">zf</span><span class="p">:</span>
                 <span class="n">tmp_dir</span> <span class="o">=</span> <span class="n">get_trx_tmp_dir</span><span class="p">()</span>
                 <span class="n">zf</span><span class="o">.</span><span class="n">extractall</span><span class="p">(</span><span class="n">tmp_dir</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-                <span class="n">trx</span> <span class="o">=</span> <span class="n">load_from_directory</span><span class="p">(</span><span class="n">tmp_dir</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-                <span class="n">trx</span><span class="o">.</span><span class="n">_uncompressed_folder_handle</span> <span class="o">=</span> <span class="n">tmp_dir</span>
+                <span class="n">tgm</span> <span class="o">=</span> <span class="n">load_from_directory</span><span class="p">(</span><span class="n">tmp_dir</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                <span class="n">tgm</span><span class="o">.</span><span class="n">_uncompressed_folder_handle</span> <span class="o">=</span> <span class="n">tmp_dir</span>
                 <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
                     <span class="s2">"File was compressed, call the close() function before exiting."</span>
                 <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">trx</span> <span class="o">=</span> <span class="n">load_from_zip</span><span class="p">(</span><span class="n">input_obj</span><span class="p">)</span>
+            <span class="n">tgm</span> <span class="o">=</span> <span class="n">load_from_zip</span><span class="p">(</span><span class="n">input_obj</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">input_obj</span><span class="p">):</span>
-        <span class="n">trx</span> <span class="o">=</span> <span class="n">load_from_directory</span><span class="p">(</span><span class="n">input_obj</span><span class="p">)</span>
+        <span class="n">tgm</span> <span class="o">=</span> <span class="n">load_from_directory</span><span class="p">(</span><span class="n">input_obj</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"File/Folder does not exist"</span><span class="p">)</span>
 
     <span class="c1"># Example of robust check for metadata</span>
     <span class="k">if</span> <span class="n">check_dpg</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">dpg</span> <span class="ow">in</span> <span class="n">trx</span><span class="o">.</span><span class="n">data_per_group</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="k">if</span> <span class="n">dpg</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">trx</span><span class="o">.</span><span class="n">groups</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">dpg</span> <span class="ow">in</span> <span class="n">tgm</span><span class="o">.</span><span class="n">data_per_group</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">dpg</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">tgm</span><span class="o">.</span><span class="n">groups</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"An undeclared group (</span><span class="si">{</span><span class="n">dpg</span><span class="si">}</span><span class="s2">) has data_per_group."</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">trx</span></div>
+    <span class="k">return</span> <span class="n">tgm</span></div>
 
 
 
@@ -1350,13 +1350,13 @@
 <div class="viewcode-block" id="save">
 <a class="viewcode-back" href="../../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap.save">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span>
-    <span class="n">trx</span><span class="p">:</span> <span class="s2">"TrxFile"</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">compression_standard</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZIP_STORED</span>
+    <span class="n">tgm</span><span class="p">:</span> <span class="s2">"TrxFile"</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">compression_standard</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZIP_STORED</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""Save a TrxFile (compressed or not).</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    trx : TrxFile</span>
+<span class="sd">    tgm : TrxFile</span>
 <span class="sd">        The TrxFile to save.</span>
 <span class="sd">    filename : str</span>
 <span class="sd">        The path to save the TrxFile to.</span>
@@ -1368,7 +1368,7 @@
     <span class="k">if</span> <span class="n">ext</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">".zip"</span><span class="p">,</span> <span class="s2">".trx"</span><span class="p">,</span> <span class="s2">""</span><span class="p">]:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Unsupported extension."</span><span class="p">)</span>
 
-    <span class="n">copy_trx</span> <span class="o">=</span> <span class="n">trx</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">()</span>
+    <span class="n">copy_trx</span> <span class="o">=</span> <span class="n">tgm</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">()</span>
     <span class="n">copy_trx</span><span class="o">.</span><span class="n">resize</span><span class="p">()</span>
     <span class="n">tmp_dir_name</span> <span class="o">=</span> <span class="n">copy_trx</span><span class="o">.</span><span class="n">_uncompressed_folder_handle</span><span class="o">.</span><span class="n">name</span>
     <span class="k">if</span> <span class="n">ext</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">".zip"</span><span class="p">,</span> <span class="s2">".trx"</span><span class="p">]:</span>
@@ -1517,10 +1517,10 @@
                 <span class="sa">f</span><span class="s2">"Preallocating TrxFile with size </span><span class="si">{</span><span class="n">nb_streamlines</span><span class="si">}</span><span class="s2"> streamlines and "</span>
                 <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">nb_vertices</span><span class="si">}</span><span class="s2"> vertices."</span>
             <span class="p">)</span>
-            <span class="n">trx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_initialize_empty_trx</span><span class="p">(</span>
+            <span class="n">tgm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_initialize_empty_trx</span><span class="p">(</span>
                 <span class="n">nb_streamlines</span><span class="p">,</span> <span class="n">nb_vertices</span><span class="p">,</span> <span class="n">init_as</span><span class="o">=</span><span class="n">init_as</span>
             <span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span> <span class="o">=</span> <span class="n">trx</span><span class="o">.</span><span class="vm">__dict__</span>
+            <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span> <span class="o">=</span> <span class="n">tgm</span><span class="o">.</span><span class="vm">__dict__</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"You must declare both nb_vertices AND NB_STREAMLINES"</span><span class="p">)</span>
 
@@ -1756,7 +1756,7 @@
 <a class="viewcode-back" href="../../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap.TrxFile._copy_fixed_arrays_from">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">_copy_fixed_arrays_from</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">trx</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="s2">"TrxFile"</span><span class="p">],</span>
+        <span class="n">tgm</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="s2">"TrxFile"</span><span class="p">],</span>
         <span class="n">strs_start</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
         <span class="n">pts_start</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
         <span class="n">nb_strs_to_copy</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -1765,7 +1765,7 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        trx : TrxFile</span>
+<span class="sd">        tgm : TrxFile</span>
 <span class="sd">            TrxFile to copy data from.</span>
 <span class="sd">        strs_start : int, optional</span>
 <span class="sd">            The start index of the streamline. Default is 0.</span>
@@ -1781,10 +1781,10 @@
 <span class="sd">            streamlines and end of copied points.</span>
 <span class="sd">        """</span>
         <span class="k">if</span> <span class="n">nb_strs_to_copy</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">curr_strs_len</span><span class="p">,</span> <span class="n">curr_pts_len</span> <span class="o">=</span> <span class="n">trx</span><span class="o">.</span><span class="n">_get_real_len</span><span class="p">()</span>
+            <span class="n">curr_strs_len</span><span class="p">,</span> <span class="n">curr_pts_len</span> <span class="o">=</span> <span class="n">tgm</span><span class="o">.</span><span class="n">_get_real_len</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">curr_strs_len</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">nb_strs_to_copy</span><span class="p">)</span>
-            <span class="n">curr_pts_len</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">trx</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_lengths</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">curr_strs_len</span><span class="p">])</span>
+            <span class="n">curr_pts_len</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">tgm</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_lengths</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">curr_strs_len</span><span class="p">])</span>
             <span class="n">curr_pts_len</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">curr_pts_len</span><span class="p">)</span>
 
         <span class="n">strs_end</span> <span class="o">=</span> <span class="n">strs_start</span> <span class="o">+</span> <span class="n">curr_strs_len</span>
@@ -1794,27 +1794,27 @@
             <span class="k">return</span> <span class="n">strs_start</span><span class="p">,</span> <span class="n">pts_start</span>
 
         <span class="c1"># Mandatory arrays</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">pts_start</span><span class="p">:</span><span class="n">pts_end</span><span class="p">]</span> <span class="o">=</span> <span class="n">trx</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">pts_start</span><span class="p">:</span><span class="n">pts_end</span><span class="p">]</span> <span class="o">=</span> <span class="n">tgm</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span>
             <span class="mi">0</span><span class="p">:</span><span class="n">curr_pts_len</span>
         <span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_offsets</span><span class="p">[</span><span class="n">strs_start</span><span class="p">:</span><span class="n">strs_end</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">trx</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_offsets</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">curr_strs_len</span><span class="p">]</span> <span class="o">+</span> <span class="n">pts_start</span>
+            <span class="n">tgm</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_offsets</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">curr_strs_len</span><span class="p">]</span> <span class="o">+</span> <span class="n">pts_start</span>
         <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_lengths</span><span class="p">[</span><span class="n">strs_start</span><span class="p">:</span><span class="n">strs_end</span><span class="p">]</span> <span class="o">=</span> <span class="n">trx</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_lengths</span><span class="p">[</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_lengths</span><span class="p">[</span><span class="n">strs_start</span><span class="p">:</span><span class="n">strs_end</span><span class="p">]</span> <span class="o">=</span> <span class="n">tgm</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_lengths</span><span class="p">[</span>
             <span class="mi">0</span><span class="p">:</span><span class="n">curr_strs_len</span>
         <span class="p">]</span>
 
         <span class="c1"># Optional fixed-sized arrays</span>
         <span class="k">for</span> <span class="n">dpv_key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_per_vertex</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">data_per_vertex</span><span class="p">[</span><span class="n">dpv_key</span><span class="p">]</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">pts_start</span><span class="p">:</span><span class="n">pts_end</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">trx</span><span class="o">.</span><span class="n">data_per_vertex</span><span class="p">[</span><span class="n">dpv_key</span><span class="p">]</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">curr_pts_len</span><span class="p">]</span>
+                <span class="n">tgm</span><span class="o">.</span><span class="n">data_per_vertex</span><span class="p">[</span><span class="n">dpv_key</span><span class="p">]</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">curr_pts_len</span><span class="p">]</span>
             <span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">data_per_vertex</span><span class="p">[</span><span class="n">dpv_key</span><span class="p">]</span><span class="o">.</span><span class="n">_offsets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_offsets</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">data_per_vertex</span><span class="p">[</span><span class="n">dpv_key</span><span class="p">]</span><span class="o">.</span><span class="n">_lengths</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_lengths</span>
 
         <span class="k">for</span> <span class="n">dps_key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_per_streamline</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">data_per_streamline</span><span class="p">[</span><span class="n">dps_key</span><span class="p">][</span><span class="n">strs_start</span><span class="p">:</span><span class="n">strs_end</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">trx</span><span class="o">.</span><span class="n">data_per_streamline</span><span class="p">[</span><span class="n">dps_key</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="n">curr_strs_len</span><span class="p">]</span>
+                <span class="n">tgm</span><span class="o">.</span><span class="n">data_per_streamline</span><span class="p">[</span><span class="n">dps_key</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="n">curr_strs_len</span><span class="p">]</span>
             <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">strs_end</span><span class="p">,</span> <span class="n">pts_end</span></div>
@@ -1846,16 +1846,16 @@
 <span class="sd">        TrxFile</span>
 <span class="sd">            An empty TrxFile preallocated with a certain size.</span>
 <span class="sd">        """</span>
-        <span class="n">trx</span> <span class="o">=</span> <span class="n">TrxFile</span><span class="p">()</span>
+        <span class="n">tgm</span> <span class="o">=</span> <span class="n">TrxFile</span><span class="p">()</span>
         <span class="n">tmp_dir</span> <span class="o">=</span> <span class="n">get_trx_tmp_dir</span><span class="p">()</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Temporary folder for memmaps: </span><span class="si">{</span><span class="n">tmp_dir</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
-        <span class="n">trx</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">"NB_VERTICES"</span><span class="p">]</span> <span class="o">=</span> <span class="n">nb_vertices</span>
-        <span class="n">trx</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">"NB_STREAMLINES"</span><span class="p">]</span> <span class="o">=</span> <span class="n">nb_streamlines</span>
+        <span class="n">tgm</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">"NB_VERTICES"</span><span class="p">]</span> <span class="o">=</span> <span class="n">nb_vertices</span>
+        <span class="n">tgm</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">"NB_STREAMLINES"</span><span class="p">]</span> <span class="o">=</span> <span class="n">nb_streamlines</span>
 
         <span class="k">if</span> <span class="n">init_as</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">trx</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">"VOXEL_TO_RASMM"</span><span class="p">]</span> <span class="o">=</span> <span class="n">init_as</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">"VOXEL_TO_RASMM"</span><span class="p">]</span>
-            <span class="n">trx</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">"DIMENSIONS"</span><span class="p">]</span> <span class="o">=</span> <span class="n">init_as</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">"DIMENSIONS"</span><span class="p">]</span>
+            <span class="n">tgm</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">"VOXEL_TO_RASMM"</span><span class="p">]</span> <span class="o">=</span> <span class="n">init_as</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">"VOXEL_TO_RASMM"</span><span class="p">]</span>
+            <span class="n">tgm</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">"DIMENSIONS"</span><span class="p">]</span> <span class="o">=</span> <span class="n">init_as</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">"DIMENSIONS"</span><span class="p">]</span>
             <span class="n">positions_dtype</span> <span class="o">=</span> <span class="n">init_as</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">dtype</span>
             <span class="n">offsets_dtype</span> <span class="o">=</span> <span class="n">init_as</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_offsets</span><span class="o">.</span><span class="n">dtype</span>
             <span class="n">lengths_dtype</span> <span class="o">=</span> <span class="n">init_as</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_lengths</span><span class="o">.</span><span class="n">dtype</span>
@@ -1872,15 +1872,15 @@
         <span class="n">positions_filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
             <span class="n">tmp_dir</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"positions.3.</span><span class="si">{</span><span class="n">positions_dtype</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span>
         <span class="p">)</span>
-        <span class="n">trx</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">_create_memmap</span><span class="p">(</span>
+        <span class="n">tgm</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">_create_memmap</span><span class="p">(</span>
             <span class="n">positions_filename</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"w+"</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">nb_vertices</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">positions_dtype</span>
         <span class="p">)</span>
 
         <span class="n">offsets_filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp_dir</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"offsets.</span><span class="si">{</span><span class="n">offsets_dtype</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-        <span class="n">trx</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_offsets</span> <span class="o">=</span> <span class="n">_create_memmap</span><span class="p">(</span>
+        <span class="n">tgm</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_offsets</span> <span class="o">=</span> <span class="n">_create_memmap</span><span class="p">(</span>
             <span class="n">offsets_filename</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"w+"</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">nb_streamlines</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">offsets_dtype</span>
         <span class="p">)</span>
-        <span class="n">trx</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_lengths</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+        <span class="n">tgm</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_lengths</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
             <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">nb_streamlines</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">lengths_dtype</span>
         <span class="p">)</span>
 
@@ -1909,12 +1909,12 @@
                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Invalid dimensionality."</span><span class="p">)</span>
 
                 <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Initializing </span><span class="si">{</span><span class="n">dpv_key</span><span class="si">}</span><span class="s2"> (dpv) with dtype: </span><span class="si">{</span><span class="n">dtype</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-                <span class="n">trx</span><span class="o">.</span><span class="n">data_per_vertex</span><span class="p">[</span><span class="n">dpv_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">ArraySequence</span><span class="p">()</span>
-                <span class="n">trx</span><span class="o">.</span><span class="n">data_per_vertex</span><span class="p">[</span><span class="n">dpv_key</span><span class="p">]</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">_create_memmap</span><span class="p">(</span>
+                <span class="n">tgm</span><span class="o">.</span><span class="n">data_per_vertex</span><span class="p">[</span><span class="n">dpv_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">ArraySequence</span><span class="p">()</span>
+                <span class="n">tgm</span><span class="o">.</span><span class="n">data_per_vertex</span><span class="p">[</span><span class="n">dpv_key</span><span class="p">]</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">_create_memmap</span><span class="p">(</span>
                     <span class="n">dpv_filename</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"w+"</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span>
                 <span class="p">)</span>
-                <span class="n">trx</span><span class="o">.</span><span class="n">data_per_vertex</span><span class="p">[</span><span class="n">dpv_key</span><span class="p">]</span><span class="o">.</span><span class="n">_offsets</span> <span class="o">=</span> <span class="n">trx</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_offsets</span>
-                <span class="n">trx</span><span class="o">.</span><span class="n">data_per_vertex</span><span class="p">[</span><span class="n">dpv_key</span><span class="p">]</span><span class="o">.</span><span class="n">_lengths</span> <span class="o">=</span> <span class="n">trx</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_lengths</span>
+                <span class="n">tgm</span><span class="o">.</span><span class="n">data_per_vertex</span><span class="p">[</span><span class="n">dpv_key</span><span class="p">]</span><span class="o">.</span><span class="n">_offsets</span> <span class="o">=</span> <span class="n">tgm</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_offsets</span>
+                <span class="n">tgm</span><span class="o">.</span><span class="n">data_per_vertex</span><span class="p">[</span><span class="n">dpv_key</span><span class="p">]</span><span class="o">.</span><span class="n">_lengths</span> <span class="o">=</span> <span class="n">tgm</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_lengths</span>
 
             <span class="k">for</span> <span class="n">dps_key</span> <span class="ow">in</span> <span class="n">init_as</span><span class="o">.</span><span class="n">data_per_streamline</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="n">dtype</span> <span class="o">=</span> <span class="n">init_as</span><span class="o">.</span><span class="n">data_per_streamline</span><span class="p">[</span><span class="n">dps_key</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span>
@@ -1936,13 +1936,13 @@
                 <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
                     <span class="sa">f</span><span class="s2">"Initializing </span><span class="si">{</span><span class="n">dps_key</span><span class="si">}</span><span class="s2"> (dps) with and dtype: </span><span class="si">{</span><span class="n">dtype</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span>
                 <span class="p">)</span>
-                <span class="n">trx</span><span class="o">.</span><span class="n">data_per_streamline</span><span class="p">[</span><span class="n">dps_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">_create_memmap</span><span class="p">(</span>
+                <span class="n">tgm</span><span class="o">.</span><span class="n">data_per_streamline</span><span class="p">[</span><span class="n">dps_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">_create_memmap</span><span class="p">(</span>
                     <span class="n">dps_filename</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"w+"</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span>
                 <span class="p">)</span>
 
-        <span class="n">trx</span><span class="o">.</span><span class="n">_uncompressed_folder_handle</span> <span class="o">=</span> <span class="n">tmp_dir</span>
+        <span class="n">tgm</span><span class="o">.</span><span class="n">_uncompressed_folder_handle</span> <span class="o">=</span> <span class="n">tmp_dir</span>
 
-        <span class="k">return</span> <span class="n">trx</span></div>
+        <span class="k">return</span> <span class="n">tgm</span></div>
 
 
 <div class="viewcode-block" id="TrxFile._create_trx_from_pointer">
@@ -1972,12 +1972,12 @@
 <span class="sd">        TrxFile</span>
 <span class="sd">            A TrxFile constructed from the pointer provided.</span>
 <span class="sd">        """</span>
-        <span class="n">trx</span> <span class="o">=</span> <span class="n">TrxFile</span><span class="p">()</span>
-        <span class="n">trx</span><span class="o">.</span><span class="n">header</span> <span class="o">=</span> <span class="n">header</span>
+        <span class="n">tgm</span> <span class="o">=</span> <span class="n">TrxFile</span><span class="p">()</span>
+        <span class="n">tgm</span><span class="o">.</span><span class="n">header</span> <span class="o">=</span> <span class="n">header</span>
 
         <span class="c1"># Handle empty TRX files early - no positions/offsets to load</span>
         <span class="k">if</span> <span class="n">header</span><span class="p">[</span><span class="s2">"NB_STREAMLINES"</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">header</span><span class="p">[</span><span class="s2">"NB_VERTICES"</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">trx</span>
+            <span class="k">return</span> <span class="n">tgm</span>
 
         <span class="n">positions</span><span class="p">,</span> <span class="n">offsets</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
         <span class="k">for</span> <span class="n">elem_filename</span> <span class="ow">in</span> <span class="n">dict_pointer_size</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -2010,23 +2010,23 @@
 
             <span class="c1"># Parse/walk the directory tree</span>
             <span class="k">if</span> <span class="n">base</span> <span class="o">==</span> <span class="s2">"positions"</span> <span class="ow">and</span> <span class="n">folder</span> <span class="o">==</span> <span class="s2">""</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">size</span> <span class="o">!=</span> <span class="n">trx</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">"NB_VERTICES"</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span> <span class="ow">or</span> <span class="n">dim</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">size</span> <span class="o">!=</span> <span class="n">tgm</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">"NB_VERTICES"</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span> <span class="ow">or</span> <span class="n">dim</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Wrong data size/dimensionality."</span><span class="p">)</span>
                 <span class="n">positions</span> <span class="o">=</span> <span class="n">_create_memmap</span><span class="p">(</span>
                     <span class="n">filename</span><span class="p">,</span>
                     <span class="n">mode</span><span class="o">=</span><span class="s2">"r+"</span><span class="p">,</span>
                     <span class="n">offset</span><span class="o">=</span><span class="n">mem_adress</span><span class="p">,</span>
-                    <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">trx</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">"NB_VERTICES"</span><span class="p">],</span> <span class="mi">3</span><span class="p">),</span>
+                    <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">tgm</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">"NB_VERTICES"</span><span class="p">],</span> <span class="mi">3</span><span class="p">),</span>
                     <span class="n">dtype</span><span class="o">=</span><span class="n">ext</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span>
                 <span class="p">)</span>
             <span class="k">elif</span> <span class="n">base</span> <span class="o">==</span> <span class="s2">"offsets"</span> <span class="ow">and</span> <span class="n">folder</span> <span class="o">==</span> <span class="s2">""</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">size</span> <span class="o">!=</span> <span class="n">trx</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">"NB_STREAMLINES"</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">dim</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">size</span> <span class="o">!=</span> <span class="n">tgm</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">"NB_STREAMLINES"</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">dim</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Wrong offsets size/dimensionality."</span><span class="p">)</span>
                 <span class="n">offsets</span> <span class="o">=</span> <span class="n">_create_memmap</span><span class="p">(</span>
                     <span class="n">filename</span><span class="p">,</span>
                     <span class="n">mode</span><span class="o">=</span><span class="s2">"r+"</span><span class="p">,</span>
                     <span class="n">offset</span><span class="o">=</span><span class="n">mem_adress</span><span class="p">,</span>
-                    <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">trx</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">"NB_STREAMLINES"</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,),</span>
+                    <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">tgm</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">"NB_STREAMLINES"</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,),</span>
                     <span class="n">dtype</span><span class="o">=</span><span class="n">ext</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span>
                 <span class="p">)</span>
                 <span class="k">if</span> <span class="n">offsets</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
@@ -2034,23 +2034,23 @@
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">lengths</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="k">elif</span> <span class="n">folder</span> <span class="o">==</span> <span class="s2">"dps"</span><span class="p">:</span>
-                <span class="n">nb_scalar</span> <span class="o">=</span> <span class="n">size</span> <span class="o">/</span> <span class="n">trx</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">"NB_STREAMLINES"</span><span class="p">]</span>
+                <span class="n">nb_scalar</span> <span class="o">=</span> <span class="n">size</span> <span class="o">/</span> <span class="n">tgm</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">"NB_STREAMLINES"</span><span class="p">]</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">nb_scalar</span><span class="o">.</span><span class="n">is_integer</span><span class="p">()</span> <span class="ow">or</span> <span class="n">nb_scalar</span> <span class="o">!=</span> <span class="n">dim</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Wrong dps size/dimensionality."</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">trx</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">"NB_STREAMLINES"</span><span class="p">],</span> <span class="nb">int</span><span class="p">(</span><span class="n">nb_scalar</span><span class="p">))</span>
+                    <span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">tgm</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">"NB_STREAMLINES"</span><span class="p">],</span> <span class="nb">int</span><span class="p">(</span><span class="n">nb_scalar</span><span class="p">))</span>
 
-                <span class="n">trx</span><span class="o">.</span><span class="n">data_per_streamline</span><span class="p">[</span><span class="n">base</span><span class="p">]</span> <span class="o">=</span> <span class="n">_create_memmap</span><span class="p">(</span>
+                <span class="n">tgm</span><span class="o">.</span><span class="n">data_per_streamline</span><span class="p">[</span><span class="n">base</span><span class="p">]</span> <span class="o">=</span> <span class="n">_create_memmap</span><span class="p">(</span>
                     <span class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"r+"</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">mem_adress</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">ext</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
                 <span class="p">)</span>
             <span class="k">elif</span> <span class="n">folder</span> <span class="o">==</span> <span class="s2">"dpv"</span><span class="p">:</span>
-                <span class="n">nb_scalar</span> <span class="o">=</span> <span class="n">size</span> <span class="o">/</span> <span class="n">trx</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">"NB_VERTICES"</span><span class="p">]</span>
+                <span class="n">nb_scalar</span> <span class="o">=</span> <span class="n">size</span> <span class="o">/</span> <span class="n">tgm</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">"NB_VERTICES"</span><span class="p">]</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">nb_scalar</span><span class="o">.</span><span class="n">is_integer</span><span class="p">()</span> <span class="ow">or</span> <span class="n">nb_scalar</span> <span class="o">!=</span> <span class="n">dim</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Wrong dpv size/dimensionality."</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">trx</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">"NB_VERTICES"</span><span class="p">],</span> <span class="nb">int</span><span class="p">(</span><span class="n">nb_scalar</span><span class="p">))</span>
+                    <span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">tgm</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">"NB_VERTICES"</span><span class="p">],</span> <span class="nb">int</span><span class="p">(</span><span class="n">nb_scalar</span><span class="p">))</span>
 
-                <span class="n">trx</span><span class="o">.</span><span class="n">data_per_vertex</span><span class="p">[</span><span class="n">base</span><span class="p">]</span> <span class="o">=</span> <span class="n">_create_memmap</span><span class="p">(</span>
+                <span class="n">tgm</span><span class="o">.</span><span class="n">data_per_vertex</span><span class="p">[</span><span class="n">base</span><span class="p">]</span> <span class="o">=</span> <span class="n">_create_memmap</span><span class="p">(</span>
                     <span class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"r+"</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">mem_adress</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">ext</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
                 <span class="p">)</span>
             <span class="k">elif</span> <span class="n">folder</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"dpg"</span><span class="p">):</span>
@@ -2062,9 +2062,9 @@
                 <span class="c1"># Handle the two-layers architecture</span>
                 <span class="n">data_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">base</span><span class="p">)</span>
                 <span class="n">sub_folder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">sub_folder</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">trx</span><span class="o">.</span><span class="n">data_per_group</span><span class="p">:</span>
-                    <span class="n">trx</span><span class="o">.</span><span class="n">data_per_group</span><span class="p">[</span><span class="n">sub_folder</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
-                <span class="n">trx</span><span class="o">.</span><span class="n">data_per_group</span><span class="p">[</span><span class="n">sub_folder</span><span class="p">][</span><span class="n">data_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">_create_memmap</span><span class="p">(</span>
+                <span class="k">if</span> <span class="n">sub_folder</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">tgm</span><span class="o">.</span><span class="n">data_per_group</span><span class="p">:</span>
+                    <span class="n">tgm</span><span class="o">.</span><span class="n">data_per_group</span><span class="p">[</span><span class="n">sub_folder</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="n">tgm</span><span class="o">.</span><span class="n">data_per_group</span><span class="p">[</span><span class="n">sub_folder</span><span class="p">][</span><span class="n">data_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">_create_memmap</span><span class="p">(</span>
                     <span class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"r+"</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">mem_adress</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">ext</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
                 <span class="p">)</span>
             <span class="k">elif</span> <span class="n">folder</span> <span class="o">==</span> <span class="s2">"groups"</span><span class="p">:</span>
@@ -2074,7 +2074,7 @@
                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Wrong group dimensionality."</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">size</span><span class="p">),)</span>
-                <span class="n">trx</span><span class="o">.</span><span class="n">groups</span><span class="p">[</span><span class="n">base</span><span class="p">]</span> <span class="o">=</span> <span class="n">_create_memmap</span><span class="p">(</span>
+                <span class="n">tgm</span><span class="o">.</span><span class="n">groups</span><span class="p">[</span><span class="n">base</span><span class="p">]</span> <span class="o">=</span> <span class="n">_create_memmap</span><span class="p">(</span>
                     <span class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"r+"</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">mem_adress</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">ext</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
                 <span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
@@ -2082,19 +2082,19 @@
 
         <span class="c1"># All essential array must be declared</span>
         <span class="k">if</span> <span class="n">positions</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">offsets</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">trx</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">positions</span>
-            <span class="n">trx</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_offsets</span> <span class="o">=</span> <span class="n">offsets</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-            <span class="n">trx</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_lengths</span> <span class="o">=</span> <span class="n">lengths</span>
+            <span class="n">tgm</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">positions</span>
+            <span class="n">tgm</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_offsets</span> <span class="o">=</span> <span class="n">offsets</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">tgm</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_lengths</span> <span class="o">=</span> <span class="n">lengths</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Missing essential data."</span><span class="p">)</span>
 
-        <span class="k">for</span> <span class="n">dpv_key</span> <span class="ow">in</span> <span class="n">trx</span><span class="o">.</span><span class="n">data_per_vertex</span><span class="p">:</span>
-            <span class="n">tmp</span> <span class="o">=</span> <span class="n">trx</span><span class="o">.</span><span class="n">data_per_vertex</span><span class="p">[</span><span class="n">dpv_key</span><span class="p">]</span>
-            <span class="n">trx</span><span class="o">.</span><span class="n">data_per_vertex</span><span class="p">[</span><span class="n">dpv_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">ArraySequence</span><span class="p">()</span>
-            <span class="n">trx</span><span class="o">.</span><span class="n">data_per_vertex</span><span class="p">[</span><span class="n">dpv_key</span><span class="p">]</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">tmp</span>
-            <span class="n">trx</span><span class="o">.</span><span class="n">data_per_vertex</span><span class="p">[</span><span class="n">dpv_key</span><span class="p">]</span><span class="o">.</span><span class="n">_offsets</span> <span class="o">=</span> <span class="n">offsets</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-            <span class="n">trx</span><span class="o">.</span><span class="n">data_per_vertex</span><span class="p">[</span><span class="n">dpv_key</span><span class="p">]</span><span class="o">.</span><span class="n">_lengths</span> <span class="o">=</span> <span class="n">lengths</span>
-        <span class="k">return</span> <span class="n">trx</span></div>
+        <span class="k">for</span> <span class="n">dpv_key</span> <span class="ow">in</span> <span class="n">tgm</span><span class="o">.</span><span class="n">data_per_vertex</span><span class="p">:</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="n">tgm</span><span class="o">.</span><span class="n">data_per_vertex</span><span class="p">[</span><span class="n">dpv_key</span><span class="p">]</span>
+            <span class="n">tgm</span><span class="o">.</span><span class="n">data_per_vertex</span><span class="p">[</span><span class="n">dpv_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">ArraySequence</span><span class="p">()</span>
+            <span class="n">tgm</span><span class="o">.</span><span class="n">data_per_vertex</span><span class="p">[</span><span class="n">dpv_key</span><span class="p">]</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">tmp</span>
+            <span class="n">tgm</span><span class="o">.</span><span class="n">data_per_vertex</span><span class="p">[</span><span class="n">dpv_key</span><span class="p">]</span><span class="o">.</span><span class="n">_offsets</span> <span class="o">=</span> <span class="n">offsets</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">tgm</span><span class="o">.</span><span class="n">data_per_vertex</span><span class="p">[</span><span class="n">dpv_key</span><span class="p">]</span><span class="o">.</span><span class="n">_lengths</span> <span class="o">=</span> <span class="n">lengths</span>
+        <span class="k">return</span> <span class="n">tgm</span></div>
 
 
 <div class="viewcode-block" id="TrxFile.resize">
@@ -2145,7 +2145,7 @@
             <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"TrxFile of the right size, no resizing."</span><span class="p">)</span>
             <span class="k">return</span>
 
-        <span class="n">trx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_initialize_empty_trx</span><span class="p">(</span><span class="n">nb_streamlines</span><span class="p">,</span> <span class="n">nb_vertices</span><span class="p">,</span> <span class="n">init_as</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">tgm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_initialize_empty_trx</span><span class="p">(</span><span class="n">nb_streamlines</span><span class="p">,</span> <span class="n">nb_vertices</span><span class="p">,</span> <span class="n">init_as</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
 
         <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
             <span class="s2">"Resizing streamlines from size "</span>
@@ -2159,11 +2159,11 @@
         <span class="c1"># Copy the fixed-sized info from the original TrxFile to the new</span>
         <span class="c1"># (resized) one.</span>
         <span class="k">if</span> <span class="n">nb_streamlines</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">"NB_STREAMLINES"</span><span class="p">]:</span>
-            <span class="n">trx</span><span class="o">.</span><span class="n">_copy_fixed_arrays_from</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nb_strs_to_copy</span><span class="o">=</span><span class="n">nb_streamlines</span><span class="p">)</span>
+            <span class="n">tgm</span><span class="o">.</span><span class="n">_copy_fixed_arrays_from</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nb_strs_to_copy</span><span class="o">=</span><span class="n">nb_streamlines</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">trx</span><span class="o">.</span><span class="n">_copy_fixed_arrays_from</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="n">tgm</span><span class="o">.</span><span class="n">_copy_fixed_arrays_from</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
-        <span class="n">tmp_dir</span> <span class="o">=</span> <span class="n">trx</span><span class="o">.</span><span class="n">_uncompressed_folder_handle</span><span class="o">.</span><span class="n">name</span>
+        <span class="n">tmp_dir</span> <span class="o">=</span> <span class="n">tgm</span><span class="o">.</span><span class="n">_uncompressed_folder_handle</span><span class="o">.</span><span class="n">name</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">groups</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp_dir</span><span class="p">,</span> <span class="s2">"groups/"</span><span class="p">))</span>
 
@@ -2176,15 +2176,15 @@
 
             <span class="c1"># Remove groups indices if resizing down</span>
             <span class="n">tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">groups</span><span class="p">[</span><span class="n">group_key</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">groups</span><span class="p">[</span><span class="n">group_key</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">strs_end</span><span class="p">]</span>
-            <span class="n">trx</span><span class="o">.</span><span class="n">groups</span><span class="p">[</span><span class="n">group_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">_create_memmap</span><span class="p">(</span>
+            <span class="n">tgm</span><span class="o">.</span><span class="n">groups</span><span class="p">[</span><span class="n">group_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">_create_memmap</span><span class="p">(</span>
                 <span class="n">group_name</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"w+"</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tmp</span><span class="p">),),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">group_dtype</span>
             <span class="p">)</span>
             <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">group_key</span><span class="si">}</span><span class="s2"> group went from </span><span class="si">{</span><span class="n">ori_len</span><span class="si">}</span><span class="s2"> items to </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-            <span class="n">trx</span><span class="o">.</span><span class="n">groups</span><span class="p">[</span><span class="n">group_key</span><span class="p">][:]</span> <span class="o">=</span> <span class="n">tmp</span>
+            <span class="n">tgm</span><span class="o">.</span><span class="n">groups</span><span class="p">[</span><span class="n">group_key</span><span class="p">][:]</span> <span class="o">=</span> <span class="n">tmp</span>
 
         <span class="k">if</span> <span class="n">delete_dpg</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-            <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span> <span class="o">=</span> <span class="n">trx</span><span class="o">.</span><span class="vm">__dict__</span>
+            <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span> <span class="o">=</span> <span class="n">tgm</span><span class="o">.</span><span class="vm">__dict__</span>
             <span class="k">return</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_per_group</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -2192,8 +2192,8 @@
         <span class="k">for</span> <span class="n">group_key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_per_group</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp_dir</span><span class="p">,</span> <span class="s2">"dpg/"</span><span class="p">,</span> <span class="n">group_key</span><span class="p">)):</span>
                 <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp_dir</span><span class="p">,</span> <span class="s2">"dpg/"</span><span class="p">,</span> <span class="n">group_key</span><span class="p">))</span>
-            <span class="k">if</span> <span class="n">group_key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">trx</span><span class="o">.</span><span class="n">data_per_group</span><span class="p">:</span>
-                <span class="n">trx</span><span class="o">.</span><span class="n">data_per_group</span><span class="p">[</span><span class="n">group_key</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">if</span> <span class="n">group_key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">tgm</span><span class="o">.</span><span class="n">data_per_group</span><span class="p">:</span>
+                <span class="n">tgm</span><span class="o">.</span><span class="n">data_per_group</span><span class="p">[</span><span class="n">group_key</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 
             <span class="k">for</span> <span class="n">dpg_key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_per_group</span><span class="p">[</span><span class="n">group_key</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="n">dpg_dtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_per_group</span><span class="p">[</span><span class="n">group_key</span><span class="p">][</span><span class="n">dpg_key</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span>
@@ -2203,18 +2203,18 @@
                 <span class="p">)</span>
 
                 <span class="n">shape</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_per_group</span><span class="p">[</span><span class="n">group_key</span><span class="p">][</span><span class="n">dpg_key</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
-                <span class="k">if</span> <span class="n">dpg_key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">trx</span><span class="o">.</span><span class="n">data_per_group</span><span class="p">[</span><span class="n">group_key</span><span class="p">]:</span>
-                    <span class="n">trx</span><span class="o">.</span><span class="n">data_per_group</span><span class="p">[</span><span class="n">group_key</span><span class="p">][</span><span class="n">dpg_key</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
-                <span class="n">trx</span><span class="o">.</span><span class="n">data_per_group</span><span class="p">[</span><span class="n">group_key</span><span class="p">][</span><span class="n">dpg_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">_create_memmap</span><span class="p">(</span>
+                <span class="k">if</span> <span class="n">dpg_key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">tgm</span><span class="o">.</span><span class="n">data_per_group</span><span class="p">[</span><span class="n">group_key</span><span class="p">]:</span>
+                    <span class="n">tgm</span><span class="o">.</span><span class="n">data_per_group</span><span class="p">[</span><span class="n">group_key</span><span class="p">][</span><span class="n">dpg_key</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="n">tgm</span><span class="o">.</span><span class="n">data_per_group</span><span class="p">[</span><span class="n">group_key</span><span class="p">][</span><span class="n">dpg_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">_create_memmap</span><span class="p">(</span>
                     <span class="n">dpg_filename</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"w+"</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dpg_dtype</span>
                 <span class="p">)</span>
 
-                <span class="n">trx</span><span class="o">.</span><span class="n">data_per_group</span><span class="p">[</span><span class="n">group_key</span><span class="p">][</span><span class="n">dpg_key</span><span class="p">][:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_per_group</span><span class="p">[</span>
+                <span class="n">tgm</span><span class="o">.</span><span class="n">data_per_group</span><span class="p">[</span><span class="n">group_key</span><span class="p">][</span><span class="n">dpg_key</span><span class="p">][:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_per_group</span><span class="p">[</span>
                     <span class="n">group_key</span>
                 <span class="p">][</span><span class="n">dpg_key</span><span class="p">]</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span> <span class="o">=</span> <span class="n">trx</span><span class="o">.</span><span class="vm">__dict__</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span> <span class="o">=</span> <span class="n">tgm</span><span class="o">.</span><span class="vm">__dict__</span></div>
 
 
 <div class="viewcode-block" id="TrxFile.get_dtype_dict">
@@ -2293,20 +2293,20 @@
 
 <div class="viewcode-block" id="TrxFile._append_trx">
 <a class="viewcode-back" href="../../autoapi/trx/trx_file_memmap/index.html#trx.trx_file_memmap.TrxFile._append_trx">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">_append_trx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trx</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="s2">"TrxFile"</span><span class="p">],</span> <span class="n">extra_buffer</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_append_trx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tgm</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="s2">"TrxFile"</span><span class="p">],</span> <span class="n">extra_buffer</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">"""Append a TrxFile to another (with buffer support).</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        trx : TrxFile</span>
+<span class="sd">        tgm : TrxFile</span>
 <span class="sd">            The TrxFile to append to the current TrxFile.</span>
 <span class="sd">        extra_buffer : int, optional</span>
 <span class="sd">            The additional buffer space required to append data. Default is 0.</span>
 <span class="sd">        """</span>
         <span class="n">strs_end</span><span class="p">,</span> <span class="n">pts_end</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_real_len</span><span class="p">()</span>
 
-        <span class="n">nb_streamlines</span> <span class="o">=</span> <span class="n">strs_end</span> <span class="o">+</span> <span class="n">trx</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">"NB_STREAMLINES"</span><span class="p">]</span>
-        <span class="n">nb_vertices</span> <span class="o">=</span> <span class="n">pts_end</span> <span class="o">+</span> <span class="n">trx</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">"NB_VERTICES"</span><span class="p">]</span>
+        <span class="n">nb_streamlines</span> <span class="o">=</span> <span class="n">strs_end</span> <span class="o">+</span> <span class="n">tgm</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">"NB_STREAMLINES"</span><span class="p">]</span>
+        <span class="n">nb_vertices</span> <span class="o">=</span> <span class="n">pts_end</span> <span class="o">+</span> <span class="n">tgm</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">"NB_VERTICES"</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">"NB_STREAMLINES"</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">nb_streamlines</span>
@@ -2316,7 +2316,7 @@
                 <span class="n">nb_streamlines</span><span class="o">=</span><span class="n">nb_streamlines</span> <span class="o">+</span> <span class="n">extra_buffer</span><span class="p">,</span>
                 <span class="n">nb_vertices</span><span class="o">=</span><span class="n">nb_vertices</span> <span class="o">+</span> <span class="n">extra_buffer</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span>
             <span class="p">)</span>
-        <span class="n">_</span> <span class="o">=</span> <span class="n">concatenate</span><span class="p">([</span><span class="bp">self</span><span class="p">,</span> <span class="n">trx</span><span class="p">],</span> <span class="n">preallocation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">delete_groups</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+        <span class="n">_</span> <span class="o">=</span> <span class="n">concatenate</span><span class="p">([</span><span class="bp">self</span><span class="p">,</span> <span class="n">tgm</span><span class="p">],</span> <span class="n">preallocation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">delete_groups</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="TrxFile.get_group">
@@ -2566,10 +2566,10 @@
                 <span class="s2">"dtype."</span>
             <span class="p">)</span>
 
-        <span class="n">trx</span> <span class="o">=</span> <span class="n">TrxFile</span><span class="p">(</span>
+        <span class="n">tgm</span> <span class="o">=</span> <span class="n">TrxFile</span><span class="p">(</span>
             <span class="n">nb_vertices</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">sft</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="p">),</span> <span class="n">nb_streamlines</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">sft</span><span class="o">.</span><span class="n">streamlines</span><span class="p">)</span>
         <span class="p">)</span>
-        <span class="n">trx</span><span class="o">.</span><span class="n">header</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">tgm</span><span class="o">.</span><span class="n">header</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">"DIMENSIONS"</span><span class="p">:</span> <span class="n">sft</span><span class="o">.</span><span class="n">dimensions</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
             <span class="s2">"VOXEL_TO_RASMM"</span><span class="p">:</span> <span class="n">sft</span><span class="o">.</span><span class="n">affine</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
             <span class="s2">"NB_VERTICES"</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">sft</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="p">),</span>
@@ -2589,13 +2589,13 @@
         <span class="n">tmp_streamlines</span><span class="o">.</span><span class="n">_offsets</span> <span class="o">=</span> <span class="n">tmp_streamlines</span><span class="o">.</span><span class="n">_offsets</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">offsets_dtype</span><span class="p">)</span>
         <span class="n">tmp_streamlines</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">tmp_streamlines</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">positions_dtype</span><span class="p">)</span>
 
-        <span class="n">trx</span><span class="o">.</span><span class="n">streamlines</span> <span class="o">=</span> <span class="n">tmp_streamlines</span>
+        <span class="n">tgm</span><span class="o">.</span><span class="n">streamlines</span> <span class="o">=</span> <span class="n">tmp_streamlines</span>
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">sft</span><span class="o">.</span><span class="n">data_per_point</span><span class="p">:</span>
             <span class="n">dtype_to_use</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="n">dtype_dict</span><span class="p">[</span><span class="s2">"dpv"</span><span class="p">][</span><span class="n">key</span><span class="p">]</span> <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">dtype_dict</span><span class="p">[</span><span class="s2">"dpv"</span><span class="p">]</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span>
             <span class="p">)</span>
-            <span class="n">trx</span><span class="o">.</span><span class="n">data_per_vertex</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">sft</span><span class="o">.</span><span class="n">data_per_point</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
-            <span class="n">trx</span><span class="o">.</span><span class="n">data_per_vertex</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">sft</span><span class="o">.</span><span class="n">data_per_point</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span>
+            <span class="n">tgm</span><span class="o">.</span><span class="n">data_per_vertex</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">sft</span><span class="o">.</span><span class="n">data_per_point</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="n">tgm</span><span class="o">.</span><span class="n">data_per_vertex</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">sft</span><span class="o">.</span><span class="n">data_per_point</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span>
                 <span class="n">dtype_to_use</span>
             <span class="p">)</span>
 
@@ -2603,22 +2603,22 @@
             <span class="n">dtype_to_use</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="n">dtype_dict</span><span class="p">[</span><span class="s2">"dps"</span><span class="p">][</span><span class="n">key</span><span class="p">]</span> <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">dtype_dict</span><span class="p">[</span><span class="s2">"dps"</span><span class="p">]</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span>
             <span class="p">)</span>
-            <span class="n">trx</span><span class="o">.</span><span class="n">data_per_streamline</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">sft</span><span class="o">.</span><span class="n">data_per_streamline</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span>
+            <span class="n">tgm</span><span class="o">.</span><span class="n">data_per_streamline</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">sft</span><span class="o">.</span><span class="n">data_per_streamline</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span>
                 <span class="n">dtype_to_use</span>
             <span class="p">)</span>
 
         <span class="c1"># For safety and for RAM, convert the whole object to memmaps</span>
         <span class="n">tmp_dir</span> <span class="o">=</span> <span class="n">get_trx_tmp_dir</span><span class="p">()</span>
-        <span class="n">save</span><span class="p">(</span><span class="n">trx</span><span class="p">,</span> <span class="n">tmp_dir</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-        <span class="n">trx</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-        <span class="n">trx</span> <span class="o">=</span> <span class="n">load_from_directory</span><span class="p">(</span><span class="n">tmp_dir</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-        <span class="n">trx</span><span class="o">.</span><span class="n">_uncompressed_folder_handle</span> <span class="o">=</span> <span class="n">tmp_dir</span>
+        <span class="n">save</span><span class="p">(</span><span class="n">tgm</span><span class="p">,</span> <span class="n">tmp_dir</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">tgm</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">tgm</span> <span class="o">=</span> <span class="n">load_from_directory</span><span class="p">(</span><span class="n">tmp_dir</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">tgm</span><span class="o">.</span><span class="n">_uncompressed_folder_handle</span> <span class="o">=</span> <span class="n">tmp_dir</span>
 
         <span class="n">sft</span><span class="o">.</span><span class="n">to_space</span><span class="p">(</span><span class="n">old_space</span><span class="p">)</span>
         <span class="n">sft</span><span class="o">.</span><span class="n">to_origin</span><span class="p">(</span><span class="n">old_origin</span><span class="p">)</span>
         <span class="k">del</span> <span class="n">tmp_streamlines</span>
 
-        <span class="k">return</span> <span class="n">trx</span></div>
+        <span class="k">return</span> <span class="n">tgm</span></div>
 
 
     <span class="nd">@staticmethod</span>
@@ -2670,13 +2670,13 @@
                 <span class="s2">"dtype."</span>
             <span class="p">)</span>
 
-        <span class="n">trx</span> <span class="o">=</span> <span class="n">TrxFile</span><span class="p">(</span>
+        <span class="n">tgm</span> <span class="o">=</span> <span class="n">TrxFile</span><span class="p">(</span>
             <span class="n">nb_vertices</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">tractogram</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="p">),</span>
             <span class="n">nb_streamlines</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">tractogram</span><span class="o">.</span><span class="n">streamlines</span><span class="p">),</span>
         <span class="p">)</span>
 
         <span class="n">affine</span><span class="p">,</span> <span class="n">dimensions</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_reference_info_wrapper</span><span class="p">(</span><span class="n">reference</span><span class="p">)</span>
-        <span class="n">trx</span><span class="o">.</span><span class="n">header</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">tgm</span><span class="o">.</span><span class="n">header</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">"DIMENSIONS"</span><span class="p">:</span> <span class="n">dimensions</span><span class="p">,</span>
             <span class="s2">"VOXEL_TO_RASMM"</span><span class="p">:</span> <span class="n">affine</span><span class="p">,</span>
             <span class="s2">"NB_VERTICES"</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">tractogram</span><span class="o">.</span><span class="n">streamlines</span><span class="o">.</span><span class="n">_data</span><span class="p">),</span>
@@ -2689,13 +2689,13 @@
         <span class="n">tmp_streamlines</span><span class="o">.</span><span class="n">_offsets</span> <span class="o">=</span> <span class="n">tmp_streamlines</span><span class="o">.</span><span class="n">_offsets</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">offsets_dtype</span><span class="p">)</span>
         <span class="n">tmp_streamlines</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">tmp_streamlines</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">positions_dtype</span><span class="p">)</span>
 
-        <span class="n">trx</span><span class="o">.</span><span class="n">streamlines</span> <span class="o">=</span> <span class="n">tmp_streamlines</span>
+        <span class="n">tgm</span><span class="o">.</span><span class="n">streamlines</span> <span class="o">=</span> <span class="n">tmp_streamlines</span>
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">tractogram</span><span class="o">.</span><span class="n">data_per_point</span><span class="p">:</span>
             <span class="n">dtype_to_use</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="n">dtype_dict</span><span class="p">[</span><span class="s2">"dpv"</span><span class="p">][</span><span class="n">key</span><span class="p">]</span> <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">dtype_dict</span><span class="p">[</span><span class="s2">"dpv"</span><span class="p">]</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span>
             <span class="p">)</span>
-            <span class="n">trx</span><span class="o">.</span><span class="n">data_per_vertex</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">tractogram</span><span class="o">.</span><span class="n">data_per_point</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
-            <span class="n">trx</span><span class="o">.</span><span class="n">data_per_vertex</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">tractogram</span><span class="o">.</span><span class="n">data_per_point</span><span class="p">[</span>
+            <span class="n">tgm</span><span class="o">.</span><span class="n">data_per_vertex</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">tractogram</span><span class="o">.</span><span class="n">data_per_point</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="n">tgm</span><span class="o">.</span><span class="n">data_per_vertex</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">tractogram</span><span class="o">.</span><span class="n">data_per_point</span><span class="p">[</span>
                 <span class="n">key</span>
             <span class="p">]</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dtype_to_use</span><span class="p">)</span>
 
@@ -2703,19 +2703,19 @@
             <span class="n">dtype_to_use</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="n">dtype_dict</span><span class="p">[</span><span class="s2">"dps"</span><span class="p">][</span><span class="n">key</span><span class="p">]</span> <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">dtype_dict</span><span class="p">[</span><span class="s2">"dps"</span><span class="p">]</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span>
             <span class="p">)</span>
-            <span class="n">trx</span><span class="o">.</span><span class="n">data_per_streamline</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">tractogram</span><span class="o">.</span><span class="n">data_per_streamline</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span>
+            <span class="n">tgm</span><span class="o">.</span><span class="n">data_per_streamline</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">tractogram</span><span class="o">.</span><span class="n">data_per_streamline</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span>
                 <span class="n">dtype_to_use</span>
             <span class="p">)</span>
 
         <span class="c1"># For safety and for RAM, convert the whole object to memmaps</span>
         <span class="n">tmp_dir</span> <span class="o">=</span> <span class="n">get_trx_tmp_dir</span><span class="p">()</span>
-        <span class="n">save</span><span class="p">(</span><span class="n">trx</span><span class="p">,</span> <span class="n">tmp_dir</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-        <span class="n">trx</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">save</span><span class="p">(</span><span class="n">tgm</span><span class="p">,</span> <span class="n">tmp_dir</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">tgm</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
-        <span class="n">trx</span> <span class="o">=</span> <span class="n">load_from_directory</span><span class="p">(</span><span class="n">tmp_dir</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">tgm</span> <span class="o">=</span> <span class="n">load_from_directory</span><span class="p">(</span><span class="n">tmp_dir</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
         <span class="k">del</span> <span class="n">tmp_streamlines</span>
 
-        <span class="k">return</span> <span class="n">trx</span></div>
+        <span class="k">return</span> <span class="n">tgm</span></div>
 
 
 <div class="viewcode-block" id="TrxFile.to_tractogram">

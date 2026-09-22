@@ -811,7 +811,7 @@ Module Contents
    ..
        !! processed by numpydoc !!
 
-.. py:function:: save(trx: TrxFile, filename: str, compression_standard: Any = zipfile.ZIP_STORED) -> None
+.. py:function:: save(tgm: TrxFile, filename: str, compression_standard: Any = zipfile.ZIP_STORED) -> None
 
    
    Save a TrxFile (compressed or not).
@@ -819,7 +819,7 @@ Module Contents
 
    :Parameters:
 
-       **trx** : TrxFile
+       **tgm** : TrxFile
            The TrxFile to save.
 
        **filename** : str
@@ -1105,7 +1105,7 @@ Module Contents
           !! processed by numpydoc !!
 
 
-   .. py:method:: _copy_fixed_arrays_from(trx: Type[TrxFile], strs_start: int = 0, pts_start: int = 0, nb_strs_to_copy: Optional[int] = None) -> Tuple[int, int]
+   .. py:method:: _copy_fixed_arrays_from(tgm: Type[TrxFile], strs_start: int = 0, pts_start: int = 0, nb_strs_to_copy: Optional[int] = None) -> Tuple[int, int]
 
       
       Fill a TrxFile using another and start indexes (preallocation).
@@ -1113,7 +1113,7 @@ Module Contents
 
       :Parameters:
 
-          **trx** : TrxFile
+          **tgm** : TrxFile
               TrxFile to copy data from.
 
           **strs_start** : int, optional
@@ -1328,7 +1328,7 @@ Module Contents
           !! processed by numpydoc !!
 
 
-   .. py:method:: _append_trx(trx: Type[TrxFile], extra_buffer: int = 0) -> None
+   .. py:method:: _append_trx(tgm: Type[TrxFile], extra_buffer: int = 0) -> None
 
       
       Append a TrxFile to another (with buffer support).
@@ -1336,7 +1336,7 @@ Module Contents
 
       :Parameters:
 
-          **trx** : TrxFile
+          **tgm** : TrxFile
               The TrxFile to append to the current TrxFile.
 
           **extra_buffer** : int, optional

@@ -52,10 +52,10 @@ trx_home = get_home()
 trx_path = os.path.join(trx_home, "gold_standard", "gs.trx")
 
 # Load the TRX file
-trx = load(trx_path)
+tgm = load(trx_path)
 
-print(f"Loaded TRX with {len(trx)} streamlines")
-print(f"Total vertices: {trx.header['NB_VERTICES']}")
+print(f"Loaded TRX with {len(tgm)} streamlines")
+print(f"Total vertices: {tgm.header['NB_VERTICES']}")
 
 # %%
 # Exploring Data Per Vertex (dpv)
@@ -63,11 +63,11 @@ print(f"Total vertices: {trx.header['NB_VERTICES']}")
 #
 # Let's see what dpv data is available.
 
-print("Data Per Vertex keys:", list(trx.data_per_vertex.keys()))
+print("Data Per Vertex keys:", list(tgm.data_per_vertex.keys()))
 
 # Examine each dpv field
-for key in trx.data_per_vertex:
-    data = trx.data_per_vertex[key]
+for key in tgm.data_per_vertex:
+    data = tgm.data_per_vertex[key]
     print(f"\n  {key}:")
     print(f"    Shape: {data._data.shape}")
     print(f"    Dtype: {data._data.dtype}")
@@ -80,9 +80,9 @@ for key in trx.data_per_vertex:
 # The dpv data is organized to match the streamlines. You can access
 # the dpv values for a specific streamline using the same indices.
 
-if len(trx.data_per_vertex) > 0:
-    first_dpv_key = list(trx.data_per_vertex.keys())[0]
-    dpv_data = trx.data_per_vertex[first_dpv_key]
+if len(tgm.data_per_vertex) > 0:
+    first_dpv_key = list(tgm.data_per_vertex.keys())[0]
+    dpv_data = tgm.data_per_vertex[first_dpv_key]
 
     # Get dpv values for the first streamline
     first_streamline_dpv = dpv_data[0]
@@ -96,11 +96,11 @@ if len(trx.data_per_vertex) > 0:
 #
 # Now let's examine the dps data.
 
-print("Data Per Streamline keys:", list(trx.data_per_streamline.keys()))
+print("Data Per Streamline keys:", list(tgm.data_per_streamline.keys()))
 
 # Examine each dps field
-for key in trx.data_per_streamline:
-    data = trx.data_per_streamline[key]
+for key in tgm.data_per_streamline:
+    data = tgm.data_per_streamline[key]
     print(f"\n  {key}:")
     print(f"    Shape: {data.shape}")
     print(f"    Dtype: {data.dtype}")
@@ -113,10 +113,10 @@ for key in trx.data_per_streamline:
 # A common use case is filtering streamlines based on dps values.
 # For example, selecting streamlines with high FA values.
 
-if len(trx.data_per_streamline) > 0:
+if len(tgm.data_per_streamline) > 0:
     # Use the first dps key for demonstration
-    first_dps_key = list(trx.data_per_streamline.keys())[0]
-    dps_data = trx.data_per_streamline[first_dps_key]
+    first_dps_key = list(tgm.data_per_streamline.keys())[0]
+    dps_data = tgm.data_per_streamline[first_dps_key]
 
     # Calculate some statistics
     print(f"\nStatistics for '{first_dps_key}':")
@@ -156,14 +156,14 @@ if len(trx.data_per_streamline) > 0:
 print("\nDemonstrating multi-dimensional data:")
 
 # Check for any multi-dimensional dpv
-for key in trx.data_per_vertex:
-    data = trx.data_per_vertex[key]
+for key in tgm.data_per_vertex:
+    data = tgm.data_per_vertex[key]
     if len(data._data.shape) > 1 and data._data.shape[1] > 1:
         print(f"  {key}: {data._data.shape[1]}D data per vertex")
 
 # Check for any multi-dimensional dps
-for key in trx.data_per_streamline:
-    data = trx.data_per_streamline[key]
+for key in tgm.data_per_streamline:
+    data = tgm.data_per_streamline[key]
     if len(data.shape) > 1 and data.shape[1] > 1:
         print(f"  {key}: {data.shape[1]}D data per streamline")
 
@@ -177,14 +177,14 @@ for key in trx.data_per_streamline:
 
 # Get vertex counts for first few streamlines
 print("\nVertex distribution for first 5 streamlines:")
-for i in range(min(5, len(trx))):
-    streamline = trx.streamlines[i]
+for i in range(min(5, len(tgm))):
+    streamline = tgm.streamlines[i]
     print(f"  Streamline {i}: {len(streamline)} vertices")
 
 # Total vertices should match
-total_from_streamlines = sum(len(trx.streamlines[i]) for i in range(len(trx)))
+total_from_streamlines = sum(len(tgm.streamlines[i]) for i in range(len(tgm)))
 print(f"\nTotal vertices from streamlines: {total_from_streamlines}")
-print(f"Total vertices in header: {trx.header['NB_VERTICES']}")
+print(f"Total vertices in header: {tgm.header['NB_VERTICES']}")
 
 # %%
 # Summary
@@ -192,8 +192,8 @@ print(f"Total vertices in header: {trx.header['NB_VERTICES']}")
 #
 # In this tutorial, you learned how to:
 #
-# - Access dpv data using ``trx.data_per_vertex[key]``
-# - Access dps data using ``trx.data_per_streamline[key]``
+# - Access dpv data using ``tgm.data_per_vertex[key]``
+# - Access dps data using ``tgm.data_per_streamline[key]``
 # - Understand the shape conventions for scalar and vector data
 # - Use metadata for statistical analysis
 # - Understand the file structure for dpv and dps

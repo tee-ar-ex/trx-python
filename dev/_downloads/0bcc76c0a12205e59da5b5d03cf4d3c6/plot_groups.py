@@ -48,9 +48,9 @@ trx_home = get_home()
 trx_path = os.path.join(trx_home, "gold_standard", "gs.trx")
 
 # Load the TRX file
-trx = load(trx_path)
+tgm = load(trx_path)
 
-print(f"Loaded TRX with {len(trx)} streamlines")
+print(f"Loaded TRX with {len(tgm)} streamlines")
 
 # %%
 # Accessing groups
@@ -59,15 +59,15 @@ print(f"Loaded TRX with {len(trx)} streamlines")
 # Groups are stored as a dictionary where keys are group names and values
 # are numpy arrays of streamline indices.
 
-print(f"Available groups: {list(trx.groups.keys())}")
+print(f"Available groups: {list(tgm.groups.keys())}")
 
 # Check the number of groups
-print(f"Number of groups: {len(trx.groups)}")
+print(f"Number of groups: {len(tgm.groups)}")
 
 # %%
 # Let's examine the groups in more detail:
 
-for group_name, indices in trx.groups.items():
+for group_name, indices in tgm.groups.items():
     print(f"  {group_name}: {len(indices)} streamlines")
 
 # %%
@@ -77,16 +77,16 @@ for group_name, indices in trx.groups.items():
 # You can extract all streamlines belonging to a specific group using
 # the ``get_group()`` method.
 
-if len(trx.groups) > 0:
+if len(tgm.groups) > 0:
     # Get the first group name
-    first_group = list(trx.groups.keys())[0]
+    first_group = list(tgm.groups.keys())[0]
 
     # Extract the group as a new TrxFile
-    group_trx = trx.get_group(first_group)
-    print(f"Extracted group '{first_group}' with {len(group_trx)} streamlines")
+    group_tgm = tgm.get_group(first_group)
+    print(f"Extracted group '{first_group}' with {len(group_tgm)} streamlines")
 
     # You can also access the raw indices
-    group_indices = trx.groups[first_group]
+    group_indices = tgm.groups[first_group]
     print(f"Raw indices (first 10): {group_indices[:10]}")
 else:
     print("No groups available in this file")
@@ -98,12 +98,12 @@ else:
 # You can use group indices to select streamlines directly with the
 # ``select()`` method.
 
-if len(trx.groups) > 0:
-    first_group = list(trx.groups.keys())[0]
-    indices = trx.groups[first_group]
+if len(tgm.groups) > 0:
+    first_group = list(tgm.groups.keys())[0]
+    indices = tgm.groups[first_group]
 
     # Select streamlines using indices
-    selected = trx.select(indices[:5])  # Select first 5 from the group
+    selected = tgm.select(indices[:5])  # Select first 5 from the group
     print(f"Selected {len(selected)} streamlines from group '{first_group}'")
 
 # %%
@@ -114,11 +114,11 @@ if len(trx.groups) > 0:
 # This is useful for storing group-level statistics like mean FA, volume,
 # or color codes.
 
-print(f"Data per group keys: {list(trx.data_per_group.keys())}")
+print(f"Data per group keys: {list(tgm.data_per_group.keys())}")
 
 # Check what metadata is available for each group
-for group_name in trx.data_per_group:
-    dpg_keys = list(trx.data_per_group[group_name].keys())
+for group_name in tgm.data_per_group:
+    dpg_keys = list(tgm.data_per_group[group_name].keys())
     print(f"  {group_name}: {dpg_keys}")
 
 # %%
@@ -169,18 +169,18 @@ print("\nOverlapping groups are allowed in TRX!")
 # A common workflow is to filter streamlines based on group membership
 # and then analyze or visualize specific bundles.
 
-if len(trx.groups) > 0:
+if len(tgm.groups) > 0:
     # Get all group names
-    group_names = list(trx.groups.keys())
+    group_names = list(tgm.groups.keys())
 
     # Report statistics for each group
     print("Group statistics:")
     for group_name in group_names:
-        group_trx = trx.get_group(group_name)
-        total_points = len(group_trx.streamlines._data)
-        avg_length = total_points / len(group_trx) if len(group_trx) > 0 else 0
+        group_tgm = tgm.get_group(group_name)
+        total_points = len(group_tgm.streamlines._data)
+        avg_length = total_points / len(group_tgm) if len(group_tgm) > 0 else 0
         print(f"  {group_name}:")
-        print(f"    - Streamlines: {len(group_trx)}")
+        print(f"    - Streamlines: {len(group_tgm)}")
         print(f"    - Total points: {total_points}")
         print(f"    - Avg points per streamline: {avg_length:.1f}")
 
@@ -190,7 +190,7 @@ if len(trx.groups) > 0:
 #
 # In this tutorial, you learned how to:
 #
-# - Access groups using ``trx.groups``
+# - Access groups using ``tgm.groups``
 # - Extract group streamlines using ``get_group()``
 # - Work with ``data_per_group`` (dpg) metadata
 # - Understand that groups can overlap
