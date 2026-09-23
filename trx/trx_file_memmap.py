@@ -5,6 +5,7 @@ from copy import deepcopy
 import json
 import logging
 import os
+from pathlib import Path, PurePosixPath
 import shutil
 import struct
 from typing import Any, List, Optional, Tuple, Type, Union
@@ -33,6 +34,12 @@ try:
     dipy_available = True
 except ImportError:
     dipy_available = False
+
+ROOT = PurePosixPath(".")
+DPV = PurePosixPath("dpv")
+DPS = PurePosixPath("dps")
+GROUPS = PurePosixPath("groups")
+DPG = PurePosixPath("dpg")
 
 
 def _get_dtype_little_endian(dtype: Union[np.dtype, str, type]) -> np.dtype:
@@ -129,14 +136,14 @@ def _append_last_offsets(nib_offsets: np.ndarray, nb_vertices: int) -> np.ndarra
     return np.append(nib_offsets, nb_vertices).astype(nib_offsets.dtype)
 
 
-def _generate_filename_from_data(arr: np.ndarray, filename: str) -> str:
+def _generate_filename_from_data(arr: np.ndarray, filename: str | Path) -> str:
     """Determine the data type from array data and generate the appropriate filename.
 
     Parameters
     ----------
     arr : np.ndarray
         A NumPy array (1-2D, otherwise ValueError raised).
-    filename : str
+    filename : str or Path
         The original filename.
 
     Returns
@@ -144,7 +151,10 @@ def _generate_filename_from_data(arr: np.ndarray, filename: str) -> str:
     str
         An updated filename with appropriate extension.
     """
-    base, ext = os.path.splitext(filename)
+    filename = Path(filename)
+    ext = "".join(filename.suffixes)
+    base = filename.name.removesuffix(ext)
+    ext = ext.lstrip(".")
     if ext:
         logging.warning("Will overwrite provided extension if needed.")
 
@@ -165,12 +175,30 @@ def _generate_filename_from_data(arr: np.ndarray, filename: str) -> str:
     return new_filename
 
 
-def _split_ext_with_dimensionality(filename: str) -> Tuple[str, int, str]:
+def _get_last_ext(filename: Path) -> str:
+    """Return the last dot-segment as the extension.
+
+    Handles dimensionality-encoded filenames like 'positions.3.float32'.
+
+    Parameters
+    ----------
+    filename : Path
+        Input filename.
+
+    Returns
+    -------
+    str
+        Last extension.
+    """
+    return f".{filename.name.split('.')[-1]}"
+
+
+def _split_ext_with_dimensionality(filename: str | Path) -> Tuple[str, int, str]:
     """Take a filename and split it into its components.
 
     Parameters
     ----------
-    filename : str
+    filename : str or Path
         Input filename.
 
     Returns
@@ -178,7 +206,7 @@ def _split_ext_with_dimensionality(filename: str) -> Tuple[str, int, str]:
     tuple
         A tuple of (basename, dimension, extension).
     """
-    basename = os.path.basename(filename)
+    basename = Path(filename).name
     split = basename.split(".")
 
     if len(split) != 2 and len(split) != 3:
@@ -274,7 +302,7 @@ def _dichotomic_search(
 
 
 def _create_memmap(
-    filename: str,
+    filename: str | Path,
     mode: str = "r",
     shape: Tuple = (1,),
     dtype: np.dtype = np.float32,
@@ -285,7 +313,7 @@ def _create_memmap(
 
     Parameters
     ----------
-    filename : str
+    filename : str or Path
         Filename where the empty memmap should be created.
     mode : str, optional
         File open mode (see np.memmap for options). Default is 'r'.
@@ -303,8 +331,10 @@ def _create_memmap(
     np.ndarray
         Memory-mapped array or a zero-filled array if shape[0] is 0.
     """
+    filename = Path(filename)
+
     if np.dtype(dtype) == bool:
-        filename = filename.replace(".bool", ".bit")
+        filename = Path(str(filename).replace(".bool", ".bit"))
 
     # TRX format uses little-endian byte order for cross-platform compatibility
     dtype = _get_dtype_little_endian(dtype)
@@ -314,18 +344,18 @@ def _create_memmap(
             filename, mode=mode, offset=offset, shape=shape, dtype=dtype, order=order
         )
     else:
-        if not os.path.isfile(filename):
+        if not filename.is_file():
             f = open(filename, "wb")
             f.close()
         return np.zeros(shape, dtype=dtype)
 
 
-def load(input_obj: str, check_dpg: bool = True) -> Type["TrxFile"]:
+def load(input_obj: str | Path, check_dpg: bool = True) -> Type["TrxFile"]:
     """Load a TrxFile (compressed or not).
 
     Parameters
     ----------
-    input_obj : str
+    input_obj : str | Path
         A directory name or filepath to the TRX data.
     check_dpg : bool, optional
         Whether to check group metadata. Default is True.
@@ -338,7 +368,8 @@ def load(input_obj: str, check_dpg: bool = True) -> Type["TrxFile"]:
     # TODO Check if 0 streamlines, then 0 vertices is expected (vice-versa)
     # TODO 4x4 affine matrices should contains values (no all-zeros)
     # TODO 3x1 dimensions array should contains values at each position (int)
-    if os.path.isfile(input_obj):
+    input_obj = Path(input_obj)
+    if input_obj.is_file():
         was_compressed = False
         with zipfile.ZipFile(input_obj, "r") as zf:
             for info in zf.infolist():
@@ -356,7 +387,7 @@ def load(input_obj: str, check_dpg: bool = True) -> Type["TrxFile"]:
                 )
         else:
             tgm = load_from_zip(input_obj)
-    elif os.path.isdir(input_obj):
+    elif input_obj.is_dir():
         tgm = load_from_directory(input_obj)
     else:
         raise ValueError("File/Folder does not exist")
@@ -369,14 +400,14 @@ def load(input_obj: str, check_dpg: bool = True) -> Type["TrxFile"]:
     return tgm
 
 
-def load_from_zip(filename: str) -> Type["TrxFile"]:
+def load_from_zip(filename: str | Path) -> Type["TrxFile"]:
     """Load a TrxFile from a single zipfile.
 
     Note: Does not work with compressed zipfiles.
 
     Parameters
     ----------
-    filename : str
+    filename : str or Path
         Path of the zipped TrxFile.
 
     Returns
@@ -395,7 +426,7 @@ def load_from_zip(filename: str) -> Type["TrxFile"]:
         files_pointer_size = {}
         for zip_info in zf.filelist:
             elem_filename = zip_info.filename
-            _, ext = os.path.splitext(elem_filename)
+            ext = _get_last_ext(Path(elem_filename))
             if ext == ".json" or zip_info.is_dir():
                 continue
 
@@ -440,12 +471,12 @@ def load_from_zip(filename: str) -> Type["TrxFile"]:
     )
 
 
-def load_from_directory(directory: str) -> Type["TrxFile"]:
+def load_from_directory(directory: str | Path) -> Type["TrxFile"]:
     """Load a TrxFile from a folder containing memmaps.
 
     Parameters
     ----------
-    directory : str
+    directory : str or Path
         Path of the directory containing TRX data.
 
     Returns
@@ -454,8 +485,8 @@ def load_from_directory(directory: str) -> Type["TrxFile"]:
         TrxFile representing the read data.
     """
 
-    directory = os.path.abspath(directory)
-    with open(os.path.join(directory, "header.json")) as header:
+    directory = Path(directory).resolve()
+    with open(directory / "header.json") as header:
         header = json.load(header)
         header["VOXEL_TO_RASMM"] = np.reshape(header["VOXEL_TO_RASMM"], (4, 4)).astype(
             np.float32
@@ -463,9 +494,10 @@ def load_from_directory(directory: str) -> Type["TrxFile"]:
         header["DIMENSIONS"] = np.array(header["DIMENSIONS"], dtype=np.uint16)
     files_pointer_size = {}
     for root, _dirs, files in os.walk(directory):
+        root = Path(root)
         for name in files:
-            elem_filename = os.path.join(root, name)
-            _, ext = os.path.splitext(elem_filename)
+            elem_filename = root / name
+            ext = _get_last_ext(elem_filename)
             if ext == ".json":
                 continue
 
@@ -476,10 +508,10 @@ def load_from_directory(directory: str) -> Type["TrxFile"]:
                 ext = ".bool"
 
             dtype_size = np.dtype(ext[1:]).itemsize
-            size = os.path.getsize(elem_filename) / dtype_size
+            size = elem_filename.stat().st_size / dtype_size
             if size.is_integer():
                 files_pointer_size[elem_filename] = 0, int(size)
-            elif os.path.getsize(elem_filename) == 1:
+            elif elem_filename.stat().st_size == 1:
                 files_pointer_size[elem_filename] = 0, 0
             else:
                 raise ValueError("Wrong size or datatype")
@@ -736,11 +768,11 @@ def _setup_groups_for_concatenation(
     tmp_dir = new_trx._uncompressed_folder_handle.name
 
     for group_key in all_groups_len.keys():
-        if not os.path.isdir(os.path.join(tmp_dir, "groups/")):
-            os.mkdir(os.path.join(tmp_dir, "groups/"))
+        if not (Path(tmp_dir) / "groups").is_dir():
+            os.mkdir(Path(tmp_dir) / "groups")
 
         dtype = all_groups_dtype[group_key]
-        group_filename = os.path.join(tmp_dir, f"groups/{group_key}.{dtype.name}")
+        group_filename = Path(tmp_dir) / f"groups/{group_key}.{dtype.name}"
         group_len = all_groups_len[group_key]
         new_trx.groups[group_key] = _create_memmap(
             group_filename, mode="w+", shape=(group_len,), dtype=dtype
@@ -841,13 +873,13 @@ def save(
     ----------
     tgm : TrxFile
         The TrxFile to save.
-    filename : str
+    filename : str or Path
         The path to save the TrxFile to.
     compression_standard : int, optional
         The compression standard to use, as defined by the ZipFile library.
         Default is zipfile.ZIP_STORED.
     """
-    _, ext = os.path.splitext(filename)
+    ext = "".join(Path(filename).suffixes)
     if ext.lower() not in [".zip", ".trx", ""]:
         raise ValueError("Unsupported extension.")
 
@@ -857,14 +889,16 @@ def save(
     if ext.lower() in [".zip", ".trx"]:
         zip_from_folder(tmp_dir_name, filename, compression_standard)
     else:
-        if os.path.isdir(filename):
+        if filename.is_dir():
             shutil.rmtree(filename)
         shutil.copytree(tmp_dir_name, filename)
     copy_trx.close()
 
 
 def zip_from_folder(
-    directory: str, filename: str, compression_standard: Any = zipfile.ZIP_STORED
+    directory: str | Path,
+    filename: str | Path,
+    compression_standard: Any = zipfile.ZIP_STORED,
 ) -> None:
     """Zip on-disk memmaps into a single file.
 
@@ -878,11 +912,14 @@ def zip_from_folder(
         The compression standard to use, as defined by the ZipFile library.
         Default is zipfile.ZIP_STORED.
     """
+    directory = Path(directory)
+    filename = Path(filename)
     with zipfile.ZipFile(filename, mode="w", compression=compression_standard) as zf:
         for root, _, files in os.walk(directory):
+            root = Path(root)
             for name in files:
-                curr_filename = os.path.join(root, name)
-                tmp_filename = curr_filename.replace(directory, "")[1:]
+                curr_filename = root / name
+                tmp_filename = curr_filename.relative_to(directory)
                 zf.write(curr_filename, tmp_filename)
 
 
@@ -916,6 +953,7 @@ class TrxFile:
         init_as: Optional[Type["TrxFile"]] = None,
         reference: Union[
             str,
+            Path,
             dict,
             Type[Nifti1Image],
             Type[TrkFile],
@@ -1081,7 +1119,8 @@ class TrxFile:
             A deepcopied TrxFile of the current TrxFile.
         """
         tmp_dir = get_trx_tmp_dir()
-        out_json = open(os.path.join(tmp_dir.name, "header.json"), "w")
+        tmp_path = Path(tmp_dir.name)
+        out_json = open(tmp_path / "header.json", "w")
         tmp_header = deepcopy(self.header)
 
         if not isinstance(tmp_header["VOXEL_TO_RASMM"], list):
@@ -1103,7 +1142,7 @@ class TrxFile:
         # Only write positions and offsets if TRX is not empty
         if tmp_header["NB_STREAMLINES"] > 0 and tmp_header["NB_VERTICES"] > 0:
             positions_filename = _generate_filename_from_data(
-                to_dump, os.path.join(tmp_dir.name, "positions")
+                to_dump, tmp_path / "positions"
             )
             _ensure_little_endian(to_dump).tofile(positions_filename)
 
@@ -1116,12 +1155,12 @@ class TrxFile:
                     self.streamlines._offsets, self.header["NB_VERTICES"]
                 )
             offsets_filename = _generate_filename_from_data(
-                to_dump, os.path.join(tmp_dir.name, "offsets")
+                to_dump, tmp_path / "offsets"
             )
             _ensure_little_endian(to_dump).tofile(offsets_filename)
 
         if len(self.data_per_vertex.keys()) > 0:
-            os.mkdir(os.path.join(tmp_dir.name, "dpv/"))
+            os.mkdir(tmp_path / "dpv")
         for dpv_key in self.data_per_vertex.keys():
             if not self._copy_safe:
                 to_dump = self.data_per_vertex[dpv_key].copy()._data
@@ -1129,25 +1168,25 @@ class TrxFile:
                 to_dump = self.data_per_vertex[dpv_key]._data
 
             dpv_filename = _generate_filename_from_data(
-                to_dump, os.path.join(tmp_dir.name, "dpv/", dpv_key)
+                to_dump, tmp_path / "dpv" / dpv_key
             )
             _ensure_little_endian(to_dump).tofile(dpv_filename)
 
         if len(self.data_per_streamline.keys()) > 0:
-            os.mkdir(os.path.join(tmp_dir.name, "dps/"))
+            os.mkdir(tmp_path / "dps")
         for dps_key in self.data_per_streamline.keys():
             to_dump = self.data_per_streamline[dps_key]
             dps_filename = _generate_filename_from_data(
-                to_dump, os.path.join(tmp_dir.name, "dps/", dps_key)
+                to_dump, tmp_path / "dps" / dps_key
             )
             _ensure_little_endian(to_dump).tofile(dps_filename)
 
         if len(self.groups.keys()) > 0:
-            os.mkdir(os.path.join(tmp_dir.name, "groups/"))
+            os.mkdir(tmp_path / "groups")
         for group_key in self.groups.keys():
             to_dump = self.groups[group_key]
             group_filename = _generate_filename_from_data(
-                to_dump, os.path.join(tmp_dir.name, "groups/", group_key)
+                to_dump, tmp_path / "groups" / group_key
             )
             _ensure_little_endian(to_dump).tofile(group_filename)
 
@@ -1155,17 +1194,17 @@ class TrxFile:
                 continue
             for dpg_key in self.data_per_group[group_key].keys():
                 # Creates 'dpg/' only if required
-                if not os.path.isdir(os.path.join(tmp_dir.name, "dpg/")):
-                    os.mkdir(os.path.join(tmp_dir.name, "dpg/"))
-                if not os.path.isdir(os.path.join(tmp_dir.name, "dpg/", group_key)):
-                    os.mkdir(os.path.join(tmp_dir.name, "dpg/", group_key))
+                if not (tmp_path / "dpg/").is_dir():
+                    os.mkdir(tmp_path / "dpg")
+                if not (tmp_path / "dpg" / group_key).is_dir():
+                    os.mkdir(tmp_path / "dpg" / group_key)
                 to_dump = self.data_per_group[group_key][dpg_key]
                 dpg_filename = _generate_filename_from_data(
-                    to_dump, os.path.join(tmp_dir.name, "dpg/", group_key, dpg_key)
+                    to_dump, tmp_path / "dpg" / group_key / dpg_key
                 )
                 _ensure_little_endian(to_dump).tofile(dpg_filename)
 
-        copy_trx = load_from_directory(tmp_dir.name)
+        copy_trx = load_from_directory(tmp_path)
         copy_trx._uncompressed_folder_handle = tmp_dir
 
         return copy_trx
@@ -1281,7 +1320,8 @@ class TrxFile:
         """
         tgm = TrxFile()
         tmp_dir = get_trx_tmp_dir()
-        logging.info(f"Temporary folder for memmaps: {tmp_dir.name}")
+        tmp_path = Path(tmp_dir.name)
+        logging.info(f"Temporary folder for memmaps: {tmp_path}")
 
         tgm.header["NB_VERTICES"] = nb_vertices
         tgm.header["NB_STREAMLINES"] = nb_streamlines
@@ -1302,14 +1342,12 @@ class TrxFile:
         logging.debug(f"Initializing lengths with dtype: {lengths_dtype.name}")
 
         # A TrxFile without init_as only contain the essential arrays
-        positions_filename = os.path.join(
-            tmp_dir.name, f"positions.3.{positions_dtype.name}"
-        )
+        positions_filename = tmp_path / f"positions.3.{positions_dtype.name}"
         tgm.streamlines._data = _create_memmap(
             positions_filename, mode="w+", shape=(nb_vertices, 3), dtype=positions_dtype
         )
 
-        offsets_filename = os.path.join(tmp_dir.name, f"offsets.{offsets_dtype.name}")
+        offsets_filename = tmp_path / f"offsets.{offsets_dtype.name}"
         tgm.streamlines._offsets = _create_memmap(
             offsets_filename, mode="w+", shape=(nb_streamlines,), dtype=offsets_dtype
         )
@@ -1320,24 +1358,20 @@ class TrxFile:
         # Only the structure of fixed-size arrays is copied
         if init_as is not None:
             if len(init_as.data_per_vertex.keys()) > 0:
-                os.mkdir(os.path.join(tmp_dir.name, "dpv/"))
+                os.mkdir(tmp_path / "dpv")
             if len(init_as.data_per_streamline.keys()) > 0:
-                os.mkdir(os.path.join(tmp_dir.name, "dps/"))
+                os.mkdir(tmp_path / "dps")
 
             for dpv_key in init_as.data_per_vertex.keys():
                 dtype = init_as.data_per_vertex[dpv_key]._data.dtype
                 tmp_as = init_as.data_per_vertex[dpv_key]._data
                 if tmp_as.ndim == 1:
-                    dpv_filename = os.path.join(
-                        tmp_dir.name, f"dpv/{dpv_key}.{dtype.name}"
-                    )
+                    dpv_filename = tmp_path / f"dpv/{dpv_key}.{dtype.name}"
                     shape = (nb_vertices, 1)
                 elif tmp_as.ndim == 2:
                     dim = tmp_as.shape[-1]
                     shape = (nb_vertices, dim)
-                    dpv_filename = os.path.join(
-                        tmp_dir.name, f"dpv/{dpv_key}.{dim}.{dtype.name}"
-                    )
+                    dpv_filename = tmp_path / f"dpv/{dpv_key}.{dim}.{dtype.name}"
                 else:
                     raise ValueError("Invalid dimensionality.")
 
@@ -1353,16 +1387,12 @@ class TrxFile:
                 dtype = init_as.data_per_streamline[dps_key].dtype
                 tmp_as = init_as.data_per_streamline[dps_key]
                 if tmp_as.ndim == 1:
-                    dps_filename = os.path.join(
-                        tmp_dir.name, f"dps/{dps_key}.{dtype.name}"
-                    )
+                    dps_filename = tmp_path / f"dps/{dps_key}.{dtype.name}"
                     shape = (nb_streamlines,)
                 elif tmp_as.ndim == 2:
                     dim = tmp_as.shape[-1]
                     shape = (nb_streamlines, dim)
-                    dps_filename = os.path.join(
-                        tmp_dir.name, f"dps/{dps_key}.{dim}.{dtype.name}"
-                    )
+                    dps_filename = tmp_path / f"dps/{dps_key}.{dim}.{dtype.name}"
                 else:
                     raise ValueError("Invalid dimensionality.")
 
@@ -1380,8 +1410,8 @@ class TrxFile:
     def _create_trx_from_pointer(  # noqa: C901
         header: dict,
         dict_pointer_size: dict,
-        root_zip: Optional[str] = None,
-        root: Optional[str] = None,
+        root_zip: str | Path | None = None,
+        root: str | Path | None = None,
     ) -> Type["TrxFile"]:
         """Create a TrxFile after reading the structure of a zip/folder.
 
@@ -1392,9 +1422,9 @@ class TrxFile:
         dict_pointer_size : dict
             A dictionary containing the filenames of all the files within the
             TrxFile disk file/folder.
-        root_zip : str, optional
+        root_zip : str or Path, optional
             The path of the ZipFile pointer.
-        root : str, optional
+        root : str or Path, optional
             The dirname of the ZipFile pointer.
 
         Returns
@@ -1409,6 +1439,7 @@ class TrxFile:
         if header["NB_STREAMLINES"] == 0 or header["NB_VERTICES"] == 0:
             return tgm
 
+        root = Path(root) if root is not None else None
         positions, offsets = None, None
         for elem_filename in dict_pointer_size.keys():
             if root_zip:
@@ -1416,30 +1447,33 @@ class TrxFile:
             else:
                 filename = elem_filename
 
-            folder = os.path.dirname(elem_filename)
+            zip_path = PurePosixPath(elem_filename)
+            folder = zip_path.parent
             base, dim, ext = _split_ext_with_dimensionality(elem_filename)
             if ext == ".bit":
                 ext = ".bool"
             mem_adress, size = dict_pointer_size[elem_filename]
 
             if root is not None:
+                disk_folder = Path(elem_filename).parent
                 # This is for Unix
-                if os.name != "nt" and folder.startswith(root.rstrip("/")):
-                    folder = folder.replace(root, "").lstrip("/")
+                if os.name != "nt" and disk_folder.is_relative_to(root):
+                    relative_folder = disk_folder.relative_to(root)
+                    folder = PurePosixPath(*relative_folder.parts)
                 # These three are for Windows
-                elif os.path.isdir(folder) and os.path.basename(folder) in [
+                elif disk_folder.is_dir() and disk_folder.name in [
                     "dpv",
                     "dps",
                     "groups",
                 ]:
-                    folder = os.path.basename(folder)
-                elif os.path.basename(os.path.dirname(folder)) == "dpg":
-                    folder = os.path.join("dpg", os.path.basename(folder))
+                    folder = PurePosixPath(disk_folder.name)
+                elif disk_folder.parent.name == "dpg":
+                    folder = DPG / folder.name
                 else:
-                    folder = ""
+                    folder = ROOT
 
             # Parse/walk the directory tree
-            if base == "positions" and folder == "":
+            if base == "positions" and folder == ROOT:
                 if size != tgm.header["NB_VERTICES"] * 3 or dim != 3:
                     raise ValueError("Wrong data size/dimensionality.")
                 positions = _create_memmap(
@@ -1449,7 +1483,7 @@ class TrxFile:
                     shape=(tgm.header["NB_VERTICES"], 3),
                     dtype=ext[1:],
                 )
-            elif base == "offsets" and folder == "":
+            elif base == "offsets" and folder == ROOT:
                 if size != tgm.header["NB_STREAMLINES"] + 1 or dim != 1:
                     raise ValueError("Wrong offsets size/dimensionality.")
                 offsets = _create_memmap(
@@ -1463,7 +1497,7 @@ class TrxFile:
                     lengths = _compute_lengths(offsets)
                 else:
                     lengths = [0]
-            elif folder == "dps":
+            elif folder == DPS:
                 nb_scalar = size / tgm.header["NB_STREAMLINES"]
                 if not nb_scalar.is_integer() or nb_scalar != dim:
                     raise ValueError("Wrong dps size/dimensionality.")
@@ -1473,7 +1507,7 @@ class TrxFile:
                 tgm.data_per_streamline[base] = _create_memmap(
                     filename, mode="r+", offset=mem_adress, shape=shape, dtype=ext[1:]
                 )
-            elif folder == "dpv":
+            elif folder == DPV:
                 nb_scalar = size / tgm.header["NB_VERTICES"]
                 if not nb_scalar.is_integer() or nb_scalar != dim:
                     raise ValueError("Wrong dpv size/dimensionality.")
@@ -1483,21 +1517,21 @@ class TrxFile:
                 tgm.data_per_vertex[base] = _create_memmap(
                     filename, mode="r+", offset=mem_adress, shape=shape, dtype=ext[1:]
                 )
-            elif folder.startswith("dpg"):
+            elif folder.parent == DPG:
                 if int(size) != dim:
                     raise ValueError("Wrong dpg size/dimensionality.")
                 else:
                     shape = (1, int(size))
 
                 # Handle the two-layers architecture
-                data_name = os.path.basename(base)
-                sub_folder = os.path.basename(folder)
+                data_name = base
+                sub_folder = folder.name
                 if sub_folder not in tgm.data_per_group:
                     tgm.data_per_group[sub_folder] = {}
                 tgm.data_per_group[sub_folder][data_name] = _create_memmap(
                     filename, mode="r+", offset=mem_adress, shape=shape, dtype=ext[1:]
                 )
-            elif folder == "groups":
+            elif folder == GROUPS:
                 # Groups are simply indices, nothing else
                 # TODO Crash if not uint?
                 if dim != 1:
@@ -1590,15 +1624,13 @@ class TrxFile:
         else:
             tgm._copy_fixed_arrays_from(self)
 
-        tmp_dir = tgm._uncompressed_folder_handle.name
+        tmp_dir = Path(tgm._uncompressed_folder_handle.name)
         if len(self.groups.keys()) > 0:
-            os.mkdir(os.path.join(tmp_dir, "groups/"))
+            os.mkdir(tmp_dir / "groups/")
 
         for group_key in self.groups.keys():
             group_dtype = self.groups[group_key].dtype
-            group_name = os.path.join(
-                tmp_dir, "groups/", f"{group_key}.{group_dtype.name}"
-            )
+            group_name = tmp_dir / "groups" / f"{group_key}.{group_dtype.name}"
             ori_len = len(self.groups[group_key])
 
             # Remove groups indices if resizing down
@@ -1615,10 +1647,10 @@ class TrxFile:
             return
 
         if len(self.data_per_group.keys()) > 0:
-            os.mkdir(os.path.join(tmp_dir, "dpg/"))
+            os.mkdir(tmp_dir / "dpg")
         for group_key in self.data_per_group:
-            if not os.path.isdir(os.path.join(tmp_dir, "dpg/", group_key)):
-                os.mkdir(os.path.join(tmp_dir, "dpg/", group_key))
+            if not (tmp_dir / "dpg" / group_key).is_dir():
+                os.mkdir(tmp_dir / "dpg" / group_key)
             if group_key not in tgm.data_per_group:
                 tgm.data_per_group[group_key] = {}
 
@@ -1626,7 +1658,7 @@ class TrxFile:
                 dpg_dtype = self.data_per_group[group_key][dpg_key].dtype
                 dpg_filename = _generate_filename_from_data(
                     self.data_per_group[group_key][dpg_key],
-                    os.path.join(tmp_dir, "dpg/", group_key, dpg_key),
+                    tmp_dir / "dpg" / group_key / dpg_key,
                 )
 
                 shape = self.data_per_group[group_key][dpg_key].shape
@@ -2015,9 +2047,10 @@ class TrxFile:
 
         # For safety and for RAM, convert the whole object to memmaps
         tmp_dir = get_trx_tmp_dir()
-        save(tgm, tmp_dir.name)
+        tmp_path = Path(tmp_dir.name)
+        save(tgm, tmp_path)
         tgm.close()
-        tgm = load_from_directory(tmp_dir.name)
+        tgm = load_from_directory(tmp_path)
         tgm._uncompressed_folder_handle = tmp_dir
 
         sft.to_space(old_space)
@@ -2112,10 +2145,11 @@ class TrxFile:
 
         # For safety and for RAM, convert the whole object to memmaps
         tmp_dir = get_trx_tmp_dir()
-        save(tgm, tmp_dir.name)
+        tmp_path = Path(tmp_dir.name)
+        save(tgm, tmp_path)
         tgm.close()
 
-        tgm = load_from_directory(tmp_dir.name)
+        tgm = load_from_directory(tmp_path)
         del tmp_streamlines
 
         return tgm

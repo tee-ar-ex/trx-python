@@ -17,6 +17,7 @@
 import warnings
 import os
 from datetime import datetime as dt
+from pathlib import Path
 
 # -- Version information -----------------------------------------------------
 # Get version from environment variable (set by CI) or package
@@ -191,5 +192,5 @@ sphinx_gallery_conf = {
     'gallery_dirs': 'auto_examples',
     'within_subsection_order': 'NumberOfCodeLinesSortKey',
     'reference_url': _validate_reference_urls(_reference_urls),
-    'default_thumb_file': os.path.join(os.path.dirname(__file__), '..', '_static', 'trx_logo.png'),
+    'default_thumb_file': str(Path(__file__).parent / '..' / '_static' / 'trx_logo.png'),
 }

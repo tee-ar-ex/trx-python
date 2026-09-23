@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import json
-import os
+from pathlib import Path
 import struct
 import zipfile
 
@@ -127,7 +127,7 @@ def test_dichotomic_search(arr, l_bound, r_bound, expected):
 def test_create_memmap(basename, create, expected):
     if create:
         with get_trx_tmp_dir() as dirname:
-            filename = os.path.join(dirname, basename)
+            filename = Path(dirname) / basename
             fp = tmm._create_memmap(
                 filename=filename, mode="w+", shape=(3, 4), dtype=np.int16
             )
@@ -137,9 +137,9 @@ def test_create_memmap(basename, create, expected):
 
     else:
         with get_trx_tmp_dir() as dirname:
-            filename = os.path.join(dirname, basename)
+            filename = Path(dirname) / basename
             mmarr = tmm._create_memmap(filename=filename, shape=(0,), dtype=np.int16)
-            assert os.path.isfile(filename)
+            assert filename.is_file()
             assert np.array_equal(mmarr, np.zeros(shape=(0,), dtype=np.float32))
 
 
@@ -154,7 +154,7 @@ def test_create_memmap(basename, create, expected):
     ],
 )
 def test_load(path, check_dpg, value_error):
-    path = os.path.join(get_home(), "memmap_test_data", path)
+    path = get_home() / "memmap_test_data" / path
     # Need to perhaps improve test
     if value_error:
         with pytest.raises(ValueError):
@@ -167,19 +167,19 @@ def test_load(path, check_dpg, value_error):
 
 @pytest.mark.parametrize("path", ["small.trx"])
 def test_load_zip(path):
-    path = os.path.join(get_home(), "memmap_test_data", path)
+    path = get_home() / "memmap_test_data" / path
     assert isinstance(tmm.load_from_zip(path), tmm.TrxFile)
 
 
 @pytest.mark.parametrize("path", ["small_fldr.trx"])
 def test_load_directory(path):
-    path = os.path.join(get_home(), "memmap_test_data", path)
+    path = get_home() / "memmap_test_data" / path
     assert isinstance(tmm.load_from_directory(path), tmm.TrxFile)
 
 
 @pytest.mark.parametrize("path", ["small.trx"])
 def test_concatenate(path):
-    path = os.path.join(get_home(), "memmap_test_data", path)
+    path = get_home() / "memmap_test_data" / path
     trx1 = tmm.load(path)
     trx2 = tmm.load(path)
     concat = tmm.concatenate([trx1, trx2])
@@ -192,7 +192,7 @@ def test_concatenate(path):
 
 @pytest.mark.parametrize("path", ["small.trx"])
 def test_resize(path):
-    path = os.path.join(get_home(), "memmap_test_data", path)
+    path = get_home() / "memmap_test_data" / path
     trx1 = tmm.load(path)
     concat = tmm.TrxFile(nb_vertices=1000000, nb_streamlines=10000, init_as=trx1)
 
@@ -206,7 +206,7 @@ def test_resize(path):
 
 @pytest.mark.parametrize("path, buffer", [("small.trx", 10000), ("small.trx", 0)])
 def test_append(path, buffer):
-    path = os.path.join(get_home(), "memmap_test_data", path)
+    path = get_home() / "memmap_test_data" / path
     trx1 = tmm.load(path)
     concat = tmm.TrxFile(nb_vertices=1, nb_streamlines=1, init_as=trx1)
 
@@ -222,7 +222,7 @@ def test_append(path, buffer):
 @pytest.mark.parametrize("path, buffer", [("small.trx", 10000)])
 @pytest.mark.skipif(not dipy_available, reason="Dipy is not installed")
 def test_append_StatefulTractogram(path, buffer):
-    path = os.path.join(get_home(), "memmap_test_data", path)
+    path = get_home() / "memmap_test_data" / path
     tgm = tmm.load(path)
     obj = tgm.to_sft()
     concat = tmm.TrxFile(nb_vertices=1, nb_streamlines=1, init_as=tgm)
@@ -238,7 +238,7 @@ def test_append_StatefulTractogram(path, buffer):
 
 @pytest.mark.parametrize("path, buffer", [("small.trx", 10000)])
 def test_append_Tractogram(path, buffer):
-    path = os.path.join(get_home(), "memmap_test_data", path)
+    path = get_home() / "memmap_test_data" / path
     tgm = tmm.load(path)
     obj = tgm.to_tractogram()
     concat = tmm.TrxFile(nb_vertices=1, nb_streamlines=1, init_as=tgm)
@@ -300,7 +300,7 @@ def test_from_lazy_tractogram(path, size, buffer):
         "dpv": {"fa": np.float16},
         "dps": {"commit_weights": np.float32, "clusters_QB": np.uint16},
     }
-    path = os.path.join(get_home(), "memmap_test_data", path)
+    path = get_home() / "memmap_test_data" / path
     tgm = tmm.TrxFile.from_lazy_tractogram(
         obj, reference=path, extra_buffer=buffer, chunk_size=1000, dtype_dict=dtype_dict
     )
@@ -349,11 +349,11 @@ def test_initialize_empty_trx(tmp_path):
     assert tgm.header["NB_VERTICES"] == 0
     assert len(tgm.streamlines) == 0
 
-    out_path = os.path.join(tmp_path, "empty.trx")
+    out_path = tmp_path / "empty.trx"
     tmm.save(tgm, out_path)
 
-    assert os.path.exists(out_path)
-    file_size = os.path.getsize(out_path)
+    assert out_path.exists()
+    file_size = out_path.stat().st_size
     assert file_size < 500  # Should be very small, just header.json in zip
 
     with zipfile.ZipFile(out_path, "r") as zf:
@@ -384,7 +384,7 @@ def test_trxfile_getgroup():
 
 
 def test_trxfile_select():
-    path = os.path.join(get_home(), "memmap_test_data", "small.trx")
+    path = get_home() / "memmap_test_data" / "small.trx"
     tgm = tmm.load(path)
 
     assert len(tgm.select([]).streamlines) == 0
@@ -399,10 +399,10 @@ def test_trxfile_select():
 
 
 def test_save_after_select(tmp_path):
-    path = os.path.join(get_home(), "memmap_test_data", "small.trx")
+    path = get_home() / "memmap_test_data" / "small.trx"
     tgm = tmm.load(path)
     sub = tgm.select(list(range(5)))
-    out = os.path.join(tmp_path, "sub.trx")
+    out = tmp_path / "sub.trx"
     tmm.save(sub, out)
     loaded = tmm.load(out)
     assert len(loaded.streamlines) == 5
@@ -422,7 +422,7 @@ def test_trxfile_close():
 @pytest.mark.parametrize("path", ["small.trx"])
 def test_close_releases_mmap_from_zip(path):
     """close() must release mmap handles even when loaded via load_from_zip()."""
-    path = os.path.join(get_home(), "memmap_test_data", path)
+    path = get_home() / "memmap_test_data" / path
     tgm = tmm.load_from_zip(path)
 
     assert tgm._uncompressed_folder_handle is None
@@ -542,7 +542,7 @@ def test_load_zip64_with_extra_fields(tmp_path):
         _data = struct.pack("<QQ", orig_size, comp_size)
         return struct.pack("<HH", 0x0001, len(_data)) + _data
 
-    trx_path = os.path.join(str(tmp_path), "test_zip64.trx")
+    trx_path = tmp_path / "test_zip64.trx"
 
     with open(trx_path, "wb") as f:
         local_info = []
@@ -647,7 +647,7 @@ def test_load_zip_with_local_header_extra_field(tmp_path):
         "NB_STREAMLINES": 1,
     }
 
-    trx_path = os.path.join(tmp_path, "test.trx")
+    trx_path = tmp_path / "test.trx"
 
     # Build ZIP with extra bytes in local headers but not central directory
     with open(trx_path, "wb") as f:
@@ -745,8 +745,8 @@ def test_endianness_roundtrip():
         test_offsets = np.array([0, 3], dtype=np.uint32)
 
         # Write as little-endian
-        pos_file = os.path.join(dirname, "test_positions.3.float32")
-        off_file = os.path.join(dirname, "test_offsets.uint32")
+        pos_file = Path(dirname) / "test_positions.3.float32"
+        off_file = Path(dirname) / "test_offsets.uint32"
 
         tmm._ensure_little_endian(test_positions).tofile(pos_file)
         tmm._ensure_little_endian(test_offsets).tofile(off_file)

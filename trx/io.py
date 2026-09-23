@@ -3,6 +3,7 @@
 
 import logging
 import os
+from pathlib import Path
 import sys
 import tempfile
 
@@ -32,18 +33,22 @@ def get_trx_tmp_dir():
     """
     if os.getenv("TRX_TMPDIR") is not None:
         if os.getenv("TRX_TMPDIR") == "use_working_dir":
-            trx_tmp_dir = os.getcwd()
+            trx_tmp_dir = str(Path.cwd())
         else:
             trx_tmp_dir = os.getenv("TRX_TMPDIR")
     else:
         trx_tmp_dir = tempfile.gettempdir()
 
     if sys.version_info[1] >= 10:
-        return tempfile.TemporaryDirectory(
+        tmp_dir = tempfile.TemporaryDirectory(
             dir=trx_tmp_dir, prefix="trx_", ignore_cleanup_errors=True
         )
     else:
-        return tempfile.TemporaryDirectory(dir=trx_tmp_dir, prefix="trx_")
+        tmp_dir = tempfile.TemporaryDirectory(dir=trx_tmp_dir, prefix="trx_")
+
+    # Keep the TemporaryDirectory instance, but provide a Path-compatible name
+    tmp_dir.name = Path(tmp_dir.name)
+    return tmp_dir
 
 
 def load_sft_with_reference(filepath, reference=None, bbox_check=True, from_space=None):
@@ -51,7 +56,7 @@ def load_sft_with_reference(filepath, reference=None, bbox_check=True, from_spac
 
     Parameters
     ----------
-    filepath : str
+    filepath : str or Path
         Path to the tractogram file (.trk, .tck, .fib, .vtk, .dpy).
     reference : str or nibabel.Nifti1Image, optional
         Reference image used for formats without embedded affine information.
@@ -81,7 +86,7 @@ def load_sft_with_reference(filepath, reference=None, bbox_check=True, from_spac
     from dipy.io.streamline import load_tractogram
 
     # Force the usage of --reference for all file formats without an header
-    _, ext = os.path.splitext(filepath)
+    ext = "".join(Path(filepath).suffixes)
     if ext == ".trk":
         if reference is not None and reference != "same":
             logging.warning(f"Reference is discarded for this file format {filepath}.")
@@ -122,7 +127,7 @@ def load(tractogram_filename, reference=None, from_space=None):
     import trx.trx_file_memmap as tmm
 
     in_ext = split_name_with_gz(tractogram_filename)[1]
-    if in_ext != ".trx" and not os.path.isdir(tractogram_filename):
+    if in_ext != ".trx" and not tractogram_filename.is_dir():
         tractogram_obj = load_sft_with_reference(
             tractogram_filename, reference, bbox_check=False, from_space=from_space
         )
@@ -140,7 +145,7 @@ def save(tractogram_obj, tractogram_filename, bbox_valid_check=False):
     tractogram_obj : TrxFile or StatefulTractogram
         Tractogram to persist. Non-TRX inputs are converted to StatefulTractogram
         before saving to non-TRX formats.
-    tractogram_filename : str
+    tractogram_filename : str or Path
         Destination file name. ``.trx`` will be saved using the TRX writer; all
         other extensions are handled by ``dipy.save_tractogram``.
     bbox_valid_check : bool, optional
@@ -153,6 +158,7 @@ def save(tractogram_obj, tractogram_filename, bbox_valid_check=False):
         The function writes to disk and returns ``None``. Returns ``None``
         immediately when ``dipy`` is unavailable.
     """
+    tractogram_filename = Path(tractogram_filename)
     if not dipy_available:
         logging.error(
             "Dipy library is missing, cannot use functions related "

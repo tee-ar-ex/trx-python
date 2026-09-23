@@ -7,6 +7,7 @@ import gzip
 import json
 import logging
 import os
+from pathlib import Path
 import tempfile
 
 from nibabel.streamlines.array_sequence import ArraySequence
@@ -276,7 +277,7 @@ def verify_header_compatibility(in_files):
 
     all_valid = True
     for filepath in in_files:
-        if not os.path.isfile(filepath):
+        if not filepath.is_file():
             print(f"{filepath} does not exist")
         _, in_extension = split_name_with_gz(filepath)
         if in_extension not in [".trk", ".nii", ".nii.gz", ".trx"]:
@@ -500,7 +501,7 @@ def _write_header(tmp_dir_name, reference, streamlines):
     if header["NB_STREAMLINES"] <= 1:
         raise IOError("To use this script, you need at least 2streamlines.")
 
-    with open(os.path.join(tmp_dir_name, "header.json"), "w") as out_json:
+    with open(Path(tmp_dir_name) / "header.json", "w") as out_json:
         json.dump(header, out_json)
 
 
@@ -518,11 +519,11 @@ def _write_streamline_data(tmp_dir_name, streamlines, positions_dtype, offsets_d
     offsets_dtype : str
         Datatype for offsets array.
     """
-    curr_filename = os.path.join(tmp_dir_name, f"positions.3.{positions_dtype}")
+    curr_filename = Path(tmp_dir_name) / f"positions.3.{positions_dtype}"
     positions = streamlines._data.astype(positions_dtype)
     tmm._ensure_little_endian(positions).tofile(curr_filename)
 
-    curr_filename = os.path.join(tmp_dir_name, f"offsets.{offsets_dtype}")
+    curr_filename = Path(tmp_dir_name) / f"offsets.{offsets_dtype}"
     offsets = streamlines._offsets.astype(offsets_dtype)
     tmm._ensure_little_endian(offsets).tofile(curr_filename)
 
@@ -548,7 +549,7 @@ def _write_data_array(tmp_dir_name, subdir_name, args, is_dpg=False):
 
     Parameters
     ----------
-    tmp_dir_name : str
+    tmp_dir_name : str | Path
         Base temporary directory.
     subdir_name : str
         Subdirectory name (dpv, dps, groups, dpg).
@@ -562,16 +563,17 @@ def _write_data_array(tmp_dir_name, subdir_name, args, is_dpg=False):
     None
         Writes the array to disk.
     """
+    tmp_dir_name = Path(tmp_dir_name)
     if is_dpg:
-        os.makedirs(os.path.join(tmp_dir_name, "dpg", args[0]), exist_ok=True)
+        os.makedirs(tmp_dir_name / "dpg" / args[0], exist_ok=True)
         curr_arr = load_matrix_in_any_format(args[1]).astype(args[2])
-        basename = os.path.basename(os.path.splitext(args[1])[0])
+        basename = Path(args[1]).stem
         dtype_str = _normalize_dtype(args[1]) if args[1] != "bool" else "bit"
         dtype = args[2]
     else:
-        os.makedirs(os.path.join(tmp_dir_name, subdir_name), exist_ok=True)
+        os.makedirs(tmp_dir_name / subdir_name, exist_ok=True)
         curr_arr = np.squeeze(load_matrix_in_any_format(args[0]).astype(args[1]))
-        basename = os.path.basename(os.path.splitext(args[0])[0])
+        basename = Path(args[0]).stem
         dtype_str = _normalize_dtype(args[1])
         dtype = dtype_str
 
@@ -584,13 +586,9 @@ def _write_data_array(tmp_dir_name, subdir_name, args, is_dpg=False):
     dim = "" if curr_arr.ndim == 1 else f"{curr_arr.shape[-1]}."
 
     if is_dpg:
-        curr_filename = os.path.join(
-            tmp_dir_name, "dpg", args[0], f"{basename}.{dim}{dtype}"
-        )
+        curr_filename = tmp_dir_name / "dpg" / args[0] / f"{basename}.{dim}{dtype}"
     else:
-        curr_filename = os.path.join(
-            tmp_dir_name, subdir_name, f"{basename}.{dim}{dtype}"
-        )
+        curr_filename = tmp_dir_name / subdir_name / f"{basename}.{dim}{dtype}"
 
     tmm._ensure_little_endian(curr_arr).tofile(curr_filename)
 

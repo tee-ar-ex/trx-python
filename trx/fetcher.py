@@ -4,6 +4,7 @@
 import hashlib
 import logging
 import os
+from pathlib import Path
 import shutil
 import urllib.request
 
@@ -24,13 +25,13 @@ def get_home():
 
     Returns
     -------
-    str
+    Path
         Path to the TRX home directory.
     """
     if "TRX_HOME" in os.environ:
-        trx_home = os.environ["TRX_HOME"]
+        trx_home = Path(os.environ["TRX_HOME"])
     else:
-        trx_home = os.path.join(os.path.expanduser("~"), ".tee_ar_ex")
+        trx_home = Path("~").expanduser() / ".tee_ar_ex"
     return trx_home
 
 
@@ -132,7 +133,7 @@ def fetch_data(files_dict, keys=None):  # noqa: C901
     """
     trx_home = get_home()
 
-    if not os.path.exists(trx_home):
+    if not trx_home.exists():
         os.makedirs(trx_home)
 
     if keys is None:
@@ -147,10 +148,10 @@ def fetch_data(files_dict, keys=None):  # noqa: C901
             expected_sha = None
         else:
             url, expected_md5, expected_sha = file_entry
-        full_path = os.path.join(trx_home, fname)
+        full_path = trx_home / fname
 
         logging.info(f"Downloading {fname} to {trx_home}")
-        if not os.path.exists(full_path):
+        if not full_path.exists():
             urllib.request.urlretrieve(url, full_path)
 
         actual_md5 = md5sum(full_path)
@@ -169,5 +170,5 @@ def fetch_data(files_dict, keys=None):  # noqa: C901
                 )
 
         if fname.endswith(".zip"):
-            dst_dir = os.path.join(trx_home, fname[:-4])
+            dst_dir = trx_home / fname[:-4]
             shutil.unpack_archive(full_path, extract_dir=dst_dir, format="zip")

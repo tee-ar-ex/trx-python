@@ -52,6 +52,7 @@ def test_close_or_delete_mmap_np_memmap(tmp_path):
     tmp_name = tmp_path / "test.mmap"
     mmap_arr = np.memmap(tmp_name, dtype="float32", mode="w+", shape=(10,))
     close_or_delete_mmap(mmap_arr)
+    assert mmap_arr._mmap.closed
     assert tmp_name.exists()
 
 
@@ -187,7 +188,7 @@ def test_get_reference_info_wrapper_nifti_header(nifti_ref):
 
 def test_get_reference_info_wrapper_nifti_file(tmp_path, nifti_ref):
     """Test get_reference_info_wrapper with a Nifti filename."""
-    path = os.path.join(tmp_path, "test.nii.gz")
+    path = tmp_path / "test.nii.gz"
     nib.save(nifti_ref, path)
     affine, dimensions, voxel_sizes, voxel_order = get_reference_info_wrapper(path)
     assert np.allclose(affine, nifti_ref.affine)

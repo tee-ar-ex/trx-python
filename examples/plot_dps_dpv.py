@@ -39,8 +39,6 @@ By the end of this tutorial, you will know how to:
 #
 # Let's load a TRX file and explore its metadata.
 
-import os
-
 import numpy as np
 
 from trx.fetcher import fetch_data, get_home, get_testing_files_dict
@@ -49,7 +47,7 @@ from trx.trx_file_memmap import load
 # Download test data
 fetch_data(get_testing_files_dict(), keys="gold_standard.zip")
 trx_home = get_home()
-trx_path = os.path.join(trx_home, "gold_standard", "gs.trx")
+trx_path = trx_home / "gold_standard" / "gs.trx"
 
 # Load the TRX file
 tgm = load(trx_path)
