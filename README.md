@@ -11,7 +11,26 @@ For details, please visit the [documentation](https://tee-ar-ex.github.io/trx-py
 
 ## Installation
 
+The trx-python library currently works and is automatically tested on
+Linux, Windows, and MacOS operating systems and on Python 3.11, 3.12,
+and 3.13.
+
+It depends on (libraries and versions):
+
+    deepdiff >= 9.1
+    nibabel >= 5
+    numpy >= 1.22
+    typer >= 0.9
+
+It also optionally uses for data visualization and manipulation:
+
+    dipy >= 1.12
+    fury >= 0.10.0, <2.0.0
+
 ### From PyPI
+
+Installation from PyPI requires an active web connection and typically takes
+about 5 minutes.
 
 ```bash
 pip install trx-python
@@ -27,17 +46,27 @@ pip install .
 
 ## Quick Start
 
+Small example data for trying out the software can be found in
+[the trx-test-data repository](https://github.com/tee-ar-ex/trx-test-data/releases/tag/v0.1.0).
+
+
 ### Loading and Saving Tractograms
 
 ```python
 from trx.io import load, save
 
 # Load a tractogram (supports .trx, .trk, .tck, .vtk, .fib, .dpy)
-tgm = load("tractogram.trx")
+tgm = load("tractogram.trk")
 
 # Save to a different format
-save(tgm, "output.trk")
+save(tgm, "output.trx")
 ```
+
+This example should take just a couple of seconds to run on a typical laptop or
+desktop, and it demonstrates conversion from the trk to the trx format. After
+running it should produce a new file called `output.trx`, which includes the
+streamlines from the trk file. It will also preserve data-per-vertx and
+data-per-streamline, if that is included in the original file.
 
 ### Command-Line Interface
 
