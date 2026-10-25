@@ -3,6 +3,7 @@
 
 from contextlib import nullcontext
 import os
+from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import patch
 
@@ -42,7 +43,7 @@ def test_create_temp_memmap_uses_reopenable_path(tmp_path):
 
     filename = mock_memmap.call_args.args[0]
     assert isinstance(filename, (str, os.PathLike))
-    assert os.path.dirname(os.fspath(filename)) == os.fspath(tmp_path)
+    assert Path(filename).parent == tmp_path
 
 
 def test_manipulate_trx_datatype_uses_reopenable_memmaps(tmp_path):
@@ -67,7 +68,7 @@ def test_manipulate_trx_datatype_uses_reopenable_memmaps(tmp_path):
     with (
         patch(
             "trx.workflows.get_trx_tmp_dir",
-            return_value=nullcontext(os.fspath(tmp_path)),
+            return_value=nullcontext(str(tmp_path)),
         ),
         patch("trx.workflows.tmm.load", return_value=tgm),
         patch("trx.workflows.tmm.save") as mock_save,
@@ -208,7 +209,7 @@ class TestUnifiedCLI:
 
     def test_trx_info_execution(self, script_runner):
         """Test trx info command execution on a real TRX file."""
-        trx_path = os.path.join(get_home(), "gold_standard", "gs.trx")
+        trx_path = get_home() / "gold_standard" / "gs.trx"
         ret = script_runner.run(["trx", "info", trx_path])
         assert ret.success
         # Check key output elements
@@ -220,7 +221,7 @@ class TestUnifiedCLI:
 
     def test_trx_info_wrong_extension(self, script_runner):
         """Test trx info rejects non-TRX files."""
-        tck_path = os.path.join(get_home(), "gold_standard", "gs.tck")
+        tck_path = get_home() / "gold_standard" / "gs.tck"
         ret = script_runner.run(["trx", "info", tck_path])
         assert not ret.success
         assert "not a TRX file" in ret.stderr
@@ -238,11 +239,11 @@ class TestWorkflowFunctions:
 
     @pytest.mark.skipif(not dipy_available, reason="Dipy is not installed.")
     def test_execution_convert_dsi(self, tmp_path):
-        in_trk = os.path.join(get_home(), "DSI", "CC.trk.gz")
-        in_nii = os.path.join(get_home(), "DSI", "CC.nii.gz")
-        exp_data = os.path.join(get_home(), "DSI", "CC_fix_data.npy")
-        exp_offsets = os.path.join(get_home(), "DSI", "CC_fix_offsets.npy")
-        out_fix_path = os.path.join(tmp_path, "fixed.trk")
+        in_trk = get_home() / "DSI" / "CC.trk.gz"
+        in_nii = get_home() / "DSI" / "CC.nii.gz"
+        exp_data = get_home() / "DSI" / "CC_fix_data.npy"
+        exp_offsets = get_home() / "DSI" / "CC_fix_offsets.npy"
+        out_fix_path = tmp_path / "fixed.trk"
         convert_dsi_studio(
             in_trk, in_nii, out_fix_path, remove_invalid=False, keep_invalid=True
         )
@@ -256,10 +257,10 @@ class TestWorkflowFunctions:
 
     @pytest.mark.skipif(not dipy_available, reason="Dipy is not installed.")
     def test_execution_convert_to_trx(self, tmp_path):
-        in_trk = os.path.join(get_home(), "DSI", "CC_fix.trk")
-        exp_data = os.path.join(get_home(), "DSI", "CC_fix_data.npy")
-        exp_offsets = os.path.join(get_home(), "DSI", "CC_fix_offsets.npy")
-        out_trx_path = os.path.join(tmp_path, "CC_fix.trx")
+        in_trk = get_home() / "DSI" / "CC_fix.trk"
+        exp_data = get_home() / "DSI" / "CC_fix_data.npy"
+        exp_offsets = get_home() / "DSI" / "CC_fix_offsets.npy"
+        out_trx_path = tmp_path / "CC_fix.trx"
         convert_tractogram(in_trk, out_trx_path, None)
 
         data_fix = np.load(exp_data)
@@ -274,15 +275,15 @@ class TestWorkflowFunctions:
 
     @pytest.mark.skipif(not dipy_available, reason="Dipy is not installed.")
     def test_execution_convert_from_trx(self, tmp_path):
-        in_trk = os.path.join(get_home(), "DSI", "CC_fix.trk")
-        in_nii = os.path.join(get_home(), "DSI", "CC.nii.gz")
-        exp_data = os.path.join(get_home(), "DSI", "CC_fix_data.npy")
-        exp_offsets = os.path.join(get_home(), "DSI", "CC_fix_offsets.npy")
+        in_trk = get_home() / "DSI" / "CC_fix.trk"
+        in_nii = get_home() / "DSI" / "CC.nii.gz"
+        exp_data = get_home() / "DSI" / "CC_fix_data.npy"
+        exp_offsets = get_home() / "DSI" / "CC_fix_offsets.npy"
 
         # Sequential conversions
-        out_trx_path = os.path.join(tmp_path, "CC_fix.trx")
-        out_trk_path = os.path.join(tmp_path, "CC_fix.trk")
-        out_tck_path = os.path.join(tmp_path, "CC_fix.tck")
+        out_trx_path = tmp_path / "CC_fix.trx"
+        out_trk_path = tmp_path / "CC_fix.trk"
+        out_tck_path = tmp_path / "CC_fix.tck"
         convert_tractogram(in_trk, out_trx_path, None)
         convert_tractogram(out_trx_path, out_tck_path, None)
         convert_tractogram(out_trx_path, out_trk_path, None)
@@ -300,8 +301,8 @@ class TestWorkflowFunctions:
 
     @pytest.mark.skipif(not dipy_available, reason="Dipy is not installed.")
     def test_execution_convert_dtype_p16_o64(self, tmp_path):
-        in_trk = os.path.join(get_home(), "DSI", "CC_fix.trk")
-        out_convert_path = os.path.join(tmp_path, "CC_fix_p16_o64.trx")
+        in_trk = get_home() / "DSI" / "CC_fix.trk"
+        out_convert_path = tmp_path / "CC_fix_p16_o64.trx"
         convert_tractogram(
             in_trk,
             out_convert_path,
@@ -317,8 +318,8 @@ class TestWorkflowFunctions:
 
     @pytest.mark.skipif(not dipy_available, reason="Dipy is not installed.")
     def test_execution_convert_dtype_p64_o32(self, tmp_path):
-        in_trk = os.path.join(get_home(), "DSI", "CC_fix.trk")
-        out_convert_path = os.path.join(tmp_path, "CC_fix_p16_o64.trx")
+        in_trk = get_home() / "DSI" / "CC_fix.trk"
+        out_convert_path = tmp_path / "CC_fix_p16_o64.trx"
         convert_tractogram(
             in_trk,
             out_convert_path,
@@ -333,44 +334,44 @@ class TestWorkflowFunctions:
         tgm.close()
 
     def test_execution_generate_trx_from_scratch(self, tmp_path):
-        reference_fa = os.path.join(get_home(), "trx_from_scratch", "fa.nii.gz")
-        raw_arr_dir = os.path.join(get_home(), "trx_from_scratch", "test_npy")
-        expected_trx = os.path.join(get_home(), "trx_from_scratch", "expected.trx")
+        reference_fa = get_home() / "trx_from_scratch" / "fa.nii.gz"
+        raw_arr_dir = get_home() / "trx_from_scratch" / "test_npy"
+        expected_trx = get_home() / "trx_from_scratch" / "expected.trx"
 
         dpv = [
-            (os.path.join(raw_arr_dir, "dpv_cx.npy"), "uint8"),
-            (os.path.join(raw_arr_dir, "dpv_cy.npy"), "uint8"),
-            (os.path.join(raw_arr_dir, "dpv_cz.npy"), "uint8"),
+            (raw_arr_dir / "dpv_cx.npy", "uint8"),
+            (raw_arr_dir / "dpv_cy.npy", "uint8"),
+            (raw_arr_dir / "dpv_cz.npy", "uint8"),
         ]
         dps = [
-            (os.path.join(raw_arr_dir, "dps_algo.npy"), "uint8"),
-            (os.path.join(raw_arr_dir, "dps_cw.npy"), "float64"),
+            (raw_arr_dir / "dps_algo.npy", "uint8"),
+            (raw_arr_dir / "dps_cw.npy", "float64"),
         ]
         dpg = [
             (
                 "g_AF_L",
-                os.path.join(raw_arr_dir, "dpg_AF_L_mean_fa.npy"),
+                raw_arr_dir / "dpg_AF_L_mean_fa.npy",
                 "float32",
             ),
             (
                 "g_AF_R",
-                os.path.join(raw_arr_dir, "dpg_AF_R_mean_fa.npy"),
+                raw_arr_dir / "dpg_AF_R_mean_fa.npy",
                 "float32",
             ),
-            ("g_AF_L", os.path.join(raw_arr_dir, "dpg_AF_L_volume.npy"), "float32"),
+            ("g_AF_L", raw_arr_dir / "dpg_AF_L_volume.npy", "float32"),
         ]
         groups = [
-            (os.path.join(raw_arr_dir, "g_AF_L.npy"), "int32"),
-            (os.path.join(raw_arr_dir, "g_AF_R.npy"), "int32"),
-            (os.path.join(raw_arr_dir, "g_CST_L.npy"), "int32"),
+            (raw_arr_dir / "g_AF_L.npy", "int32"),
+            (raw_arr_dir / "g_AF_R.npy", "int32"),
+            (raw_arr_dir / "g_CST_L.npy", "int32"),
         ]
 
-        out_gen_path = os.path.join(tmp_path, "generated.trx")
+        out_gen_path = tmp_path / "generated.trx"
         generate_trx_from_scratch(
             reference_fa,
             out_gen_path,
-            positions=os.path.join(raw_arr_dir, "positions.npy"),
-            offsets=os.path.join(raw_arr_dir, "offsets.npy"),
+            positions=raw_arr_dir / "positions.npy",
+            offsets=raw_arr_dir / "offsets.npy",
             positions_dtype="float16",
             offsets_dtype="uint64",
             space_str="rasmm",
@@ -419,8 +420,8 @@ class TestWorkflowFunctions:
 
     @pytest.mark.skipif(not dipy_available, reason="Dipy is not installed.")
     def test_execution_concatenate_validate_trx(self, tmp_path):
-        trx1 = tmm.load(os.path.join(get_home(), "gold_standard", "gs.trx"))
-        trx2 = tmm.load(os.path.join(get_home(), "gold_standard", "gs.trx"))
+        trx1 = tmm.load(get_home() / "gold_standard" / "gs.trx")
+        trx2 = tmm.load(get_home() / "gold_standard" / "gs.trx")
         tgm = tmm.concatenate([trx1, trx2], preallocation=False)
 
         # Right size
@@ -454,8 +455,8 @@ class TestWorkflowFunctions:
             )
 
         # Validate
-        out_concat_path = os.path.join(tmp_path, "concat.trx")
-        out_valid_path = os.path.join(tmp_path, "valid.trx")
+        out_concat_path = tmp_path / "concat.trx"
+        out_valid_path = tmp_path / "valid.trx"
         tmm.save(tgm, out_concat_path)
         validate_tractogram(
             out_concat_path,
@@ -477,7 +478,7 @@ class TestWorkflowFunctions:
 
     @pytest.mark.skipif(not dipy_available, reason="Dipy is not installed.")
     def test_execution_manipulate_trx_datatype(self, tmp_path):
-        expected_trx = os.path.join(get_home(), "trx_from_scratch", "expected.trx")
+        expected_trx = get_home() / "trx_from_scratch" / "expected.trx"
         tgm = tmm.load(expected_trx)
 
         expected_dtype = {
@@ -526,8 +527,7 @@ class TestWorkflowFunctions:
             },
             "groups": {"g_AF_L": np.dtype("uint16"), "g_AF_R": np.dtype("uint16")},
         }
-
-        out_gen_path = os.path.join(tmp_path, "generated.trx")
+        out_gen_path = tmp_path / "generated.trx"
         with patch(
             "trx.workflows.tempfile.NamedTemporaryFile",
             side_effect=AssertionError(

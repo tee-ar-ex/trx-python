@@ -1,7 +1,7 @@
 """Custom spin commands for trx-python development."""
 
-import glob
 import os
+from pathlib import Path
 import shutil
 import subprocess
 import sys
@@ -223,35 +223,32 @@ def docs(_clean, open_browser):
     open_browser : bool
         If True, open documentation in browser after building.
     """
-    import os
 
-    docs_dir = "docs"
+    docs_dir = Path("docs")
 
     if _clean:
         click.echo("Cleaning build directory...")
-        build_dir = os.path.join(docs_dir, "_build")
-        if os.path.exists(build_dir):
+        build_dir = docs_dir / "_build"
+        if build_dir.exists():
             shutil.rmtree(build_dir)
 
         # Clean sphinx-gallery generated files
-        gallery_dir = os.path.join(docs_dir, "source", "auto_examples")
-        if os.path.exists(gallery_dir):
+        gallery_dir = docs_dir / "source" / "auto_examples"
+        if gallery_dir.exists():
             click.echo("Cleaning sphinx-gallery generated files...")
             shutil.rmtree(gallery_dir)
 
         # Clean sphinx-gallery execution times file
-        sg_times = os.path.join(docs_dir, "source", "sg_execution_times.rst")
-        if os.path.exists(sg_times):
+        sg_times = docs_dir / "source" / "sg_execution_times.rst"
+        if sg_times.exists():
             os.remove(sg_times)
 
     click.echo("Building documentation...")
-    cmd = ["make", "-C", docs_dir, "html"]
+    cmd = ["make", "-C", str(docs_dir), "html"]
     result = run(cmd, capture=False, check=False)
 
     if result == 0:
-        index_path = os.path.abspath(
-            os.path.join(docs_dir, "_build", "html", "index.html")
-        )
+        index_path = (docs_dir / "_build" / "html" / "index.html").resolve()
         click.echo("\nDocs built successfully!")
         click.echo(f"Open: {index_path}")
 
@@ -270,27 +267,26 @@ def clean():  # noqa: C901
 
     # Clean TRX temp directory
     trx_tmp_dir = os.getenv("TRX_TMPDIR", tempfile.gettempdir())
-    if os.path.exists(trx_tmp_dir):
-        temp_files = glob.glob(os.path.join(trx_tmp_dir, "trx_*"))
-        for temp_dir in temp_files:
-            if os.path.isdir(temp_dir):
-                click.echo(f"Removing temporary directory: {temp_dir}")
-                shutil.rmtree(temp_dir)
+    if trx_tmp_dir.exists():
+        for temp_name in trx_tmp_dir.glob("trx_*"):
+            if temp_name.is_dir():
+                click.echo(f"Removing temporary directory: {temp_name}")
+                shutil.rmtree(temp_name)
 
     # Clean build artifacts
     for build_pattern in ["build", "dist", "*.egg-info"]:
-        for path in glob.glob(build_pattern):
-            if os.path.isdir(path):
+        for path in Path(".").glob(build_pattern):
+            if path.is_dir():
                 click.echo(f"Removing build directory: {path}")
                 shutil.rmtree(path)
-            elif os.path.isfile(path):
+            elif path.is_file():
                 click.echo(f"Removing build file: {path}")
-                os.remove(path)
+                path.unlink()
 
     # Clean Python cache
     for cache_dir in ["**/__pycache__", "**/.pytest_cache"]:
-        for path in glob.glob(cache_dir, recursive=True):
-            if os.path.isdir(path):
+        for path in Path(".").glob(cache_dir):
+            if path.is_dir():
                 click.echo(f"Removing cache directory: {path}")
                 shutil.rmtree(path)
 

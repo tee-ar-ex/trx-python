@@ -24,7 +24,6 @@ By the end of this tutorial, you will know how to:
 # Let's start by loading an existing TRX file. First, we need to download
 # some test data.
 
-import os
 import tempfile
 
 from trx.fetcher import fetch_data, get_home, get_testing_files_dict
@@ -33,7 +32,7 @@ from trx.trx_file_memmap import load, save
 # Download test data
 fetch_data(get_testing_files_dict(), keys="gold_standard.zip")
 trx_home = get_home()
-trx_path = os.path.join(trx_home, "gold_standard", "gs.trx")
+trx_path = trx_home / "gold_standard" / "gs.trx"
 
 # Load the TRX file
 tgm = load(trx_path)
@@ -109,10 +108,10 @@ print(f"Selected {len(selected)} streamlines")
 
 with tempfile.TemporaryDirectory() as tmpdir:
     # Save as TRX file (zip archive)
-    output_path = os.path.join(tmpdir, "output.trx")
+    output_path = tmpdir / "output.trx"
     save(tgm, output_path)
     print(f"Saved TRX file to: {output_path}")
-    print(f"File size: {os.path.getsize(output_path)} bytes")
+    print(f"File size: {output_path.stat().st_size} bytes")
 
     # Reload to verify
     reloaded = load(output_path)

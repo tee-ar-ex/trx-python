@@ -2,6 +2,7 @@
 
 from copy import deepcopy
 import os
+from pathlib import Path
 import tempfile
 import zipfile
 
@@ -28,26 +29,26 @@ fetch_data(get_testing_files_dict(), keys=["gold_standard.zip"])
 @pytest.mark.parametrize("path", ["gs.trk", "gs.tck", "gs.vtk"])
 @pytest.mark.skipif(not dipy_available, reason="Dipy is not installed.")
 def test_seq_ops_sft(tmp_path, path):
-    gs_dir = os.path.join(get_home(), "gold_standard")
-    path = os.path.join(tmp_path, path)
+    gs_dir = get_home() / "gold_standard"
+    path = tmp_path / path
 
-    obj = load(os.path.join(gs_dir, "gs.trx"), os.path.join(gs_dir, "gs.nii"))
+    obj = load(gs_dir / "gs.trx", gs_dir / "gs.nii")
     sft_1 = obj.to_sft()
     save_tractogram(sft_1, path)
     obj.close()
-    save_tractogram(sft_1, os.path.join(tmp_path, "tmp.trk"))
+    save_tractogram(sft_1, tmp_path / "tmp.trk")
 
-    _ = load_tractogram(os.path.join(tmp_path, "tmp.trk"), "same")
+    _ = load_tractogram(tmp_path / "tmp.trk", "same")
 
 
 def test_seq_ops_trx(tmp_path):
-    gs_dir = os.path.join(get_home(), "gold_standard")
-    path = os.path.join(gs_dir, "gs.trx")
+    gs_dir = get_home() / "gold_standard"
+    path = gs_dir / "gs.trx"
 
     trx_1 = tmm.load(path)
-    tmm.save(trx_1, os.path.join(tmp_path, "tmp.trx"))
+    tmm.save(trx_1, tmp_path / "tmp.trx")
     trx_1.close()
-    trx_2 = tmm.load(os.path.join(tmp_path, "tmp.trx"))
+    trx_2 = tmm.load(tmp_path / "tmp.trx")
     trx_2.close()
 
 
@@ -56,11 +57,11 @@ def test_seq_ops_trx(tmp_path):
 def test_load_vox(path):
     from dipy.io.stateful_tractogram import Space
 
-    gs_dir = os.path.join(get_home(), "gold_standard")
-    path = os.path.join(gs_dir, path)
-    coord = np.loadtxt(os.path.join(get_home(), "gold_standard", "gs_vox_space.txt"))
-    from_space = Space.LPSMM if path.endswith("gs.vtk") else None
-    obj = load(path, os.path.join(gs_dir, "gs.nii"), from_space=from_space)
+    gs_dir = get_home() / "gold_standard"
+    path = gs_dir / path
+    coord = np.loadtxt(get_home() / "gold_standard" / "gs_vox_space.txt")
+    from_space = Space.LPSMM if path.name.endswith("gs.vtk") else None
+    obj = load(path, gs_dir / "gs.nii", from_space=from_space)
 
     sft = obj.to_sft() if isinstance(obj, TrxFile) else obj
     sft.to_vox()
@@ -75,11 +76,11 @@ def test_load_vox(path):
 def test_load_voxmm(path):
     from dipy.io.stateful_tractogram import Space
 
-    gs_dir = os.path.join(get_home(), "gold_standard")
-    path = os.path.join(gs_dir, path)
-    coord = np.loadtxt(os.path.join(get_home(), "gold_standard", "gs_voxmm_space.txt"))
-    from_space = Space.LPSMM if path.endswith("gs.vtk") else None
-    obj = load(path, os.path.join(gs_dir, "gs.nii"), from_space=from_space)
+    gs_dir = get_home() / "gold_standard"
+    path = gs_dir / path
+    coord = np.loadtxt(get_home() / "gold_standard" / "gs_voxmm_space.txt")
+    from_space = Space.LPSMM if path.name.endswith("gs.vtk") else None
+    obj = load(path, gs_dir / "gs.nii", from_space=from_space)
 
     sft = obj.to_sft() if isinstance(obj, TrxFile) else obj
     sft.to_voxmm()
@@ -92,20 +93,21 @@ def test_load_voxmm(path):
 @pytest.mark.parametrize("path", ["gs.trk", "gs.trx", "gs_fldr.trx"])
 @pytest.mark.skipif(not dipy_available, reason="Dipy is not installed.")
 def test_multi_load_save_rasmm(tmp_path, path):
-    gs_dir = os.path.join(get_home(), "gold_standard")
-    basename, ext = os.path.splitext(path)
+    gs_dir = get_home() / "gold_standard"
+    basename = Path(path).stem
+    ext = Path(path).suffix.lstrip(".")
 
-    path = os.path.join(gs_dir, path)
-    coord = np.loadtxt(os.path.join(get_home(), "gold_standard", "gs_rasmm_space.txt"))
+    path = gs_dir / path
+    coord = np.loadtxt(get_home() / "gold_standard" / "gs_rasmm_space.txt")
 
-    obj = load(path, os.path.join(gs_dir, "gs.nii"))
+    obj = load(path, gs_dir / "gs.nii")
     for i in range(3):
-        out_path = os.path.join(tmp_path, f"{basename}_tmp{i}_{ext}")
+        out_path = tmp_path / f"{basename}_tmp{i}_{ext}"
         save(obj, out_path)
 
         if isinstance(obj, TrxFile):
             obj.close()
-        obj = load(out_path, os.path.join(gs_dir, "gs.nii"))
+        obj = load(out_path, gs_dir / "gs.nii")
 
     assert_allclose(obj.streamlines._data, coord, rtol=1e-04, atol=1e-06)
     if isinstance(obj, TrxFile):
@@ -115,26 +117,22 @@ def test_multi_load_save_rasmm(tmp_path, path):
 @pytest.mark.parametrize("path", ["gs.trx", "gs_fldr.trx"])
 @pytest.mark.skipif(not dipy_available, reason="Dipy is not installed.")
 def test_delete_tmp_gs_dir(path):
-    gs_dir = os.path.join(get_home(), "gold_standard")
-    path = os.path.join(gs_dir, path)
+    gs_dir = get_home() / "gold_standard"
+    path = gs_dir / path
 
     trx1 = tmm.load(path)
-    if os.path.isfile(path):
+    if path.is_file():
         tmp_gs_dir = deepcopy(trx1._uncompressed_folder_handle.name)
-        assert os.path.isdir(tmp_gs_dir)
+        assert tmp_gs_dir.is_dir()
     sft = trx1.to_sft()
     trx1.close()
 
-    coord_rasmm = np.loadtxt(
-        os.path.join(get_home(), "gold_standard", "gs_rasmm_space.txt")
-    )
-    coord_vox = np.loadtxt(
-        os.path.join(get_home(), "gold_standard", "gs_vox_space.txt")
-    )
+    coord_rasmm = np.loadtxt(get_home() / "gold_standard" / "gs_rasmm_space.txt")
+    coord_vox = np.loadtxt(get_home() / "gold_standard" / "gs_vox_space.txt")
 
     # The folder trx representation does not need tmp files
-    if os.path.isfile(path):
-        assert not os.path.isdir(tmp_gs_dir)
+    if path.is_file():
+        assert not tmp_gs_dir.is_dir()
 
     assert_allclose(sft.streamlines._data, coord_rasmm, rtol=1e-04, atol=1e-06)
 
@@ -156,8 +154,8 @@ def test_delete_tmp_gs_dir(path):
 @pytest.mark.parametrize("path", ["gs.trx"])
 @pytest.mark.skipif(not dipy_available, reason="Dipy is not installed.")
 def test_close_tmp_files(path):
-    gs_dir = os.path.join(get_home(), "gold_standard")
-    path = os.path.join(gs_dir, path)
+    gs_dir = get_home() / "gold_standard"
+    path = gs_dir / path
 
     tgm = tmm.load(path)
     process = psutil.Process(os.getpid())
@@ -175,7 +173,7 @@ def test_close_tmp_files(path):
 
     count = 0
     for open_file in open_files:
-        basename = os.path.basename(open_file.path)
+        basename = Path(open_file.path).name
         if basename in expected_content:
             count += 1
 
@@ -185,7 +183,7 @@ def test_close_tmp_files(path):
     open_files = process.open_files()
     count = 0
     for open_file in open_files:
-        basename = os.path.basename(open_file.path)
+        basename = Path(open_file.path).name
         if basename in expected_content:
             count += 1
     assert not count
@@ -194,59 +192,60 @@ def test_close_tmp_files(path):
 @pytest.mark.parametrize(
     "env_value, expected_parent_fn",
     [
-        ("use_working_dir", os.getcwd),
-        (os.path.expanduser("~"), lambda: os.path.expanduser("~")),
-        (None, tempfile.gettempdir),
+        ("use_working_dir", lambda: Path.cwd()),
+        (Path("~").expanduser(), lambda: Path("~").expanduser()),
+        (None, lambda: Path(tempfile.gettempdir())),
     ],
 )
 def test_get_trx_tmp_dir(env_value, expected_parent_fn, monkeypatch):
     if env_value is None:
         monkeypatch.delenv("TRX_TMPDIR", raising=False)
     else:
-        monkeypatch.setenv("TRX_TMPDIR", env_value)
+        monkeypatch.setenv("TRX_TMPDIR", str(env_value))
 
     td = get_trx_tmp_dir()
+    tmp_path = Path(td.name)
     try:
-        assert os.path.dirname(td.name) == expected_parent_fn()
-        assert os.path.isdir(td.name)
+        assert tmp_path.parent == expected_parent_fn()
+        assert tmp_path.is_dir()
     finally:
         td.cleanup()
 
-    assert not os.path.isdir(td.name)
+    assert not tmp_path.is_dir()
 
 
 @pytest.mark.parametrize(
     "trx_tmpdir_env, expected_parent",
     [
-        ("use_working_dir", lambda: os.getcwd()),
-        (os.path.expanduser("~"), lambda: os.path.expanduser("~")),
-        (None, lambda: tempfile.gettempdir()),
+        ("use_working_dir", lambda: Path.cwd()),
+        (Path("~").expanduser(), lambda: Path("~").expanduser()),
+        (None, lambda: Path(tempfile.gettempdir())),
     ],
 )
 def test_change_tmp_dir(trx_tmpdir_env, expected_parent, monkeypatch):
     """Integration test through tmm.load(path), assuming that it
     eventually calls get_trx_tmp_dir()."""
-    gs_dir = os.path.join(get_home(), "gold_standard")
-    path = os.path.join(gs_dir, "gs.trx")
+    gs_dir = get_home() / "gold_standard"
+    path = gs_dir / "gs.trx"
 
     if trx_tmpdir_env is None:
         monkeypatch.delenv("TRX_TMPDIR", raising=False)
     else:
-        monkeypatch.setenv("TRX_TMPDIR", trx_tmpdir_env)
+        monkeypatch.setenv("TRX_TMPDIR", str(trx_tmpdir_env))
 
     tgm = tmm.load(path)
     tmp_gs_dir = deepcopy(tgm._uncompressed_folder_handle.name)
 
-    assert os.path.dirname(tmp_gs_dir) == expected_parent()
+    assert tmp_gs_dir.parent == expected_parent()
 
     tgm.close()
-    assert not os.path.isdir(tmp_gs_dir)
+    assert not tmp_gs_dir.is_dir()
 
 
 @pytest.mark.parametrize("path", ["gs.trx", "gs_fldr.trx"])
 def test_complete_dir_from_trx(path):
-    gs_dir = os.path.join(get_home(), "gold_standard")
-    path = os.path.join(gs_dir, path)
+    gs_dir = get_home() / "gold_standard"
+    path = gs_dir / path
 
     tgm = tmm.load(path)
     if tgm._uncompressed_folder_handle is None:
@@ -257,8 +256,8 @@ def test_complete_dir_from_trx(path):
     file_paths = []
     for dirpath, _, filenames in os.walk(dir_to_check):
         for filename in filenames:
-            full_path = os.path.join(dirpath, filename)
-            cut_path = full_path.split(dir_to_check)[1][1:].replace("\\", "/")
+            full_path = Path(dirpath) / filename
+            cut_path = full_path.relative_to(dir_to_check).as_posix()
             file_paths.append(cut_path)
 
     expected_content = [
@@ -274,8 +273,8 @@ def test_complete_dir_from_trx(path):
 
 
 def test_complete_zip_from_trx():
-    gs_dir = os.path.join(get_home(), "gold_standard")
-    path = os.path.join(gs_dir, "gs.trx")
+    gs_dir = get_home() / "gold_standard"
+    path = gs_dir / "gs.trx"
 
     with zipfile.ZipFile(path, mode="r") as zf:
         zip_file_list = zf.namelist()

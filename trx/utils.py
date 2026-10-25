@@ -2,7 +2,7 @@
 """Utility functions for reference handling, coordinate flips, and file operations."""
 
 import logging
-import os
+from pathlib import Path
 
 import nibabel as nib
 from nibabel.streamlines.array_sequence import ArraySequence
@@ -42,7 +42,7 @@ def split_name_with_gz(filename):
 
     Parameters
     ----------
-    filename : str
+    filename : str or Path
         The filename to clean.
 
     Returns
@@ -52,17 +52,19 @@ def split_name_with_gz(filename):
     ext : str
         The full extension.
     """
-    base, ext = os.path.splitext(filename)
+    filename = Path(filename)
+    ext = filename.suffix
+    base = filename.with_suffix("")
 
     if ext == ".gz":
         # Test if we have a .nii additional extension
-        temp_base, add_ext = os.path.splitext(base)
+        add_ext = base.suffix
 
         if add_ext == ".nii" or add_ext == ".trk":
             ext = add_ext + ext
-            base = temp_base
+            base = base.with_suffix("")
 
-    return base, ext
+    return str(base), ext
 
 
 def get_reference_info_wrapper(reference):  # noqa: C901
@@ -70,7 +72,7 @@ def get_reference_info_wrapper(reference):  # noqa: C901
 
     Parameters
     ----------
-    reference : str or dict or Nifti1Image or TrkFile or Nifti1Header or TrxFile
+    reference : str or Path or dict or Nifti1Image or TrkFile or Nifti1Header or TrxFile
         Reference that provides the spatial attribute.
 
     Returns
@@ -90,7 +92,8 @@ def get_reference_info_wrapper(reference):  # noqa: C901
     is_trk = False
     is_sft = False
     is_trx = False
-    if isinstance(reference, str):
+    if isinstance(reference, (str, Path)):
+        reference = Path(reference)
         _, ext = split_name_with_gz(reference)
         if ext in [".nii", ".nii.gz"]:
             header = nib.load(reference).header
@@ -332,7 +335,7 @@ def load_matrix_in_any_format(filepath):
 
     Parameters
     ----------
-    filepath : str
+    filepath : str or Path
         Path to the matrix file.
 
     Returns
@@ -340,7 +343,7 @@ def load_matrix_in_any_format(filepath):
     matrix : numpy.ndarray
         The matrix.
     """
-    _, ext = os.path.splitext(filepath)
+    ext = "".join(Path(filepath).suffixes)
     if ext == ".txt":
         data = np.loadtxt(filepath)
     elif ext == ".npy":
